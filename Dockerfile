@@ -62,10 +62,10 @@ RUN mkdir -p /var/www/public
 # Add application
 WORKDIR /var/www
 
-ADD --chown=app:app . /var/www
-
 # Switch to use a non-root user from here on
+RUN chown -R app:app /var/www
 USER 1000
+ADD . /var/www
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
