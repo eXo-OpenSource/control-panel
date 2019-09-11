@@ -57,6 +57,7 @@ npm:
     expire_in: 1 month
     paths:
       - node_modules/
+      - public/
 
 #codestyle:
 #  stage: test
