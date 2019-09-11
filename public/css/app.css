@@ -28,7 +28,42 @@
   vertical-align: middle;
   height: 2rem;
 }
-/**
+
+.alert {
+  font-size: 0.875rem;
+  border-width: 1px;
+  border-top-width: 8px;
+  border-radius: 0.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.alert-info {
+  color: #2b6cb0;
+  border-color: #3182ce;
+  background-color: #ebf8ff;
+}
+
+.alert-success {
+  color: #2f855a;
+  border-color: #38a169;
+  background-color: #f0fff4;
+}
+
+.alert-warning {
+  color: #c05621;
+  border-color: #dd6b20;
+  background-color: #fffaf0;
+}
+
+.alert-danger {
+  color: #c53030;
+  border-color: #e53e3e;
+  background-color: #fff5f5;
+}/**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.
  *

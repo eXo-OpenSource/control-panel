@@ -15,6 +15,42 @@ class Character extends Model
         return $this->hasOne(BankAccount::class, 'Id', 'BankAccount');
     }
 
+    public function faction()
+    {
+        return $this->hasOne(Faction::class, 'Id', 'FactionId');
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'Id', 'CompanyId');
+    }
+
+    public function group()
+    {
+        return $this->hasOne(Group::class, 'Id', 'GroupId');
+    }
+
+    public function getFactionName()
+    {
+        if ($this->FactionId === 0)
+            return 'keine';
+        return $this->faction->Name;
+    }
+
+    public function getCompanyName()
+    {
+        if ($this->CompanyId === 0)
+            return 'keines';
+        return $this->company->Name;
+    }
+
+    public function getGroupName()
+    {
+        if ($this->GroupId === 0)
+            return 'keine';
+        return $this->group->Name;
+    }
+
     public function getCollectedCollectableCount()
     {
         $collectables = json_decode($this->Collectables, true);

@@ -47,15 +47,15 @@
                             </tr>
                             <tr>
                                 <td>Fraktion</td>
-                                <td>{{ $user->character->FactionId }}</td>
+                                <td>{{ $user->character->getFactionName() }}</td>
                             </tr>
                             <tr>
                                 <td>Unternehmen</td>
-                                <td>{{ $user->character->CompanyId }}</td>
+                                <td>{{ $user->character->getCompanyName() }}</td>
                             </tr>
                             <tr>
                                 <td>Gruppe</td>
-                                <td>{{ $user->character->GroupId }}</td>
+                                <td>{{ $user->character->getGroupName() }}</td>
                             </tr>
                         </table>
                     </div>
@@ -84,7 +84,7 @@
                                     <td>{{ $user->character->JobLevel }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Fischenlevel</td>
+                                    <td>Fischerlevel</td>
                                     <td>{{ $user->character->FishingLevel }}</td>
                                 </tr>
                             </table>

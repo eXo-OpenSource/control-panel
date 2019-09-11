@@ -17,3 +17,23 @@
     @apply .font-light .px-3 .align-middle;
     height: 2rem;
 }
+
+.alert {
+    @apply .text-sm .border .border-t-8 .rounded .px-3 py-4 .mb-4;
+}
+
+.alert-info {
+    @apply .text-blue-700 .border-blue-600 .bg-blue-100;
+}
+
+.alert-success {
+    @apply .text-green-700 .border-green-600 .bg-green-100;
+}
+
+.alert-warning {
+    @apply .text-orange-700 .border-orange-600 .bg-orange-100;
+}
+
+.alert-danger {
+    @apply .text-red-700 .border-red-600 .bg-red-100;
+}

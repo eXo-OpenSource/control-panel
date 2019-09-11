@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -74,21 +75,24 @@ class LoginController extends Controller
             if ($account) {
                 if (env('APP_ENV') === 'staging') {
                     if ($account->Rank < 2) {
-                        return view('auth.login', ['failed' => "Testphase: Login derzeit nicht möglich! Bitte melde dich bei einem Admin."]);
+                        Session::flash('alert-danger', 'Testphase: Login derzeit nicht möglich! Bitte melde dich bei einem Admin.');
+                        return view('auth.login');
                     }
                 }
 
                 return $this->sendLoginResponse($request, $account);
             } else {
-                return view('auth.login', ['failed' => "User/Email oder Passwort falsch!"]);
+                Session::flash('alert-danger', 'User/Email oder Passwort falsch!');
+                return view('auth.login');
             }
 
         } catch (GuzzleException $exception) {
             if (isset($exception) && $exception->getCode() == 400) {
-                return view('auth.login', ['failed' => "User/Email oder Passwort falsch!"]);
+                Session::flash('alert-danger', 'User/Email oder Passwort falsch!');
+                return view('auth.login');
             } else {
-                dd($exception);
-                return view('auth.login', ['failed' => "Login derzeit nicht möglich! Bitte melde dich bei einem Admin."]);
+                Session::flash('alert-danger', 'Login derzeit nicht möglich! Bitte melde dich bei einem Admin.');
+                return view('auth.login');
             };
         }
     }

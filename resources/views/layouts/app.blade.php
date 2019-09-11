@@ -42,6 +42,18 @@
             </div>
         </nav>
 
+
+        <div class="flex items-center">
+            <div class="md:w-1/2 md:mx-auto">
+
+
+                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                    @if(Session::has('alert-' . $msg))
+                        <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }}</p>
+                    @endif
+                @endforeach
+            </div>
+        </div>
         @yield('content')
     </div>
 
