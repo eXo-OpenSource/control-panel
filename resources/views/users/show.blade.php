@@ -98,19 +98,19 @@
                             <table class="table w-full">
                                 <tr>
                                     <td>Autoführerschein</td>
-                                    <td>{{ $user->character->HasDrivingLicense }}</td>
+                                    <td>@if($user->character->HasDrivingLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                                 </tr>
                                 <tr>
                                     <td>Motorradführerschein</td>
-                                    <td>{{ $user->character->HasBikeLicense }}</td>
+                                    <td>@if($user->character->HasBikeLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                                 </tr>
                                 <tr>
                                     <td>LKW-Führerschein</td>
-                                    <td>{{ $user->character->HasTruckLicense }}</td>
+                                    <td>@if($user->character->HasTruckLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                                 </tr>
                                 <tr>
                                     <td>Flugschein</td>
-                                    <td>{{ $user->character->HasPilotsLicense }}</td>
+                                    <td>@if($user->character->HasPilotsLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                                 </tr>
                             </table>
                         </div>
