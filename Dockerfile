@@ -62,7 +62,7 @@ RUN mkdir -p /var/www/public
 # Add application
 WORKDIR /var/www
 
-COPY --chown app:app . /var/www
+COPY --chown=app:app . /var/www
 
 # Switch to use a non-root user from here on
 USER 1000
