@@ -15,7 +15,7 @@ class Character extends Model
         return $this->hasOne(BankAccount::class, 'Id', 'BankAccount');
     }
 
-    public function getCollectedCollectableCount() 
+    public function getCollectedCollectableCount()
     {
         $collectables = json_decode($this->Collectables, true);
 
@@ -24,7 +24,24 @@ class Character extends Model
         }
         $collectables = $collectables[0];
 
-        if (!$collectables['collected']) {
+        if (!isset($collectables['collected'])) {
+            return 0;
+        }
+
+        return sizeof($collectables['collected']);
+    }
+
+    public function getPlayTime()
+    {
+        $this->
+        $collectables = json_decode($this->Collectables, true);
+
+        if (!$collectables[0]) {
+            return 0;
+        }
+        $collectables = $collectables[0];
+
+        if (!isset($collectables['collected'])) {
             return 0;
         }
 

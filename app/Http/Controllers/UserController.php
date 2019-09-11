@@ -46,7 +46,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.view', compact('user'));
+        abort_unless(auth()->user()->can('show', $user), 403);
+
+        return view('users.show', compact('user'));
     }
 
     /**

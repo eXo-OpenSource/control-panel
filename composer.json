@@ -12,7 +12,8 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+      "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^1.4",
