@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::resource('users', 'UserController');
 Route::get('/home', 'HomeController@index')->name('home');
