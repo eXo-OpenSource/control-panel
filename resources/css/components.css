@@ -1,0 +1,19 @@
+.table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table tr:hover td {
+    /*@apply .bg-20;*/
+}
+
+.table th {
+    /* .bg-30 .text-80 .border-50 */
+    @apply .font-bold .text-xs .uppercase .py-3 .px-3 .tracking-wide .align-middle;
+}
+
+.table td {
+    /* .text-90 .border-50 min-w-table-cell */
+    @apply .font-light .px-3 .align-middle;
+    height: 2rem;
+}

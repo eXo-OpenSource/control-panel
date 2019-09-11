@@ -1,0 +1,117 @@
+image: lorisleiva/laravel-docker:latest
+
+stages:
+  - prepare
+  - test
+  - build
+  - deploy
+
+#services:
+#  - docker:dind
+
+#variables:
+#  DOCKER_DRIVER: overlay2
+#  DOCKER_HOST: tcp://docker:2375
+
+
+.change_file_permissions: &change_file_permissions |
+  find . -type f -not -path "./vendor/*" -exec chmod 664 {} \;
+  find . -type d -not -path "./vendor/*" -exec chmod 775 {} \;
+
+composer:
+  stage: prepare
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer
+    paths:
+      - vendor/
+  script:
+    - composer install --no-dev --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+
+composer_dev:
+  stage: prepare
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-composer-dev
+    paths:
+      - vendor/
+  script:
+    - composer install
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+
+npm:
+  stage: prepare
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}-npm
+    paths:
+      - node_modules/
+  script:
+    - npm install
+    - npm run prod
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - node_modules/
+
+#codestyle:
+#  stage: test
+#  image: lorisleiva/laravel-docker
+#  script:
+#    - phpcs --extensions=php app
+#  dependencies: []
+
+#larastan:
+#  stage: test
+#  image: edbizarro/gitlab-ci-pipeline-php:7.2
+#  dependencies:
+#    - composer_dev
+#  script:
+#    - vendor/bin/phpstan analyse app
+
+#phpunit:
+#  stage: test
+#  dependencies:
+#    - composer_dev
+#  script:
+#    - vendor/bin/phpunit --coverage-text --colors=never
+
+phpcpd:
+  stage: test
+  image: edbizarro/gitlab-ci-pipeline-php:7.2
+  script:
+    - test -f phpcpd.phar || curl -L https://phar.phpunit.de/phpcpd.phar -o phpcpd.phar
+    - php phpcpd.phar app/ --min-lines=50
+  dependencies: []
+  cache:
+    paths:
+      - phpcpd.phar
+
+docker:
+  stage: build
+  image: docker:dind
+  script:
+    - export CI_PATH=$CI_REGISTRY/$(echo $CI_PROJECT_NAMESPACE | tr "[:upper:]" "[:lower:]")/$(echo $CI_PROJECT_NAME | tr "[:upper:]" "[:lower:]")
+    - echo $CI_PROJECT_PATH
+    - echo $CI_PROJECT_PATH_SLUG
+    - docker build -t $CI_JOB_ID .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - '[ "$CI_BUILD_REF_NAME" != "master" ] && docker tag $CI_JOB_ID $CI_PATH:latest-$CI_COMMIT_REF_SLUG'
+    - '[ "$CI_BUILD_REF_NAME" == "master" ] && docker tag $CI_JOB_ID $CI_PATH:latest'
+    - docker push $CI_PATH
+    - docker logout
+    - docker rmi $CI_JOB_ID
+  only:
+    - master
+
+deploy_master:
+  image: appropriate/curl:latest
+  stage: deploy
+  script:
+    - curl http://$DEPLOYRON_IP:6000/deploy/cp_master?APISecret=$DEPLOY_API_SECRET_DEVELOP
+  only:
+    - master

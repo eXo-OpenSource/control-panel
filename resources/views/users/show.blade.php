@@ -17,11 +17,11 @@
                     </div>
                     <div class="p-6">
                         <table class="table w-full">
-                            <tr>
+                            <tr class="mb-2">
                                 <td>Letzer Login</td>
                                 <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>
                             </tr>
-                            <tr>
+                            <tr class="mb-2">
                                 <td>Registrierungsdatum</td>
                                 <td>{{ $user->RegisterDate->format('d.m.Y H:i:s') }}</td>
                             </tr>
