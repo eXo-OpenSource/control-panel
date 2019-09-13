@@ -51,6 +51,18 @@ class Character extends Model
         return $this->group->Name;
     }
 
+    public function hasFaction() {
+        return $this->FactionId !== 0;
+    }
+
+    public function hasCompany() {
+        return $this->CompanyId !== 0;
+    }
+
+    public function hasGroup() {
+        return $this->GroupId !== 0;
+    }
+
     public function getCollectedCollectableCount()
     {
         $collectables = json_decode($this->Collectables, true);
@@ -69,18 +81,9 @@ class Character extends Model
 
     public function getPlayTime()
     {
-        $this->
-        $collectables = json_decode($this->Collectables, true);
+        $hours = floor($this->PlayTime / 60);
+        $minutes = $this->PlayTime % 60;
 
-        if (!$collectables[0]) {
-            return 0;
-        }
-        $collectables = $collectables[0];
-
-        if (!isset($collectables['collected'])) {
-            return 0;
-        }
-
-        return sizeof($collectables['collected']);
+        return $hours . ':' . $minutes;
     }
 }

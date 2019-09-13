@@ -15,49 +15,34 @@
                     <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
                         {{ $user->Name }}
                     </div>
-                    <div class="p-6">
-                        <table class="table w-full">
-                            <tr class="mb-2">
-                                <td>Letzer Login</td>
-                                <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>
-                            </tr>
-                            <tr class="mb-2">
-                                <td>Registrierungsdatum</td>
-                                <td>{{ $user->RegisterDate->format('d.m.Y H:i:s') }}</td>
-                            </tr>
-                            <tr>
-                                <td>Karma</td>
-                                <td>{{ $user->character->Karma }}</td>
-                            </tr>
-                            <tr>
-                                <td >Geld (Bar/Bank)</td>
-                                <td>{{ $user->character->Money }}$ / {{ $user->character->bankAccount->Money }}$</td>
-                            </tr>
-                            <tr>
-                                <td>Spielzeit</td>
-                                <td>{{ $user->character->PlayTime / 60 }}</td>
-                            </tr>
-                            <tr>
-                                <td>Collectables</td>
-                                <td>{{ $user->character->getCollectedCollectableCount() }}/40</td>
-                            </tr>
-                            <tr>
-                                <td>GWD Note</td>
-                                <td>{{ $user->character->PaNote }}</td>
-                            </tr>
-                            <tr>
-                                <td>Fraktion</td>
-                                <td>{{ $user->character->getFactionName() }}</td>
-                            </tr>
-                            <tr>
-                                <td>Unternehmen</td>
-                                <td>{{ $user->character->getCompanyName() }}</td>
-                            </tr>
-                            <tr>
-                                <td>Gruppe</td>
-                                <td>{{ $user->character->getGroupName() }}</td>
-                            </tr>
-                        </table>
+                    <div class="p-6 flex">
+                        <div class="mr-6">
+                            <img class="rounded shadow-lg" src="https://exo-reallife.de/images/skins/Skin{{ $user->character->Skin }}.jpg">
+                        </div>
+                        <dl class="user-stats mr-6">
+                            <dt>Letzer Login</dt>
+                            <dd>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</dd>
+                            <dt>Registrierungsdatum</dt>
+                            <dd>{{ $user->RegisterDate->format('d.m.Y H:i:s') }}</dd>
+                            <dt>Karma</dt>
+                            <dd>{{ $user->character->Karma }}</dd>
+                            <dt>Geld (Bar/Bank)</dt>
+                            <dd>{{ $user->character->Money }}$ / {{ $user->character->bankAccount->Money }}$</dd>
+                            <dt>Spielzeit</dt>
+                            <dd>{{ $user->character->getPlayTime() }}</dd>
+                        </dl>
+                        <dl class="user-stats">
+                            <dt>Collectables</dt>
+                            <dd>{{ $user->character->getCollectedCollectableCount() }}/40</dd>
+                            <dt>GWD Note</dt>
+                            <dd>{{ $user->character->PaNote }}</dd>
+                            <dt>Fraktion</dt>
+                            <dd>@if($user->character->hasFaction())<a href="{{ route('factions.show', [$user->character->FactionId]) }}">@endif{{ $user->character->getFactionName() }}@if($user->character->hasFaction())</a>@endif</dd>
+                            <dt>Unternehmen</dt>
+                            <dd>@if($user->character->hasCompany())<a href="{{ url('/') }}">@endif{{ $user->character->getCompanyName() }}@if($user->character->hasCompany())</a>@endif</dd>
+                            <dt>Gruppe</dt>
+                            <dd>@if($user->character->hasGroup())<a href="{{ url('/') }}">@endif{{ $user->character->getGroupName() }}@if($user->character->hasGroup())</a>@endif</dd>
+                        </dl>
                     </div>
                 </div>
                 <div class="flex-row w-full md:w-1/3">

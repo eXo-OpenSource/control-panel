@@ -5828,30 +5828,51 @@
   border-spacing: 0;
 }
 
+.table-fixed {
+  table-layout: fixed;
+}
+
+.table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
 .table tr:hover td {
-  /*@apply .bg-20;*/
+  background-color: #f6fbff;
 }
 
 .table th {
-  /* .bg-30 .text-80 .border-50 */
   font-weight: 700;
   font-size: 0.75rem;
   text-transform: uppercase;
+  border-bottom-width: 2px;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   letter-spacing: 0.025em;
   vertical-align: middle;
+  color: #7c858e;
+  background-color: #f4f7fa;
+  border-color: #e3e7eb;
 }
 
 .table td {
-  /* .text-90 .border-50 min-w-table-cell */
   font-weight: 300;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   vertical-align: middle;
-  height: 2rem;
+  color: #3c4b5f;
+  border-color: #e3e7eb;
+  height: 3.8125rem;
+}
+
+.th-fit,
+.td-fit {
+  width: 1%;
+  white-space: nowrap;
 }
 
 .alert {
@@ -5888,7 +5909,26 @@
   color: #c53030;
   border-color: #e53e3e;
   background-color: #fff5f5;
-}/**
+}
+
+.user-stats {
+  color: #1a202c;
+  font-weight: 300;
+}
+
+.user-stats dt {
+  padding-bottom: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.user-stats dd {
+  padding-bottom: 1rem;
+}
+
+.user-stats dd a {
+  color: #3182ce;
+}
+/**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.
  *

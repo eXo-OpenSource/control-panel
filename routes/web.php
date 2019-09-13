@@ -17,5 +17,8 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::resource('users', 'UserController');
+Route::resource('factions', 'FactionController');
+Route::resource('companies', 'CompanyController');
+Route::resource('groups', 'GroupController');
 Route::get('/home', 'HomeController@index')->name('home');
 
