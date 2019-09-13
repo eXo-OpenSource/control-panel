@@ -3,11 +3,11 @@
 @section('content')
 
     <div class="w-full my-5 py-2 bg-red-500 sm:bg-blue-500 md:bg-gray-500 lg:bg-purple-500 xl:bg-green-500">
-        <p class="visible sm:hidden text-black">red - none</p>
-        <p class="sm:visible md:hidden text-black">blue - sm</p>
-        <p class="md:visible lg:hidden text-black">gray - md</p>
-        <p class="lg:visible xl:hidden text-black">gray - lg</p>
-        <p class="xl:visible text-black">green - xl</p>
+        <p class="block sm:hidden text-black">red - none</p>
+        <p class="hidden sm:block md:hidden text-black">blue - sm</p>
+        <p class="hidden md:block lg:hidden text-black">gray - md</p>
+        <p class="hidden lg:block xl:hidden text-black">gray - lg</p>
+        <p class="hidden xl:block text-black">green - xl</p>
     </div>
     <div class="flex items-center">
         <div class="w-full ml-2 mr-2 md:w-2/3 md:mx-auto">
