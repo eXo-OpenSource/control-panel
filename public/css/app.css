@@ -5911,6 +5911,21 @@
   background-color: #fff5f5;
 }
 
+.vehicle-info {
+  color: #2d3748;
+  font-weight: 300;
+  margin-left: 0.5rem;
+}
+
+.vehicle-info dt {
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.vehicle-info dd {
+  padding-bottom: 1rem;
+}
+
 .user-stats {
   color: #1a202c;
   font-weight: 300;

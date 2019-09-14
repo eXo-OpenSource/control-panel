@@ -56,6 +56,20 @@
     @apply .text-red-700 .border-red-600 .bg-red-100;
 }
 
+
+.vehicle-info {
+     @apply .text-gray-800 .font-light .ml-2;
+ }
+
+.vehicle-info dt {
+    @apply .pb-2 .text-base;
+}
+
+.vehicle-info dd {
+    @apply .pb-4;
+}
+
+
 .user-stats {
     @apply .text-gray-900 .font-light;
 }

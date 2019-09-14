@@ -28,6 +28,8 @@ class UserPolicy
 
     public function show(?User $authUser, User $user)
     {
+        if ($authUser === null)
+            return false;
         return $authUser->Id == $user->Id;
     }
 }

@@ -35,7 +35,7 @@
                             <dt>Karma</dt>
                             <dd>{{ $user->character->Karma }}</dd>
                             <dt>Geld (Bar/Bank)</dt>
-                            <dd>{{ $user->character->Money }}$ / {{ $user->character->bankAccount->Money }}$</dd>
+                            <dd>{{ number_format($user->character->Money, 0, ',', ' ') }}$ / {{ number_format($user->character->bankAccount->Money, 0, ',', ' ') }}$</dd>
                             <dt>Spielzeit</dt>
                             <dd>{{ $user->character->getPlayTime() }}</dd>
                         </dl>
@@ -88,7 +88,29 @@
                 <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
                     Fahrzeuge
                 </div>
-                <div class="p-6 flex xl:flex-row flex-col w-full">
+                <div class="p-6 flex flex-col w-full">
+                    @foreach($user->character->vehicles as $vehicle)
+                        @if($loop->first)<div class="flex flex-row w-full">@endif
+                        <div class="flex flex-col w-1/3">
+                            <span class="text-2xl text-gray-900 font-light mb-2">{{ $vehicle->getName() }}</span>
+                            <div class="flex">
+                                <img src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Model }}.jpg">
+                                <dl class="vehicle-info">
+                                    <dt>Kilometerstand</dt>
+                                    <dd>{{ number_format($vehicle->Mileage / 1000, 2, ',', ' ') }} km</dd>
+                                    <dt>Lackfarbe</dt>
+                                    <dd class="flex">
+                                        <div class="w-5 h-5 border border-black" style="background-color: {{ $vehicle->getTuningColor(1) }};"></div>
+                                        <div class="w-5 h-5 border border-black ml-1" style="background-color: {{ $vehicle->getTuningColor(2) }};"></div>
+                                        <div class="w-5 h-5 border border-black ml-1" style="background-color: {{ $vehicle->getTuningColor(3) }};"></div>
+                                        <div class="w-5 h-5 border border-black ml-1" style="background-color: {{ $vehicle->getTuningColor(4) }};"></div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        @if(!$loop->last && $loop->iteration % 3 === 0)</div><div class="flex flex-row w-full mt-4">@endif
+                        @if($loop->last)</div>@endif
+                    @endforeach
                 </div>
             </div>
             <div class="w-full break-words bg-white border border-2 rounded shadow-md mb-4">
