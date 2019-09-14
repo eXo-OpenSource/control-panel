@@ -9,6 +9,10 @@ class Character extends Model
     protected $table = 'character';
     protected $primaryKey = 'Id';
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'Id', 'Id');
+    }
 
     public function bankAccount()
     {

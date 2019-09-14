@@ -26,6 +26,7 @@
                         @guest
                             <a class="no-underline hover:underline text-gray-300 text-sm p-3" href="{{ route('login') }}">{{ __('Login') }}</a>
                         @else
+                            <a class="no-underline hover:underline text-gray-300 text-sm p-3" href="{{ route('factions.index') }}">Fraktion</a>
                             <a class="no-underline hover:underline text-gray-300 text-sm p-3" href="{{ route('users.show', ['user' => auth()->user()]) }}">{{ Auth::user()->Name }}</a>
                             <span class="text-gray-300 text-sm pr-4"></span>
 

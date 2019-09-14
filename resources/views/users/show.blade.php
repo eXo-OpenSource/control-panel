@@ -94,7 +94,7 @@
                         <div class="flex flex-col w-1/3">
                             <span class="text-2xl text-gray-900 font-light mb-2">{{ $vehicle->getName() }}</span>
                             <div class="flex">
-                                <img src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Model }}.jpg">
+                                <img class="rounded" src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Model }}.jpg">
                                 <dl class="vehicle-info">
                                     <dt>Kilometerstand</dt>
                                     <dd>{{ number_format($vehicle->Mileage / 1000, 2, ',', ' ') }} km</dd>
