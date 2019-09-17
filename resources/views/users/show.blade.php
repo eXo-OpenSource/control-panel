@@ -120,6 +120,14 @@
                 <div class="p-6 flex xl:flex-row flex-col w-full">
                 </div>
             </div>
+            <div class="w-full break-words bg-white border border-2 rounded shadow-md mb-4">
+                <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
+                    Aktivität
+                </div>
+                <div class="p-6 flex xl:flex-row flex-col w-full">
+                    <chart-component :chartdata="{{ json_encode($user->character->getActivity(true)) }}"></chart-component>
+                </div>
+            </div>
         </div>
     </div>
 
