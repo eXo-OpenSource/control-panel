@@ -15,11 +15,13 @@
                         <tr>
                             <th>Name</th>
                             <th>Rang</th>
+                            <th>Aktivität</th>
                         </tr>
                         @foreach($faction->members()->with('user')->orderBy('FactionRank', 'DESC')->get() as $character)
                             <tr>
                                 <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
                                 <td>{{ $character->FactionRank }}</td>
+                                <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
                             </tr>
                         @endforeach
                     </table>

@@ -35,6 +35,7 @@ RUN apk --update add --no-cache \
       php7-zlib \
       php7-tokenizer \
       php7-bcmath \
+      php7-redis \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
     adduser -u 1000 -S app -G app

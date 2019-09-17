@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class Character extends Model
@@ -162,4 +163,24 @@ class Character extends Model
         return $activity;
     }
 
+
+    public function getWeekActivity()
+    {
+
+        $key = 'player:' . $this->Id . ':activity:weekly';
+
+        $sum = Cache::get($key);
+
+        if (!isset($sum)) {
+            $date = (new \DateTime('-7 days'))->format('Y-m-d');
+
+            $activities = AccountActivity::query()->where('UserId', $this->Id)->where('Date', '>', $date)->orderBy('Id', 'DESC')->get()->pluck('Duration')->toArray();
+
+            $sum = array_sum($activities);
+            Cache::put($key, $sum, 60 * 30);
+        }
+
+        return $sum;
+
+    }
 }
