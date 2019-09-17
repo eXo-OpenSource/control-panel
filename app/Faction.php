@@ -57,12 +57,17 @@ class Faction extends Model
                     $found = true;
                 }
             }
-
-            array_push($activity, array(
-                "Date" => $date,
-                "Duration" => '0'
-            ));
+            if (!$found) {
+                array_push($activity, array(
+                    "Date" => $date,
+                    "Duration" => '0'
+                ));
+            }
         }
+
+        usort($activity, function($a, $b) {
+            return strcmp(((array)$a)['Date'], ((array)$b)['Date']);
+        });
 
         if ($chart) {
             $activity = (array)$activity;
@@ -73,10 +78,12 @@ class Faction extends Model
 
             $dataset = ['label' => 'Aktivität in h', 'data' => []];
 
-            foreach($activity as $act) {
+            foreach((array)$activity as $act) {
                 array_push($chartData['labels'], ((array)$act)['Date']);
                 array_push($dataset['data'] , round(((array)$act)['Duration'] / 60, 1));
             }
+
+
 
             array_push($chartData['datasets'], $dataset);
 

@@ -135,11 +135,17 @@ class Character extends Model
                 }
             }
 
-            array_push($activity, array(
-                "Date" => $date,
-                "Duration" => '0'
-            ));
+            if (!$found) {
+                array_push($activity, array(
+                    "Date" => $date,
+                    "Duration" => '0'
+                ));
+            }
         }
+
+        usort($activity, function($a, $b) {
+            return strcmp(((array)$a)['Date'], ((array)$b)['Date']);
+        });
 
         if ($chart) {
             $activity = (array)$activity;
