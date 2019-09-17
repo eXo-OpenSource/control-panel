@@ -152,7 +152,7 @@ class Character extends Model
 
             foreach($activity as $act) {
                 array_push($chartData['labels'], ((array)$act)['Date']);
-                array_push($dataset['data'] , ((array)$act)['Duration'] / 60);
+                array_push($dataset['data'] , round(((array)$act)['Duration'] / 60, 1));
             }
 
             array_push($chartData['datasets'], $dataset);
