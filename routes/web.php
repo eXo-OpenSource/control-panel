@@ -20,5 +20,6 @@ Route::resource('users', 'UserController');
 Route::resource('factions', 'FactionController');
 Route::resource('companies', 'CompanyController');
 Route::resource('groups', 'GroupController');
+Route::resource('textures', 'TextureController');
 Route::get('/home', 'HomeController@index')->name('home');
 

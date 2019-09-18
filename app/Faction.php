@@ -24,32 +24,22 @@ class Faction extends Model
         $currentDate = date("Y-m-d", strtotime("-14 days"));;
         $toDate = date("Y-m-d");
 
-        $dates = "'" . $currentDate . "'";
-        $datesCol = array();
+        $dates = [];
 
-        array_push($datesCol, $currentDate);
+        array_push($dates, $currentDate);
 
         while ($currentDate !== $toDate) {
             $currentDate = date("Y-m-d", strtotime($currentDate) + strtotime("+1 day") - strtotime($toDate));
-            $dates = $dates . ", '" . $currentDate . "'";
-            array_push($datesCol, $currentDate);
+            array_push($dates, $currentDate);
         }
 
         $members = $this->members->pluck('Id');
 
-        $users = join(', ', $members->toArray());
-
-        while ($currentDate !== $toDate) {
-            $currentDate = date("Y-m-d", strtotime($currentDate) + strtotime("+1 day") - strtotime($toDate));
-            $dates = $dates . ", '" . $currentDate . "'";
-            array_push($datesCol, $currentDate);
-        }
-
-        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . $users . ') AND Date IN (' . $dates . ') GROUP BY Date;');
+        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . join(', ', $members->toArray()) . ') AND Date IN (' . join(', ', $dates) . ') GROUP BY Date;');
 
         $activity = (array)$activity;
 
-        foreach ($datesCol as $date) {
+        foreach ($dates as $date) {
             $found = false;
 
             foreach ($activity as $act) {

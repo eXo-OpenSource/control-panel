@@ -85,3 +85,35 @@
 .user-stats dd a {
     @apply .text-blue-600;
 }
+
+/* Buttons */
+
+.btn {
+    @apply .text-gray-100 .font-bold .py-2 .px-4 .rounded;
+}
+
+.btn :focus {
+    @apply .outline-none .shadow-outline;
+}
+
+.btn-disabled {
+    @apply .opacity-75 .cursor-not-allowed;
+}
+
+.btn-primary {
+    @apply .bg-blue-500;
+}
+
+.btn-primary :hover {
+    @apply .bg-blue-700;
+}
+
+.btn-danger {
+    @apply .bg-red-500;
+}
+
+.btn-danger :hover {
+    @apply .bg-red-700;
+}
+
+

@@ -117,7 +117,27 @@
                 <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
                     Spielerakte
                 </div>
-                <div class="p-6 flex xl:flex-row flex-col w-full">
+                <div class="p-6 w-full">
+
+
+                    <table class="table w-full">
+                        <tr>
+                            <th>Fraktion/Unternehmen</th>
+                            <th>Dauer</th>
+                            <th>Uninviter</th>
+                            <th>Grund</th>
+                            <th></th>
+                        </tr>
+                        @foreach($user->character->history as $history)
+                            <tr>
+                                <td>{{ $history->element->Name }}</td>
+                                <td>{{ $history->getDuration() }}</td>
+                                <td>{{ $history->getUninviter() }}</td>
+                                <td>{{ $history->ExternalReason }}</td>
+                                <td><button class="btn btn-primary">Details</button></td>
+                            </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
             <div class="w-full break-words bg-white border border-2 rounded shadow-md mb-4">
@@ -125,7 +145,7 @@
                     Aktivität
                 </div>
                 <div class="p-6 flex xl:flex-row flex-col w-full">
-                    <chart-component :chartdata="{{ json_encode($user->character->getActivity(true)) }}"></chart-component>
+                    <chart-component :chartdata="{{ json_encode($user->character->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'stepSize' => 1, 'suggestedMax' => 8]]]]]) }}"></chart-component>
                 </div>
             </div>
         </div>

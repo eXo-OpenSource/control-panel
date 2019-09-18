@@ -5943,6 +5943,46 @@
 .user-stats dd a {
   color: #3182ce;
 }
+
+/* Buttons */
+
+.btn {
+  color: #f7fafc;
+  font-weight: 700;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
+.btn :focus {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+.btn-disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: #4299e1;
+}
+
+.btn-primary :hover {
+  background-color: #2b6cb0;
+}
+
+.btn-danger {
+  background-color: #f56565;
+}
+
+.btn-danger :hover {
+  background-color: #c53030;
+}
+
+
 /**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.

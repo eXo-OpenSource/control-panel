@@ -64194,7 +64194,15 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 Vue.component('chart-component', __webpack_require__(/*! ./components/ChartComponent.vue */ "./resources/js/components/ChartComponent.vue")["default"]);
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    open: false
+  },
+  methods: {
+    toggle: function toggle() {
+      this.open = !this.open;
+    }
+  }
 });
 
 /***/ }),
@@ -64259,14 +64267,13 @@ if (token) {
 /*!****************************************************!*\
   !*** ./resources/js/components/ChartComponent.vue ***!
   \****************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ChartComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChartComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ChartComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ChartComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ChartComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 var render, staticRenderFns
 
 
@@ -64296,7 +64303,7 @@ component.options.__file = "resources/js/components/ChartComponent.vue"
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/ChartComponent.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64313,8 +64320,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/rbitschnau/tmp/control-panel/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/rbitschnau/tmp/control-panel/resources/css/app.css */"./resources/css/app.css");
+__webpack_require__(/*! G:\Projects\1. Web\control-panel\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! G:\Projects\1. Web\control-panel\resources\css\app.css */"./resources/css/app.css");
 
 
 /***/ })

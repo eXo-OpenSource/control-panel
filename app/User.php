@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Character::class, 'Id', 'Id');
     }
+
+    public function textures()
+    {
+        return $this->hasMany(Texture::class, 'UserId', 'Id');
+    }
 }

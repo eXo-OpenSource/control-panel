@@ -110,23 +110,20 @@ class Character extends Model
         $currentDate = date("Y-m-d", strtotime("-14 days"));;
         $toDate = date("Y-m-d");
 
-        $dates = "'" . $currentDate . "'";
-        $datesCol = array();
+        $dates = [];
 
-        array_push($datesCol, $currentDate);
+        array_push($dates, $currentDate);
 
         while ($currentDate !== $toDate) {
             $currentDate = date("Y-m-d", strtotime($currentDate) + strtotime("+1 day") - strtotime($toDate));
-            $dates = $dates . ", '" . $currentDate . "'";
-            array_push($datesCol, $currentDate);
+            array_push($dates, $currentDate);
         }
 
-
-        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID = ? AND Date IN (' . $dates . ') GROUP BY Date;', [$this->Id]);
+        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID = ? AND Date IN (' . join(', ', $dates) . ') GROUP BY Date;', [$this->Id]);
 
         $activity = (array)$activity;
 
-        foreach ($datesCol as $date) {
+        foreach ($dates as $date) {
             $found = false;
 
             foreach ($activity as $act) {
@@ -187,6 +184,5 @@ class Character extends Model
         }
 
         return $sum;
-
     }
 }
