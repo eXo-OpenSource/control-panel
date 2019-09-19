@@ -15,12 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['register' => false]);
+Route::prefix('auth')->group(function () {
+    Route::get('login', 'Auth\\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\\LoginController@login');
+    Route::post('logout', 'Auth\\LoginController@logout')->name('logout');
+});
 
-Route::resource('users', 'UserController');
-Route::resource('factions', 'FactionController');
-Route::resource('companies', 'CompanyController');
-Route::resource('groups', 'GroupController');
-Route::resource('textures', 'TextureController');
-Route::get('/home', 'HomeController@index')->name('home');
-
+Route::middleware('auth')->group(function () {
+    Route::resource('users', 'UserController');
+    Route::resource('factions', 'FactionController');
+    Route::resource('companies', 'CompanyController');
+    Route::resource('groups', 'GroupController');
+    Route::resource('textures', 'TextureController');
+    Route::get('/home', 'HomeController@index')->name('home');
+});
