@@ -14,7 +14,7 @@ class Texture extends Model
     public function getStatus()
     {
         if ($this->Status === 0) {
-            return 'Teststatus';
+            return 'Testmodus';
         } else if ($this->Status === 1) {
             return 'in Bearbeitung';
         } else if ($this->Status === 2) {
