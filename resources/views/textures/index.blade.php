@@ -22,7 +22,7 @@
                     </tr>
                     @foreach($textures as $texture)
                     <tr>
-                        <td><img class="h-20" src="https://picupload.pewx.de/textures/{{ $texture->Image }}"></td>
+                        <td><img class="h-20" src="@if(strpos($texture->Image, 'http') !== 0){{'https://picupload.pewx.de/textures/'}}@endif{{ $texture->Image }}"></td>
                         <td>@vehicleName($texture->Model)
                             <img class="h-20 rounded" src="https://exo-reallife.de/images/veh/Vehicle_{{ $texture->Model }}.jpg"></td>
                         <td>@if($texture->Public === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Texture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class TextureController extends Controller
 {
@@ -51,7 +52,31 @@ class TextureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required',
+            'vehicle' => 'required|in:' . implode(',', array_keys(config('constants.vehicleNames'))),
+            'type' => 'required|in:0,1',
+            'texture' => 'required|image'
+        ]);
+
+        $path = Storage::disk('textures')->put(
+            '', $request->file('texture')
+        );
+
+        $texture = new Texture();
+        $texture->UserId = auth()->user()->Id;
+        $texture->Name = $data['name'];
+        $texture->Image = env('APP_URL') .  '/storage/textures/' . $path;
+        $texture->Model = $data['vehicle'];
+        $texture->Status = 0;
+        $texture->Public = $data['type'];
+        $texture->Admin = 0;
+        $texture->Date = new \DateTime();
+        $texture->Earnings = 0;
+        $texture->save();
+
+        Session::flash('alert-success', 'Erfolgreich hochgeladen!');
+        return redirect()->route('textures.index');
     }
 
     /**

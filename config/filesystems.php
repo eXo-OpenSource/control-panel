@@ -55,6 +55,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'textures' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/textures'),
+            'url' => env('APP_URL').'/images/textures',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

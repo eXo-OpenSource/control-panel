@@ -9,6 +9,7 @@ class Texture extends Model
 {
     protected $primaryKey = 'Id';
     protected $table = 'textureshop';
+    public $timestamps = false;
 
     public function getStatus()
     {

@@ -10,12 +10,12 @@
                         Fahrzeug-Textur Hochladen
                     </div>
 
-                    <form class="w-full p-6" method="POST" action="{{ route('login') }}">
+                    <form class="w-full p-6" method="POST" action="{{ route('textures.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="block mb-4">
                             <label class="form-input-label" for="name">Name</label>
-                            <input type="text" id="name" class="form-input mt-1 block w-full{{ $errors->has('name') ? ' border-red-500' : '' }}" placeholder="Namen der Textur" name="name" value="{{ old('name') }}" required>
+                            <input type="text" id="name" class="form-input mt-1 block w-full{{ $errors->has('name') ? ' border-red-500' : '' }}" placeholder="Namen der Textur" name="name" value="{{ old('name') }}" >
                             @if ($errors->has('name'))
                                 <p class="form-input-error">
                                     {{ $errors->first('name') }}
@@ -26,14 +26,14 @@
                         <div class="block mb-4">
                             <label class="form-input-label" for="vehicle">Fahrzeugmodel</label>
                             <select class="form-select block w-full mt-1{{ $errors->has('vehicle') ? ' border-red-500' : '' }}" name="vehicle" id="vehicle">
-                                <option value="0">[Model auswählen]</option>
+                                <option value="">[Model auswählen]</option>
                                 @foreach($vehicles as $vehicle)
-                                    <option value="{{ $vehicle['Id'] }}">{{ $vehicle['Name'] }} (ID: {{ $vehicle['Id'] }})</option>
+                                    <option value="{{ $vehicle['Id'] }}" @if($vehicle['Id'] == old('vehicle')){{ 'selected' }}@endif>{{ $vehicle['Name'] }} (ID: {{ $vehicle['Id'] }})</option>
                                 @endforeach
                             </select>
-                            @if ($errors->has('public'))
+                            @if ($errors->has('vehicle'))
                                 <p class="form-input-error">
-                                    {{ $errors->first('public') }}
+                                    {{ $errors->first('vehicle') }}
                                 </p>
                             @endif
                         </div>
@@ -42,32 +42,33 @@
                             <label class="form-input-label">Typ</label>
                             <div>
                                 <div class="inline-flex items-center">
-                                    <input type="radio" class="form-radio" id="private" name="public" value="0">
+                                    <input type="radio" class="form-radio" id="private" name="type" value="0" @if(old('type') === '0'){{ 'checked' }}@endif>
                                     <label class="ml-2" for="private">Privat nur für mich</label>
                                 </div>
                             </div>
                             <div>
                                 <div class="inline-flex items-center">
-                                    <input type="radio" class="form-radio" id="public" name="public" value="1">
+                                    <input type="radio" class="form-radio" id="public" name="type" value="1" @if(old('type') === '1'){{ 'checked' }}@endif>
                                     <label class="ml-2" for="public">Öffentlich</label>
                                 </div>
                             </div>
-                            @if ($errors->has('public'))
+                            @if ($errors->has('type'))
                                 <p class="form-input-error">
-                                    {{ $errors->first('public') }}
+                                    {{ $errors->first('type') }}
                                 </p>
                             @endif
                         </div>
 
                         <div class="block mb-4">
-                            <label class="form-input-label" for="file">Textur</label>
-                            <input type="file" id="file" class="mt-1 block w-full{{ $errors->has('name') ? ' border-red-500' : '' }}" name="file" required>
-                            @if ($errors->has('name'))
+                            <label class="form-input-label" for="texture">Textur</label>
+                            <input type="file" id="texture" class="mt-1 block w-full{{ $errors->has('file') ? ' border-red-500' : '' }}" name="texture">
+                            @if ($errors->has('texture'))
                                 <p class="form-input-error">
-                                    {{ $errors->first('name') }}
+                                    {{ $errors->first('texture') }}
                                 </p>
                             @endif
                         </div>
+
                         <div>
                             <button type="submit" class="btn btn-primary float-right">
                                 Hochladen
