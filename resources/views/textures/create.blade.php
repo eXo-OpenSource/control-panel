@@ -9,7 +9,7 @@
                     Fahrzeug-Textur Hochladen
                 </div>
 
-                <form class="w-full max-w-lg">
+                <form class="w-full max-w-lg m-4">
                     <div class="flex flex-wrap -mx-3 mb-6">
                         <div class="w-full px-3">
                             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
@@ -42,8 +42,7 @@
                             </label>
                             <div class="">
                                 <input type="radio" name="type" value="0"> Privat nur für mich<br>
-                                <input type="radio" name="type" value="1"> Öffentlich <small></small>
-                                <!--(Du erhälst 10% des Kaufpreises für jedes mit der Textur ausgestattete Fahrzeug) -->
+                                <input type="radio" name="type" value="1"> Öffentlich
                             </div>
                         </div>
                     </div>
@@ -53,6 +52,13 @@
                                 Bild
                             </label>
                             <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="file">
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                        <div class="w-full px-3">
+                            <button class="btn btn-primary float-right" type="button">
+                                Hochladen
+                            </button>
                         </div>
                     </div>
                 </form>

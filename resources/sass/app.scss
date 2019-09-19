@@ -1,0 +1,17 @@
+$fa-font-path: '/fonts/font-awesome';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+
+@import '~tailwindcss/base.css';
+@import '~tailwindcss/components.css';
+@import "components";
+@import 'components/buttons';
+@import 'components/alerts';
+@import 'components/tables';
+/*
+* @import "components/buttons";
+* @import "components/forms";
+*/
+@import '~tailwindcss/utilities.css';

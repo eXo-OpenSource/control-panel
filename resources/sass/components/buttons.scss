@@ -1,0 +1,51 @@
+.btn {
+    //@apply .text-gray-100 .font-bold .py-2 .px-4 .rounded;
+    @apply .cursor-pointer .px-5 .py-2 .inline-block .rounded;
+    &:focus {
+        @apply .outline-none .shadow-outline;
+    }
+
+    &:disabled {
+        @apply .opacity-50 .cursor-not-allowed;
+    }
+}
+
+.btn-primary {
+    @apply .bg-blue-600 .text-blue-100;
+
+    &:hover {
+        @apply .bg-blue-500 .text-white;
+    }
+}
+
+.btn-warning {
+    @apply .bg-orange-600 .text-orange-100;
+
+    &:hover {
+        @apply .bg-orange-500 .text-white;
+    }
+}
+
+.btn-danger {
+    @apply .bg-red-600 .text-red-100;
+
+    &:hover {
+        @apply .bg-red-500 .text-white;
+    }
+}
+
+.btn-inverse {
+    @apply .bg-gray-600 .text-gray-100;
+
+    &:hover {
+        @apply .bg-gray-500 .text-white;
+    }
+}
+
+.btn-success {
+    @apply .bg-teal-600 .text-teal-100;
+
+    &:hover {
+        @apply .bg-teal-500 .text-white;
+    }
+}

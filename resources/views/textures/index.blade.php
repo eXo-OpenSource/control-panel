@@ -27,7 +27,7 @@
                             <img class="h-20 rounded" src="https://exo-reallife.de/images/veh/Vehicle_{{ $texture->Model }}.jpg"></td>
                         <td>@if($texture->Public === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                         <td>{{ $texture->getStatus() }}</td>
-                        <td><form method="POST" action="{{ route('textures.destroy', [$texture->Id]) }}">@method('DELETE')@csrf<button type="submit"@if(!$texture->isDeleteable()){{'disabled'}}@endif class="btn btn-danger @if(!$texture->isDeleteable()){{'btn-disabled'}}@endif ">Löschen</button></form></td>
+                        <td><form method="POST" action="{{ route('textures.destroy', [$texture->Id]) }}">@method('DELETE')@csrf<button type="submit"@if(!$texture->isDeleteable()){{'disabled'}}@endif class="btn btn-danger">Löschen</button></form></td>
                     </tr>
 
                     @endforeach

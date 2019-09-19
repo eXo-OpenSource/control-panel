@@ -32,7 +32,7 @@
                         Aktivität
                     </div>
 
-                    <chart-component :chartdata="{{ json_encode($faction->getActivity(true)) }}"></chart-component>
+                    <chart-component :chartdata="{{ json_encode($faction->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'suggestedMax' => 8]]]]]) }}"></chart-component>
                 </div>
             </div>
         </div>

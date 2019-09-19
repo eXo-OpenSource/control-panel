@@ -1,4 +1,19 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/fonts/font-awesome/fa-brands-400.eot": "/fonts/font-awesome/fa-brands-400.eot",
+    "/fonts/font-awesome/fa-brands-400.svg": "/fonts/font-awesome/fa-brands-400.svg",
+    "/fonts/font-awesome/fa-brands-400.ttf": "/fonts/font-awesome/fa-brands-400.ttf",
+    "/fonts/font-awesome/fa-brands-400.woff": "/fonts/font-awesome/fa-brands-400.woff",
+    "/fonts/font-awesome/fa-brands-400.woff2": "/fonts/font-awesome/fa-brands-400.woff2",
+    "/fonts/font-awesome/fa-regular-400.eot": "/fonts/font-awesome/fa-regular-400.eot",
+    "/fonts/font-awesome/fa-regular-400.svg": "/fonts/font-awesome/fa-regular-400.svg",
+    "/fonts/font-awesome/fa-regular-400.ttf": "/fonts/font-awesome/fa-regular-400.ttf",
+    "/fonts/font-awesome/fa-regular-400.woff": "/fonts/font-awesome/fa-regular-400.woff",
+    "/fonts/font-awesome/fa-regular-400.woff2": "/fonts/font-awesome/fa-regular-400.woff2",
+    "/fonts/font-awesome/fa-solid-900.eot": "/fonts/font-awesome/fa-solid-900.eot",
+    "/fonts/font-awesome/fa-solid-900.svg": "/fonts/font-awesome/fa-solid-900.svg",
+    "/fonts/font-awesome/fa-solid-900.ttf": "/fonts/font-awesome/fa-solid-900.ttf",
+    "/fonts/font-awesome/fa-solid-900.woff": "/fonts/font-awesome/fa-solid-900.woff",
+    "/fonts/font-awesome/fa-solid-900.woff2": "/fonts/font-awesome/fa-solid-900.woff2"
 }

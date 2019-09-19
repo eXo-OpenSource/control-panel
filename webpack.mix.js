@@ -15,8 +15,13 @@ require('laravel-mix-purgecss');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .postCss('resources/css/app.css', 'public/css')
+   .sass('resources/sass/app.scss', 'public/css')
    .tailwind('./tailwind.config.js');
+
+mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fonts/font-awesome');
+
+mix.setPublicPath('public');
+mix.setResourceRoot('../');
 
 if (mix.inProduction()) {
   mix
