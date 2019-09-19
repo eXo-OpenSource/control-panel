@@ -56,7 +56,7 @@ class TextureController extends Controller
             'name' => 'required',
             'vehicle' => 'required|in:' . implode(',', array_keys(config('constants.vehicleNames'))),
             'type' => 'required|in:0,1',
-            'texture' => 'required|image'
+            'texture' => 'required|image|dimensions:max_width=600,max_height=600|max:200'
         ]);
 
         $path = Storage::disk('textures')->put(

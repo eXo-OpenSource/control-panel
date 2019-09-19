@@ -64,9 +64,12 @@ RUN mkdir -p /var/www/public
 WORKDIR /var/www
 
 # Switch to use a non-root user from here on
-RUN chown -R app:app /var/www
 USER 1000
 ADD . /var/www
+RUN chown -R app:app /var/www
+
+RUN php artisan storage:link && \
+    php artisan cache:clear
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
