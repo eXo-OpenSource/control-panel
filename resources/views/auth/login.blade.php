@@ -13,52 +13,39 @@
                     <form class="w-full p-6" method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="flex flex-wrap mb-6">
-                            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">
-                                {{ __('Benutzername') }}:
-                            </label>
-
-                            <input id="username" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline{{ $errors->has('username') ? ' border-red-500' : '' }}" name="username" value="{{ old('username') }}" required autofocus>
-
+                        <div class="block mb-4">
+                            <label class="form-input-label" for="username">Benutzername</label>
+                            <input type="text" id="username" class="form-input mt-1 block w-full{{ $errors->has('username') ? ' border-red-500' : '' }}" placeholder="Benutzername" name="username" value="{{ old('username') }}" required>
                             @if ($errors->has('username'))
-                                <p class="text-red-500 text-xs italic mt-4">
+                                <p class="form-input-error">
                                     {{ $errors->first('username') }}
                                 </p>
                             @endif
                         </div>
 
-                        <div class="flex flex-wrap mb-6">
-                            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">
-                                {{ __('Passwort') }}:
-                            </label>
-
-                            <input id="password" type="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline{{ $errors->has('password') ? ' border-red-500' : '' }}" name="password" required>
-
+                        <div class="block mb-4">
+                            <label class="form-input-label" for="password">Passwort</label>
+                            <input type="password" id="password" class="form-input mt-1 block w-full{{ $errors->has('password') ? ' border-red-500' : '' }}" placeholder="Passwort" name="password" required>
                             @if ($errors->has('password'))
-                                <p class="text-red-500 text-xs italic mt-4">
+                                <p class="form-input-error">
                                     {{ $errors->first('password') }}
                                 </p>
                             @endif
                         </div>
 
-                        <div class="flex mb-6">
-                            <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                            <label class="text-sm text-gray-700 ml-3" for="remember">
-                                {{ __('Anmeldung merken') }}
-                            </label>
+                        <div class="inline-flex items-center mb-4">
+                            <input type="checkbox" name="remember" id="remember" class="form-checkbox" {{ old('remember') ? 'checked' : '' }}>
+                            <label class="ml-2 text-sm" for="remember">Anmeldung merken</label>
                         </div>
 
                         <div class="flex flex-wrap items-center">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-gray-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button type="submit" class="btn btn-primary">
                                 {{ __('Absenden') }}
                             </button>
 
-                            @if (Route::has('password.request'))
-                                <a class="text-sm text-blue-500 hover:text-blue-700 whitespace-no-wrap no-underline ml-auto" href="https://forum.exo-reallife.de/wsc/index.php?lost-password/">
-                                    {{ __('Passwort vergessen?') }}
-                                </a>
-                            @endif
+                            <a class="text-sm text-blue-500 hover:text-blue-700 whitespace-no-wrap no-underline ml-auto" href="https://forum.exo-reallife.de/wsc/index.php?lost-password/">
+                                {{ __('Passwort vergessen?') }}
+                            </a>
                         </div>
                     </form>
 

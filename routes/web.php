@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
 Auth::routes(['register' => false]);
 
 Route::resource('users', 'UserController');

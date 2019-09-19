@@ -1,0 +1,6 @@
+.form-input-label {
+    @apply .text-gray-700 .font-bold .block .text-sm .mb-2;
+}
+.form-input-error {
+    @apply .text-red-500 .text-xs .italic .mt-1 .mb-4;
+}
