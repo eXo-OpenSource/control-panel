@@ -14,6 +14,12 @@ class Faction extends Model
         return $this->hasMany(Character::class, 'FactionId', 'Id');
     }
 
+    public function logs()
+    {
+        return GroupLog::where('GroupType', 'faction')->where('GroupId', $this->Id);
+    }
+
+
     public function membersCount()
     {
         return Character::where('FactionId', $this->Id)->count();
@@ -24,4 +30,5 @@ class Faction extends Model
         $members = $this->members->pluck('Id')->toArray();
         return AccountActivity::getActivity($members, $chart);
     }
+
 }

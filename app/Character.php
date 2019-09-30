@@ -10,6 +10,7 @@ class Character extends Model
 {
     protected $table = 'character';
     protected $primaryKey = 'Id';
+    protected $connection = 'mysql';
 
     public function user()
     {

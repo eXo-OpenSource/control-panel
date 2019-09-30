@@ -26,13 +26,37 @@
                         @endforeach
                     </table>
                 </div>
-                <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md ml-4 w-2/3">
+                <div class="flex flex-col ml-4 w-2/3">
 
-                    <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                        Aktivität
+                    <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md w-full">
+
+                        <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
+                            Aktivität
+                        </div>
+
+                        <chart-component :chartdata="{{ json_encode($faction->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'suggestedMax' => 8]]]]]) }}"></chart-component>
                     </div>
 
-                    <chart-component :chartdata="{{ json_encode($faction->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'suggestedMax' => 8]]]]]) }}"></chart-component>
+
+                    <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md mt-4 w-full">
+
+                        <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
+                            Logs
+                        </div>
+
+                        <table class="table w-full">
+                            <tr>
+                                <th>User</th>
+                                <th>Beschreibung</th>
+                            </tr>
+                            @foreach($faction->logs()->orderBy('Timestamp', 'DESC')->limit(100)->with('user')->with('user.user')->get() as $log)
+                                <tr>
+                                    <td><a href="{{ route('users.show', [$log->UserId]) }}">{{ $log->user->user->Name }}</a></td>
+                                    <td>{{ $log->Description }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

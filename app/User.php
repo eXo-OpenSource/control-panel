@@ -13,6 +13,7 @@ class User extends Authenticatable
     protected $table = 'account';
     protected $primaryKey = 'Id';
     public $remember_token = false;
+    protected $connection = 'mysql';
     protected $dates = ['LastLogin', 'RegisterDate'];
     /**
      * The attributes that are mass assignable.

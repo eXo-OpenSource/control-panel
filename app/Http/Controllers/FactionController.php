@@ -48,6 +48,7 @@ class FactionController extends Controller
     public function show(Faction $faction)
     {
         abort_unless($faction->active === 1, 403);
+
         return view('factions.show', compact('faction'));
     }
 
