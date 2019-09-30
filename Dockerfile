@@ -63,10 +63,11 @@ RUN mkdir -p /var/www/public
 # Add application
 WORKDIR /var/www
 
-# Switch to use a non-root user from here on
-USER 1000
 ADD . /var/www
 RUN chown -R app:app /var/www
+
+# Switch to use a non-root user from here on
+USER 1000
 
 RUN php artisan storage:link && \
     php artisan cache:clear
