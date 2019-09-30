@@ -15,10 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('auth')->group(function () {
-    Route::get('login', 'Auth\\LoginController@showLoginForm')->name('login');
-    Route::post('login', 'Auth\\LoginController@login');
-    Route::post('logout', 'Auth\\LoginController@logout')->name('logout');
+Route::namespace('Auth')->prefix('auth')->group(function () {
+    Route::get('login', 'LoginController@showLoginForm')->name('login');
+    Route::post('login', 'LoginController@login');
+    Route::post('logout', 'LoginController@logout')->name('logout');
 });
 
 Route::middleware('auth')->group(function () {
@@ -28,4 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('groups', 'GroupController');
     Route::resource('textures', 'TextureController');
     Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::namespace('Admin')->prefix('admin')->group(function () {
+        Route::resource('dashboard', 'DashboardController')->only('index');
+    });
 });
