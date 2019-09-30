@@ -11,7 +11,7 @@
                         Mitglieder
                     </div>
 
-                    <table class="table w-full">
+                    <table class="table table-sm w-full">
                         <tr>
                             <th>Name</th>
                             <th>Rang</th>
@@ -41,18 +41,18 @@
                     <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md mt-4 w-full">
 
                         <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                            Logs
+                            Logs - Letzen 10 Einträge
                         </div>
 
-                        <table class="table w-full">
+                        <table class="table table-sm w-full">
                             <tr>
-                                <th>User</th>
-                                <th>Beschreibung</th>
+                                <th>Eintrag</th>
+                                <th>Datum</th>
                             </tr>
-                            @foreach($faction->logs()->orderBy('Timestamp', 'DESC')->limit(100)->with('user')->with('user.user')->get() as $log)
+                            @foreach($faction->logs()->orderBy('Timestamp', 'DESC')->limit(10)->with('user')->with('user.user')->get() as $log)
                                 <tr>
-                                    <td><a href="{{ route('users.show', [$log->UserId]) }}">{{ $log->user->user->Name }}</a></td>
-                                    <td>{{ $log->Description }}</td>
+                                    <td><a href="{{ route('users.show', [$log->UserId]) }}">{{ $log->user->user->Name }}</a> {{ $log->Description }}</td>
+                                    <td>{{ Carbon\Carbon::createFromTimestamp($log->Timestamp)->format('d.m.Y H:i:s') }}</td>
                                 </tr>
                             @endforeach
                         </table>

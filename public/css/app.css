@@ -55877,6 +55877,10 @@ readers do not read off random characters that represent icons */
   height: 3.8125rem;
 }
 
+.table-sm td {
+  height: 2.2rem;
+}
+
 .th-fit,
 .td-fit {
   width: 1%;
