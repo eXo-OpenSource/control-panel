@@ -33,3 +33,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('dashboard', 'DashboardController')->only('index');
     });
 });
+
+Route::get('/2D5DBD7FFEE15070A8EFADE1491690879A80B736E51C891D65791030387DE112', function () {
+    $mtaService = new \App\Services\MTAService();
+
+    return $mtaService->kickPlayer(1, 3, "Da war er weg...");
+});
