@@ -30,12 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::namespace('Admin')->prefix('admin')->group(function () {
-        Route::resource('dashboard', 'DashboardController')->only('index');
+        Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
+        Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
     });
 });
 
-Route::get('/2D5DBD7FFEE15070A8EFADE1491690879A80B736E51C891D65791030387DE112', function () {
-    $mtaService = new \App\Services\MTAService();
-
-    return $mtaService->kickPlayer(1, 3, "Da war er weg...");
+Route::get('/test', function () {
+    dump(auth()->user()->isBanned());
 });

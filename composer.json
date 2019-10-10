@@ -16,7 +16,7 @@
         "http-interop/http-factory-guzzle": "^1.0",
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
-        "multitheftauto/mtasa-php-sdk": "dev-master",
+        "multitheftauto/mtasa-php-sdk": "^1.0",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
@@ -55,12 +55,6 @@
             "Tests\\": "tests/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "https://github.com/MegaThorx/mtasa-php-sdk"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {

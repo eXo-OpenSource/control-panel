@@ -33,6 +33,11 @@
                             <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('companies.index') }}">Unternehmen</a>
                             <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('groups.index') }}">Gruppen</a>
                             <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('textures.index') }}">Texturen</a>
+                            @auth
+                                @if(auth()->user()->Rank >= 3)
+                                    <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('admin.dashboard.index') }}">Admin</a>
+                                @endif
+                            @endauth
                         </div>
                         <div>
                             @guest

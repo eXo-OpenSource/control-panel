@@ -856,6 +856,50 @@ video {
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
   border-color: #63b3ed;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination .page-item .page-link {
+  padding: .75rem;
+  display: block;
+  text-decoration: none;
+  border-top-width: 1px;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+  background-color: #ffffff;
+  color: #2779BD;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #f1f5f8;
+}
+
+.pagination .page-item:first-child .page-link {
+  border-top-left-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+}
+
+.pagination .page-item:last-child .page-link {
+  border-right-width: 1px;
+  border-top-right-radius: .25rem;
+  border-bottom-right-radius: .25rem;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #2779BD;
+  border-color: #2779BD;
+  color: #ffffff;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: #f1f5f8;
+  color: #8795a1;
+}
 .sr-only {
   position: absolute;
   width: 1px;

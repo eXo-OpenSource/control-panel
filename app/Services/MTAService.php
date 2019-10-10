@@ -31,4 +31,14 @@ class MTAService
     {
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKUnbanPlayer', $adminId,  $targetId);
     }
+
+    public function addWarn($adminId, $targetId, $duration, $reason)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKAddWarn', $adminId,  $targetId, $duration, $reason);
+    }
+
+    public function removeWarn($adminId, $targetId, $warnId)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKRemoveWarn', $adminId,  $targetId, $warnId);
+    }
 }

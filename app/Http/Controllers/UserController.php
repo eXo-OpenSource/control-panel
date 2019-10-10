@@ -47,8 +47,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         abort_unless(auth()->user()->can('show', $user), 403);
-
-        return view('users.show', compact('user'));
+        $banned = $user->isBanned();
+        return view('users.show', compact('user', 'banned'));
     }
 
     /**

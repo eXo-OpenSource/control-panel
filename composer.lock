@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "41fd4b4edad33b59f9ce4b95760890ff",
+    "content-hash": "df6c871b00ab80f900ea4a474db05be7",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1132,16 +1132,16 @@
         },
         {
             "name": "multitheftauto/mtasa-php-sdk",
-            "version": "dev-master",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/MegaThorx/mtasa-php-sdk.git",
-                "reference": "4f33018ffa9139cfd46a27c7e18de1b71ca08930"
+                "url": "https://github.com/multitheftauto/mtasa-php-sdk.git",
+                "reference": "5673c25cacc76367bd3438797977be38b8788d9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MegaThorx/mtasa-php-sdk/zipball/4f33018ffa9139cfd46a27c7e18de1b71ca08930",
-                "reference": "4f33018ffa9139cfd46a27c7e18de1b71ca08930",
+                "url": "https://api.github.com/repos/multitheftauto/mtasa-php-sdk/zipball/5673c25cacc76367bd3438797977be38b8788d9f",
+                "reference": "5673c25cacc76367bd3438797977be38b8788d9f",
                 "shasum": ""
             },
             "require": {
@@ -1167,40 +1167,13 @@
                     "MultiTheftAuto\\Sdk\\": "src/"
                 }
             },
-            "scripts": {
-                "infection": [
-                    "infection"
-                ],
-                "lint": [
-                    "php-cs-fixer fix --verbose --show-progress=estimating"
-                ],
-                "lint:check": [
-                    "php-cs-fixer fix --dry-run --verbose --show-progress=estimating"
-                ],
-                "phpunit": [
-                    "phpunit tests"
-                ],
-                "phpstan": [
-                    "phpstan analyse"
-                ],
-                "test": [
-                    "@lint:check",
-                    "@phpunit",
-                    "@phpstan"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "MTA SDK to interact with MTA's server.",
             "homepage": "https://mtasa.com/",
-            "support": {
-                "chat": "https://mtasa.com/discord",
-                "forum": "https://forum.mtasa.com",
-                "wiki": "https://wiki.multitheftauto.com/wiki/PHP_SDK",
-                "source": "https://github.com/MegaThorx/mtasa-php-sdk/tree/master"
-            },
-            "time": "2019-10-07T17:49:01+00:00"
+            "time": "2019-10-08T01:14:08+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -6126,9 +6099,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "multitheftauto/mtasa-php-sdk": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
