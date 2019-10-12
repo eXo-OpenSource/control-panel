@@ -13,9 +13,13 @@ class User extends Authenticatable
 
     protected $table = 'account';
     protected $primaryKey = 'Id';
-    public $remember_token = false;
     protected $connection = 'mysql';
     protected $dates = ['LastLogin', 'RegisterDate'];
+    public $timestamps = false;
+
+    // ALTER TABLE `vrp_account` ADD COLUMN `RememberToken` varchar(100) NULL AFTER `AutologinToken`;
+    protected $rememberTokenName = 'RememberToken';
+
     /**
      * The attributes that are mass assignable.
      *

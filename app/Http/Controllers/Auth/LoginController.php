@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -43,6 +44,16 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'username';
+    }
+/*
     protected function sendLoginResponse(Request $request, $user)
     {
         $remember = $request->has('remember');
@@ -52,8 +63,8 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
         return $this->authenticated($request, $this->guard()->user())
             ?: redirect()->intended($this->redirectPath());
-    }
-
+    }*/
+    /*
     public function login(Request $request)
     {
         $credentials = $request->only('username', 'password');
@@ -95,5 +106,5 @@ class LoginController extends Controller
                 return view('auth.login');
             };
         }
-    }
+    }*/
 }
