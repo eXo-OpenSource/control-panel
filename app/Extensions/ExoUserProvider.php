@@ -64,10 +64,9 @@ class ExoUserProvider implements UserProvider
         $client = new Client();
 
         try {
-            $result = $client->post(env('AUTH_ENDPOINT') . '?user-api', [
+            $result = $client->post(env('AUTH_ENDPOINT') . '?user-api&method=login', [
                 'form_params' => [
                     'secret' => env('AUTH_SECRET'),
-                    'method' => 'login',
                     'username' => $credentials['username'],
                     'password' => $credentials['password']
                 ]
@@ -97,10 +96,9 @@ class ExoUserProvider implements UserProvider
         $client = new Client();
 
         try {
-            $result = $client->post(env('AUTH_ENDPOINT') . '?user-api', [
+            $result = $client->post(env('AUTH_ENDPOINT') . '?user-api&method=login', [
                 'form_params' => [
                     'secret' => env('AUTH_SECRET'),
-                    'method' => 'login',
                     'username' => $credentials['username'],
                     'password' => $credentials['password']
                 ]
