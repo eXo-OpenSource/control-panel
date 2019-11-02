@@ -1,0 +1,74 @@
+.#{$prefix}avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50em;
+  @include avatar($avatar-width,$avatar-status-width);
+}
+
+.#{$prefix}avatar-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50em;
+}
+
+.#{$prefix}avatar-status {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  border: 1px solid $white;
+  border-radius: 50em;
+
+  @include ltr {
+    right: 0;
+  }
+  @include rtl {
+    left: 0;
+  }
+}
+
+.#{$prefix}avatar-sm {
+  @include avatar($avatar-sm-width,$avatar-sm-status-width);
+}
+
+.#{$prefix}avatar-lg {
+  @include avatar($avatar-lg-width,$avatar-lg-status-width);
+}
+
+.#{$prefix}avatar-xl {
+  @include avatar($avatar-xl-width,$avatar-xl-status-width);
+}
+
+.#{$prefix}avatars-stack {
+  display: flex;
+
+  .#{$prefix}avatar {
+    margin-right: - ($avatar-width / 2);
+    transition: margin-right $layout-transition-speed;
+
+    &:hover {
+      margin-right: 0;
+    }
+  }
+
+  .#{$prefix}avatar-sm {
+    margin-right: - ($avatar-sm-width / 2);
+  }
+
+  .#{$prefix}avatar-lg {
+    margin-right: - ($avatar-lg-width / 2);
+  }
+
+  .#{$prefix}avatar-xl {
+    margin-right: - ($avatar-xl-width / 2);
+  }
+}
+
+.#{$prefix}avatar-rounded {
+  border-radius: $border-radius;
+}
+
+.#{$prefix}avatar-square {
+  border-radius: 0;
+}

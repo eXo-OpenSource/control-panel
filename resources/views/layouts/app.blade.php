@@ -12,52 +12,62 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="bg-gray-100 h-screen antialiased leading-none">
-    <div id="app">
-        <nav class="bg-blue-900 shadow mb-8 py-6">
-            <div class="container mx-auto">
-                <div class="flex items-center justify-between flex-wrap">
-                    <div class="flex items-center flex-no-shrink text-white mr-6 ml-4 sm:ml-0">
-                        <a href="{{ url('/') }}" class="text-lg font-semibold text-gray-100 no-underline">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                    </div>
-                    <div class="block sm:hidden">
-                        <button @click="toggle" class="flex items-center px-3 py-2 border rounded text-gray-300 border-gray-300 hover:text-white hover:border-white">
-                            <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                        </button>
-                    </div>
-                    <div :class="open ? 'block': 'hidden'" class="w-full flex-grow sm:flex sm:items-center sm:w-auto">
-                        <div class="text-sm sm:flex-grow">
-                            <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('factions.index') }}">Fraktion</a>
-                            <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('companies.index') }}">Unternehmen</a>
-                            <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('groups.index') }}">Gruppen</a>
-                            <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('textures.index') }}">Texturen</a>
-                            @auth
-                                @if(auth()->user()->Rank >= 3)
-                                    <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('admin.dashboard.index') }}">Admin</a>
-                                @endif
-                            @endauth
-                        </div>
-                        <div>
-                            @guest
-                                <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            @else
-                                <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('users.show', ['user' => auth()->user()]) }}">{{ Auth::user()->Name }}</a>
+<body class="c-app c-dark-theme pace-done pace-done">
+    <div id="app" class="c-wrapper">
+        <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+            <ul class="c-header-nav d-md-down-none">
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('factions.index') }}">Fraktion</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('companies.index') }}">Unternehmen</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('groups.index') }}">Gruppen</a></li>
+                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('textures.index') }}">Texturen</a></li>
+                @auth
+                    @if(auth()->user()->Rank >= 3)
+                        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.dashboard.index') }}">Admin</a></li>
+                    @endif
+                @endauth
+            </ul>
+            <ul class="c-header-nav ml-auto">
 
-                                <a href="{{ route('logout') }}"
-                                   class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3"
-                                   onclick="event.preventDefault();
+                @guest
+                    <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                @else
+                    <!--
+                    <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('users.show', ['user' => auth()->user()]) }}">{{ Auth::user()->Name }}</a>
+
+                    <a href="{{ route('logout') }}"
+                       class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3"
+                       onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                                    {{ csrf_field() }}
-                                </form>
-                            @endguest
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        {{ csrf_field() }}
+                    </form> -->
+                    <li class="c-header-nav-item dropdown px-3"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div class="c-avatar"><span>{{ Auth::user()->Name }}</span></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pt-0">
+                            <div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
+                                <a class="dropdown-item" href="{{ route('users.show', ['user' => auth()->user()]) }}">
+                                    {{ __('Character') }}
+                                </a>
+                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
                         </div>
-                    </div>
-                </div>
+                    </li>
+                @endguest
+            </ul>
+            <div class="c-subheader px-3">
+
+                <ol class="breadcrumb border-0 m-0">
+                    <li class="breadcrumb-item">Home</li>
+                    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+
+                </ol>
             </div>
-        </nav>
+        </header>
 
         <div class="flex items-center">
             <div class="md:w-2/3 md:mx-auto">
@@ -70,10 +80,19 @@
                 @endforeach
             </div>
         </div>
-        @yield('content')
+        <div class="c-body">
+            <main class="c-main">
+                @yield('content')
+            </main>
+        </div>
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.1/dist/Chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@coreui/coreui@3.0.0-alpha.13/dist/js/coreui.min.js"></script>
     <script src="{{ mix('js/app.js') }}"></script>
+    @yield('script')
 </body>
 </html>

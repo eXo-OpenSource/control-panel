@@ -1,50 +1,46 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center">
-        <div class="w-full ml-2 mr-2 md:w-2/3 md:mx-auto">
-            <h2 class="text-3xl mb-8">{{ $faction->Name }}</h2>
-            <div class="flex flex-row">
-                <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md w-1/3">
-
-                    <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                        Mitglieder
-                    </div>
-
-                    <table class="table table-sm w-full">
-                        <tr>
-                            <th>Name</th>
-                            <th>Rang</th>
-                            <th>Aktivität</th>
-                        </tr>
-                        @foreach($faction->members()->with('user')->orderBy('FactionRank', 'DESC')->get() as $character)
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">{{ __('Mitglieder') }}</div>
+                    <div class="card-body">
+                        <table class="table table-sm table-responsive-sm">
+                            <thead>
                             <tr>
-                                <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
-                                <td>{{ $character->FactionRank }}</td>
-                                <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Rang') }}</th>
+                                <th>{{ __('Aktivität') }}</th>
                             </tr>
-                        @endforeach
-                    </table>
-                </div>
-                <div class="flex flex-col ml-4 w-2/3">
-
-                    <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md w-full">
-
-                        <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                            Aktivität
-                        </div>
-
-                        <chart-component :chartdata="{{ json_encode($faction->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'suggestedMax' => 8]]]]]) }}"></chart-component>
+                            </thead>
+                            <tbody>
+                            @foreach($faction->members()->with('user')->orderBy('FactionRank', 'DESC')->get() as $character)
+                                <tr>
+                                    <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
+                                    <td>{{ $character->FactionRank }}</td>
+                                    <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
-
-
-                    <div class="flex flex-col break-words bg-white border border-2 rounded shadow-md mt-4 w-full">
-
-                        <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                            Logs - Letzen 100 Einträge
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">{{ __('Aktivität') }}</div>
+                    <div class="card-body">
+                        <div class="chart-wrapper">
+                            <canvas id="canvas-1"></canvas>
                         </div>
-
-                        <table class="table table-sm w-full">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">{{ __('Logs - Letzten 100 Einträge') }}</div>
+                    <div class="card-body">
+                        <table class="table table-sm">
                             <tr>
                                 <th>Eintrag</th>
                                 <th>Datum</th>
@@ -61,4 +57,33 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        var data = {!! json_encode($faction->getActivity(true)) !!};
+
+        var lineChart = new Chart($('#canvas-1'), {
+            type: 'line',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Aktivität in h',
+                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                    borderColor: 'rgba(220, 220, 220, 1)',
+                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                    pointBorderColor: '#fff',
+                    data: data.data
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [
+                        {ticks: {beginAtZero: true, suggestedMax: 8}}
+                    ]
+                },
+                responsive: true
+            }
+        });
+    </script>
 @endsection
