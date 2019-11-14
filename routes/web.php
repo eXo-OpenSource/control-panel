@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
+        Route::get('textures', 'TextureController@index')->name('admin.texture');
     });
 });
 
