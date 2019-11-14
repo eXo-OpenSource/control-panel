@@ -26,7 +26,7 @@ class TextureController extends Controller
             $limit = request()->get('limit');
         }
 
-        $textures = Texture::query();
+        $textures = Texture::query()->with(['admin', 'user']);
 
         $textures->orderBy('Id', 'DESC');
 
