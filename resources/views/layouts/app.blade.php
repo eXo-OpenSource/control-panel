@@ -14,7 +14,7 @@
 </head>
 <body class="c-app c-dark-theme pace-done pace-done">
     <div id="app" class="c-wrapper">
-        <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+        <header class="c-header c-header-light c-header-fixed px-5"> <!--c-header-with-subheader -->
             <ul class="c-header-nav d-md-down-none">
                 <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a></li>
                 <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('factions.index') }}">Fraktion</a></li>
@@ -32,18 +32,8 @@
                 @guest
                     <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                 @else
-                    <!--
-                    <a class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3" href="{{ route('users.show', ['user' => auth()->user()]) }}">{{ Auth::user()->Name }}</a>
-
-                    <a href="{{ route('logout') }}"
-                       class="no-underline hover:text-white block sm:inline-block text-gray-300 text-sm p-3"
-                       onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                        {{ csrf_field() }}
-                    </form> -->
                     <li class="c-header-nav-item dropdown px-3"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <div class="c-avatar"><span>{{ Auth::user()->Name }}</span></div>
+                            <div><span>{{ Auth::user()->Name }}</span></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right pt-0">
                             <div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
@@ -58,6 +48,7 @@
                     </li>
                 @endguest
             </ul>
+            <!--
             <div class="c-subheader px-3">
 
                 <ol class="breadcrumb border-0 m-0">
@@ -66,7 +57,7 @@
                     <li class="breadcrumb-item active">Dashboard</li>
 
                 </ol>
-            </div>
+            </div>-->
         </header>
 
         <div class="flex items-center">

@@ -14,8 +14,22 @@ class GroupController extends Controller
      */
     public function index()
     {
-        $groups = Group::all();
-        return view('groups.index', compact('groups'));
+        $limit = 50;
+
+        if(request()->has('limit')) {
+            if (request()->get('limit') < 0) {
+                $limit = 1;
+            } else if (request()->get('limit') > 500) {
+                $limit = 500;
+            }
+            $limit = request()->get('limit');
+        }
+
+        $groups = Group::query();
+
+        $groups = $groups->paginate($limit);
+
+        return view('groups.index', compact('groups', 'limit'));
     }
 
     /**
@@ -47,7 +61,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        return view('groups.show', compact('group'));
     }
 
     /**

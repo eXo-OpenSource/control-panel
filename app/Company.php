@@ -17,4 +17,15 @@ class Company extends Model
     {
         return Character::where('CompanyId', $this->Id)->count();
     }
+
+    public function logs()
+    {
+        return GroupLog::where('GroupType', 'company')->where('GroupId', $this->Id);
+    }
+
+    public function getActivity($chart)
+    {
+        $members = $this->members->pluck('Id')->toArray();
+        return AccountActivity::getActivity($members, $chart);
+    }
 }
