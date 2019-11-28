@@ -33,7 +33,6 @@
                                         <td>{{ $texture->getStatus() }}</td>
                                         <td><form method="POST" action="{{ route('textures.destroy', [$texture->Id]) }}">@method('DELETE')@csrf<button type="submit"@if(!$texture->isDeleteable()){{'disabled'}}@endif class="btn btn-danger">Löschen</button></form></td>
                                     </tr>
-
                                 @endforeach
                                 </tbody>
                             </table>
