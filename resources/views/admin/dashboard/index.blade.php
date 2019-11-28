@@ -7,6 +7,9 @@
                 <li class="mr-3">
                     <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="{{ route('admin.user.search') }}">Benutzersuche</a>
                 </li>
+                <li class="mr-3">
+                    <a class="inline-block border border-blue-500 rounded py-1 px-3 bg-blue-500 text-white" href="{{ route('admin.texture') }}">Texturen</a>
+                </li>
             </ul>
         </div>
 

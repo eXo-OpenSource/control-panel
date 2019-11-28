@@ -10,6 +10,7 @@ class Texture extends Model
     protected $primaryKey = 'Id';
     protected $table = 'textureshop';
     public $timestamps = false;
+    protected $dates = ['Date'];
 
     public function getStatus()
     {
@@ -22,6 +23,16 @@ class Texture extends Model
         } else {
             return 'Abgelehnt';
         }
+    }
+
+    public function user() 
+    {
+        return $this->hasOne(User::class, 'Id', 'UserId');
+    }
+
+    public function admin() 
+    {
+        return $this->hasOne(User::class, 'Id', 'Admin');
     }
 
     public function isDeleteable()
