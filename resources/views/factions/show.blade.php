@@ -61,20 +61,14 @@
 
 @section('script')
     <script>
+
         var data = {!! json_encode($faction->getActivity(true)) !!};
 
         var lineChart = new Chart($('#canvas-1'), {
             type: 'line',
             data: {
                 labels: data.labels,
-                datasets: [{
-                    label: 'Aktivität in h',
-                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                    borderColor: 'rgba(220, 220, 220, 1)',
-                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                    pointBorderColor: '#fff',
-                    data: data.data
-                }]
+                datasets: data.datasets
             },
             options: {
                 scales: {

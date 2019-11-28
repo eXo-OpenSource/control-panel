@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Faction;
 use App\Services\TicketService;
 use App\Texture;
 use Illuminate\Http\Request;
@@ -22,7 +23,25 @@ class DashboardController extends Controller
 
         $textures = Texture::query()->orderBy('Id', 'DESC')->limit(10);
         $tickets = TicketService::getStatistics(true);
+        $totalTickets = DB::selectOne('SELECT COUNT(TID) AS `Count` FROM `mtickets`')->Count;
 
-        return view('admin.dashboard.index', compact('textures', 'tickets'));
+        $tickets['datasets'][0] = array_merge($tickets['datasets'][0], ['backgroundColor' => 'transparent', 'borderColor' => 'rgba(255,255,255,.55)', 'pointBackgroundColor' => '#321fdb']);
+
+        $factions = Faction::where('active', 1)->get();
+
+        $data = ['datasets' => []];
+
+        foreach ($factions as $faction) {
+            $activity = $faction->getActivity(true);
+            if (!isset($data['labels'])) {
+                $data['labels'] = $activity['labels'];
+            }
+
+            array_push($data['datasets'], $activity['datasets'][0]);
+        }
+
+        $faction = $factions[0];
+
+        return view('admin.dashboard.index', compact('textures', 'tickets', 'faction', 'data', 'totalTickets'));
     }
 }

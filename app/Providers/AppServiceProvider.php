@@ -34,6 +34,22 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo config('constants.vehicleNames')[$model]; ?>";
         });
 
+        Blade::directive('factionColor', function ($value) {
+            $value = explode(', ', $value);
+
+            $factionId = $value[0];
+            $alpha = isset($value[1]) ? $value[1] : 1;
+
+            $color = config('constants.factionColors')[0];
+
+            if (config('constants.factionColors')[$factionId]) {
+                $color = config('constants.factionColors')[$factionId];
+            }
+
+            return "<?php echo 'rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")'; ?>";
+        });
+        //
+
         Gate::define('admin-rank-1', function ($user) { // Ticketsupporter
             return $user->Rank >= 1;
         });

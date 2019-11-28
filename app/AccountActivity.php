@@ -28,7 +28,12 @@ class AccountActivity extends Model
             array_push($dates, $currentDate);
         }
 
-        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . join(', ', $users) . ') AND Date IN (\'' . join('\', \'', $dates) . '\') GROUP BY Date;');
+
+        $activity = [];
+
+        if (count($users) > 0) {
+            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . join(', ', $users) . ') AND Date IN (\'' . join('\', \'', $dates) . '\') GROUP BY Date;');
+        }
 
         foreach ($dates as $date) {
             $found = false;
