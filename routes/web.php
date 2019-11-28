@@ -34,7 +34,3 @@ Route::middleware('auth')->group(function () {
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
     });
 });
-
-Route::get('/test', function () {
-    dump(auth()->user()->isBanned());
-});
