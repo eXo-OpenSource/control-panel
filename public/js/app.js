@@ -64320,8 +64320,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! G:\Projects\1. Web\control-panel\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! G:\Projects\1. Web\control-panel\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/rbitschnau/tmp/control-panel/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/rbitschnau/tmp/control-panel/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

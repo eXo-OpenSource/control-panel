@@ -9,24 +9,24 @@
                         <div class="card-body">
                             <h1>{{ __('Anmeldung') }}</h1>
                             <p class="text-muted"></p>
-                            <form method="POST" action="{{ route('login') }}">
+                            <form class="@if($errors->count() > 0){{ 'was-validated_2' }}@endif" method="POST" action="{{ route('login') }}" novalidate>
                                 @csrf
 
                                 <div class="mb-3">
                                     <label for="username">{{ __('Benutzername') }}</label>
-                                    <div class="input-group">
+                                    <div class="input-group is-invalid">
                                         <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <i class="fas fa-user"></i>
                                         </span>
                                         </div>
-                                        <input id="username" name="username" class="form-control{{ $errors->has('username') ? ' is-invalid' : '' }}" type="text" placeholder="{{ __('Benutzername') }}" value="{{ old('username') }}" required>
+                                        <input id="username" name="username" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" type="text" placeholder="{{ __('Benutzername') }}" value="{{ old('username') }}" required>
+                                        @if ($errors->has('username'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('username') }}
+                                            </div>
+                                        @endif
                                     </div>
-                                    @if ($errors->has('username'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('username') }}
-                                        </div>
-                                    @endif
                                 </div>
 
                                 <div class="mb-4">
@@ -38,12 +38,12 @@
                                         </span>
                                         </div>
                                         <input id="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" type="password" placeholder="{{ __('Passwort') }}" value="{{ old('username') }}" required>
+                                        @if ($errors->has('password'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('password') }}
+                                            </div>
+                                        @endif
                                     </div>
-                                    @if ($errors->has('password'))
-                                        <div class="invalid-feedback">
-                                            {{ $errors->first('password') }}
-                                        </div>
-                                    @endif
                                 </div>
 
                                 <div class="row">
