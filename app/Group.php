@@ -28,4 +28,9 @@ class Group extends Model
         $members = $this->members->pluck('Id')->toArray();
         return AccountActivity::getActivity($members, $chart);
     }
+
+    public function vehicles()
+    {
+        return $this->newHasMany(Vehicle::where('OwnerType', 4), $this, 'OwnerId', 'Id');
+    }
 }

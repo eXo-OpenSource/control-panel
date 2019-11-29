@@ -40,7 +40,6 @@ class Character extends Model
     public function vehicles()
     {
         return $this->newHasMany(Vehicle::where('OwnerType', 1), $this, 'OwnerId', 'Id');
-        //return $this->hasMany(Vehicle::class, 'ElementId', 'Id');
     }
 
     public function history()

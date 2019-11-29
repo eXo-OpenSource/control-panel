@@ -16,16 +16,41 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($group->members()->with('user')->orderBy('CompanyRank', 'DESC')->get() as $character)
+                            @foreach($group->members()->with('user')->orderBy('GroupRank', 'DESC')->get() as $character)
                                 <tr>
                                     <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
-                                    <td>{{ $character->CompanyRank }}</td>
+                                    <td>{{ $character->GroupRank }}</td>
                                     <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+
+                <div class="row">
+                    @foreach($group->vehicles as $vehicle)
+                        <div class="col-md-4">
+                            <div class="card">
+                                <img class="bd-placeholder-img card-img-top" src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Model }}.jpg">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ $vehicle->getName() }}</h5>
+                                    <dl class="vehicle-info">
+                                        <dt>Kilometerstand</dt>
+                                        <dd>{{ number_format($vehicle->Mileage / 1000, 2, ',', ' ') }} km</dd>
+                                        <dt>Lackfarbe</dt>
+                                        <dd class="d-flex">
+                                            <div class="border" style="height: 25px; width: 25px; background-color: {{ $vehicle->getTuningColor(1) }};"></div>
+                                            <div class="border" style="height: 25px; width: 25px; background-color: {{ $vehicle->getTuningColor(2) }};"></div>
+                                            <div class="border" style="height: 25px; width: 25px; background-color: {{ $vehicle->getTuningColor(3) }};"></div>
+                                            <div class="border" style="height: 25px; width: 25px; background-color: {{ $vehicle->getTuningColor(4) }};"></div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             <div class="col-lg-6">
@@ -67,14 +92,7 @@
             type: 'line',
             data: {
                 labels: data.labels,
-                datasets: [{
-                    label: 'Aktivität in h',
-                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                    borderColor: 'rgba(220, 220, 220, 1)',
-                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                    pointBorderColor: '#fff',
-                    data: data.data
-                }]
+                datasets: data.datasets
             },
             options: {
                 scales: {

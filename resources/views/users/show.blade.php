@@ -55,9 +55,9 @@
                                     <dt>Fraktion</dt>
                                     <dd>@if($user->character->hasFaction())<a href="{{ route('factions.show', [$user->character->FactionId]) }}">@endif{{ $user->character->getFactionName() }}@if($user->character->hasFaction())</a>@endif</dd>
                                     <dt>Unternehmen</dt>
-                                    <dd>@if($user->character->hasCompany())<a href="{{ url('/') }}">@endif{{ $user->character->getCompanyName() }}@if($user->character->hasCompany())</a>@endif</dd>
+                                    <dd>@if($user->character->hasCompany())<a href="{{ route('companies.show', [$user->character->CompanyId]) }}">@endif{{ $user->character->getCompanyName() }}@if($user->character->hasCompany())</a>@endif</dd>
                                     <dt>Gruppe</dt>
-                                    <dd>@if($user->character->hasGroup())<a href="{{ url('/') }}">@endif{{ $user->character->getGroupName() }}@if($user->character->hasGroup())</a>@endif</dd>
+                                    <dd>@if($user->character->hasGroup())<a href="{{ route('groups.show', [$user->character->GroupId])  }}">@endif{{ $user->character->getGroupName() }}@if($user->character->hasGroup())</a>@endif</dd>
                                 </dl>
                             </div>
                         </div>
