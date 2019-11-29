@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use TrayLabs\InfluxDB\Facades\InfluxDB;
 
 class DashboardController extends Controller
 {
@@ -29,19 +30,30 @@ class DashboardController extends Controller
 
         $factions = Faction::where('active', 1)->get();
 
-        $data = ['datasets' => []];
+        $factionData = ['datasets' => []];
 
         foreach ($factions as $faction) {
             $activity = $faction->getActivity(true);
-            if (!isset($data['labels'])) {
-                $data['labels'] = $activity['labels'];
+            if (!isset($factionData['labels'])) {
+                $factionData['labels'] = $activity['labels'];
             }
 
-            array_push($data['datasets'], $activity['datasets'][0]);
+            array_push($factionData['datasets'], $activity['datasets'][0]);
         }
 
-        $faction = $factions[0];
 
-        return view('admin.dashboard.index', compact('textures', 'tickets', 'faction', 'data', 'totalTickets'));
+
+        $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 200m GROUP BY time(10m)');
+        $points = $playerCount->getPoints();
+
+        $playerCountData = ['datasets' => [['data' => [], 'backgroundColor' => 'transparent', 'borderColor' => 'rgba(255,255,255,.55)', 'pointBackgroundColor' => '#39f']], 'labels' => []];
+        $lastPlayerCount = 0;
+        foreach ($points as $point) {
+            array_push($playerCountData['labels'], $point['time']);
+            array_push($playerCountData['datasets'][0]['data'], $point['mean']);
+            $lastPlayerCount = floor($point['mean']);
+        }
+
+        return view('admin.dashboard.index', compact('textures', 'tickets', 'factionData', 'totalTickets', 'playerCountData', 'lastPlayerCount'));
     }
 }

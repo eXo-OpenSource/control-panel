@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -20,6 +19,17 @@
                             </div>
                             <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
                                 <canvas class="chart" id="card-chart1" height="70"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card text-white bg-info" style="background: linear-gradient(45deg,#39f 0%,#2982cc 100%);">
+                            <div class="card-body pb-0">
+                                <div class="text-value-lg">{{ $lastPlayerCount }}</div>
+                                <div>Players</div>
+                            </div>
+                            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                                <canvas class="chart" id="card-chart2" height="70"></canvas>
                             </div>
                         </div>
                     </div>
@@ -44,10 +54,17 @@
 
 
 @section('script')
+    <link href="https://unpkg.com/@coreui/coreui-chartjs@2.0.0-beta.0/dist/css/coreui-chartjs.css" rel="stylesheet">
+    <script src="https://unpkg.com/@coreui/coreui-chartjs@2.0.0-beta.0/dist/js/coreui-chartjs.bundle.js"></script>
     <script>
-        const random = () => Math.round(Math.random() * 100)
 
-        var data = {!! json_encode($data) !!};
+        Chart.defaults.global.pointHitDetectionRadius = 1;
+        Chart.defaults.global.tooltips.enabled = false;
+        Chart.defaults.global.tooltips.mode = 'index';
+        Chart.defaults.global.tooltips.position = 'nearest';
+        Chart.defaults.global.tooltips.custom = coreui.ChartJS.customTooltips;
+
+        var data = {!! json_encode($factionData) !!};
 
         const lineChart = new Chart(document.getElementById('canvas-1'), {
             type: 'line',
@@ -113,29 +130,60 @@
                 }
             }
         })
-        /*
-        var lineChart = new Chart($('#canvas-1'), {
+
+
+
+        var playerCountData = {!! json_encode($playerCountData) !!};
+
+        const cardChart2 = new Chart(document.getElementById('card-chart2'), {
             type: 'line',
             data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Aktivität in h',
-                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                    borderColor: 'rgba(220, 220, 220, 1)',
-                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                    pointBorderColor: '#fff',
-                    data: data.data
-                }]
+                labels: playerCountData.labels,
+                datasets: playerCountData.datasets, /*[
+                    {
+                        label: 'My First dataset',
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgba(255,255,255,.55)',
+                        pointBackgroundColor: getStyle('--primary'),
+                        data:
+                    }
+                ]*/
             },
             options: {
-                scales: {
-                    yAxes: [
-                        {ticks: {beginAtZero: true, suggestedMax: 8}}
-                    ]
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
                 },
-                responsive: true
+                scales: {
+                    xAxes: [{
+                        gridLines: {
+                            color: 'transparent',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: {
+                            fontSize: 2,
+                            fontColor: 'transparent'
+                        }
+                    }],
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            display: false
+                        }
+                    }]
+                },
+                elements: {
+                    line: {
+                        borderWidth: 1
+                    },
+                    point: {
+                        radius: 4,
+                        hitRadius: 10,
+                        hoverRadius: 4
+                    }
+                }
             }
-        });*/
+        })
     </script>
 @endsection
 

@@ -20,7 +20,8 @@
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "tray-labs/laravel-influxdb": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
