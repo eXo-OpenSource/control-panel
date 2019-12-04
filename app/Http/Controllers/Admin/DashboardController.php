@@ -43,14 +43,14 @@ class DashboardController extends Controller
 
 
 
-        $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 200m GROUP BY time(10m)');
+        $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 1d GROUP BY time(1h)');
         $points = $playerCount->getPoints();
 
         $playerCountData = ['datasets' => [['data' => [], 'backgroundColor' => 'transparent', 'borderColor' => 'rgba(255,255,255,.55)', 'pointBackgroundColor' => '#39f']], 'labels' => []];
         $lastPlayerCount = 0;
         foreach ($points as $point) {
             array_push($playerCountData['labels'], $point['time']);
-            array_push($playerCountData['datasets'][0]['data'], $point['mean']);
+            array_push($playerCountData['datasets'][0]['data'], floor($point['mean']));
             $lastPlayerCount = floor($point['mean']);
         }
 
