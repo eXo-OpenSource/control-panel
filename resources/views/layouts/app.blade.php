@@ -37,9 +37,12 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right pt-0">
                             <div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
-                                <a class="dropdown-item" href="{{ route('users.show', ['user' => auth()->user()]) }}">
-                                    {{ __('Character') }}
-                                </a>
+                            <a class="dropdown-item" href="{{ route('users.show', ['user' => auth()->user()]) }}">
+                                {{ __('Character') }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('teamspeak.index') }}">
+                                {{ __('Teamspeak') }}
+                            </a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}

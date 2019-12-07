@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('companies', 'CompanyController');
     Route::resource('groups', 'GroupController');
     Route::resource('textures', 'TextureController');
+    Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::namespace('Admin')->prefix('admin')->group(function () {
