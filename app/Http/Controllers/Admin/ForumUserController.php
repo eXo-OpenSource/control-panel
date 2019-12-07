@@ -6,6 +6,7 @@ use App\Faction;
 use App\Services\TicketService;
 use App\Texture;
 use App\User;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,11 @@ class ForumUserController extends Controller
     public function show($forumId)
     {
         $user = User::where('ForumId', $forumId)->first();
+
+        if (!$user) {
+            Session::flash('alert-danger', 'Es existiert kein Account zum gewünschten Forenaccount!');
+            return redirect()->route('admin.dashboard.index');
+        }
 
         return redirect()->route('users.show', [$user]);
     }
