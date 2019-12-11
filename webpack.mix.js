@@ -19,6 +19,7 @@ mix.js('resources/js/app.js', 'public/js')
    .tailwind('./tailwind.config.js');
 
 mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fonts/font-awesome');
+mix.copy('./node_modules/paper/dist/paper-full.min.js', 'public/js/paper.js');
 
 mix.setPublicPath('public');
 mix.setResourceRoot('../');

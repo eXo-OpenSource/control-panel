@@ -31,6 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
 
+    Route::namespace('Event')->prefix('events')->name('events.')->group(function () {
+        Route::resource('santa', 'SantaController')->only(['index', 'store', 'create']);
+    });
+
     Route::namespace('Admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');

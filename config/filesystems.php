@@ -62,6 +62,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'santa' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/events/santa'),
+            'url' => env('APP_URL').'/images/events/santa',
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

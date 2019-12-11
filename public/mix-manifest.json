@@ -15,5 +15,6 @@
     "/fonts/font-awesome/fa-solid-900.svg": "/fonts/font-awesome/fa-solid-900.svg",
     "/fonts/font-awesome/fa-solid-900.ttf": "/fonts/font-awesome/fa-solid-900.ttf",
     "/fonts/font-awesome/fa-solid-900.woff": "/fonts/font-awesome/fa-solid-900.woff",
-    "/fonts/font-awesome/fa-solid-900.woff2": "/fonts/font-awesome/fa-solid-900.woff2"
+    "/fonts/font-awesome/fa-solid-900.woff2": "/fonts/font-awesome/fa-solid-900.woff2",
+    "/js/paper.js": "/js/paper.js"
 }

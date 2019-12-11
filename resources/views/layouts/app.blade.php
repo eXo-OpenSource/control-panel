@@ -11,6 +11,7 @@
 
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @yield('head')
 </head>
 <body class="c-app c-dark-theme pace-done pace-done">
     <div id="app" class="c-wrapper">
