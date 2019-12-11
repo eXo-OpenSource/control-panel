@@ -8,9 +8,13 @@
                 <div class="row mb-4 d-flex justify-content-between align-items-start">
                     <div></div>
                     <div>
-                        <a class="btn btn-danger" href="{{ route('admin.user.search') }}">Ban</a>
-                        <a class="btn btn-danger" href="{{ route('admin.texture') }}">Kick</a>
-                        <a class="btn btn-danger" href="{{ route('admin.texture') }}">Unban</a>
+                        @auth
+                            @if(auth()->user()->Rank >= 3)
+                                <a class="btn btn-danger" href="{{ route('admin.user.search') }}">Ban</a>
+                                <a class="btn btn-danger" href="{{ route('admin.texture') }}">Kick</a>
+                                <a class="btn btn-danger" href="{{ route('admin.texture') }}">Unban</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
                 <div class="row">
@@ -29,14 +33,18 @@
                                     </div>
                                 </div>
                                 <dl class="user-stats mt-2">
+                                    @can('privateData', $user)
                                     <dt>Letzer Login</dt>
                                     <dd>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</dd>
                                     <dt>Registrierungsdatum</dt>
                                     <dd>{{ $user->RegisterDate->format('d.m.Y H:i:s') }}</dd>
+                                    @endcan
                                     <dt>Karma</dt>
                                     <dd>{{ $user->character->Karma }}</dd>
+                                    @can('privateData', $user)
                                     <dt>Geld (Bar/Bank)</dt>
                                     <dd>{{ number_format($user->character->Money, 0, ',', ' ') }}$ / {{ number_format($user->character->bankAccount->Money, 0, ',', ' ') }}$</dd>
+                                    @endcan
                                     <dt>Spielzeit</dt>
                                     <dd>{{ $user->character->getPlayTime() }}</dd>
                                 </dl>
@@ -48,8 +56,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <dl class="user-stats">
+                                    @can('privateData', $user)
                                     <dt>Collectables</dt>
                                     <dd>{{ $user->character->getCollectedCollectableCount() }}/40</dd>
+                                    @endcan
                                     <dt>GWD Note</dt>
                                     <dd>{{ $user->character->PaNote }}</dd>
                                     <dt>Fraktion</dt>
@@ -82,6 +92,7 @@
                         </div>
                     </div>
 
+                    @can('privateData', $user)
                     <div class="col-md-2">
                         <div class="card">
                             <div class="card-body">
@@ -100,30 +111,12 @@
                             </div>
                         </div>
                     </div>
-
-
-                    <div class="col-md-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <dl class="user-stats">
-                                    <dt>Gebannt</dt>
-                                    <dd>@if($banned === false)<i class="fas fa-times text-green-500"></i>@else @if($banned === 0)<i class="fas fa-check text-red-500"></i>@else{{ (new \DateTime)->setTimestamp($banned)->format('d.m.Y H:i:s') }}@endif @endif</dd>
-                                    <dt>Autoführerschein</dt>
-                                    <dd>@if($user->character->HasDrivingLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</dd>
-                                    <dt>Motorradführerschein</dt>
-                                    <dd>@if($user->character->HasBikeLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</dd>
-                                    <dt>LKW-Führerschein</dt>
-                                    <dd>@if($user->character->HasTruckLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</dd>
-                                    <dt>Flugschein</dt>
-                                    <dd>@if($user->character->HasPilotsLicense === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
+                    @endcan
                 </div>
             </div>
         </div>
 
+        @can('vehicles', $user)
         <div class="row">
             @foreach($user->character->vehicles as $vehicle)
                 <div class="col-md-2">
@@ -147,7 +140,9 @@
                 </div>
             @endforeach
         </div>
+        @endcan
 
+        @can('history', $user)
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -182,16 +177,9 @@
             </div>
         </div>
     </div>
-    <!--
-    <div class="w-full my-5 py-2 bg-red-500 sm:bg-blue-500 md:bg-gray-500 lg:bg-purple-500 xl:bg-green-500">
-        <p class="block sm:hidden text-black">red - none</p>
-        <p class="hidden sm:block md:hidden text-black">blue - sm</p>
-        <p class="hidden md:block lg:hidden text-black">gray - md</p>
-        <p class="hidden lg:block xl:hidden text-black">gray - lg</p>
-        <p class="hidden xl:block text-black">green - xl</p>
-    </div>
-    -->
+    @endcan
 
+    @can('activity', $user)
     <div class="flex flex-col">
         <div class="flex items-center">
             <div class="w-full ml-2 mr-2 md:w-2/3 md:mx-auto">
@@ -207,4 +195,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection

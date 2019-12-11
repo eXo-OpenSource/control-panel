@@ -12,7 +12,7 @@
                             <tr>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Rang') }}</th>
-                                <th>{{ __('Aktivität') }}</th>
+                                @can('activity', $company)<th>{{ __('Aktivität') }}</th>@endcan
                             </tr>
                             </thead>
                             <tbody>
@@ -20,7 +20,7 @@
                                 <tr>
                                     <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
                                     <td>{{ $character->CompanyRank }}</td>
-                                    <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
+                                    @can('activity', $company)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
                                 </tr>
                             @endforeach
                             </tbody>
@@ -29,6 +29,7 @@
                 </div>
             </div>
             <div class="col-lg-6">
+                @can('activityTotal', $company)
                 <div class="card">
                     <div class="card-header">{{ __('Aktivität') }}</div>
                     <div class="card-body">
@@ -37,6 +38,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+                @can('logs', $company)
                 <div class="card">
                     <div class="card-header">{{ __('Logs - Letzten 100 Einträge') }}</div>
                     <div class="card-body">
@@ -54,12 +57,14 @@
                         </table>
                     </div>
                 </div>
+                @endcan
             </div>
         </div>
     </div>
 @endsection
 
 @section('script')
+    @can('activityTotal', $company)
     <script>
         var data = {!! json_encode($company->getActivity(true)) !!};
 
@@ -86,4 +91,5 @@
             }
         });
     </script>
+    @endcan
 @endsection

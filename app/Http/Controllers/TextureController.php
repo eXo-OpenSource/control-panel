@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Texture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,6 +17,8 @@ class TextureController extends Controller
      */
     public function index()
     {
+        abort_unless(Gate::allows('admin-rank-2'), 403);
+
         $textures = auth()->user()->textures;
         return view('textures.index', compact('textures'));
     }
@@ -27,6 +30,8 @@ class TextureController extends Controller
      */
     public function create()
     {
+        abort_unless(Gate::allows('admin-rank-2'), 403);
+
         $vehicles = [];
 
         foreach(config('constants.vehicleNames') as $id => $name)
@@ -52,6 +57,8 @@ class TextureController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('admin-rank-2'), 403);
+
         $data = $request->validate([
             'name' => 'required',
             'vehicle' => 'required|in:' . implode(',', array_keys(config('constants.vehicleNames'))),
@@ -121,6 +128,8 @@ class TextureController extends Controller
      */
     public function destroy(Texture $texture)
     {
+        abort_unless(Gate::allows('admin-rank-2'), 403);
+
         abort_unless(auth()->user()->can('destroy', $texture), 403);
 
         if ($texture->isDeleteable()) {

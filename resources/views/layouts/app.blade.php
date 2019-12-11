@@ -20,9 +20,9 @@
                 <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('factions.index') }}">Fraktion</a></li>
                 <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('companies.index') }}">Unternehmen</a></li>
                 <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('groups.index') }}">Gruppen</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('textures.index') }}">Texturen</a></li>
                 @auth
                     @if(auth()->user()->Rank >= 3)
+                        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('textures.index') }}">Texturen</a></li>
                         <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.dashboard.index') }}">Admin</a></li>
                     @endif
                 @endauth

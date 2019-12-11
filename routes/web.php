@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/home', 'HomeController@index')->name('home');
 
+
     Route::namespace('Admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');

@@ -12,7 +12,7 @@
                             <tr>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Rang') }}</th>
-                                <th>{{ __('Aktivität') }}</th>
+                                @can('activity', $group)<th>{{ __('Aktivität') }}</th>@endcan
                             </tr>
                             </thead>
                             <tbody>
@@ -20,7 +20,7 @@
                                 <tr>
                                     <td><a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a></td>
                                     <td>{{ $character->GroupRank }}</td>
-                                    <td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>
+                                    @can('activity', $group)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
                                 </tr>
                             @endforeach
                             </tbody>
@@ -29,6 +29,7 @@
                 </div>
 
 
+                @can('vehicles', $group)
                 <div class="row">
                     @foreach($group->vehicles as $vehicle)
                         <div class="col-md-4">
@@ -53,7 +54,9 @@
                     @endforeach
                 </div>
             </div>
+            @endcan
             <div class="col-lg-6">
+                @can('activityTotal', $group)
                 <div class="card">
                     <div class="card-header">{{ __('Aktivität') }}</div>
                     <div class="card-body">
@@ -62,6 +65,8 @@
                         </div>
                     </div>
                 </div>
+                @endcan
+                @can('logs', $group)
                 <div class="card">
                     <div class="card-header">{{ __('Logs - Letzten 100 Einträge') }}</div>
                     <div class="card-body">
@@ -79,12 +84,14 @@
                         </table>
                     </div>
                 </div>
+                @endcan
             </div>
         </div>
     </div>
 @endsection
 
 @section('script')
+    @can('activityTotal', $group)
     <script>
         var data = {!! json_encode($group->getActivity(true)) !!};
 
@@ -104,4 +111,5 @@
             }
         });
     </script>
+    @endcan
 @endsection
