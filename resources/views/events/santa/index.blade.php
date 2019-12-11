@@ -28,8 +28,6 @@
             flex-direction: column;
             width: 400px;
             height: 600px;
-            background: url(/images/santa.png) no-repeat center;
-            background-size: 100%;
             margin: 20px 0;
         }
         #head{
