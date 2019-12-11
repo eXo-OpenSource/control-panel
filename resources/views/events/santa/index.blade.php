@@ -6,9 +6,9 @@
             <div class="col-md-8">
                 <div class="drawing-area">
                     <div class="santa">
-                        <img src="{{ $head->Image }}">
-                        <img src="{{ $body->Image }}">
-                        <img src="{{ $legs->Image }}">
+                        @if(isset($head))<img src="{{ $head->Image }}">@endif
+                        @if(isset($body))<img src="{{ $body->Image }}">@endif
+                        @if(isset($legs))<img src="{{ $legs->Image }}">@endif
                         <canvas id="head" resize></canvas>
                         <canvas id="body" resize></canvas>
                         <canvas id="legs" resize></canvas>
