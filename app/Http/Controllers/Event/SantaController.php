@@ -23,9 +23,9 @@ class SantaController extends Controller
      */
     public function index()
     {
-        $head = SantaEvent::where('Part', 'head')->first();
-        $body = SantaEvent::where('Part', 'body')->first();
-        $legs = SantaEvent::where('Part', 'legs')->first();
+        $head = SantaEvent::where('Part', 'head')->inRandomOrder()->first();
+        $body = SantaEvent::where('Part', 'body')->inRandomOrder()->first();
+        $legs = SantaEvent::where('Part', 'legs')->inRandomOrder()->first();
 
         return view('events.santa.index', compact('head', 'body', 'legs'));
     }
