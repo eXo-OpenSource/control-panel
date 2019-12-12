@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div style="flex: 0 0 400px;max-width: 400px;">
                 <div class="drawing-area">
                     <div class="santa">
                         <canvas id="head" resize></canvas>
@@ -11,18 +11,24 @@
                         <canvas id="legs" resize></canvas>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="row">
-                    <button id="reset" class="btn btn-danger">Zurücksetzen</button>
-                    <form class="ml-2" action="{{ route('events.santa.store') }}" method="post">
+
+        <div class="row justify-content-center">
+            <div style="flex: 0 0 400px;max-width: 400px;" class="d-block">
+                <div class="row justify-content-center">
+                    <form action="{{ route('events.santa.store') }}" method="post">
                         @csrf
                         <input id="svgInput" type="text" name="svg" value="" hidden="">
                         <input id="partInput" type="text" name="part" value="body" hidden="">
-                        <button id="submit" type="submit" class="btn btn-primary">Absenden</button>
+                        <button id="submit" type="submit" class="btn btn-primary d-none">Absenden</button>
                     </form>
+                    <button id="reset" class="btn btn-danger ml-2">Zurücksetzen</button>
                 </div>
             </div>
         </div>
+
     </div>
 @endsection
 
@@ -77,7 +83,7 @@
               path.lineTo(event.point);
               var submit = document.getElementById('submit')
               if (!submitVisible) {
-                submit.classList.add('visible')
+                submit.classList.remove('d-none')
                 submitVisible = true
               }
             },
@@ -90,6 +96,8 @@
 
         resetBtn.addEventListener('click', function(){
           project.clear()
+          submit.classList.add('d-none')
+          submitVisible = false
         })
 
         var h = document.querySelectorAll('.part-image.head')

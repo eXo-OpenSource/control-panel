@@ -3,15 +3,19 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="drawing-area">
+            <div class="col-md-12">
+                <div class="row mb-4">
+                    <a href="{{ route('events.santa.create') }}" class="btn btn-primary ml-auto">Hochladen</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div style="flex: 0 0 400px;max-width: 400px;">
+                <div class="">
                     <div class="santa">
                         @if(isset($head))<img src="{{ $head->Image }}">@endif
                         @if(isset($body))<img src="{{ $body->Image }}">@endif
                         @if(isset($legs))<img src="{{ $legs->Image }}">@endif
-                        <canvas id="head" resize></canvas>
-                        <canvas id="body" resize></canvas>
-                        <canvas id="legs" resize></canvas>
                     </div>
                 </div>
         </div>
@@ -44,4 +48,7 @@
             background: rgba(255, 255, 255, 0.5);
         }
     </style>
+@endsection
+
+@section('script')
 @endsection
