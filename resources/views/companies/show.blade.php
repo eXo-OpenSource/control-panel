@@ -65,31 +65,24 @@
 
 @section('script')
     @can('activityTotal', $company)
-    <script>
-        var data = {!! json_encode($company->getActivity(true)) !!};
+        <script>
+            var data = {!! json_encode($company->getActivity(true)) !!};
 
-        var lineChart = new Chart($('#canvas-1'), {
-            type: 'line',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Aktivität in h',
-                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                    borderColor: 'rgba(220, 220, 220, 1)',
-                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                    pointBorderColor: '#fff',
-                    data: data.data
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [
-                        {ticks: {beginAtZero: true, suggestedMax: 8}}
-                    ]
+            var lineChart = new Chart($('#canvas-1'), {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: data.datasets
                 },
-                responsive: true
-            }
-        });
-    </script>
+                options: {
+                    scales: {
+                        yAxes: [
+                            {ticks: {beginAtZero: true, suggestedMax: 8}}
+                        ]
+                    },
+                    responsive: true
+                }
+            });
+        </script>
     @endcan
 @endsection

@@ -43,8 +43,53 @@
                             </div>
                         </div>
 
-                    <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                        <canvas id="canvas-1" height="300" style="display: block;"></canvas>
+                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                            <canvas id="canvas-1" height="300" style="display: block;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-0">Aktivität der Unternehmen</h4>
+                            </div>
+                        </div>
+
+                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                            <canvas id="canvas-2" height="300" style="display: block;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-0">Aktivität der Fraktionen pro Mitglied</h4>
+                            </div>
+                        </div>
+
+                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                            <canvas id="canvas-3" height="300" style="display: block;"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title mb-0">Aktivität der Unternehmen pro Mitglied</h4>
+                            </div>
+                        </div>
+
+                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                            <canvas id="canvas-4" height="300" style="display: block;"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,6 +116,45 @@
             data: {
                 labels : data.labels,
                 datasets : data.datasets
+            },
+            options: {
+                responsive: true
+            }
+        })
+
+        var dataCompany = {!! json_encode($companyData) !!};
+
+        const lineChart2 = new Chart(document.getElementById('canvas-2'), {
+            type: 'line',
+            data: {
+                labels : dataCompany.labels,
+                datasets : dataCompany.datasets
+            },
+            options: {
+                responsive: true
+            }
+        })
+
+        var dataFaction2 = {!! json_encode($factionData2) !!};
+
+        const lineChart3 = new Chart(document.getElementById('canvas-3'), {
+            type: 'line',
+            data: {
+                labels : dataFaction2.labels,
+                datasets : dataFaction2.datasets
+            },
+            options: {
+                responsive: true
+            }
+        })
+
+        var dataCompany2 = {!! json_encode($companyData2) !!};
+
+        const lineChart4 = new Chart(document.getElementById('canvas-4'), {
+            type: 'line',
+            data: {
+                labels : dataCompany2.labels,
+                datasets : dataCompany2.datasets
             },
             options: {
                 responsive: true
