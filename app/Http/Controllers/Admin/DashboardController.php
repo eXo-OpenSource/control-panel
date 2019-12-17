@@ -38,6 +38,7 @@ class DashboardController extends Controller
             $activity = $faction->getActivity(true);
             if (!isset($factionData['labels'])) {
                 $factionData['labels'] = $activity['labels'];
+                $factionData2['labels'] = $activity['labels'];
             }
 
             array_push($factionData['datasets'], $activity['datasets'][0]);
@@ -63,6 +64,7 @@ class DashboardController extends Controller
             $activity = $company->getActivity(true);
             if (!isset($companyData['labels'])) {
                 $companyData['labels'] = $activity['labels'];
+                $companyData2['labels'] = $activity['labels'];
             }
 
             array_push($companyData['datasets'], $activity['datasets'][0]);
