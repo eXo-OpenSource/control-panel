@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Company;
 use App\Faction;
+use App\Services\StatisticService;
 use App\Services\TicketService;
 use App\Texture;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +24,8 @@ class DashboardController extends Controller
     public function index()
     {
         abort_unless(Gate::allows('admin-rank-2'), 403);
+
+        $result = StatisticService::getFactionsActivity(Carbon::now()->subDays(13), Carbon::now());
 
         $textures = Texture::query()->orderBy('Id', 'DESC')->limit(10);
         $tickets = TicketService::getStatistics(true);

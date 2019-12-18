@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,12 @@ class Faction extends Model
     public function logs()
     {
         return GroupLog::where('GroupType', 'faction')->where('GroupId', $this->Id);
+    }
+
+    public function getActivity2(Carbon $from, Carbon $to)
+    {
+        $members = $this->members->pluck('Id')->toArray();
+        return AccountActivity::getActivity2($members, $from, $to);
     }
 
     public function getActivity($chart)
