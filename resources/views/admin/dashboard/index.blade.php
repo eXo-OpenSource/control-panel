@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
                         <div class="card text-white bg-primary" style="background: linear-gradient(45deg,#321fdb 0%,#1f1498 100%);">
                             <div class="card-body pb-0">
                                 <div class="text-value-lg">{{ $totalTickets }}</div>
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6 col-lg-3">
+                    <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
                         <div class="card text-white bg-info" style="background: linear-gradient(45deg,#39f 0%,#2982cc 100%);">
                             <div class="card-body pb-0">
                                 <div class="text-value-lg">{{ $lastPlayerCount }}</div>
@@ -35,60 +35,71 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="card-title mb-0">Aktivität der Fraktionen</h4>
+
+
+                <div class="row">
+                    <div class="col-xl-6 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Fraktionen</h4>
+                                    </div>
+                                </div>
+
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-1" height="300" style="display: block;"></canvas>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Unternehmen</h4>
+                                    </div>
+                                </div>
 
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                            <canvas id="canvas-1" height="300" style="display: block;"></canvas>
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-2" height="300" style="display: block;"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="card-title mb-0">Aktivität der Unternehmen</h4>
-                            </div>
-                        </div>
 
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                            <canvas id="canvas-2" height="300" style="display: block;"></canvas>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Fraktionen pro Mitglied</h4>
+                                    </div>
+                                </div>
+
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-3" height="300" style="display: block;"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-xl-6 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Unternehmen pro Mitglied</h4>
+                                    </div>
+                                </div>
 
-
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="card-title mb-0">Aktivität der Fraktionen pro Mitglied</h4>
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-4" height="300" style="display: block;"></canvas>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                            <canvas id="canvas-3" height="300" style="display: block;"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <h4 class="card-title mb-0">Aktivität der Unternehmen pro Mitglied</h4>
-                            </div>
-                        </div>
-
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                            <canvas id="canvas-4" height="300" style="display: block;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -118,7 +129,8 @@
                 datasets : data.datasets
             },
             options: {
-                responsive: true
+                responsive: true,
+                maintainAspectRatio: false
             }
         })
 
@@ -131,7 +143,8 @@
                 datasets : dataCompany.datasets
             },
             options: {
-                responsive: true
+                responsive: true,
+                maintainAspectRatio: false
             }
         })
 
@@ -144,7 +157,8 @@
                 datasets : dataFaction2.datasets
             },
             options: {
-                responsive: true
+                responsive: true,
+                maintainAspectRatio: false
             }
         })
 
@@ -157,7 +171,8 @@
                 datasets : dataCompany2.datasets
             },
             options: {
-                responsive: true
+                responsive: true,
+                maintainAspectRatio: false
             }
         })
 
