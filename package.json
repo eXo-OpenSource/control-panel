@@ -10,6 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
+        "@babel/preset-react": "^7.0.0",
         "@fortawesome/fontawesome-free": "^5.11.1",
         "@tailwindcss/custom-forms": "^0.2.1",
         "axios": "^0.19",
@@ -19,16 +20,17 @@
         "laravel-mix-tailwind": "^0.1.0",
         "lodash": "^4.17.13",
         "paper": "^0.12.3",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
         "tailwindcss": "^1.0",
-        "tailwindcss-plugins": "^0.3.0",
-        "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.4"
+        "tailwindcss-plugins": "^0.3.0"
     },
     "dependencies": {
-        "chart.js": "^2.8.0",
+        "chart.js": "^2.9.3",
+        "react-chartjs-2": "^2.8.0",
         "vue-chartjs": "^3.4.2"
     }
 }

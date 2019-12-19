@@ -1,8 +1,5 @@
 const mix = require('laravel-mix');
 
-require('laravel-mix-tailwind');
-require('laravel-mix-purgecss');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -14,9 +11,8 @@ require('laravel-mix-purgecss');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-   .tailwind('./tailwind.config.js');
+mix.react('resources/js/app.js', 'public/js')
+   .sass('resources/sass/app.scss', 'public/css');
 
 mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fonts/font-awesome');
 mix.copy('./node_modules/paper/dist/paper-full.min.js', 'public/js/paper.js');
@@ -25,7 +21,7 @@ mix.setPublicPath('public');
 mix.setResourceRoot('../');
 
 if (mix.inProduction()) {
-  mix
-   .version()
-   .purgeCss();
+    mix
+        .version()
+        .purgeCss();
 }
