@@ -16,10 +16,10 @@ use Illuminate\Http\Request;
 
 
 
-Route::middleware('auth:api')->group(function () {
-    Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
-        Route::resource('factions', 'FactionController')->only('index');
-    });
+Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
+    Route::resource('factions', 'FactionController')->only('index');
+});
+Route::middleware('auth')->group(function () {
 });
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
