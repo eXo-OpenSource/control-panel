@@ -45,6 +45,10 @@ class StatisticService
             $data = [
                 'label' => $faction->Name,
                 'borderColor' => $faction->getColor(),
+                'backgroundColor' => $faction->getColor(0.2),
+                'pointBorderColor' => $faction->getColor(),
+                'pointBackgroundColor' => $faction->getColor(),
+                'pointHoverBackgroundColor' => $faction->getColor(),
                 'data' => [],
             ];
 
