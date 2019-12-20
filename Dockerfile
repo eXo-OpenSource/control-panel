@@ -54,7 +54,6 @@ COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R app.app /run && \
   chown -R app.app /var/lib/nginx && \
-  chown -R app.app /var/tmp/nginx && \
   chown -R app.app /var/log/nginx && \
   chown -R app.app /var/www
 
