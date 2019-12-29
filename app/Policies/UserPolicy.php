@@ -55,4 +55,9 @@ class UserPolicy
         return false; // currently broken
         return $authUser->Id == $user->Id;
     }
+
+    public function hardware(User $authUser, User $user)
+    {
+        return false; // only for admins for now
+    }
 }

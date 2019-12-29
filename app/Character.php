@@ -47,6 +47,11 @@ class Character extends Model
         return $this->hasMany(PlayerHistory::class, 'UserId', 'Id');
     }
 
+    public function hardwareStatistic()
+    {
+        return $this->hasMany(ClientStatistic::class, 'UserId', 'Id');
+    }
+
     public function getFactionName()
     {
         if ($this->FactionId === 0)

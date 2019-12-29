@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class AccountActivity extends Model
 {
-    protected $table = "accountActivity";
+    protected $table = "account_activity";
 
     protected $dates = [
         'Date'
@@ -20,7 +20,7 @@ class AccountActivity extends Model
 
         $activity = [];
         if (count($users) > 0) {
-            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . join(', ', $users) . ') AND Date >= ? AND Date <= ? GROUP BY Date;', [$from->format('Y-m-d'), $to->format('Y-m-d')]);
+            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_account_activity WHERE UserId IN (' . join(', ', $users) . ') AND Date >= ? AND Date <= ? GROUP BY Date;', [$from->format('Y-m-d'), $to->format('Y-m-d')]);
         }
 
         for ($i = 0; $i < $days; $i++) {
@@ -66,7 +66,7 @@ class AccountActivity extends Model
         $activity = [];
 
         if (count($users) > 0) {
-            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_accountActivity WHERE UserID IN (' . join(', ', $users) . ') AND Date IN (\'' . join('\', \'', $dates) . '\') GROUP BY Date;');
+            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_account_activity WHERE UserId IN (' . join(', ', $users) . ') AND Date IN (\'' . join('\', \'', $dates) . '\') GROUP BY Date;');
         }
 
         foreach ($dates as $date) {

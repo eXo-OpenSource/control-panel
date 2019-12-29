@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Line} from 'react-chartjs-2';
+import DatePicker from 'react-datepicker';
+
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
 let data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -51,6 +54,7 @@ let data = {
     ]
 };
 
+
 export default class Chart extends Component {
 
     constructor() {
@@ -72,16 +76,31 @@ export default class Chart extends Component {
         }
     }
 
+    async handleDateChange(e) {
+        console.log(e);
+    }
+
     render() {
+
+        const ExampleCustomInput = ({ value, onClick }) => (
+            <button className="btn btn-sm btn-primary" onClick={onClick}>
+                {value}
+            </button>
+        );
+
         return (
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-md-8">
                         <div className="card">
-                            <div className="card-header">Chart {this.props.chart}</div>
+                            <div className="card-header">{this.props.title}
+                                <div className="float-right">
+                                    <p>{this.state.data.from} - {this.state.data.to}</p>
+                                </div>
+                            </div>
 
                             <div className="card-body">
-                                <Line data={this.state.data} />
+                                <Line data={this.state.data.chart} />
                             </div>
                         </div>
                     </div>

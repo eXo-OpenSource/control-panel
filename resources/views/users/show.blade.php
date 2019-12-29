@@ -176,24 +176,62 @@
                 </div>
             </div>
         </div>
-    </div>
-    @endcan
+        @endcan
 
-    @can('activity', $user)
-    <div class="flex flex-col">
-        <div class="flex items-center">
-            <div class="w-full ml-2 mr-2 md:w-2/3 md:mx-auto">
-
-                <div class="w-full break-words bg-white border border-2 rounded shadow-md mb-4">
-                    <div class="font-semibold bg-gray-200 text-gray-700 py-3 px-6 mb-0">
-                        Aktivität
+        @can('activity', $user)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Aktivität') }}
                     </div>
-                    <div class="p-6 flex xl:flex-row flex-col w-full">
+                    <div class="card-body">
                         <chart-component :chartdata="{{ json_encode($user->character->getActivity(true)) }}" :options="{{ json_encode(['scales' => ['yAxes' => [['ticks' => ['beginAtZero' => true, 'stepSize' => 1, 'suggestedMax' => 8]]]]]) }}"></chart-component>
+
                     </div>
                 </div>
             </div>
         </div>
+        @endcan
+
+        @can('hardware', $user)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Hardware') }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-responsive-sm">
+                            <thead>
+                            <tr>
+                                <th scope="col">{{ __('Serial') }}</th>
+                                <th scope="col">{{ __('GPU') }}</th>
+                                <th scope="col">{{ __('VRAM') }}</th>
+                                <th scope="col">{{ __('Resolution') }}</th>
+                                <th scope="col">{{ __('AllowScreenUpload') }}</th>
+                                <th scope="col">{{ __('FPS') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($user->character->hardwareStatistic as $hardware)
+                                <tr>
+                                    <td>{{ $hardware->Serial }}</td>
+                                    <td>{{ $hardware->GPU }}</td>
+                                    <td>{{ $hardware->VRAM }}</td>
+                                    <td>{{ $hardware->Resolution }}</td>
+                                    <td>{{ $hardware->AllowScreenUpload }}</td>
+                                    <td>{{ $hardware->FPS }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @endcan
+
     </div>
-    @endcan
 @endsection

@@ -43,7 +43,17 @@ class StatisticService
             $activity = $faction->getActivity2($from, $to);
 
             $data = [
-                'label' => $faction->Name,
+                'label' => "Aktivität (h)",
+                'borderColor' => $faction->getColor(),
+                'backgroundColor' => $faction->getColor(0.2),
+                'pointBorderColor' => $faction->getColor(),
+                'pointBackgroundColor' => $faction->getColor(),
+                'pointHoverBackgroundColor' => $faction->getColor(),
+                'data' => [],
+            ];
+
+            $dataDuty = [
+                'label' => "Aktivität im Dienst (h)",
                 'borderColor' => $faction->getColor(),
                 'backgroundColor' => $faction->getColor(0.2),
                 'pointBorderColor' => $faction->getColor(),
@@ -57,13 +67,22 @@ class StatisticService
                     array_push($result['labels'], $entry->Date);
                 }
 
-                array_push($data['data'], $entry->Duration);
+                array_push($data['data'], round($entry->Duration / 60, 1));
+                array_push($dataDuty['data'], round($entry->DurationDuty / 60, 1));
             }
 
             array_push($result['datasets'], $data);
+            array_push($result['datasets'], $dataDuty);
         }
 
-        return $result;
+
+        return [
+            'chart' => $result,
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d')
+        ];
+
+        // $to->format('Y-m-d') - 03/01/2014
     }
 
     public static function getFactionActivity(Faction $faction, Carbon $from, Carbon $to)
