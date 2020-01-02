@@ -39,34 +39,10 @@
 
                 <div class="row">
                     <div class="col-xl-6 col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-0">Aktivität der Fraktionen</h4>
-                                    </div>
-                                </div>
-
-                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                                    <canvas id="canvas-1" height="300" style="display: block;"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                        <react-chart data-chart="factions" data-state="true" data-title="Aktivität der Fraktionen"></react-chart>
                     </div>
                     <div class="col-xl-6 col-lg-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <h4 class="card-title mb-0">Aktivität der Unternehmen</h4>
-                                    </div>
-                                </div>
-
-                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                                    <canvas id="canvas-2" height="300" style="display: block;"></canvas>
-                                </div>
-                            </div>
-                        </div>
+                        <react-chart data-chart="companies" data-state="true" data-title="Aktivität der Unternehmen"></react-chart>
                     </div>
                 </div>
 
@@ -120,34 +96,6 @@
         Chart.defaults.global.tooltips.position = 'nearest';
         Chart.defaults.global.tooltips.custom = coreui.ChartJS.customTooltips;
 
-        var data = {!! json_encode($factionData) !!};
-
-        const lineChart = new Chart(document.getElementById('canvas-1'), {
-            type: 'line',
-            data: {
-                labels : data.labels,
-                datasets : data.datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        })
-
-        var dataCompany = {!! json_encode($companyData) !!};
-
-        const lineChart2 = new Chart(document.getElementById('canvas-2'), {
-            type: 'line',
-            data: {
-                labels : dataCompany.labels,
-                datasets : dataCompany.datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        })
-
         var dataFaction2 = {!! json_encode($factionData2) !!};
 
         const lineChart3 = new Chart(document.getElementById('canvas-3'), {
@@ -155,20 +103,6 @@
             data: {
                 labels : dataFaction2.labels,
                 datasets : dataFaction2.datasets
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        })
-
-        var dataCompany2 = {!! json_encode($companyData2) !!};
-
-        const lineChart4 = new Chart(document.getElementById('canvas-4'), {
-            type: 'line',
-            data: {
-                labels : dataCompany2.labels,
-                datasets : dataCompany2.datasets
             },
             options: {
                 responsive: true,
