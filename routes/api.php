@@ -15,13 +15,15 @@ use Illuminate\Http\Request;
 
 
 
+Route::middleware('auth')->group(function () {
+    Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
+        Route::resource('factions', 'FactionController')->only('index');
+    });
 
-Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
-    Route::resource('factions', 'FactionController')->only('index');
+    Route::namespace('Api')->name('api.')->group(function () {
+        Route::resource('charts', 'ChartController')->only('show');
+    });
 });
-
-
-Route::namespace('Api')->name('api.')->group(function () {
-    Route::resource('charts', 'ChartController')->only('show');
+Route::middleware('auth:api')->group(function () {
 });
 

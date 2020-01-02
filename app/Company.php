@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
@@ -23,20 +24,9 @@ class Company extends Model
         return GroupLog::where('GroupType', 'company')->where('GroupId', $this->Id);
     }
 
-    public function getActivity($chart)
+    public function getActivity(Carbon $from, Carbon $to)
     {
-        $members = $this->members->pluck('Id')->toArray();
-        $data = AccountActivity::getActivity($members, $chart);
-
-        foreach ($data['datasets'] as $key => $value) {
-            $data['datasets'][$key]['label'] = $this->Name;
-            $data['datasets'][$key]['backgroundColor'] = $this->getColor(0.2);
-            $data['datasets'][$key]['borderColor'] = $this->getColor();
-            $data['datasets'][$key]['pointBackgroundColor'] = $this->getColor();
-            $data['datasets'][$key]['pointBorderColor'] = '#fff';
-        }
-
-        return $data;
+        return AccountActivityGroup::getActivity($this->Id, 2, $from, $to);
     }
 
     public function getColor($alpha = 1)

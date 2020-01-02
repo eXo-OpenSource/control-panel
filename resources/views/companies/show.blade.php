@@ -30,14 +30,7 @@
             </div>
             <div class="col-lg-6">
                 @can('activityTotal', $company)
-                <div class="card">
-                    <div class="card-header">{{ __('Aktivität') }}</div>
-                    <div class="card-body">
-                        <div class="chart-wrapper">
-                            <canvas id="canvas-1"></canvas>
-                        </div>
-                    </div>
-                </div>
+                    <react-chart data-chart="company:{{ $company->Id }}" data-state="true" data-title="Aktivität"></react-chart>
                 @endcan
                 @can('logs', $company)
                 <div class="card">
@@ -61,28 +54,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-@section('script')
-    @can('activityTotal', $company)
-        <script>
-            var data = {!! json_encode($company->getActivity(true)) !!};
-
-            var lineChart = new Chart($('#canvas-1'), {
-                type: 'line',
-                data: {
-                    labels: data.labels,
-                    datasets: data.datasets
-                },
-                options: {
-                    scales: {
-                        yAxes: [
-                            {ticks: {beginAtZero: true, suggestedMax: 8}}
-                        ]
-                    },
-                    responsive: true
-                }
-            });
-        </script>
-    @endcan
 @endsection

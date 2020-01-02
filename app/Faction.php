@@ -27,7 +27,6 @@ class Faction extends Model
 
     public function getActivity2(Carbon $from, Carbon $to)
     {
-        $members = $this->members->pluck('Id')->toArray();
         return AccountActivityGroup::getActivity($this->Id, 2, $from, $to);
     }
 
