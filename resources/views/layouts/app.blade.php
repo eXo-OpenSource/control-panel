@@ -13,21 +13,53 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @yield('head')
 </head>
-<body class="c-app c-dark-theme pace-done pace-done">
+<body class="c-app">
+    <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+        <div class="c-sidebar-brand">
+            <a href="{{ '/' }}">
+                <img class="c-sidebar-brand-full" src="/images/logo.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
+                <img class="c-sidebar-brand-minimized" src="/images/logo_small.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
+            </a>
+        </div>
+        <ul class="c-sidebar-nav">
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('factions.index') }}">
+                    {{ __('Fraktionen') }}
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('companies.index') }}">
+                    {{ __('Unternehmen') }}
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('groups.index') }}">
+                    {{ __('Gruppen') }}
+                </a>
+            </li>
+            @auth
+                @if(auth()->user()->Rank >= 3)
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('textures.index') }}">
+                    {{ __('Texturen') }}
+                </a>
+            </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}">
+                    {{ __('Admin') }}
+                </a>
+            </li>
+                @endif
+            @endauth
+        </ul>
+        <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
+    </div>
+
     <div id="app" class="c-wrapper">
-        <header class="c-header c-header-light c-header-fixed px-5"> <!--c-header-with-subheader -->
-            <ul class="c-header-nav d-md-down-none">
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ url('/') }}">{{ config('app.name', 'Laravel') }}</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('factions.index') }}">Fraktion</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('companies.index') }}">Unternehmen</a></li>
-                <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('groups.index') }}">Gruppen</a></li>
-                @auth
-                    @if(auth()->user()->Rank >= 3)
-                        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('textures.index') }}">Texturen</a></li>
-                        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.dashboard.index') }}">Admin</a></li>
-                    @endif
-                @endauth
-            </ul>
+        <header class="c-header c-header-light c-header-fixed"> <!--c-header-with-subheader -->
+            <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show"><span class="c-header-toggler-icon"></span></button><a class="c-header-brand d-sm-none" href="#"><img class="c-header-brand" src="assets/brand/coreui-base.svg" width="97" height="46" alt="CoreUI Logo"></a>
+            <button class="c-header-toggler c-class-toggler ml-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true"><span class="c-header-toggler-icon"></span></button>
+
             <ul class="c-header-nav ml-auto">
 
                 @guest
@@ -85,7 +117,7 @@
     <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.1/dist/Chart.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script> -->
-    <script src="https://unpkg.com/@coreui/coreui@3.0.0-alpha.13/dist/js/coreui.min.js"></script>
+    <script src="https://unpkg.com/@coreui/coreui@3.0.0-beta.1/dist/js/coreui.min.js"></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @yield('script')
 </body>
