@@ -19,8 +19,9 @@ use Illuminate\Http\Request;
 Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
     Route::resource('factions', 'FactionController')->only('index');
 });
-Route::middleware('auth')->group(function () {
+
+
+Route::namespace('Api')->name('api.')->group(function () {
+    Route::resource('charts', 'ChartController')->only('show');
 });
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+

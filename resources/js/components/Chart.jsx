@@ -65,7 +65,7 @@ export default class Chart extends Component {
     }
 
     async componentDidMount() {
-        const response = await axios.get('/api/admin/factions');
+        const response = await axios.get('/api/charts/' + this.props.chart);
 
         try {
             this.setState({
