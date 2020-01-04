@@ -167,7 +167,7 @@
                                     <td>{{ $history->getDuration() }}</td>
                                     <td>{{ $history->getUninviter() }}</td>
                                     <td>{{ $history->ExternalReason }}</td>
-                                    <td><button class="btn btn-primary">Details</button></td>
+                                    <td>a<react-history-dialog data-history="test"></react-history-dialog>b</td>
                                 </tr>
                             @endforeach
                             </tbody>

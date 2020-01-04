@@ -15,3 +15,4 @@ require('./bootstrap');
 require('./components/Example');
 require('./components/Test');
 require('./components/Chart');
+require('./components/HistoryDialog');

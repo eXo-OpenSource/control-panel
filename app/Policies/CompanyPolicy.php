@@ -39,11 +39,11 @@ class CompanyPolicy
 
     public function activity(User $user, Company $company)
     {
-        return $user->CompanyId === $company->Id;
+        return $user->character->CompanyId === $company->Id;
     }
 
     public function logs(User $user, Company $company)
     {
-        return $user->CompanyId === $company->Id;
+        return $user->character->CompanyId === $company->Id;
     }
 }

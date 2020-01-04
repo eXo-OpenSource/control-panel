@@ -42,8 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'session',
-            'provider' => 'users'
+            'driver' => 'exo-user-token',
         ],
     ],
 

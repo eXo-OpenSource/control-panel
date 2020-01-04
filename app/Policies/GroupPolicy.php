@@ -34,21 +34,26 @@ class GroupPolicy
 
     public function activityTotal(User $user, Group $group)
     {
-        return $user->GroupId === $group->Id;
+        return $user->character->GroupId === $group->Id;
     }
 
     public function activity(User $user, Group $group)
     {
-        return $user->GroupId === $group->Id;
+        return $user->character->GroupId === $group->Id;
     }
 
     public function logs(User $user, Group $group)
     {
-        return $user->GroupId === $group->Id;
+        return $user->character->GroupId === $group->Id;
     }
 
     public function vehicles(User $user, Group $group)
     {
-        return $user->GroupId === $group->Id;
+        return $user->character->GroupId === $group->Id;
+    }
+
+    public function bankTransactions(User $user, Group $group)
+    {
+        return $user->character->GroupId === $group->Id;
     }
 }

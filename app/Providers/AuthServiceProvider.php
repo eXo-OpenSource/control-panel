@@ -27,6 +27,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Auth::viaRequest('exo-user-token', function ($request) {
+            if ($request->token && $request->token !== '') {
+                return \App\User::where('ApiToken', $request->token)->first();
+            }
+            return null;
+        });
+
         Auth::provider('exo', function ($app, array $config) {
             return new ExoUserProvider();
         });

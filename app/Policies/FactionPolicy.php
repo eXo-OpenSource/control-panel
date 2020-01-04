@@ -39,11 +39,11 @@ class FactionPolicy
 
     public function activity(User $user, Faction $faction)
     {
-        return $user->FactionId === $faction->Id;
+        return $user->character->FactionId === $faction->Id;
     }
 
     public function logs(User $user, Faction $faction)
     {
-        return $user->FactionId === $faction->Id;
+        return $user->character->FactionId === $faction->Id;
     }
 }

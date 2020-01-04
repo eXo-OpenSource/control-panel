@@ -33,4 +33,15 @@ class Group extends Model
     {
         return $this->newHasMany(Vehicle::where('OwnerType', 4), $this, 'OwnerId', 'Id');
     }
+
+    public function bankAccount()
+    {
+        return $this->newHasOne(BankAccount::where('OwnerType', 8), $this, 'OwnerId', 'Id');
+    }
+
+    public function bankAccountTransactions()
+    {
+        // SELECT FromId, FromType, `From`, FromCash, ToId, ToType, `To`, ToCash, Amount, Reason, Category, Subcategory, Date FROM view_Money WHERE (FromType = 1 AND FromId = {$playerId}) OR (ToType = 1 AND ToId = {$playerId}) ORDER BY Date DESC LIMIT 0, 1000
+        return BankAccountTransaction::query()->where('FromId', $this->Id)->where('FromType', 8)->orWhere('ToId', $this->Id)->where('ToType', 8);
+    }
 }
