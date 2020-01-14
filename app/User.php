@@ -72,6 +72,16 @@ class User extends Authenticatable
         return $this->hasMany(Punish::class, 'UserId', 'Id');
     }
 
+    public function kills()
+    {
+        return $this->hasMany(Kills::class, 'UserId', 'Id');
+    }
+
+    public function deaths()
+    {
+        return $this->hasMany(Kills::class, 'TargetId', 'Id');
+    }
+
     public function isBanned()
     {
         $time = (new \DateTime())->getTimestamp();

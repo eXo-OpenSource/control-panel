@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class Punish extends Model
+class Kills extends Model
 {
     protected $primaryKey = 'Id';
-    protected $table = 'Punish';
+    protected $table = 'Kills';
     protected $connection = 'mysql_logs';
     public $timestamps = false;
 
@@ -20,8 +20,8 @@ class Punish extends Model
         return $this->hasOne(User::class, 'Id', 'UserId');
     }
 
-    public function admin()
+    public function target()
     {
-        return $this->hasOne(User::class, 'Id', 'AdminId');
+        return $this->hasOne(User::class, 'Id', 'TargetId');
     }
 }
