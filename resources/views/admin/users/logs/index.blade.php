@@ -72,7 +72,7 @@
                                 (ID: {{ $punish->TargetId }})
                                     </td>
                                     <td>{{ $punish->Weapon }}</td>
-                                    <td>{{ $punish->Range }}</td>
+                                    <td>{{ $punish->RangeBetween }}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -100,7 +100,7 @@
                                 (ID: {{ $punish->TargetId }})
                                     </td>
                                     <td>{{ $punish->Weapon }}</td>
-                                    <td>{{ $punish->Range }}</td>
+                                    <td>{{ $punish->RangeBetween }}</td>
                                 </tr>
                             @endforeach
                         </table>
