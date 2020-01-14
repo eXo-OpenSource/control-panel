@@ -1,15 +1,16 @@
 @extends('layouts.app')
 
+@section('top-menu')
+    <ul class="c-header-nav d-md-down-none">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.user.search') }}">Benutzersuche</a></li>
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.texture') }}">Texturen</a></li>
+    </ul>
+@endsection
+
 @section('content')
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-12">
-
-                <div class="d-block mb-4">
-                    <a class="btn btn-primary" href="{{ route('admin.user.search') }}">Benutzersuche</a>
-                    <a class="btn btn-primary" href="{{ route('admin.texture') }}">Texturen</a>
-                </div>
-
                 <div class="row">
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
                         <div class="card text-white bg-primary" style="background: linear-gradient(45deg,#321fdb 0%,#1f1498 100%);">

@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('top-menu')
+    <ul class="c-header-nav d-md-down-none">
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.users.logs.index', [$user->Id]) }}">{{ __('Logs') }}</a></li>
+    </ul>
+@endsection
+
 @section('content')
 
     <div class="container-fluid">
