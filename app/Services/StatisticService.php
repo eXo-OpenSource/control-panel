@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Company;
 use App\Faction;
+use App\User;
 use Carbon\Carbon;
 
 class StatisticService
@@ -201,6 +202,55 @@ class StatisticService
 
         array_push($result['datasets'], $data);
         array_push($result['datasets'], $dataDuty);
+
+        return [
+            'chart' => $result,
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getUserActivity(User $user, Carbon $from, Carbon $to)
+    {
+        $result = [
+            'labels' => [],
+            'datasets' => [],
+        ];
+
+        $activity = $user->getActivity($from, $to);
+
+        $data = [
+            'label' => 'Aktivität (h)',
+            'borderColor' => 'rgba(165, 170, 170, 1)',
+            'backgroundColor' => 'rgba(165, 170, 170, 0.2)',
+            'pointBorderColor' => 'rgba(165, 170, 170, 1)',
+            'pointBackgroundColor' => 'rgba(165, 170, 170, 1)',
+            'pointHoverBackgroundColor' => 'rgba(165, 170, 170, 1)',
+            'data' => [],
+        ];
+
+        $dataDuty = [
+            'label' => 'Aktivität im Dienst (h)',
+            /*
+            'borderColor' => $company->getColor(),
+            'backgroundColor' => $company->getColor(0.2),
+            'pointBorderColor' => $company->getColor(),
+            'pointBackgroundColor' => $company->getColor(),
+            'pointHoverBackgroundColor' => $company->getColor(),
+            */
+            'data' => [],
+        ];
+
+        foreach ($activity as $entry) {
+            array_push($result['labels'], $entry->Date);
+
+            array_push($data['data'], round($entry->Duration / 60, 1));
+            //array_push($dataDuty['data'], round($entry->DurationDuty / 60, 1));
+        }
+
+        array_push($result['datasets'], $data);
+        //array_push($result['datasets'], $dataDuty);
 
         return [
             'chart' => $result,

@@ -35,7 +35,7 @@ class DashboardController extends Controller
         $factions = Faction::where('active', 1)->get();
         $factionData = ['datasets' => []];
         $factionData2 = ['datasets' => []];
-
+/*
         foreach ($factions as $faction) {
             $activity = $faction->getActivity(true);
             if (!isset($factionData['labels'])) {
@@ -56,6 +56,7 @@ class DashboardController extends Controller
 
             array_push($factionData2['datasets'], $dataset);
         }
+*/
 
         $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 1d GROUP BY time(1h)');
         $points = $playerCount->getPoints();

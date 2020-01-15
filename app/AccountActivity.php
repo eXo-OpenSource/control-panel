@@ -14,14 +14,12 @@ class AccountActivity extends Model
         'Date'
     ];
 
-    public static function getActivity2($users, Carbon $from, Carbon $to)
+    public static function getActivity(User $user, Carbon $from, Carbon $to)
     {
         $days = $from->diffInDays($to);
 
-        $activity = [];
-        if (count($users) > 0) {
-            $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_account_activity WHERE UserId IN (' . join(', ', $users) . ') AND Date >= ? AND Date <= ? GROUP BY Date;', [$from->format('Y-m-d'), $to->format('Y-m-d')]);
-        }
+        $activity = DB::select('SELECT Date, SUM(Duration) AS Duration FROM vrp_account_activity WHERE UserId = ? AND Date >= ? AND Date <= ? GROUP BY Date;', [$user->Id, $from->format('Y-m-d'), $to->format('Y-m-d')]);
+
 
         for ($i = 0; $i < $days; $i++) {
             $date = $from->copy()->addDays($i)->format('Y-m-d');
@@ -48,6 +46,7 @@ class AccountActivity extends Model
         return $activity;
     }
 
+    /*
     public static function getActivity($users, $chart = false)
     {
         $currentDate = date("Y-m-d", strtotime("-14 days"));;
@@ -110,5 +109,6 @@ class AccountActivity extends Model
 
         return $activity;
     }
+    */
 }
 

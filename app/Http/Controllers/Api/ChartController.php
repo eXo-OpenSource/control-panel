@@ -8,6 +8,7 @@ use App\Company;
 use App\Faction;
 use App\Http\Controllers\Controller;
 use App\Services\StatisticService;
+use App\User;
 use Carbon\Carbon;
 
 class ChartController extends Controller
@@ -36,6 +37,13 @@ class ChartController extends Controller
             abort_unless(auth()->user()->can('activityTotal', $company), 403);
 
             return StatisticService::getCompanyActivity($company, $from, $to);
+        } elseif (substr($name, 0, 4) === 'user') {
+            $user = explode(':', $name);
+            $user = User::find($user[1]);
+
+            abort_unless(auth()->user()->can('activity', $user), 403);
+
+            return StatisticService::getUserActivity($user, $from, $to);
         }
 
         return ['status' => 'Error'];

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -109,12 +110,10 @@ class Character extends Model
         return $hours . ':' . $minutes;
     }
 
-
-    public function getActivity($chart)
+    public function getActivity(Carbon $from, Carbon $to)
     {
-        return AccountActivity::getActivity([$this->Id], $chart);
+        return AccountActivity::getActivity($this->user, $from, $to);
     }
-
 
     public function getWeekActivity()
     {
