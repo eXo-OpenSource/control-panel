@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Company;
 use App\Faction;
+use App\Group;
 use App\User;
 use Carbon\Carbon;
 
@@ -43,7 +44,7 @@ class StatisticService
         ];
 
         foreach ($factions as $key => $faction) {
-            $activity = $faction->getActivity2($from, $to);
+            $activity = $faction->getActivity($from, $to);
 
             $data = [
                 'label' => $faction->Name . ": Aktivität (h)",
@@ -124,7 +125,7 @@ class StatisticService
             'datasets' => [],
         ];
 
-        $activity = $faction->getActivity2($from, $to);
+        $activity = $faction->getActivity($from, $to);
 
         $data = [
             'label' => 'Aktivität (h)',
@@ -202,6 +203,41 @@ class StatisticService
 
         array_push($result['datasets'], $data);
         array_push($result['datasets'], $dataDuty);
+
+        return [
+            'chart' => $result,
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getGroupActivity(Group $group, Carbon $from, Carbon $to)
+    {
+        $result = [
+            'labels' => [],
+            'datasets' => [],
+        ];
+
+        $activity = $group->getActivity($from, $to);
+
+        $data = [
+            'label' => 'Aktivität (h)',
+            'borderColor' => 'rgba(165, 170, 170, 1)',
+            'backgroundColor' => 'rgba(165, 170, 170, 0.2)',
+            'pointBorderColor' => 'rgba(165, 170, 170, 1)',
+            'pointBackgroundColor' => 'rgba(165, 170, 170, 1)',
+            'pointHoverBackgroundColor' => 'rgba(165, 170, 170, 1)',
+            'data' => [],
+        ];
+
+        foreach ($activity as $entry) {
+            array_push($result['labels'], $entry->Date);
+
+            array_push($data['data'], round($entry->Duration / 60, 1));
+        }
+
+        array_push($result['datasets'], $data);
 
         return [
             'chart' => $result,

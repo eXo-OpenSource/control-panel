@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Company;
 use App\Faction;
+use App\Group;
 use App\Http\Controllers\Controller;
 use App\Services\StatisticService;
 use App\User;
@@ -44,6 +45,13 @@ class ChartController extends Controller
             abort_unless(auth()->user()->can('activity', $user), 403);
 
             return StatisticService::getUserActivity($user, $from, $to);
+        } elseif (substr($name, 0, 5) === 'group') {
+            $group = explode(':', $name);
+            $group = Group::find($group[1]);
+
+            abort_unless(auth()->user()->can('activityTotal', $group), 403);
+
+            return StatisticService::getGroupActivity($group, $from, $to);
         }
 
         return ['status' => 'Error'];

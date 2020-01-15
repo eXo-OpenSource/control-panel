@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
@@ -23,10 +24,9 @@ class Group extends Model
         return GroupLog::where('GroupType', 'group')->where('GroupId', $this->Id);
     }
 
-    public function getActivity($chart)
+    public function getActivity(Carbon $from, Carbon $to)
     {
-        $members = $this->members->pluck('Id')->toArray();
-        return AccountActivity::getActivity($members, $chart);
+        return AccountActivityGroup::getActivity($this->Id, 4, $from, $to);
     }
 
     public function vehicles()

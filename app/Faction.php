@@ -25,37 +25,9 @@ class Faction extends Model
         return GroupLog::where('GroupType', 'faction')->where('GroupId', $this->Id);
     }
 
-    public function getActivity2(Carbon $from, Carbon $to)
+    public function getActivity(Carbon $from, Carbon $to)
     {
         return AccountActivityGroup::getActivity($this->Id, 2, $from, $to);
-    }
-
-    public function getActivity($chart)
-    {
-        $members = $this->members->pluck('Id')->toArray();
-
-        /*
-                    {
-                        label: 'My First dataset',
-                        backgroundColor : '@factionColor(4, 0.2)',
-                        borderColor : '@factionColor(4)',
-                        pointBackgroundColor : '@factionColor(4)',
-                        pointBorderColor : '#fff',
-                        data : [random(), random(), random(), random(), random(), random(), random()]
-                    },
-         */
-
-        $data = AccountActivity::getActivity($members, $chart);
-
-        foreach ($data['datasets'] as $key => $value) {
-            $data['datasets'][$key]['label'] = $this->Name;
-            $data['datasets'][$key]['backgroundColor'] = $this->getColor(0.2);
-            $data['datasets'][$key]['borderColor'] = $this->getColor();
-            $data['datasets'][$key]['pointBackgroundColor'] = $this->getColor();
-            $data['datasets'][$key]['pointBorderColor'] = '#fff';
-        }
-
-        return $data;
     }
 
     public function getColor($alpha = 1)
