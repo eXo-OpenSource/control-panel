@@ -24,15 +24,5 @@ mix.setResourceRoot('../');
 if (mix.inProduction()) {
     mix
         .version()
-        .purgeCss({
-            globs: [
-                path.join(__dirname, 'resources/**/*.blade.php'),
-                path.join(__dirname, 'resources/**/*.js'),
-                path.join(__dirname, 'resources/**/*.jsx'),
-                path.join(__dirname, 'resources/**/*.ts'),
-                path.join(__dirname, 'resources/**/*.tsx'),
-                path.join(__dirname, 'resources/**/*.vue'),
-                path.join(__dirname, 'vendor/laravel/framework/src/Illuminate/Pagination/resources/**/*.blade.php'),
-            ],
-        });
+        .purgeCss();
 }
