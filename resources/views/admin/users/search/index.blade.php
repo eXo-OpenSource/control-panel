@@ -44,7 +44,7 @@
                             </thead>
                             <tbody>
                             @foreach($users as $user)
-                                <tr onclick="location.href = '{{ route('users.show', [$user->Id]) }}';" class="cursor-pointer">
+                                <tr onclick="location.href = '{{ route('users.show', [$user->Id]) }}';" style="cursor: pointer;">
                                     <td>{{ $user->Name }}</td>
                                     <td>@if($user->character){{ $user->character->getPlayTime() }}@else{{ '-' }}@endif</td>
                                     <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>
