@@ -1,27 +1,26 @@
 <?php
 
-namespace App;
+namespace App\Models\Logs;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
-class Punish extends Model
+class Damage extends Model
 {
     protected $primaryKey = 'Id';
-    protected $table = 'Punish';
+    protected $table = 'Damage';
     protected $connection = 'mysql_logs';
     public $timestamps = false;
 
-    protected $dates = ['Date'];
+    protected $dates = ['StartTime', 'Date'];
 
     public function user()
     {
         return $this->hasOne(User::class, 'Id', 'UserId');
     }
 
-    public function admin()
+    public function target()
     {
-        return $this->hasOne(User::class, 'Id', 'AdminId');
+        return $this->hasOne(User::class, 'Id', 'TargetId');
     }
 }

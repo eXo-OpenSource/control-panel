@@ -2,7 +2,7 @@
 
 @section('top-menu')
     <ul class="c-header-nav d-md-down-none">
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.users.logs.index', [$user->Id]) }}">{{ __('Logs') }}</a></li>
+        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.users.logs.show', [$user->Id, 'punish']) }}">{{ __('Logs') }}</a></li>
     </ul>
 @endsection
 
@@ -23,32 +23,7 @@
                         @include('admin.users.logs.partials.punish')
                     </div>
                     <div class="tab-pane" id="kills" role="tabpanel">
-                        <table class="table w-full">
-                            <tr>
-                                <th>Id</th>
-                                <th>Datum</th>
-                                <th>User</th>
-                                <th>Target</th>
-                                <th>Weapon</th>
-                                <th>Range</th>
-                            </tr>
-                            @foreach($user->kills()->with(['user', 'target'])->limit(100)->orderBy('Id', 'DESC')->get() as $punish)
-                                <tr>
-                                    <td>{{ $punish->Id }}</td>
-                                    <td>{{ $punish->Date }}</td>
-                                    <td>
-                                        @if($punish->user)<a href="{{ route('users.show', [$punish->UserId]) }}">{{ $punish->user->Name }}</a>@else{{ 'Unknown' }}@endif
-                                (ID: {{ $punish->UserId }})
-                                    </td>
-                                    <td>
-                                        @if($punish->target)<a href="{{ route('users.show', [$punish->TargetId]) }}">{{ $punish->target->Name }}</a>@else{{ 'Unknown' }}@endif
-                                (ID: {{ $punish->TargetId }})
-                                    </td>
-                                    <td>{{ $punish->Weapon }}</td>
-                                    <td>{{ $punish->RangeBetween }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
+                        @include('admin.users.logs.partials.kills')
                     </div>
                     <div class="tab-pane" id="deaths" role="tabpanel">
                         <table class="table w-full">

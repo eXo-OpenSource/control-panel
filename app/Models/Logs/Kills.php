@@ -1,10 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models\Logs;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class Kills extends Model
 {

@@ -1,5 +1,5 @@
 @php
-    $punish = $user->punish()->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(5);
+    $punish = $user->punish()->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
 <table class="table w-full">
     <tr>

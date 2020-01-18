@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Models\Logs\Damage;
+use App\Models\Logs\Heal;
+use App\Models\Logs\Kills;
+use App\Models\Logs\Punish;
 use Carbon\Carbon;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
@@ -81,6 +84,16 @@ class User extends Authenticatable
     public function deaths()
     {
         return $this->hasMany(Kills::class, 'TargetId', 'Id');
+    }
+
+    public function heal()
+    {
+        return $this->hasMany(Heal::class, 'UserId', 'Id');
+    }
+
+    public function damage()
+    {
+        return Damage::query()->where('UserId', $this->Id)->orWhere('TargetId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
     }
 
     public function isBanned()

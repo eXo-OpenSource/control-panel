@@ -47,12 +47,12 @@ class UserLogController extends Controller
      * Display the specified resource.
      *
      * @param  \App\User  $user
-     * @param  \DummyFullModelClass  $DummyModelVariable
+     * @param  string  $log
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, DummyModelClass $DummyModelVariable)
+    public function show(User $user, $log)
     {
-        //
+        return view('admin.users.logs.show', compact('user', 'log'));
     }
 
     /**
