@@ -46,6 +46,14 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Anmeldung merken') }}
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-6">
                                         <button type="submit" class="btn btn-primary px-4">

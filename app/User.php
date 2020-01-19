@@ -5,6 +5,7 @@ namespace App;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
+use App\Models\Logs\Money;
 use App\Models\Logs\Punish;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -94,6 +95,11 @@ class User extends Authenticatable
     public function damage()
     {
         return Damage::query()->where('UserId', $this->Id)->orWhere('TargetId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
+    }
+
+    public function money()
+    {
+        return Money::query()->where('FromType', 1)->where('FromId', $this->Id)->orWhere('ToType', 1)->where('ToId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
     }
 
     public function isBanned()

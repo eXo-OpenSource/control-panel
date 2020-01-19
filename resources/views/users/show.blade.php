@@ -17,8 +17,36 @@
                         @auth
                             @if(auth()->user()->Rank >= 3)
                                 <a class="btn btn-danger" href="{{ route('admin.user.search') }}">Ban</a>
-                                <a class="btn btn-danger" href="{{ route('admin.texture') }}">Kick</a>
+                                <button class="btn btn-danger" data-toggle="modal" data-target="#modal-kick">Kick</button>
                                 <a class="btn btn-danger" href="{{ route('admin.texture') }}">Unban</a>
+
+                                <div class="modal fade" id="modal-kick" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">{{ __(':name kicken', ['name' => $user->Name]) }}</h4>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                            </div>
+                                            <form method="POST" action="{{ route('admin.users.update', [$user->Id]) }}">
+                                                @method('PUT')
+                                                @csrf()
+                                                <input type="hidden" name="type" value="kick">
+                                                <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="reason">{{ __('Grund') }}</label>
+                                                            <input class="form-control" id="reason" name="reason" type="text" placeholder="{{ __('Grund') }}">
+                                                        </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-danger" type="submit">{{ __('Kicken') }}</button>
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">{{ __('Abbrechen') }}</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             @endif
                         @endauth
                     </div>

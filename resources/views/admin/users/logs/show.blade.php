@@ -34,6 +34,7 @@
                         @elseif($log === 'damage')
                             @include('admin.users.logs.partials.damage')
                         @elseif($log === 'money')
+                            @include('admin.users.logs.partials.money')
                         @endif
                     </div>
                 </div>
