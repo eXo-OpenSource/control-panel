@@ -40,4 +40,9 @@ class Faction extends Model
 
         return "rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")";
     }
+
+    public function vehicles()
+    {
+        return $this->newHasMany(Vehicle::where('OwnerType', 2), $this, 'OwnerId', 'Id');
+    }
 }

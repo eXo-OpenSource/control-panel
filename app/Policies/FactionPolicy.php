@@ -46,4 +46,9 @@ class FactionPolicy
     {
         return $user->character->FactionId === $faction->Id;
     }
+
+    public function vehicles(User $user, Faction $faction)
+    {
+        return true;
+    }
 }

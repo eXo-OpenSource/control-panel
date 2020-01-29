@@ -39,4 +39,9 @@ class Company extends Model
 
         return "rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")";
     }
+
+    public function vehicles()
+    {
+        return $this->newHasMany(Vehicle::where('OwnerType', 3), $this, 'OwnerId', 'Id');
+    }
 }

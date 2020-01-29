@@ -27,6 +27,16 @@
                         </table>
                     </div>
                 </div>
+
+                @can('vehicles', $company)
+                <div class="row">
+                    @foreach($company->vehicles as $vehicle)
+                        <div class="col-md-4">
+                            @include('partials.vehicle')
+                        </div>
+                    @endforeach
+                </div>
+                @endcan
             </div>
             <div class="col-lg-6">
                 @can('activityTotal', $company)
