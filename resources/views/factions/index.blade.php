@@ -19,7 +19,7 @@
                             <tbody>
                             @foreach($factions as $faction)
                                 <tr>
-                                    <td><a href="{{ route('factions.show', [$faction->Id]) }}">{{ $faction->Name }}</a></td>
+                                    <td><a href="{{ route('factions.show', [$faction->Id]) }}">{{ $faction->Name }}</a>@if($faction->active == 0) <small>({{ __('deaktiviert') }})</small>@endif</td>
                                     <td>{{ $faction->membersCount() }}</td>
                                 </tr>
                             @endforeach

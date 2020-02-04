@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Faction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class FactionController extends Controller
 {
@@ -14,7 +15,14 @@ class FactionController extends Controller
      */
     public function index()
     {
-        $factions = Faction::where('active', 1)->get();
+        $factions = Faction::query();
+
+        if (Gate::denies('admin-rank-3')) {
+            $factions->where('active', 1);
+        }
+
+        $factions = $factions->get();
+
         return view('factions.index', compact('factions'));
     }
 
@@ -47,7 +55,9 @@ class FactionController extends Controller
      */
     public function show(Faction $faction)
     {
-        abort_unless($faction->active === 1, 403);
+        if (Gate::denies('admin-rank-3')) {
+            abort_unless($faction->active === 1, 403);
+        }
 
         return view('factions.show', compact('faction'));
     }
