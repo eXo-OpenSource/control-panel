@@ -21,6 +21,8 @@ Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::post('logout', 'LoginController@logout')->name('logout');
 });
 
+Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online');
+
 Route::middleware('auth')->group(function () {
     Route::resource('users', 'UserController');
     Route::resource('factions', 'FactionController');

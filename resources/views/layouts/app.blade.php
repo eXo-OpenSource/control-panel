@@ -37,6 +37,11 @@
                     {{ __('Gruppen') }}
                 </a>
             </li>
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ route('who.is.online') }}">
+                    {{ __('Wer ist online') }}
+                </a>
+            </li>
             @auth
                 @if(auth()->user()->Rank >= 3)
             <li class="c-sidebar-nav-item">

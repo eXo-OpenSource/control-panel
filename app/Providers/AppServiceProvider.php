@@ -48,6 +48,16 @@ class AppServiceProvider extends ServiceProvider
 
             return "<?php echo 'rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")'; ?>";
         });
+
+
+        Blade::directive('playTime', function ($playTime) {
+            /*dd($playTime);
+            $playTime = intval($playTime);
+            $hours = floor($playTime / 60);
+            $minutes = $playTime % 60;*/
+            return "<?php \$tmp = intval($playTime); \$hours = floor(\$tmp / 60); \$minutes = \$tmp % 60; echo \$hours . ':' . \$minutes; ?>";
+        });
+
         //
 
         Gate::define('admin-rank-1', function ($user) { // Ticketsupporter
