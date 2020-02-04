@@ -46,7 +46,7 @@ class WhoIsOnlineController extends Controller
                 $groupIDs = array_unique($groupIDs);
 
                 foreach(Faction::all() as $faction) {
-                    $factions[$faction->Id] = $faction->Name_Short;
+                    $factions[$faction->Id] = $faction->Name;
 
                     if ($faction->Id > 3 && $faction->active == 1) {
                         $factionsCount[$faction->Id] = (object)['Name' => $faction->Name, 'Count' => 0];
