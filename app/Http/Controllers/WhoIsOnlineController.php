@@ -49,7 +49,7 @@ class WhoIsOnlineController extends Controller
                     $factions[$faction->Id] = $faction->Name_Short;
 
                     if ($faction->Id > 3 && $faction->active == 1) {
-                        $factionsCount[$faction->Id] = (object)['Name' => $faction->Name_Short, 'Count' => 0];
+                        $factionsCount[$faction->Id] = (object)['Name' => $faction->Name, 'Count' => 0];
                     }
                 }
 
