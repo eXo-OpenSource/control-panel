@@ -9,7 +9,7 @@
                         {{ __('Wer ist online') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-responsive-sm">
+                        <table class="table table-sm table-responsive-sm">
                             <thead>
                             <tr>
                                 <th scope="col">{{ __('Name') }}</th>
@@ -20,7 +20,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($players as $player)
+                            @foreach($data->Players as $player)
                                 <tr>
                                     <td><a href="{{ route('users.show', [$player->Id]) }}">{{ $player->Name }}</a></td>
                                     <td>@if($player->FactionId != 0)<a href="{{ route('factions.show', [$player->FactionId]) }}">{{ $player->FactionName }}</a>@else{{ $player->FactionName }}@endif</td>
@@ -31,6 +31,33 @@
                             @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Derzeit sind :count Spieler online', ['count' => $data->Total]) }}
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                @foreach($data->Factions as $faction)
+                                    <div class="col-md-4 col-xs-6">
+                                        <span>{{ $faction->Name }}: {{ $faction->Count }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                @foreach($data->Companies as $company)
+                                    <div class="col-md-4 col-xs-6">
+                                        <span>{{ $company->Name }}: {{ $company->Count }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

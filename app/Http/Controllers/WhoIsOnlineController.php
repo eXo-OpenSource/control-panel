@@ -33,6 +33,8 @@ class WhoIsOnlineController extends Controller
 
                 $factions = [0 => '- Keine -'];
                 $companies = [0 => '- Keine -'];
+                $factionsCount = [1 => (object)['Name' => 'Staat', 'Count' => 0]];
+                $companiesCount = [];
                 $groups = [0 => '- Keine -'];
                 $groupIDs = [];
 
@@ -45,10 +47,15 @@ class WhoIsOnlineController extends Controller
 
                 foreach(Faction::all() as $faction) {
                     $factions[$faction->Id] = $faction->Name_Short;
+
+                    if ($faction->Id > 3 && $faction->active == 1) {
+                        $factionsCount[$faction->Id] = (object)['Name' => $faction->Name_Short, 'Count' => 0];
+                    }
                 }
 
                 foreach(Company::all() as $company) {
                     $companies[$company->Id] = $company->Name_Short;
+                    $companiesCount[$company->Id] = (object)['Name' => $company->Name_Short, 'Count' => 0];
                 }
 
                 foreach(Group::query()->whereIn('Id', $groupIDs)->get() as $group) {
@@ -58,6 +65,20 @@ class WhoIsOnlineController extends Controller
                 $playersNew = [];
 
                 foreach($players as $player) {
+                    if ($player->Faction != 0) {
+                        if ($player->Faction > 0 && $player->Faction < 4) {
+                            $factionsCount[1]->Count++;
+                        } else {
+                            if (isset($factionsCount[$player->Faction])) {
+                                $factionsCount[$player->Faction]->Count++;
+                            }
+                        }
+                    }
+
+                    if ($player->Company != 0) {
+                        $companiesCount[$player->Company]->Count++;
+                    }
+
                     array_push($playersNew, (object)[
                         'Id' => $player->Id,
                         'Name' => $player->Name,
@@ -71,12 +92,17 @@ class WhoIsOnlineController extends Controller
                     ]);
                 }
 
-                Cache::put('players', $playersNew, now()->addMinutes(5));
+                Cache::put('players', (object)[
+                    'Players' => $playersNew,
+                    'Factions' => $factionsCount,
+                    'Companies' => $companiesCount,
+                    'Total' => count($playersNew)
+                ], now()->addMinutes(5));
             }
         }
 
-        $players = Cache::get('players', []);
+        $data = Cache::get('players', []);
 
-        return view('online.index', compact('players'));
+        return view('online.index', compact('data'));
     }
 }
