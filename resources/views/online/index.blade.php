@@ -42,20 +42,24 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                @foreach($data->Factions as $faction)
-                                    <div class="col-md-4 col-xs-6">
-                                        <span>{{ $faction->Name }}: {{ $faction->Count }}</span>
-                                    </div>
-                                @endforeach
+                                <div class="row">
+                                    @foreach($data->Factions as $faction)
+                                        <div class="col-md-4 col-xs-6">
+                                            <span>{{ $faction->Name }}: {{ $faction->Count }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                @foreach($data->Companies as $company)
-                                    <div class="col-md-4 col-xs-6">
-                                        <span>{{ $company->Name }}: {{ $company->Count }}</span>
-                                    </div>
-                                @endforeach
+                                <div class="row">
+                                    @foreach($data->Companies as $company)
+                                        <div class="col-md-4 col-xs-6">
+                                            <span>{{ $company->Name }}: {{ $company->Count }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
