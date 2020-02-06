@@ -23,12 +23,17 @@ Route::namespace('Auth')->prefix('auth')->group(function () {
 
 Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online');
 
+Route::resource('groups', 'GroupController')->only('index', 'show');
+Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
+
+Route::resource('factions', 'FactionController');
+Route::get('factions/{faction}/{page}', 'FactionController@show')->name('factions.show.page');
+
+Route::resource('companies', 'CompanyController');
+Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
+
 Route::middleware('auth')->group(function () {
     Route::resource('users', 'UserController');
-    Route::resource('factions', 'FactionController');
-    Route::resource('companies', 'CompanyController');
-    Route::resource('groups', 'GroupController');
-    Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
     Route::resource('textures', 'TextureController');
     Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/home', 'HomeController@index')->name('home');

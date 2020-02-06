@@ -53,13 +53,13 @@ class FactionController extends Controller
      * @param  \App\Faction  $faction
      * @return \Illuminate\Http\Response
      */
-    public function show(Faction $faction)
+    public function show(Faction $faction, $page = '')
     {
         if (Gate::denies('admin-rank-3')) {
             abort_unless($faction->active === 1, 403);
         }
 
-        return view('factions.show', compact('faction'));
+        return view('factions.show', compact('faction', 'page'));
     }
 
     /**

@@ -45,9 +45,9 @@ class CompanyController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show(Company $company, $page = '')
     {
-        return view('companies.show', compact('company'));
+        return view('companies.show', compact('company', 'page'));
     }
 
     /**
