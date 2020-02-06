@@ -106,7 +106,7 @@ return [
         479 => "Regina",
         480 => "Comet",
         481 => "BMX",
-        482 => "Burriro",
+        482 => "Burrito",
         483 => "Camper",
         484 => "Marquis",
         485 => "Baggage",
