@@ -26,14 +26,17 @@ Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online'
 Route::resource('groups', 'GroupController')->only('index', 'show');
 Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
 
-Route::resource('factions', 'FactionController');
+Route::resource('factions', 'FactionController')->only('index', 'show');
 Route::get('factions/{faction}/{page}', 'FactionController@show')->name('factions.show.page');
 
-Route::resource('companies', 'CompanyController');
+Route::resource('companies', 'CompanyController')->only('index', 'show');
 Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('users', 'UserController');
+    Route::resource('users', 'UserController')->only('index', 'show');
+    Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
+
+    Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
     Route::resource('textures', 'TextureController');
     Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/home', 'HomeController@index')->name('home');

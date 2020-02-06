@@ -44,11 +44,11 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(User $user, $page = '')
     {
         abort_unless(auth()->user()->can('show', $user), 403);
         $banned = $user->isBanned();
-        return view('users.show', compact('user', 'banned'));
+        return view('users.show', compact('user', 'page', 'banned'));
     }
 
     /**
@@ -59,7 +59,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return json_encode($user->character->getActivity(true));
+        //
     }
 
     /**
