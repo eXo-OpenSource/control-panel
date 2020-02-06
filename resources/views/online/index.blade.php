@@ -22,7 +22,7 @@
                             <tbody>
                             @foreach($data->Players as $player)
                                 <tr>
-                                    <td><a href="{{ route('users.show', [$player->Id]) }}">{{ $player->Name }}</a></td>
+                                    <td>@if($player->Id != -1)<a href="{{ route('users.show', [$player->Id]) }}">{{ $player->Name }}@else{{ $player->Name }}@endif</a></td>
                                     <td>@if($player->FactionId != 0)<a href="{{ route('factions.show', [$player->FactionId]) }}">{{ $player->FactionName }}</a>@else{{ $player->FactionName }}@endif</td>
                                     <td>@if($player->CompanyId != 0)<a href="{{ route('companies.show', [$player->CompanyId]) }}">{{ $player->CompanyName }}</a>@else{{ $player->CompanyName }}@endif</td>
                                     <td>@if($player->GroupId != 0)<a href="{{ route('groups.show', [$player->GroupId]) }}">{{ $player->GroupName }}</a>@else{{ $player->GroupName }}@endif</td>
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row pt-3">
                             <div class="col-md-6 col-xs-12">
                                 <div class="row">
                                     @foreach($data->Companies as $company)
