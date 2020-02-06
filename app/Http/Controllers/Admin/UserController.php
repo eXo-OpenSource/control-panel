@@ -24,7 +24,7 @@ class UserController extends Controller
         if ($type === 'kick') {
             $reason = $request->get('reason');
 
-            if (empty('reason')) {
+            if (empty($reason)) {
                 return redirect()->route('users.show', [$user->Id]);
             }
 
@@ -37,6 +37,55 @@ class UserController extends Controller
                     Session::flash('alert-success', 'Erfolgreich gekickt!');
                 } else {
                     Session::flash('alert-danger', 'Spieler konnte nicht gekickt werden!');
+                }
+            } else {
+                Session::flash('alert-danger', 'Interner Fehler!');
+            }
+
+            return redirect()->route('users.show', [$user->Id]);
+        } elseif ($type === 'unban') {
+            $reason = $request->get('reason');
+
+            if (empty($reason)) {
+                return redirect()->route('users.show', [$user->Id]);
+            }
+
+            $mtaService = new MTAService();
+            $response = $mtaService->unbanPlayer(auth()->user()->Id, $user->Id, $reason);
+
+            if (!empty($response)) {
+                $data = json_decode($response[0]);
+                if ($data->status === 'SUCCESS') {
+                    Session::flash('alert-success', 'Erfolgreich entbannt!');
+                } else {
+                    Session::flash('alert-danger', 'Spieler konnte nicht entbannt werden!');
+                }
+            } else {
+                Session::flash('alert-danger', 'Interner Fehler!');
+            }
+
+            return redirect()->route('users.show', [$user->Id]);
+        } elseif ($type === 'ban') {
+            $reason = $request->get('reason');
+            $duration = $request->get('duration');
+
+            if (empty($reason)) {
+                return redirect()->route('users.show', [$user->Id]);
+            }
+
+            if (empty($duration) && intval('duration') <= 0) {
+                return redirect()->route('users.show', [$user->Id]);
+            }
+
+            $mtaService = new MTAService();
+            $response = $mtaService->banPlayer(auth()->user()->Id, $user->Id, $duration, $reason);
+
+            if (!empty($response)) {
+                $data = json_decode($response[0]);
+                if ($data->status === 'SUCCESS') {
+                    Session::flash('alert-success', 'Erfolgreich gebannt!');
+                } else {
+                    Session::flash('alert-danger', 'Spieler konnte nicht gebannt werden!');
                 }
             } else {
                 Session::flash('alert-danger', 'Interner Fehler!');
