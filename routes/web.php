@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('factions', 'FactionController');
     Route::resource('companies', 'CompanyController');
     Route::resource('groups', 'GroupController');
+    Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
     Route::resource('textures', 'TextureController');
     Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/home', 'HomeController@index')->name('home');

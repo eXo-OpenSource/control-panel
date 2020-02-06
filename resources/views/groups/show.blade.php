@@ -2,66 +2,25 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">{{ __('Mitglieder') }}</div>
-                    <div class="card-body">
-                        <table class="table table-sm table-responsive-sm">
-                            <thead>
-                            <tr>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Rang') }}</th>
-                                @can('activity', $group)<th>{{ __('Aktivität') }}</th>@endcan
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($group->members()->with('user')->orderBy('GroupRank', 'DESC')->get() as $character)
-                                <tr>
-                                    <td>@if($character->user)<a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a>@else{{ 'Unknown' }}@endif</td>
-                                    <td>{{ $character->GroupRank }}</td>
-                                    @can('activity', $group)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+        <h3>{{ $group->Name }}</h3>
+        <hr>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item"><a class="nav-link @if($page === ''){{'active'}}@endif" href="{{ route('groups.show', [$group->Id]) }}">{{ __('Übersicht') }}</a></li>
+                        @can('vehicles', $group)<li class="nav-item"><a class="nav-link @if($page === 'vehicles'){{'active'}}@endif" href="{{ route('groups.show.page', [$group->Id, 'vehicles']) }}">{{ __('Fahrzeuge') }}</a></li>@endcan
+                        @can('logs', $group)<li class="nav-item"><a class="nav-link @if($page === 'logs'){{'active'}}@endif" href="{{ route('groups.show.page', [$group->Id, 'logs']) }}">{{ __('Logs') }}</a></li>@endcan
+                    </ul>
+                </ul>
+                <div class="tab-content pt-4">
+                    @if($page === '')
+                        @include('groups.partials.overview')
+                    @elseif($page === 'vehicles')
+                        @include('groups.partials.vehicles')
+                    @elseif($page === 'logs')
+                        @include('groups.partials.logs')
+                    @endif
                 </div>
-
-
-                @can('vehicles', $group)
-                <div class="row">
-                    @foreach($group->vehicles as $vehicle)
-                        <div class="col-md-4">
-                            @include('partials.vehicle')
-                        </div>
-                    @endforeach
-                </div>
-                @endcan
-            </div>
-            <div class="col-lg-6">
-                @can('activityTotal', $group)
-                    <react-chart data-chart="group:{{ $group->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
-                @endcan
-                @can('logs', $group)
-                <div class="card">
-                    <div class="card-header">{{ __('Logs - Letzten 100 Einträge') }}</div>
-                    <div class="card-body">
-                        <table class="table table-sm">
-                            <tr>
-                                <th>Eintrag</th>
-                                <th>Datum</th>
-                            </tr>
-                            @foreach($group->logs()->orderBy('Timestamp', 'DESC')->limit(100)->with('user')->with('user.user')->get() as $log)
-                                <tr>
-                                    <td>@if($log->user and $log->user->user)<a href="{{ route('users.show', [$log->user->user->Id]) }}">{{ $log->user->user->Name }}</a>@else{{ 'Unknown' }}@endif {{ $log->Description }}</td>
-                                    <td>{{ Carbon\Carbon::createFromTimestamp($log->Timestamp)->format('d.m.Y H:i:s') }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
-                @endcan
             </div>
         </div>
     </div>

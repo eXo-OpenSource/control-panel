@@ -59,9 +59,9 @@ class GroupController extends Controller
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group)
+    public function show(Group $group, $page = '')
     {
-        return view('groups.show', compact('group'));
+        return view('groups.show', compact('group', 'page'));
     }
 
     /**
