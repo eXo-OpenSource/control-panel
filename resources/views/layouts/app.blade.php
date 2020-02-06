@@ -62,7 +62,7 @@
 
     <div id="app" class="c-wrapper">
         <header class="c-header c-header-light c-header-fixed"> <!--c-header-with-subheader -->
-            <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show"><span class="c-header-toggler-icon"></span></button><a class="c-header-brand d-sm-none" href="#"><img class="c-header-brand" src="/images/logo.png" width="97" height="10" alt="eXo Logo"></a>
+            <button class="c-header-toggler c-class-toggler d-lg-none mr-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show"><span class="c-header-toggler-icon"></span></button><a class="c-header-brand d-sm-none" href="#"><img class="c-header-brand" src="/images/logo.png" alt="eXo Logo"></a>
             <button class="c-header-toggler c-class-toggler ml-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true"><span class="c-header-toggler-icon"></span></button>
 
             @yield('top-menu')
@@ -72,9 +72,11 @@
                 @guest
                     <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                 @else
-                    <li class="c-header-nav-item dropdown px-3"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <div><span>{{ Auth::user()->Name }}</span></div>
+                    <li class="c-header-nav-item dropdown px-3">
+                        <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <div class="c-avatar"><img class="c-avatar-img" src="/images/skins/head/{{ Auth::user()->character->Skin }}.png" alt="{{ Auth::user()->Name }}"></div>
                         </a>
+
                         <div class="dropdown-menu dropdown-menu-right pt-0">
                             <div class="dropdown-header bg-light py-2"><strong>Account</strong></div>
                             <a class="dropdown-item" href="{{ route('users.show', ['user' => auth()->user()]) }}">
