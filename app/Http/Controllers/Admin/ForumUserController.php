@@ -17,6 +17,8 @@ class ForumUserController extends Controller
 {
     public function show($forumId)
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
+
         $user = User::where('ForumId', $forumId)->first();
 
         if (!$user) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Texture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class TextureController extends Controller
 {
@@ -15,6 +16,8 @@ class TextureController extends Controller
      */
     public function index()
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
+
         $limit = 50;
 
         if(request()->has('limit')) {

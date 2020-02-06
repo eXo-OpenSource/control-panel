@@ -6,6 +6,7 @@ use DummyFullModelClass;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class UserLogController extends Controller
 {
@@ -17,6 +18,8 @@ class UserLogController extends Controller
      */
     public function index(User $user)
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
+
         return view('admin.users.logs.index', compact('user'));
     }
 
@@ -52,6 +55,7 @@ class UserLogController extends Controller
      */
     public function show(User $user, $log)
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
         return view('admin.users.logs.show', compact('user', 'log'));
     }
 

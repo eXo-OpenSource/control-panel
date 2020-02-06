@@ -20,6 +20,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
+
         $type = $request->get('type');
 
         if ($type === 'kick') {
