@@ -117,6 +117,11 @@
                 @yield('content')
             </main>
         </div>
+
+        <footer class="c-footer">
+            <div>@include('layouts.partials.online')</div>
+            <div class="mfs-auto"></div>
+        </footer>
     </div>
 
     <!-- Scripts -->
