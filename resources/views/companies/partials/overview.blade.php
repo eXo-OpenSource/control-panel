@@ -15,7 +15,7 @@
                     @foreach($company->members()->with('user')->orderBy('CompanyRank', 'DESC')->get() as $character)
                         <tr>
                             <td>@if($character->user)<a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a>@else{{ 'Unknown' }}@endif</td>
-                            <td>{{ $character->FactionRank }}</td>
+                            <td>{{ $character->CompanyRank }}</td>
                             @can('activity', $company)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
                         </tr>
                     @endforeach
