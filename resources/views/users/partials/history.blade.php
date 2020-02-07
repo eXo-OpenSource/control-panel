@@ -23,10 +23,10 @@
                             <tr>
                                 <td>{{ $history->element->Name }}</td>
                                 <td>{{ $history->JoinDate->format('d.m.Y H:i:s') }}</td>
-                                <td>{{ $history->LeaveDate->format('d.m.Y H:i:s') }}</td>
+                                <td>@if($history->LeaveDate){{ $history->LeaveDate->format('d.m.Y H:i:s') }}@else{{ '-' }}@endif</td>
                                 <td>{{ $history->getDuration() }}</td>
                                 <td>{{ $history->getUninviter() }}</td>
-                                <td>{{ $history->ExternalReason }}</td>
+                                <td>@if($history->ExternalReason){{ $history->ExternalReason }}@else{{ '-' }}@endif</td>
                                 <td></td>
                             </tr>
                         @endforeach
