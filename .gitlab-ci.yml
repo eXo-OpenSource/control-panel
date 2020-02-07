@@ -108,6 +108,7 @@ docker:
     - docker rmi $CI_JOB_ID
   only:
     - master
+    - release/production
 
 deploy_master:
   image: appropriate/curl:latest
@@ -116,3 +117,11 @@ deploy_master:
     - curl http://$DEPLOYRON_IP:6000/deploy/cp_master?APISecret=$DEPLOY_API_SECRET_DEVELOP
   only:
     - master
+
+deploy_production:
+  image: appropriate/curl:latest
+  stage: deploy
+  script:
+    - curl http://$DEPLOYRON_IP:6000/deploy/cp_production?APISecret=$DEPLOY_API_SECRET_PRODUCTION
+  only:
+    - release/production
