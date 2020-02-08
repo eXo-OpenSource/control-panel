@@ -26,6 +26,11 @@ class LastUserActivity
                 'Time' => Carbon::now(),
                 'Name' => Auth::user()->Name
             ];
+
+            usort($users, function($a, $b) {
+                return $a->Time > $b->Time;
+            });
+
             Cache::forever('users-online', $users);
         }
         return $next($request);
