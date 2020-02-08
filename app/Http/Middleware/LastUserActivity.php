@@ -22,13 +22,24 @@ class LastUserActivity
     {
         if(Auth::check()) {
             $users = Cache::get('users-online', []);
-            $users[Auth::user()->Id] = (object)[
-                'Time' => Carbon::now(),
-                'Name' => Auth::user()->Name
-            ];
+            $found = false;
+            foreach($users as $user) {
+                if($user->Id === Auth::user()->Id) {
+                    $user->Time = Carbon::now();
+                    $found = true;
+                    break;
+                }
+            }
+            if(!$found) {
+                array_push($users, (object)[
+                    'Id' => Auth::user()->Id,
+                    'Time' => Carbon::now(),
+                    'Name' => Auth::user()->Name,
+                ]);
+            }
 
             usort($users, function($a, $b) {
-                return $a->Time > $b->Time;
+                return $a->Time < $b->Time;
             });
 
             Cache::forever('users-online', $users);
