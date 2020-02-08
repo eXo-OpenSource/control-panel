@@ -107,6 +107,10 @@ class Character extends Model
         $hours = floor($this->PlayTime / 60);
         $minutes = $this->PlayTime % 60;
 
+        if($minutes < 10) {
+            $minutes = '0' . $minutes;
+        }
+
         return $hours . ':' . $minutes;
     }
 

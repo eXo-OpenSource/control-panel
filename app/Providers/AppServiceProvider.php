@@ -51,11 +51,7 @@ class AppServiceProvider extends ServiceProvider
 
 
         Blade::directive('playTime', function ($playTime) {
-            /*dd($playTime);
-            $playTime = intval($playTime);
-            $hours = floor($playTime / 60);
-            $minutes = $playTime % 60;*/
-            return "<?php \$tmp = intval($playTime); \$hours = floor(\$tmp / 60); \$minutes = \$tmp % 60; echo \$hours . ':' . \$minutes; ?>";
+            return "<?php \$tmp = intval($playTime); \$hours = floor(\$tmp / 60); \$minutes = \$tmp % 60; if(\$minutes < 10) { \$minutes = '0' . \$minutes; } echo \$hours . ':' . \$minutes; ?>";
         });
 
         //

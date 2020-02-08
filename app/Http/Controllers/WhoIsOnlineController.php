@@ -20,9 +20,20 @@ class WhoIsOnlineController extends Controller
                 $players = $response[0];
 
                 usort($players, function($a, $b) {
+                    if ($a->Id === -1 && $b->Id === -1) {
+                        return strcmp($a->Name, $b->Name);
+                    } else if ($a->Id === -1) {
+                        return false;
+                    } else if ($b->Id === -1) {
+                        return true;
+                    }
                     if ($a->Faction == $b->Faction) {
                         if ($a->Company == $b->Company) {
-                            return strcmp($a->Name, $b->Name);
+                            if ($a->GroupId == $b->GroupId) {
+                                return strcmp($a->Name, $b->Name);
+                            } else {
+                                return $a->GroupId > $b->GroupId;
+                            }
                         } else {
                             return $a->Company > $b->Company;
                         }
