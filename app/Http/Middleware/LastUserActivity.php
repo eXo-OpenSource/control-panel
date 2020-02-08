@@ -22,12 +22,17 @@ class LastUserActivity
     {
         if(Auth::check()) {
             $users = Cache::get('users-online', []);
+            $diff = Carbon::now()->subMinutes(30);
             $found = false;
-            foreach($users as $user) {
+
+            foreach($users as $key => $user) {
                 if($user->Id === Auth::user()->Id) {
                     $user->Time = Carbon::now();
                     $found = true;
-                    break;
+                }
+
+                if($user->Time < $diff) {
+                    unset($users[$key]);
                 }
             }
             if(!$found) {
