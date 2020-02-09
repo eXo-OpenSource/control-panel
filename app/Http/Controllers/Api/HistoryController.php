@@ -17,7 +17,7 @@ class HistoryController extends Controller
 
         $data = $history->toArray();
 
-        // unset($data['InternalReason']);
+        unset($data['user']);
 
         $data['JoinDateText'] = $history->JoinDate->format('d.m.Y H:i:s');
         $data['LeaveDateText'] = $history->LeaveDate->format('d.m.Y H:i:s');
