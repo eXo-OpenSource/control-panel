@@ -27,8 +27,12 @@
                                 @foreach($textures as $texture)
                                     <tr>
                                         <td><img class="img-fluid" style="max-height: 200px; max-width: 200px;" src="@if(strpos($texture->Image, 'http') !== 0){{'https://picupload.pewx.de/textures/'}}@endif{{ $texture->Image }}"></td>
+                                        @if ($texture->Model)
                                         <td>@vehicleName($texture->Model)
                                             <img class="img-fluid rounded" src="https://exo-reallife.de/images/veh/Vehicle_{{ $texture->Model }}.jpg"></td>
+                                        @else
+                                        <td>Alle</td>
+                                        @endif
                                         <td>@if($texture->Public === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
                                         <td>{{ $texture->getStatus() }}</td>
                                         <td><form method="POST" action="{{ route('textures.destroy', [$texture->Id]) }}">@method('DELETE')@csrf<button type="submit"@if(!$texture->isDeleteable()){{'disabled'}}@endif class="btn btn-danger">Löschen</button></form></td>

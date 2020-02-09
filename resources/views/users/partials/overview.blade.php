@@ -15,7 +15,7 @@
                 </div>
                 <dl class="user-stats mt-2">
                     @can('privateData', $user)
-                        <dt>Onlinestatus</dt>
+                        <dt>Online-Status</dt>
                         <dd>@if ($user->isOnline()) <span class="badge badge-success">online</span> @else <span class="badge badge-danger">offline</span> @endif</dd>
                         <dt>Letzer Login</dt>
                         <dd>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</dd>
