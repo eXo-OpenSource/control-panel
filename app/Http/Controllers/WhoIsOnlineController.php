@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 class WhoIsOnlineController extends Controller
 {
-    function index()
-    {
+    public static function getOnlinePlayers(){
         if (!Cache::has('players')) {
             $mtaService = new MTAService();
             $response = $mtaService->getOnlinePlayers();
@@ -112,8 +111,12 @@ class WhoIsOnlineController extends Controller
             }
         }
 
-        $data = Cache::get('players', []);
+        return Cache::get('players', []);
+    }
 
+    function index()
+    {
+        $data = WhoIsOnlineController::getOnlinePlayers();
         return view('online.index', compact('data'));
     }
 }

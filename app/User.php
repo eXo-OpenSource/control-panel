@@ -2,15 +2,18 @@
 
 namespace App;
 
-use App\Models\Logs\Damage;
+use Carbon\Carbon;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
 use App\Models\Logs\Money;
+use App\Models\Logs\Damage;
 use App\Models\Logs\Punish;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Services\MTAService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Notifications\Notifiable;
+use App\Http\Controllers\WhoIsOnlineController;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -124,6 +127,19 @@ class User extends Authenticatable
         }
 
         return $bans[0]->expires;
+    }
+
+    public function isOnline() {
+
+        $data = WhoIsOnlineController::getOnlinePlayers();
+        $online = false;
+        foreach($data->Players as $player) {
+            if ($player->Id == $this->Id) {
+                $online = true;
+                break;
+            }
+        }
+        return $online;
     }
 
     public function getActivity(Carbon $from, Carbon $to)
