@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Company;
 use App\Faction;
+use App\PlayerHistory;
 use App\Services\StatisticService;
 use App\Services\TicketService;
 use App\Texture;
@@ -32,32 +33,6 @@ class DashboardController extends Controller
         $tickets['datasets'][0] = array_merge($tickets['datasets'][0], ['backgroundColor' => 'transparent', 'borderColor' => 'rgba(255,255,255,.55)', 'pointBackgroundColor' => '#321fdb']);
 
 
-        $factions = Faction::where('active', 1)->get();
-        $factionData = ['datasets' => []];
-        $factionData2 = ['datasets' => []];
-/*
-        foreach ($factions as $faction) {
-            $activity = $faction->getActivity(true);
-            if (!isset($factionData['labels'])) {
-                $factionData['labels'] = $activity['labels'];
-                $factionData2['labels'] = $activity['labels'];
-            }
-
-            array_push($factionData['datasets'], $activity['datasets'][0]);
-
-            $memberCount = $faction->membersCount();
-            if ($memberCount === 0) { $memberCount = 1; }
-
-            $dataset = $activity['datasets'][0];
-
-            foreach ($dataset['data'] as $key => $value) {
-                $dataset['data'][$key] = round($value / $memberCount, 2);
-            }
-
-            array_push($factionData2['datasets'], $dataset);
-        }
-*/
-
         $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 1d GROUP BY time(1h)');
         $points = $playerCount->getPoints();
 
@@ -69,6 +44,9 @@ class DashboardController extends Controller
             $lastPlayerCount = floor($point['mean']);
         }
 
-        return view('admin.dashboard.index', compact('textures', 'tickets', 'factionData2', 'totalTickets', 'playerCountData', 'lastPlayerCount'));
+        $invites = PlayerHistory::orderBy('JoinDate', 'DESC')->with('user', 'inviter')->limit(10)->get();
+        $uninvites = PlayerHistory::orderBy('LeaveDate', 'DESC')->with('user', 'uninviter')->limit(10)->get();
+
+        return view('admin.dashboard.index', compact('textures', 'tickets', 'totalTickets', 'playerCountData', 'lastPlayerCount', 'invites', 'uninvites'));
     }
 }
