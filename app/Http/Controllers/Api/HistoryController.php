@@ -20,7 +20,7 @@ class HistoryController extends Controller
         unset($data['user']);
 
         $data['JoinDateText'] = $history->JoinDate->format('d.m.Y H:i:s');
-        $data['LeaveDateText'] = $history->LeaveDate->format('d.m.Y H:i:s');
+        $data['LeaveDateText'] = $history->LeaveDate ? $history->LeaveDate->format('d.m.Y H:i:s') : '-';
         $data['Inviter'] = $history->getInviter();
         $data['Uninviter'] = $history->getUninviter();
         $data['InviterUrl'] = route('users.show', $history->InviterId);
