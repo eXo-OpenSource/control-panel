@@ -24,5 +24,7 @@ mix.setResourceRoot('../');
 if (mix.inProduction()) {
     mix
         .version()
-        .purgeCss();
+        .purgeCss({
+            whitelist: ['c-show']
+        });
 }
