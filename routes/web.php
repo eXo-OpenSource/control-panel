@@ -22,6 +22,7 @@ Route::namespace('Auth')->prefix('auth')->group(function () {
 });
 
 Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online');
+Route::get('statistics', 'StatisticsController@index')->name('statistics');
 
 Route::resource('groups', 'GroupController')->only('index', 'show');
 Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
@@ -31,6 +32,8 @@ Route::get('factions/{faction}/{page}', 'FactionController@show')->name('faction
 
 Route::resource('companies', 'CompanyController')->only('index', 'show');
 Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', 'UserController')->only('index', 'show');

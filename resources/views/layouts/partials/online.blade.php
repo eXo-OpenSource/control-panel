@@ -4,7 +4,7 @@
             $users = \Illuminate\Support\Facades\Cache::get('users-online');
         @endphp
         @foreach($users as $user)
-            {{ $user->Name }} ({{ $user->Time->diffForHumans() }})</span>
+            {{ $user->Name }} <i>({{ $user->Time->diffForHumans() }})</i></span>
         @endforeach
     @endif
 @endauth

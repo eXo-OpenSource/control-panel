@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
             return "<?php \$tmp = intval($playTime); \$hours = floor(\$tmp / 60); \$minutes = \$tmp % 60; if(\$minutes < 10) { \$minutes = '0' . \$minutes; } echo \$hours . ':' . \$minutes; ?>";
         });
 
+        Blade::directive('money', function ($money) {
+            return "<?php echo '$ ' . number_format($money, 0, ',','.' ); ?>";
+        });
+
         //
 
         Gate::define('admin-rank-1', function ($user) { // Ticketsupporter

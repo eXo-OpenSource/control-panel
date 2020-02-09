@@ -14,51 +14,9 @@
     @yield('head')
 </head>
 <body class="c-app c-dark-theme">
-    <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
-        <div class="c-sidebar-brand">
-            <a href="{{ '/' }}">
-                <img class="c-sidebar-brand-full" src="/images/logo.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
-                <img class="c-sidebar-brand-minimized" src="/images/logo_small.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
-            </a>
-        </div>
-        <ul class="c-sidebar-nav">
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('factions.index') }}">
-                    {{ __('Fraktionen') }}
-                </a>
-            </li>
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('companies.index') }}">
-                    {{ __('Unternehmen') }}
-                </a>
-            </li>
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('groups.index') }}">
-                    {{ __('Gruppen') }}
-                </a>
-            </li>
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('who.is.online') }}">
-                    {{ __('Wer ist online') }}
-                </a>
-            </li>
-            @auth
-                @if(auth()->user()->Rank >= 3)
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('textures.index') }}">
-                    {{ __('Texturen') }}
-                </a>
-            </li>
-            <li class="c-sidebar-nav-item">
-                <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}">
-                    {{ __('Admin') }}
-                </a>
-            </li>
-                @endif
-            @endauth
-        </ul>
-        <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
-    </div>
+    <!-- // @include('layouts.partials.header')-->
+
+    @include('layouts.partials.sidebar')
 
     <div id="app" class="c-wrapper">
         <header class="c-header c-header-light c-header-fixed"> <!--c-header-with-subheader -->
