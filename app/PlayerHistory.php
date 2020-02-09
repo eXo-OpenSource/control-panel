@@ -20,6 +20,11 @@ class PlayerHistory extends Model
         }
     }
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'Id', 'UserId');
+    }
+
     public function inviter()
     {
         return $this->hasOne(User::class, 'Id', 'InviterId');

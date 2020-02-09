@@ -27,7 +27,7 @@
                                 <td>{{ $history->getDuration() }}</td>
                                 <td>{{ $history->getUninviter() }}</td>
                                 <td>@if($history->ExternalReason){{ $history->ExternalReason }}@else{{ '-' }}@endif</td>
-                                <td></td>
+                                <td><react-history-dialog data-history-id="{{ $history->Id }}"></react-history-dialog></td>
                             </tr>
                         @endforeach
                         </tbody>

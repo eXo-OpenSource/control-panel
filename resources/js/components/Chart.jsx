@@ -6,61 +6,12 @@ import DatePicker from 'react-datepicker';
 
 import 'bootstrap-daterangepicker/daterangepicker.css';
 
-let data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-        {
-            label: 'My First dataset',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgba(75,192,192,1)',
-            pointBackgroundColor: 'rgba(75,192,192,1)',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-            label: 'My Second dataset',
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: 'rgba(136,71,192,0.4)',
-            borderColor: 'rgb(167,76,192)',
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: 'rgb(167,76,192))',
-            pointBackgroundColor: 'rgb(167,76,192)',
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgb(167,76,192)',
-            pointHoverBorderColor: 'rgba(220,220,220,1)',
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [43, 23, 54, 45, 76, 23, 1]
-        }
-    ]
-};
-
-
 export default class Chart extends Component {
 
     constructor() {
         super();
         this.state = {
-            data: data
+            data: null
         }
     }
 
@@ -87,26 +38,42 @@ export default class Chart extends Component {
                 {value}
             </button>
         );
+        if(this.state.data != null) {
+            return (
+                <div className="card">
+                    <div className="card-header">{this.props.title}
+                        <div className="float-right">
+                            <p>{this.state.data.from} - {this.state.data.to}</p>
+                        </div>
+                    </div>
 
-        return (
-            <div className="card">
-                <div className="card-header">{this.props.title}
-                    <div className="float-right">
-                        <p>{this.state.data.from} - {this.state.data.to}</p>
+                    <div className="card-body">
+                        <Line data={this.state.data.chart} />
                     </div>
                 </div>
+            );
+        } else {
 
-                <div className="card-body">
-                    <Line data={this.state.data.chart} />
+            return (
+                <div className="card">
+                    <div className="card-header">{this.props.title}
+                    </div>
+
+                    <div className="card-body">
+                        Loading...
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 
 var charts = document.getElementsByTagName('react-chart');
 for (var index in charts) {
     const component = charts[index];
-    const props = Object.assign({}, component.dataset);
-    ReactDOM.render(<Chart {...props} />, component);
+    if(typeof component === 'object') {
+        const props = Object.assign({}, component.dataset);
+        ReactDOM.render(<Chart {...props} />, component);
+    }
 }
+
