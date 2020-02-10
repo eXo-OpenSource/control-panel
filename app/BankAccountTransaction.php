@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class BankAccountTransaction extends Model
 {
     protected $primaryKey = 'Id';
-    protected $connection = 'mysql_logs';
-    protected $table = 'MoneyNew';
+    // protected $connection = 'mysql_logs';
+    protected $table = 'view_MoneyLog';
 
     public function getFromName()
     {
@@ -84,5 +84,15 @@ class BankAccountTransaction extends Model
         }
 
         return $result;
+    }
+
+    public function from()
+    {
+        return $this->morphTo('bank', 'FromType', 'FromId', 'Id');
+    }
+
+    public function to()
+    {
+        return $this->morphTo('bank', 'ToType', 'ToId', 'Id');
     }
 }

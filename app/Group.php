@@ -47,4 +47,14 @@ class Group extends Model
         // SELECT FromId, FromType, `From`, FromCash, ToId, ToType, `To`, ToCash, Amount, Reason, Category, Subcategory, Date FROM view_Money WHERE (FromType = 1 AND FromId = {$playerId}) OR (ToType = 1 AND ToId = {$playerId}) ORDER BY Date DESC LIMIT 0, 1000
         return BankAccountTransaction::query()->where('FromId', $this->Id)->where('FromType', 8)->orWhere('ToId', $this->Id)->where('ToType', 8);
     }
+
+    public function bank()
+    {
+        return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
+    }
+
+    public function getMorphClass()
+    {
+        return 4;
+    }
 }

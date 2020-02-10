@@ -45,4 +45,14 @@ class Faction extends Model
     {
         return $this->newHasMany(Vehicle::where('OwnerType', 2), $this, 'OwnerId', 'Id');
     }
+
+    public function bank()
+    {
+        return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
+    }
+
+    public function getMorphClass()
+    {
+        return 2;
+    }
 }

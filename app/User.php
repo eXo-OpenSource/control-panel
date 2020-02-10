@@ -102,7 +102,7 @@ class User extends Authenticatable
 
     public function money()
     {
-        return Money::query()->where('FromType', 1)->where('FromId', $this->Id)->orWhere('ToType', 1)->where('ToId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
+        return BankAccountTransaction::query()->where('FromType', 1)->where('FromId', $this->Id)->orWhere('ToType', 1)->where('ToId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
     }
 
     public function isBanned()
@@ -145,5 +145,15 @@ class User extends Authenticatable
     public function getActivity(Carbon $from, Carbon $to)
     {
         return AccountActivity::getActivity($this, $from, $to);
+    }
+
+    public function bank()
+    {
+        return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
+    }
+
+    public function getMorphClass()
+    {
+        return 1;
     }
 }

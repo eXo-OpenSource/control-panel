@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\VehicleShop;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -95,5 +97,18 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin-rank-9', function ($user) { // Projektleiter
             return $user->Rank >= 9;
         });
+
+
+        Relation::morphMap([
+            1 => \App\User::class,
+            2 => \App\Faction::class,
+            3 => \App\Company::class,
+            4 => \App\Group::class,
+            5 => \App\ServerBankAccount::class,
+            6 => \App\Shop::class,
+            7 => \App\User::class,
+            8 => \App\User::class,
+            9 => \App\VehicleShop::class,
+        ]);
     }
 }

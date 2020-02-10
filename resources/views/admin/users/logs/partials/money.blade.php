@@ -16,8 +16,8 @@
         <tr>
             <td>{{ $entry->Id }}</td>
             <td>{{ $entry->Date }}</td>
-            <td>{{ $entry->FromId }}, {{ $entry->FromType }}, {{ $entry->FromBank }}</td>
-            <td>{{ $entry->ToId }}, {{ $entry->ToType }}, {{ $entry->ToBank }}</td>
+            <td>{{ $entry->FromId }}, {{ $entry->FromType }}, {{ $entry->FromBank }}, @if($entry->from){{ $entry->from->Name }}@else{{ ' - ' }}@endif</td>
+            <td>{{ $entry->ToId }}, {{ $entry->ToType }}, {{ $entry->ToBank }}, @if($entry->to){{ $entry->to->Name }}@else{{ ' - ' }}@endif</td>
             <td>{{ $entry->Amount }}</td>
             <td>{{ $entry->Reason }}</td>
             <td>{{ $entry->Category }}</td>

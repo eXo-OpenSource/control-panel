@@ -9,6 +9,7 @@ class Company extends Model
 {
     protected $primaryKey = 'Id';
 
+
     public function members()
     {
         return $this->hasMany(Character::class, 'CompanyId', 'Id');
@@ -43,5 +44,15 @@ class Company extends Model
     public function vehicles()
     {
         return $this->newHasMany(Vehicle::where('OwnerType', 3), $this, 'OwnerId', 'Id');
+    }
+
+    public function bank()
+    {
+        return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
+    }
+
+    public function getMorphClass()
+    {
+        return 3;
     }
 }
