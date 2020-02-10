@@ -11,7 +11,7 @@ class StatisticsController extends Controller
     function index()
     {
         $playTime = Character::orderBy('PlayTime', 'desc')->limit(50)->with('user')->get(['Id', 'PlayTime']);
-        $bankMoney = BankAccount::where('OwnerType', 1)->with('ownerUser')->orderBy('Money', 'desc')->limit(50)->get();
+        $bankMoney = BankAccount::where('OwnerType', 1)->orderBy('Money', 'desc')->limit(50)->get();
         $fishes = Stats::orderBy('FishCaught', 'desc')->limit(50)->with('user')->get();
         $driven = Stats::orderBy('Driven', 'desc')->limit(50)->with('user')->get();
 

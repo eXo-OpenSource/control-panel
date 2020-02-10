@@ -48,7 +48,7 @@
                             @foreach($bankMoney as $key => $row)
                                 <tr>
                                     <td>{{$key+1}}.</td>
-                                    <td>@if($row->ownerUser->Id != -1)<a href="{{ route('users.show', [$row->ownerUser->Id]) }}">{{ $row->ownerUser->Name }}@else{{ $row->ownerUser->Name }}@endif</a></td>
+                                    <td>@if($row->owner->Id != -1)<a href="{{ route('users.show', [$row->owner->Id]) }}">{{ $row->owner->Name }}@else{{ $row->owner->Name }}@endif</a></td>
                                     <td>@money($row->Money)</td>
                                 </tr>
                             @endforeach
