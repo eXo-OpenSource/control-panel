@@ -25,7 +25,7 @@ class UserController extends Controller
         $type = $request->get('type');
 
         if ($type === 'kick') {
-            if (Gate::denies('admin-rank-3')) {
+            if (Gate::allows('admin-rank-3')) {
                 $reason = $request->get('reason');
 
                 if (empty($reason)) {
@@ -49,7 +49,7 @@ class UserController extends Controller
                 return redirect()->route('users.show', [$user->Id]);
             }
         } elseif ($type === 'unban') {
-            if (Gate::denies('admin-rank-5')) {
+            if (Gate::allows('admin-rank-5')) {
                 $reason = $request->get('reason');
 
                 if (empty($reason)) {
@@ -73,7 +73,7 @@ class UserController extends Controller
                 return redirect()->route('users.show', [$user->Id]);
             }
         } elseif ($type === 'ban') {
-            if (Gate::denies('admin-rank-3')) {
+            if (Gate::allows('admin-rank-3')) {
                 $reason = $request->get('reason');
                 $duration = $request->get('duration');
 
