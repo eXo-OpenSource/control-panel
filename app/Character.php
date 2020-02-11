@@ -74,7 +74,7 @@ class Character extends Model
 
     public function getGroupName()
     {
-        if ($this->GroupId === 0 && $this->group)
+        if ($this->GroupId === 0 || !$this->group)
             return 'keine';
         return $this->group->Name;
     }
