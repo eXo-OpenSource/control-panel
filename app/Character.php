@@ -18,9 +18,9 @@ class Character extends Model
         return $this->hasOne(User::class, 'Id', 'Id');
     }
 
-    public function bankAccount()
+    public function bank()
     {
-        return $this->hasOne(BankAccount::class, 'Id', 'BankAccount');
+        return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
     }
 
     public function faction()
@@ -51,6 +51,11 @@ class Character extends Model
     public function hardwareStatistic()
     {
         return $this->hasMany(ClientStatistic::class, 'UserId', 'Id');
+    }
+
+    public function stats()
+    {
+        return $this->hasOne(Stats::class, 'Id', 'Id');
     }
 
     public function getFactionName()
@@ -114,27 +119,8 @@ class Character extends Model
         return $hours . ':' . $minutes;
     }
 
-    public function getActivity(Carbon $from, Carbon $to)
+    public function getMorphClass()
     {
-        return AccountActivity::getActivity($this->user, $from, $to);
-    }
-
-    public function getWeekActivity()
-    {
-
-        $key = 'player:' . $this->Id . ':activity:weekly';
-
-        $sum = Cache::get($key);
-
-        if (!isset($sum)) {
-            $date = (new \DateTime('-7 days'))->format('Y-m-d');
-
-            $activities = AccountActivity::query()->where('UserId', $this->Id)->where('Date', '>', $date)->orderBy('Id', 'DESC')->get()->pluck('Duration')->toArray();
-
-            $sum = array_sum($activities);
-            Cache::put($key, $sum, 60 * 30);
-        }
-
-        return $sum;
+        return 1;
     }
 }

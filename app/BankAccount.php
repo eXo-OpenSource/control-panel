@@ -19,6 +19,6 @@ class BankAccount extends Model
     public function owner()
     {
         //  morphTo($name = null, $type = null, $id = null, $ownerKey = null)
-        return $this->morphTo('bank', 'OwnerType', 'OwnerId', 'Id'); // , 'OwnerType', 'Id', 'OwnerId');
+        return $this->morphTo('owner', 'OwnerType', 'OwnerId', 'Id'); // , 'OwnerType', 'Id', 'OwnerId');
     }
 }

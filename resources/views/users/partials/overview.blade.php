@@ -26,7 +26,7 @@
                     <dd>{{ $user->character->Karma }}</dd>
                     @can('privateData', $user)
                         <dt>Geld (Bar/Bank)</dt>
-                        <dd>{{ number_format($user->character->Money, 0, ',', ' ') }}$ / {{ number_format($user->character->bankAccount->Money, 0, ',', ' ') }}$</dd>
+                        <dd>{{ number_format($user->character->Money, 0, ',', ' ') }}$ / {{ number_format($user->character->bank->Money, 0, ',', ' ') }}$</dd>
                     @endcan
                     <dt>Spielzeit</dt>
                     <dd>{{ $user->character->getPlayTime() }}</dd>

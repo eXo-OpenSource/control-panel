@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\VehicleShop;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -110,5 +111,9 @@ class AppServiceProvider extends ServiceProvider
             8 => \App\User::class,
             9 => \App\VehicleShop::class,
         ]);
+
+        Paginator::defaultView('pagination.default');
+
+        Paginator::defaultSimpleView('pagination.simple-default');
     }
 }
