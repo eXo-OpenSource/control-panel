@@ -119,6 +119,25 @@ class Character extends Model
         return $hours . ':' . $minutes;
     }
 
+    public function getWeekActivity()
+    {
+
+        $key = 'player:' . $this->Id . ':activity:weekly';
+
+        $sum = Cache::get($key);
+
+        if (!isset($sum)) {
+            $date = (new \DateTime('-7 days'))->format('Y-m-d');
+
+            $activities = AccountActivity::query()->where('UserId', $this->Id)->where('Date', '>', $date)->orderBy('Id', 'DESC')->get()->pluck('Duration')->toArray();
+
+            $sum = array_sum($activities);
+            Cache::put($key, $sum, 60 * 30);
+        }
+
+        return $sum;
+    }
+
     public function getMorphClass()
     {
         return 1;
