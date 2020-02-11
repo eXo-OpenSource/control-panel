@@ -70,7 +70,7 @@ export default class Vehicle extends Component {
                                         <dt>Premium</dt>
                                         <dd>{premium}</dd>
                                         <dt>Kilometerstand</dt>
-                                        <dd>{this.state.data.Mileage} km</dd>
+                                        <dd>{this.props.Distance} km</dd>
                                         <dt>Lackfarbe</dt>
                                         <dd className="d-flex">
                                             <div className="border" style={{height: '25px', width: '25px', backgroundColor: this.props.col1}}></div>
