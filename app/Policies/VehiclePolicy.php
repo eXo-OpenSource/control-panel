@@ -23,7 +23,7 @@ class VehiclePolicy
     public function before($user, $ability)
     {
         if ($user->Rank >= 2) {
-            // return true;
+            return true;
         }
     }
 
@@ -34,6 +34,16 @@ class VehiclePolicy
 
     public function private(User $user, Vehicle $vehicle)
     {
-        return true;
+        if($vehicle->OwnerType === 1) {
+            return $user->Id == $vehicle->OwnerId;
+        } elseif($vehicle->OwnerType === 2) {
+            return $user->FactionId == $vehicle->OwnerId;
+        } elseif($vehicle->OwnerType === 3) {
+            return $user->CompanyId == $vehicle->OwnerId;
+        } elseif($vehicle->OwnerType === 4) {
+            return $user->GroupId == $vehicle->OwnerId;
+        }
+
+        return false;
     }
 }
