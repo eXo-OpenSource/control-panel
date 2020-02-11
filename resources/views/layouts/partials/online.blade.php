@@ -4,7 +4,7 @@
             $users = \Illuminate\Support\Facades\Cache::get('users-online');
         @endphp
         @foreach($users as $user)
-            {{ $user->Name }} <i>({{ $user->Time->diffForHumans() }})</i></span>
+            <span data-toggle="tooltip" data-placement="top" title="{{ $user->Time->diffForHumans() }}">{{ $user->Name }}</span>@if(!$loop->last){{ ',' }}@endif
         @endforeach
     @endif
 @endauth

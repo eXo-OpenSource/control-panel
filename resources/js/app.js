@@ -14,3 +14,4 @@ require('./bootstrap');
 
 require('./components/Chart');
 require('./components/HistoryDialog');
+require('./components/Vehicle');
