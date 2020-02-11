@@ -63,7 +63,7 @@
                                 <tr class="table-active">
                                     <td>{{ $bankMoneyMyPosition }}</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
-                                    <td>{{ auth()->user()->character->bank->Money }}</td>
+                                    <td>@money({{ auth()->user()->character->bank->Money }})</td>
                                 </tr>
                             @endif
                             </tbody>

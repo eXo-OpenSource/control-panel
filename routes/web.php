@@ -56,3 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::get('textures', 'TextureController@index')->name('admin.texture');
     });
 });
+
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
