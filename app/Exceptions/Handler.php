@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -52,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if(env('APP_ENV') !== 'local') {
-            if($exception instanceof NotFoundHttpException) {
+            if($exception instanceof NotFoundHttpException || $exception instanceof ModelNotFoundException) {
                 return response()->view('errors.404');
             } else if($exception instanceof AccessDeniedHttpException) {
                 return response()->view('errors.403');

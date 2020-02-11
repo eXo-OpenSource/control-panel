@@ -27,7 +27,7 @@
                             @endforeach
                             @if($playTimeMyPosition && $playTimeMyPosition > 50)
                                 <tr class="table-active">
-                                    <td>{{ $playTimeMyPosition }}</td>
+                                    <td>{{ $playTimeMyPosition }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
                                     <td>{{ auth()->user()->character->getPlayTime() }}</td>
                                 </tr>
@@ -61,7 +61,7 @@
                             @endforeach
                             @if($bankMoneyMyPosition && $bankMoneyMyPosition > 50)
                                 <tr class="table-active">
-                                    <td>{{ $bankMoneyMyPosition }}</td>
+                                    <td>{{ $bankMoneyMyPosition }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
                                     <td>@money(auth()->user()->character->bank->Money)</td>
                                 </tr>
@@ -97,7 +97,7 @@
                             @endforeach
                             @if($fishesMyPosition && $fishesMyPosition > 50)
                                 <tr class="table-active">
-                                    <td>{{ $fishesMyPosition }}</td>
+                                    <td>{{ $fishesMyPosition }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
                                     <td>{{ number_format(auth()->user()->character->stats->FishCaught, 0, '', '.') }}</td>
                                 </tr>
@@ -131,7 +131,7 @@
                             @endforeach
                             @if($drivenMyPosition && $drivenMyPosition > 50)
                                 <tr class="table-active">
-                                    <td>{{ $drivenMyPosition }}</td>
+                                    <td>{{ $drivenMyPosition }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
                                     <td>{{ number_format(auth()->user()->character->stats->Driven, 0, ',', '.') }} km</td>
                                 </tr>
