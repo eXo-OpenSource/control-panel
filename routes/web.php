@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('users.logs', 'UserLogController', ['as' => 'admin'])->only('index', 'show');
+        Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');
