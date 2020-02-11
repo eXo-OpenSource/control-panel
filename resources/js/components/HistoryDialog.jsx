@@ -37,7 +37,7 @@ export default class HistoryDialog extends Component {
 
     render() {
 
-        let body = <Spinner animation="border" />;
+        let body = <div className="text-center"><Spinner animation="border" /></div>;
 
         if(this.state.data) {
             let inviter = this.state.data.InviterId !== 0 ? <dd><a href={this.state.data.InviterUrl}>{this.state.data.Inviter}</a></dd> : <dd>{this.state.data.Inviter}</dd>;

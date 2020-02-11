@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('santa', 'SantaController')->only(['index', 'store', 'create']);
     });
 
-    Route::namespace('Admin')->prefix('admin')->group(function () {
+    Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('users.logs', 'UserLogController', ['as' => 'admin'])->only('index', 'show');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
@@ -57,6 +57,3 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::get('/debug-sentry', function () {
-    throw new Exception('My first Sentry error!');
-});

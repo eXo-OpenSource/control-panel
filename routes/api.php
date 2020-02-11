@@ -16,12 +16,13 @@ use Illuminate\Http\Request;
 
 
 Route::middleware('auth')->group(function () {
-    Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
+    Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
     });
 
     Route::namespace('Api')->name('api.')->group(function () {
         Route::resource('charts', 'ChartController')->only('show');
         Route::resource('histories', 'HistoryController')->only('show');
+        Route::resource('vehicles', 'VehicleController')->only('show');
     });
 });

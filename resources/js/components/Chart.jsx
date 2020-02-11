@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Line} from 'react-chartjs-2';
 import DatePicker from 'react-datepicker';
+import { Spinner } from 'react-bootstrap';
+
 
 import 'bootstrap-daterangepicker/daterangepicker.css';
 
@@ -60,7 +62,9 @@ export default class Chart extends Component {
                     </div>
 
                     <div className="card-body">
-                        Loading...
+                        <div className="text-center">
+                            <Spinner animation="border" />
+                        </div>
                     </div>
                 </div>
             );
