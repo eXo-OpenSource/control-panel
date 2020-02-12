@@ -89,6 +89,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js" integrity="sha384-L2pyEeut/H3mtgCBaUNw7KWzp5n9&#43;4pDQiExs933/5QfaTh8YStYFFkOzSoXjlTb" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@coreui/coreui@3.0.0-rc.0/dist/js/coreui.min.js"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
+    @if(env('SENTRY_JS_DSN') && !env('APP_DEBUG'))
+    <script src="https://browser.sentry-cdn.com/5.12.1/bundle.min.js" integrity="sha384-y+an4eARFKvjzOivf/Z7JtMJhaN6b+lLQ5oFbBbUwZNNVir39cYtkjW1r6Xjbxg3" crossorigin="anonymous"></script>
+    <script>
+        Sentry.init({ dsn: '{{ env('SENTRY_JS_DSN') }}' });
+    </script>
+    @endif
     @yield('script')
 </body>
 </html>

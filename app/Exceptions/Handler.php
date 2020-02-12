@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if(env('APP_ENV') !== 'local') {
+        if(!env('APP_DEBUG')) {
             if($exception instanceof NotFoundHttpException || $exception instanceof ModelNotFoundException) {
                 return response()->view('errors.404');
             } else if($exception instanceof AccessDeniedHttpException) {
