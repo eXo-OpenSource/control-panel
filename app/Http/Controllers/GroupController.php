@@ -61,6 +61,7 @@ class GroupController extends Controller
      */
     public function show(Group $group, $page = '')
     {
+        abort_unless(array_search($page, ['', 'vehicles', 'logs']) !== false, 404);
         return view('groups.show', compact('group', 'page'));
     }
 

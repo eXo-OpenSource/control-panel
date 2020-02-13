@@ -54,4 +54,14 @@ class Faction extends Model
     {
         return 2;
     }
+
+    public function getName()
+    {
+        return $this->Name;
+    }
+
+    public function getURL()
+    {
+        return route('factions.show', $this->Id);
+    }
 }

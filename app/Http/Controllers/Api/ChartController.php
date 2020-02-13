@@ -20,38 +20,84 @@ class ChartController extends Controller
         $to = Carbon::now();
 
 
-        if ($name === 'factions') {
-            return StatisticService::getFactionsActivity($from, $to);
-        } elseif ($name === 'companies') {
-            return StatisticService::getCompaniesActivity($from, $to);
-        } elseif (substr($name, 0, 7) === 'faction') {
-            $faction = explode(':', $name);
-            $faction = Faction::find($faction[1]);
+        $parts = explode(':', $name);
 
-            abort_unless(auth()->user()->can('activityTotal', $faction), 403);
 
-            return StatisticService::getFactionActivity($faction, $from, $to);
-        } elseif (substr($name, 0, 7) === 'company') {
-            $company = explode(':', $name);
-            $company = Company::find($company[1]);
+        if($parts[0] === 'activity') {
+            switch($parts[1]) {
+                case 'factions':
+                    return StatisticService::getFactionsActivity($from, $to);
+                    break;
+                case 'companies':
+                    return StatisticService::getCompaniesActivity($from, $to);
+                    break;
+                case 'faction':
+                    $faction = Faction::find($parts[2]);
 
-            abort_unless(auth()->user()->can('activityTotal', $company), 403);
+                    abort_unless(auth()->user()->can('activityTotal', $faction), 403);
 
-            return StatisticService::getCompanyActivity($company, $from, $to);
-        } elseif (substr($name, 0, 4) === 'user') {
-            $user = explode(':', $name);
-            $user = User::find($user[1]);
+                    return StatisticService::getFactionActivity($faction, $from, $to);
+                    break;
+                case 'company':
+                    $company = Company::find($parts[2]);
 
-            abort_unless(auth()->user()->can('activity', $user), 403);
+                    abort_unless(auth()->user()->can('activityTotal', $company), 403);
 
-            return StatisticService::getUserActivity($user, $from, $to);
-        } elseif (substr($name, 0, 5) === 'group') {
-            $group = explode(':', $name);
-            $group = Group::find($group[1]);
+                    return StatisticService::getCompanyActivity($company, $from, $to);
+                    break;
+                case 'group':
+                    $group = Group::find($parts[2]);
 
-            abort_unless(auth()->user()->can('activityTotal', $group), 403);
+                    abort_unless(auth()->user()->can('activityTotal', $group), 403);
 
-            return StatisticService::getGroupActivity($group, $from, $to);
+                    return StatisticService::getGroupActivity($group, $from, $to);
+                    break;
+                case 'user':
+                    $user = User::find($parts[2]);
+
+                    abort_unless(auth()->user()->can('activity', $user), 403);
+
+                    return StatisticService::getUserActivity($user, $from, $to);
+                    break;
+            }
+        }
+        elseif($parts[0] === 'money')
+        {
+            switch($parts[1]) {
+                case 'overall':
+                    // abort_unless(auth()->user()->can('bank', $faction), 403);
+
+                    return StatisticService::getMoney(null, $from, $to);
+                    break;
+                case 'faction':
+                    $faction = Faction::find($parts[2]);
+
+                    abort_unless(auth()->user()->can('bank', $faction), 403);
+
+                    return StatisticService::getMoney($faction, $from, $to);
+                    break;
+                case 'company':
+                    $company = Company::find($parts[2]);
+
+                    abort_unless(auth()->user()->can('bank', $company), 403);
+
+                    return StatisticService::getMoney($company, $from, $to);
+                    break;
+                case 'group':
+                    $group = Group::find($parts[2]);
+
+                    abort_unless(auth()->user()->can('bank', $group), 403);
+
+                    return StatisticService::getMoney($group, $from, $to);
+                    break;
+                case 'user':
+                    $user = User::find($parts[2]);
+
+                    abort_unless(auth()->user()->can('bank', $user), 403);
+
+                    return StatisticService::getMoney($user, $from, $to);
+                    break;
+            }
         }
 
         return ['status' => 'Error'];

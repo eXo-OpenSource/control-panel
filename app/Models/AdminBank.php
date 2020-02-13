@@ -1,16 +1,19 @@
 <?php
 
+
 namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Model;
 
-class ServerBankAccount extends Model
+class AdminBank extends Model
 {
     protected $primaryKey = 'Id';
+    protected $table = 'server_bank_accounts';
 
     public function getName()
     {
-        return $this->Name;
+        return 'Admin Kasse';
     }
 
     public function getURL()

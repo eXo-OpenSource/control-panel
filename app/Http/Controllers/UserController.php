@@ -44,11 +44,15 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, $page = '')
+    public function show(User $user, $page = '', $log = '')
     {
+        if($page === '' && $log !== '')
+            $page = 'logs';
+
         abort_unless(auth()->user()->can('show', $user), 403);
+        abort_unless(array_search($page, ['', 'vehicles', 'history', 'logs']) !== false, 404);
         $banned = $user->isBanned();
-        return view('users.show', compact('user', 'page', 'banned'));
+        return view('users.show', compact('user', 'page', 'log', 'banned'));
     }
 
     /**

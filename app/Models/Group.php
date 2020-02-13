@@ -57,4 +57,14 @@ class Group extends Model
     {
         return 4;
     }
+
+    public function getName()
+    {
+        return $this->Name;
+    }
+
+    public function getURL()
+    {
+        return route('companies.show', $this->Id);
+    }
 }

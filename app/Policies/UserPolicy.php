@@ -52,7 +52,16 @@ class UserPolicy
 
     public function activity(User $authUser, User $user)
     {
-        return false; // currently broken
+        return $authUser->Id == $user->Id;
+    }
+
+    public function bank(User $authUser, User $user)
+    {
+        return $authUser->Id == $user->Id;
+    }
+
+    public function logs(User $authUser, User $user)
+    {
         return $authUser->Id == $user->Id;
     }
 

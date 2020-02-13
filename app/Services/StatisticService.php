@@ -9,29 +9,12 @@ use App\Models\Faction;
 use App\Models\Group;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class StatisticService
 {
-    /**
-    label: 'My Second dataset',
-    fill: false,
-    lineTension: 0.1,
-    backgroundColor: 'rgba(136,71,192,0.4)',
-    borderColor: 'rgb(167,76,192)',
-    borderCapStyle: 'butt',
-    borderDash: [],
-    borderDashOffset: 0.0,
-    borderJoinStyle: 'miter',
-    pointBorderColor: 'rgb(167,76,192))',
-    pointBackgroundColor: 'rgb(167,76,192)',
-    pointBorderWidth: 1,
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: 'rgb(167,76,192)',
-    pointHoverBorderColor: 'rgba(220,220,220,1)',
-    pointHoverBorderWidth: 2,
-    pointRadius: 1,
-    pointHitRadius: 10,
-     */
 
     public static function getFactionsActivity(Carbon $from, Carbon $to)
     {
@@ -69,7 +52,20 @@ class StatisticService
 
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'status' => 'Success'
@@ -111,7 +107,20 @@ class StatisticService
 
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'status' => 'Success'
@@ -158,7 +167,20 @@ class StatisticService
         array_push($result['datasets'], $dataDuty);
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'status' => 'Success'
@@ -205,7 +227,20 @@ class StatisticService
         array_push($result['datasets'], $dataDuty);
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'status' => 'Success'
@@ -240,7 +275,20 @@ class StatisticService
         array_push($result['datasets'], $data);
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'status' => 'Success'
@@ -289,9 +337,98 @@ class StatisticService
         //array_push($result['datasets'], $dataDuty);
 
         return [
-            'chart' => $result,
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getMoney(?Model $object, Carbon $from, Carbon $to)
+    {
+        $data = ['in' => 0, 'out' => 0];
+        $labels = [
+            'Einnahmen',
+            'Ausgaben',
+        ];
+
+        if($object !== null) {
+            $bankAccount = -1;
+
+            if($object->bank) {
+                $bankAccount = $object->bank->Id;
+            } else {
+                if($object instanceof Faction) {
+                    if($object->Id === 2 || $object->Id === 3) {
+                        $bankAccount = Faction::find(1)->bank->Id;
+                    }
+                } else {
+                    return ['status' => 'Error'];
+                }
+            }
+
+            if(!Cache::has('bank:in-out:' . $bankAccount)) {
+                $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND Date BETWEEN ? AND ?', [$bankAccount, $from, $to])[0]->Amount;
+                $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND Date BETWEEN ? AND ?', [$bankAccount, $from, $to])[0]->Amount;
+                Cache::put('bank:in-out:' . $bankAccount, ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
+            }
+
+            $data = Cache::get('bank:in-out:' . $bankAccount);
+        } else {
+
+            if(!Cache::has('bank:in-out:overall')) {
+                $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+                $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+                Cache::put('bank:in-out:overall', ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
+            }
+            $data = Cache::get('bank:in-out:overall');
+
+            $labels = [
+                'Erschaffen',
+                'Zerstört',
+            ];
+        }
+
+        return [
+            'type' => 'doughnut',
+            'data' => [
+                'datasets' => [
+                    [
+                        'data' => [
+                            $data['in'],
+                            $data['out'],
+                        ],
+                        'backgroundColor' => ['rgba(69, 161, 100, 1)', 'rgba(209, 103, 103, 1)'],
+                        'borderWidth' => 0,
+                    ]
+                ],
+                'labels' => $labels
+            ],
+            'options' => [
+                'maintainAspectRatio' => false,
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ]
+                ]
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'tooltips' => 'money',
             'status' => 'Success'
         ];
     }

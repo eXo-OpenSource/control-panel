@@ -101,7 +101,12 @@
     <div class="row">
 
         <div class="col-xl-6 col-lg-12">
-            <react-chart data-chart="user:{{ $user->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
+            <react-chart data-chart="activity:user:{{ $user->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
         </div>
+        @can('bank', $user)
+        <div class="col-xl-6 col-lg-12">
+                <react-chart data-chart="money:user:{{ $user->Id }}" data-state="true" data-title="{{ __('Einnahmen/Ausgaben') }}"></react-chart>
+        </div>
+        @endcan
     </div>
 @endcan

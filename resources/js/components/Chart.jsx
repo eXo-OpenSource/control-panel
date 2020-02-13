@@ -1,8 +1,7 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import {Line} from 'react-chartjs-2';
-import DatePicker from 'react-datepicker';
+import { Line, Doughnut } from 'react-chartjs-2';
 import { Spinner } from 'react-bootstrap';
 
 
@@ -14,19 +13,40 @@ export default class Chart extends Component {
         super();
         this.state = {
             data: null
-        }
+        };
     }
 
     async componentDidMount() {
         const response = await axios.get('/api/charts/' + this.props.chart);
 
         try {
+            if(response.data && response.data.tooltips) {
+                if (!response.data.options) {
+                    response.data.options = {};
+                }
+                if (!response.data.options.tooltips) {
+                    response.data.options.tooltips = {};
+                }
+                response.data.options.tooltips.callbacks = {};
+                response.data.options.tooltips.callbacks.label = this.handleLabel.bind(this);
+            }
+
             this.setState({
                 data: response.data
             });
         } catch (error) {
             console.log(error);
         }
+    }
+
+    handleLabel(tooltipItem, data) {
+        var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] || '';
+
+        if(this.state.data.tooltips === 'money') {
+            return '$ ' + Number(label).toLocaleString('de-AT');
+        }
+
+        return label;
     }
 
     async handleDateChange(e) {
@@ -41,19 +61,40 @@ export default class Chart extends Component {
             </button>
         );
         if(this.state.data != null) {
-            return (
-                <div className="card">
-                    <div className="card-header">{this.props.title}
-                        <div className="float-right">
-                            <p>{this.state.data.from} - {this.state.data.to}</p>
+            if(this.state.data.status && this.state.data.status === 'Error') {
+                return (
+                    <div className="card">
+                        <div className="card-header">{this.props.title}
+                        </div>
+
+                        <div className="card-body">
+                            <div className="text-center">
+                                <p>Daten konnten nicht geladen werden!</p>
+                            </div>
                         </div>
                     </div>
+                );
+            } else {
+                let chart = <Line data={this.state.data.data} options={this.state.data.options} />;
 
-                    <div className="card-body">
-                        <Line data={this.state.data.chart} />
+                if(this.state.data.type === 'doughnut') {
+                    chart = <Doughnut data={this.state.data.data} options={this.state.data.options} />;
+                }
+
+                return (
+                    <div className="card">
+                        <div className="card-header">{this.props.title}
+                            <div className="float-right">
+                                <p>{this.state.data.from} - {this.state.data.to}</p>
+                            </div>
+                        </div>
+
+                        <div className="card-body"  style={{'height': '40vh'}}>
+                            {chart}
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            }
         } else {
 
             return (

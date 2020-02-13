@@ -55,4 +55,14 @@ class Company extends Model
     {
         return 3;
     }
+
+    public function getName()
+    {
+        return $this->Name;
+    }
+
+    public function getURL()
+    {
+        return route('companies.show', $this->Id);
+    }
 }

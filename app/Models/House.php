@@ -1,16 +1,18 @@
 <?php
 
+
 namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Model;
 
-class ServerBankAccount extends Model
+class House extends Model
 {
     protected $primaryKey = 'Id';
 
     public function getName()
     {
-        return $this->Name;
+        return 'Haus' + $this->Id;
     }
 
     public function getURL()

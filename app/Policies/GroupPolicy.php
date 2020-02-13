@@ -52,6 +52,11 @@ class GroupPolicy
         return $user->character->GroupId === $group->Id;
     }
 
+    public function bank(User $user, Group $group)
+    {
+        return $user->character->GroupId === $group->Id;
+    }
+
     public function bankTransactions(User $user, Group $group)
     {
         return $user->character->GroupId === $group->Id;

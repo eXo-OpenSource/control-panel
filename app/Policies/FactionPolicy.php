@@ -37,6 +37,11 @@ class FactionPolicy
         return true;
     }
 
+    public function bank(User $user, Faction $faction)
+    {
+        return $user->character->FactionId === $faction->Id;
+    }
+
     public function activity(User $user, Faction $faction)
     {
         return $user->character->FactionId === $faction->Id;

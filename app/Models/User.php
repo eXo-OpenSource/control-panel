@@ -153,4 +153,14 @@ class User extends Authenticatable
     {
         return 1;
     }
+
+    public function getName()
+    {
+        return $this->Name;
+    }
+
+    public function getURL()
+    {
+        return route('users.show', $this->Id);
+    }
 }

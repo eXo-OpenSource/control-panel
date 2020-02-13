@@ -47,6 +47,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company, $page = '')
     {
+        abort_unless(array_search($page, ['', 'vehicles', 'logs']) !== false, 404);
         return view('companies.show', compact('company', 'page'));
     }
 

@@ -104,11 +104,11 @@ class AppServiceProvider extends ServiceProvider
             1 => \App\Models\User::class,
             2 => \App\Models\Faction::class,
             3 => \App\Models\Company::class,
-            4 => \App\Models\Group::class,
+            4 => \App\Models\AdminBank::class,
             5 => \App\Models\ServerBankAccount::class,
             6 => \App\Models\Shop::class,
-            7 => \App\Models\User::class,
-            8 => \App\Models\User::class,
+            7 => \App\Models\House::class,
+            8 => \App\Models\Group::class,
             9 => \App\Models\VehicleShop::class,
         ]);
 

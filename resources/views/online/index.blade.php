@@ -9,7 +9,7 @@
                         {{ __('Wer ist online') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-responsive-sm">
+                        <table class="table table-sm table-responsive">
                             <thead>
                             <tr>
                                 <th scope="col">{{ __('Name') }}</th>

@@ -59,6 +59,7 @@ class FactionController extends Controller
             abort_unless($faction->active === 1, 403);
         }
 
+        abort_unless(array_search($page, ['', 'vehicles', 'logs']) !== false, 404);
         return view('factions.show', compact('faction', 'page'));
     }
 

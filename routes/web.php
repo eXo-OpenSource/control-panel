@@ -37,6 +37,8 @@ Route::get('companies/{company}/{page}', 'CompanyController@show')->name('compan
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', 'UserController')->only('index', 'show');
+    Route::get('users/{user}/logs', 'UserLogController@show')->name('users.show.logs');
+    Route::get('users/{user}/logs/{log}', 'UserLogController@show')->name('users.show.logs');
     Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
 
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
@@ -49,9 +51,9 @@ Route::middleware('auth')->group(function () {
 
     Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
-        Route::resource('users.logs', 'UserLogController', ['as' => 'admin'])->only('index', 'show');
         Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
+        Route::get('logs/{log?}', 'LogController@show')->name('admin.logs.show');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');
         Route::get('textures', 'TextureController@index')->name('admin.texture');

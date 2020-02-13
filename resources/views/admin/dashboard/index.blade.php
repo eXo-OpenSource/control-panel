@@ -40,10 +40,10 @@
 
                 <div class="row">
                     <div class="col-xl-6 col-lg-12">
-                        <react-chart data-chart="factions" data-state="true" data-title="Aktivität der Fraktionen"></react-chart>
+                        <react-chart data-chart="activity:factions" data-state="true" data-title="Aktivität der Fraktionen"></react-chart>
                     </div>
                     <div class="col-xl-6 col-lg-12">
-                        <react-chart data-chart="companies" data-state="true" data-title="Aktivität der Unternehmen"></react-chart>
+                        <react-chart data-chart="activity:companies" data-state="true" data-title="Aktivität der Unternehmen"></react-chart>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
                                         <tr>
                                             <th scope="col">{{ __('Datum') }}</th>
                                             <th scope="col">{{ __('Fraktion/Unternehmen') }}</th>
-                                            <th scope="col">{{ __('Inviter') }}</th>
+                                            <th scope="col">{{ __('Uninviter') }}</th>
                                             <th scope="col">{{ __('Name') }}</th>
                                             <th scope="col"></th>
                                         </tr>
@@ -114,6 +114,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-12">
+                        <react-chart data-chart="money:overall" data-state="true" data-title="{{ __('Geldfluss') }}"></react-chart>
                     </div>
                 </div>
             </div>

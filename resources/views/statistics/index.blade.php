@@ -9,7 +9,7 @@
                         {{ __('Spielzeit-Statistik') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-responsive-sm table-hover table-outline mb-0">
+                        <table class="table table-sm table-hover table-outline mb-0">
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>
@@ -43,7 +43,7 @@
                         {{ __('Bankgeld-Statistik') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-responsive-sm table-hover table-outline mb-0">
+                        <table class="table table-sm table-hover table-outline mb-0">
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>
@@ -79,7 +79,7 @@
                         {{ __('Fische gefangen') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-responsive-sm table-hover table-outline mb-0">
+                        <table class="table table-sm table-hover table-outline mb-0">
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>
@@ -113,7 +113,7 @@
                         {{ __('Kilometer gefahren') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-responsive-sm table-hover table-outline mb-0">
+                        <table class="table table-sm table-hover table-outline mb-0">
                             <thead class="thead-light">
                             <tr>
                                 <th>#</th>

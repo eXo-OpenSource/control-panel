@@ -26,7 +26,10 @@
     </div>
     <div class="col-lg-6">
         @can('activityTotal', $faction)
-            <react-chart data-chart="faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
+            <react-chart data-chart="activity:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
+        @endcan
+        @can('bank', $faction)
+            <react-chart data-chart="money:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Einnahmen/Ausgaben') }}"></react-chart>
         @endcan
     </div>
 </div>
