@@ -25,9 +25,17 @@ class Action extends Model
     public function getGroupName()
     {
         if($this->GroupType === 'faction') {
-            return 'Fraktion: ' . Faction::find($this->GroupId)->Name;
+            $faction = Company::find($this->GroupId);
+
+            if($faction) {
+                return 'Fraktion: ' . $faction->Name;
+            }
         } elseif($this->GroupType === 'company') {
-            return 'Unternehmen: ' . Company::find($this->GroupId)->Name;
+            $company = Company::find($this->GroupId);
+
+            if($company) {
+                return 'Unternehmen: ' . $company->Name;
+            }
         } elseif($this->GroupType === 'group') {
             $group = Group::find($this->GroupId);
 
@@ -36,6 +44,6 @@ class Action extends Model
             }
         }
 
-        return 'Unbekannt';
+        return 'Unbekannt: ' . $this->GroupType . ':' . $this->GroupId;
     }
 }
