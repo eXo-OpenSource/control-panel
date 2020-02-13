@@ -111,16 +111,10 @@ docker:
     - release/production
 
 deploy_master:
-  image: ubuntu:latest
+  image: appropriate/curl:latest
   stage: deploy
   script:
-    - apt update && apt install -y curl
-    - curl -sL https://sentry.io/get-cli/ | bash
-    - VERSION=$(sentry-cli releases propose-version)
-    - sentry-cli releases new -p "exo-cp" $VERSION
-    - sentry-cli releases set-commits --auto $VERSION
     - curl http://$DEPLOYRON_IP:6000/deploy/cp_master?APISecret=$DEPLOY_API_SECRET_DEVELOP
-    - sentry-cli releases deploys $VERSION new -e "production"
   only:
     - master
 
@@ -131,3 +125,4 @@ deploy_production:
     - curl http://$DEPLOYRON_IP:6000/deploy/cp_production?APISecret=$DEPLOY_API_SECRET_PRODUCTION
   only:
     - release/production
+
