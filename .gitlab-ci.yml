@@ -114,6 +114,7 @@ deploy_master:
   image: ubuntu:latest
   stage: deploy
   script:
+    - apt install -y curl
     - curl -sL https://sentry.io/get-cli/ | bash
     - VERSION=$(sentry-cli releases propose-version)
     - sentry-cli releases new -p "exo-cp" $VERSION
