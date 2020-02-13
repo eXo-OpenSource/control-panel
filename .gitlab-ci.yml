@@ -5,6 +5,7 @@ stages:
   - test
   - build
   - deploy
+  - sentry
 
 #services:
 #  - docker:dind
@@ -126,3 +127,13 @@ deploy_production:
   only:
     - release/production
 
+sentry_job:
+  image: getsentry/sentry-cli
+  stage: deploy
+  script:
+    - sentry-cli releases new --project $SENTRY_PROJECT $CI_COMMIT_SHA
+    - sentry-cli releases set-commits --auto $CI_COMMIT_SHA
+    - sentry-cli releases deploys $CI_COMMIT_SHA new --env ${CI_COMMIT_BRANCH//\//__}
+  only:
+    - master
+    - release/production
