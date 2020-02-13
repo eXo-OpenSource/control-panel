@@ -5,7 +5,6 @@ stages:
   - test
   - build
   - deploy
-  - sentry
 
 #services:
 #  - docker:dind

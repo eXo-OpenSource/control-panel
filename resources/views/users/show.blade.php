@@ -1,13 +1,5 @@
 @extends('layouts.app')
 
-@section('top-menu')
-    @if(auth()->user()->Rank >= 3)
-        <ul class="c-header-nav d-md-down-none">
-            <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.users.logs.show', [$user->Id, 'punish']) }}">{{ __('Logs') }}</a></li>
-        </ul>
-    @endif
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <div class="row mb-4 d-flex justify-content-between align-items-start">
