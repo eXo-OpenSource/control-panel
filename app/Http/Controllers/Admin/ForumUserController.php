@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Faction;
+use App\Models\Faction;
 use App\Services\TicketService;
-use App\Texture;
-use App\User;
+use App\Models\Texture;
+use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

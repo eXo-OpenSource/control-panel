@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
-use App\Vehicle;
+use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {

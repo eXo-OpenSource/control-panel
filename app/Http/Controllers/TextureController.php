@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Texture;
+use App\Models\Texture;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
@@ -123,7 +123,7 @@ class TextureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Texture $texture
+     * @param \App\Models\Texture $texture
      * @return void
      */
     public function destroy(Texture $texture)

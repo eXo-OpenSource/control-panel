@@ -1,11 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class Character extends Model
 {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\User;
 
-use App\BankAccount;
-use App\Group;
+use App\Models\BankAccount;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -12,7 +12,7 @@ class GroupBankAccountController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
     public function index(Group $group)
@@ -25,7 +25,7 @@ class GroupBankAccountController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $group
+     * @param  \App\Models\Group  $group
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Group $group)
@@ -36,8 +36,8 @@ class GroupBankAccountController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Group  $group
-     * @param  \App\BankAccount  $bankAccount
+     * @param  \App\Models\Group  $group
+     * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
     public function show(Group $group, BankAccount $bankAccount)
@@ -49,8 +49,8 @@ class GroupBankAccountController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Group  $group
-     * @param  \App\BankAccount  $bankAccount
+     * @param  \App\Models\Group  $group
+     * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Group $group, BankAccount $bankAccount)
@@ -61,8 +61,8 @@ class GroupBankAccountController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Group  $group
-     * @param  \App\BankAccount  $bankAccount
+     * @param  \App\Models\Group  $group
+     * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
     public function destroy(Group $group, BankAccount $bankAccount)

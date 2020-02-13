@@ -15,7 +15,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Faction'    => \App\Policies\FactionPolicy::class,
+        'App\Models\Company'    => \App\Policies\CompanyPolicy::class,
+        'App\Models\Group'      => \App\Policies\GroupPolicy::class,
+        'App\Models\Texture'    => \App\Policies\TexturePolicy::class,
+        'App\Models\User'       => \App\Policies\UserPolicy::class,
+        'App\Models\Vehicle'    => \App\Policies\VehiclePolicy::class,
     ];
 
     /**
@@ -29,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Auth::viaRequest('exo-user-token', function ($request) {
             if ($request->token && $request->token !== '') {
-                return \App\User::where('ApiToken', $request->token)->first();
+                return \App\Models\User::where('ApiToken', $request->token)->first();
             }
             return null;
         });
@@ -38,4 +43,5 @@ class AuthServiceProvider extends ServiceProvider
             return new ExoUserProvider();
         });
     }
+
 }

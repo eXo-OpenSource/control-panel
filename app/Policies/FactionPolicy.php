@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Faction;
-use App\User;
+use App\Models\Faction;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class FactionPolicy

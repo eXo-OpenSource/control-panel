@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Texture;
-use App\User;
+use App\Models\Texture;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TexturePolicy

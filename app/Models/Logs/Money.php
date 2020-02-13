@@ -2,7 +2,7 @@
 
 namespace App\Models\Logs;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Money extends Model

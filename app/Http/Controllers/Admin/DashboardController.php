@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Company;
-use App\Faction;
-use App\PlayerHistory;
+use App\Models\Company;
+use App\Models\Faction;
+use App\Models\PlayerHistory;
 use App\Services\StatisticService;
 use App\Services\TicketService;
-use App\Texture;
+use App\Models\Texture;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

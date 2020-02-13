@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Event;
 
-use App\Faction;
-use App\SantaEvent;
+use App\Models\Faction;
+use App\Models\SantaEvent;
 use App\Services\TicketService;
-use App\Texture;
+use App\Models\Texture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;

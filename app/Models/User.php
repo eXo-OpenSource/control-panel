@@ -1,19 +1,16 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use Carbon\Carbon;
+use App\Http\Controllers\WhoIsOnlineController;
+use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
-use App\Models\Logs\Money;
-use App\Models\Logs\Damage;
 use App\Models\Logs\Punish;
-use App\Services\MTAService;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Notifications\Notifiable;
-use App\Http\Controllers\WhoIsOnlineController;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {

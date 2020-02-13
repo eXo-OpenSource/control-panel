@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Faction;
+use App\Models\Faction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -50,7 +50,7 @@ class FactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Faction  $faction
+     * @param  \App\Models\Faction  $faction
      * @return \Illuminate\Http\Response
      */
     public function show(Faction $faction, $page = '')
@@ -65,7 +65,7 @@ class FactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Faction  $faction
+     * @param  \App\Models\Faction  $faction
      * @return \Illuminate\Http\Response
      */
     public function edit(Faction $faction)
@@ -77,7 +77,7 @@ class FactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Faction  $faction
+     * @param  \App\Models\Faction  $faction
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Faction $faction)
@@ -88,7 +88,7 @@ class FactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Faction  $faction
+     * @param  \App\Models\Faction  $faction
      * @return \Illuminate\Http\Response
      */
     public function destroy(Faction $faction)

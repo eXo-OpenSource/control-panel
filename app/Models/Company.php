@@ -1,28 +1,28 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-class Faction extends Model
+class Company extends Model
 {
     protected $primaryKey = 'Id';
 
+
     public function members()
     {
-        return $this->hasMany(Character::class, 'FactionId', 'Id');
+        return $this->hasMany(Character::class, 'CompanyId', 'Id');
     }
 
     public function membersCount()
     {
-        return Character::where('FactionId', $this->Id)->count();
+        return Character::where('CompanyId', $this->Id)->count();
     }
 
     public function logs()
     {
-        return GroupLog::where('GroupType', 'faction')->where('GroupId', $this->Id);
+        return GroupLog::where('GroupType', 'company')->where('GroupId', $this->Id);
     }
 
     public function getActivity(Carbon $from, Carbon $to)
@@ -32,10 +32,10 @@ class Faction extends Model
 
     public function getColor($alpha = 1)
     {
-        $color = config('constants.factionColors')[0];
+        $color = config('constants.companyColors')[0];
 
-        if (config('constants.factionColors')[$this->Id]) {
-            $color = config('constants.factionColors')[$this->Id];
+        if (config('constants.companyColors')[$this->Id]) {
+            $color = config('constants.companyColors')[$this->Id];
         }
 
         return "rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")";
@@ -43,7 +43,7 @@ class Faction extends Model
 
     public function vehicles()
     {
-        return $this->newHasMany(Vehicle::where('OwnerType', 2), $this, 'OwnerId', 'Id');
+        return $this->newHasMany(Vehicle::where('OwnerType', 3), $this, 'OwnerId', 'Id');
     }
 
     public function bank()
@@ -53,6 +53,6 @@ class Faction extends Model
 
     public function getMorphClass()
     {
-        return 2;
+        return 3;
     }
 }

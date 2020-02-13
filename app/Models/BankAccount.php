@@ -1,11 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Group;
-use App\Company;
-use App\Faction;
-use App\Character;
 use Illuminate\Database\Eloquent\Model;
 
 class BankAccount extends Model

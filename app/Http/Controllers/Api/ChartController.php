@@ -4,12 +4,12 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Company;
-use App\Faction;
-use App\Group;
+use App\Models\Company;
+use App\Models\Faction;
+use App\Models\Group;
 use App\Http\Controllers\Controller;
 use App\Services\StatisticService;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 class ChartController extends Controller

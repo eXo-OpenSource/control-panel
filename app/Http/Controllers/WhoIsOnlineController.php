@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\Faction;
-use App\Group;
+use App\Models\Company;
+use App\Models\Faction;
+use App\Models\Group;
 use App\Services\MTAService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

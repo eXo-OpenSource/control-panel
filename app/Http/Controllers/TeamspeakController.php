@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\TeamspeakIdentity;
+use App\Models\TeamspeakIdentity;
 use Illuminate\Http\Request;
 
 class TeamspeakController extends Controller
@@ -43,7 +43,7 @@ class TeamspeakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
     public function show(TeamspeakIdentity $teamspeakIdentity)
@@ -54,7 +54,7 @@ class TeamspeakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
     public function edit(TeamspeakIdentity $teamspeakIdentity)
@@ -66,7 +66,7 @@ class TeamspeakController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, TeamspeakIdentity $teamspeakIdentity) {
@@ -76,7 +76,7 @@ class TeamspeakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
     public function destroy(TeamspeakIdentity $teamspeakIdentity)

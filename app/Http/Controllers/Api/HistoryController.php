@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
-use App\PlayerHistory;
+use App\Models\PlayerHistory;
 use App\Services\StatisticService;
 use Carbon\Carbon;
 

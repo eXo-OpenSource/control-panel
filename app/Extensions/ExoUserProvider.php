@@ -4,7 +4,7 @@
 namespace App\Extensions;
 
 
-use App\User;
+use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;

@@ -1,9 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 
 class Texture extends Model
 {
@@ -25,12 +24,12 @@ class Texture extends Model
         }
     }
 
-    public function user() 
+    public function user()
     {
         return $this->hasOne(User::class, 'Id', 'UserId');
     }
 
-    public function admin() 
+    public function admin()
     {
         return $this->hasOne(User::class, 'Id', 'Admin');
     }

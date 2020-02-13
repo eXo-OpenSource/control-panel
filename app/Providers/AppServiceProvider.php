@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\VehicleShop;
+use App\Models\VehicleShop;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
@@ -101,15 +101,15 @@ class AppServiceProvider extends ServiceProvider
 
 
         Relation::morphMap([
-            1 => \App\User::class,
-            2 => \App\Faction::class,
-            3 => \App\Company::class,
-            4 => \App\Group::class,
-            5 => \App\ServerBankAccount::class,
-            6 => \App\Shop::class,
-            7 => \App\User::class,
-            8 => \App\User::class,
-            9 => \App\VehicleShop::class,
+            1 => \App\Models\User::class,
+            2 => \App\Models\Faction::class,
+            3 => \App\Models\Company::class,
+            4 => \App\Models\Group::class,
+            5 => \App\Models\ServerBankAccount::class,
+            6 => \App\Models\Shop::class,
+            7 => \App\Models\User::class,
+            8 => \App\Models\User::class,
+            9 => \App\Models\VehicleShop::class,
         ]);
 
         Paginator::defaultView('pagination.default');

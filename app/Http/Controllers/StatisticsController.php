@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\BankAccount;
-use App\Character;
-use App\Stats;
+use App\Models\BankAccount;
+use App\Models\Character;
+use App\Models\Stats;
 
 class StatisticsController extends Controller
 {

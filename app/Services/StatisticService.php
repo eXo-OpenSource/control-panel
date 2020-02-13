@@ -4,10 +4,10 @@
 namespace App\Services;
 
 
-use App\Company;
-use App\Faction;
-use App\Group;
-use App\User;
+use App\Models\Company;
+use App\Models\Faction;
+use App\Models\Group;
+use App\Models\User;
 use Carbon\Carbon;
 
 class StatisticService
@@ -35,7 +35,7 @@ class StatisticService
 
     public static function getFactionsActivity(Carbon $from, Carbon $to)
     {
-        /** @var Faction[] $factions */
+        /** @var \App\Models\Faction[] $factions */
         $factions = Faction::where('active', 1)->get();
 
         $result = [
@@ -77,7 +77,7 @@ class StatisticService
     }
     public static function getCompaniesActivity(Carbon $from, Carbon $to)
     {
-        /** @var Company[] $companies */
+        /** @var \App\Models\Company[] $companies */
         $companies = Company::all();
 
         $result = [
