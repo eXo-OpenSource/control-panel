@@ -37,8 +37,7 @@ Route::get('companies/{company}/{page}', 'CompanyController@show')->name('compan
 
 Route::middleware('auth')->group(function () {
     Route::resource('users', 'UserController')->only('index', 'show');
-    Route::get('users/{user}/logs', 'UserLogController@show')->name('users.show.logs');
-    Route::get('users/{user}/logs/{log}', 'UserLogController@show')->name('users.show.logs');
+    Route::get('users/{user}/logs/{log?}', 'UserLogController@show')->name('users.show.logs');
     Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
 
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
