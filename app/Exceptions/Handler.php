@@ -52,15 +52,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if(!env('APP_DEBUG')) {
-            if($exception instanceof NotFoundHttpException || $exception instanceof ModelNotFoundException) {
-                return response()->view('errors.404');
-            } else if($exception instanceof AccessDeniedHttpException) {
-                return response()->view('errors.403');
-            }
-            return response()->view('errors.500');
-        }
-
         return parent::render($request, $exception);
     }
 }
