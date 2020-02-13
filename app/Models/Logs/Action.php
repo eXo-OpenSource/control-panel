@@ -12,7 +12,7 @@ class Action extends Model
 {
     protected $primaryKey = 'Id';
     protected $connection = 'mysql_logs';
-    protected $table = 'Action';
+    protected $table = 'Actions';
     public $timestamps = false;
 
     protected $dates = ['Date'];
