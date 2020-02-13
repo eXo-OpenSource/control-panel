@@ -114,7 +114,7 @@ deploy_master:
   image: appropriate/curl:latest
   stage: deploy
   script:
-    - curl -sL https://sentry.io/get-cli/ | bash
+    - curl -sL https://sentry.io/get-cli/ | sh
     - VERSION=$(sentry-cli releases propose-version)
     - sentry-cli releases new -p "exo-cp" $VERSION
     - sentry-cli releases set-commits --auto $VERSION
