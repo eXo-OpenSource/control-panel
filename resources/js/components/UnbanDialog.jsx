@@ -31,7 +31,7 @@ export default class UnbanDialog extends Component {
 
     }
 
-    async ban() {
+    async unban() {
         try {
             const response = await axios.put('/api/admin/users/' + this.props.id, {
                 type: 'unban',
@@ -78,7 +78,7 @@ export default class UnbanDialog extends Component {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="danger" onClick={this.ban.bind(this)}>
+                        <Button variant="danger" onClick={this.unban.bind(this)}>
                             Entsperren
                         </Button>
                         <Button variant="secondary" onClick={this.handleClose}>

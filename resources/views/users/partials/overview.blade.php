@@ -8,15 +8,8 @@
     <div class="col-md-2">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title mb-0">{{ $user->Name }}</h4>
-                    </div>
-                </div>
-                <dl class="user-stats mt-2">
+                <dl class="user-stats">
                     @can('privateData', $user)
-                        <dt>Online-Status</dt>
-                        <dd>@if ($user->isOnline()) <span class="badge badge-success">online</span> @else <span class="badge badge-danger">offline</span> @endif</dd>
                         <dt>Letzer Login</dt>
                         <dd>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</dd>
                         <dt>Registrierungsdatum</dt>

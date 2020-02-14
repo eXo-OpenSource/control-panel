@@ -62,7 +62,7 @@ export default class BanDialog extends Component {
         return (
             <>
                 <Button variant="danger" onClick={this.handleShow}>
-                    Ban
+                    Sperren
                 </Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
