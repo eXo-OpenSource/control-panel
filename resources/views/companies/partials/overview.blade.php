@@ -9,6 +9,7 @@
                         <th>{{ __('Name') }}</th>
                         <th>{{ __('Rang') }}</th>
                         @can('activity', $company)<th>{{ __('Aktivität') }}</th>@endcan
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -17,6 +18,13 @@
                             <td>@if($character->user)<a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a>@else{{ 'Unknown' }}@endif</td>
                             <td>{{ $character->CompanyRank }}</td>
                             @can('activity', $company)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
+                            <td>
+                                @if($character->user->isOnline())
+                                    <span class="badge badge-success">online</span>
+                                @else
+                                    <span class="badge badge-danger">offline</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>
