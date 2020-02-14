@@ -12,14 +12,16 @@ export default class Chart extends Component {
     constructor() {
         super();
         this.state = {
-            data: null
+            data: null,
+            status: null
         };
     }
 
     async componentDidMount() {
-        const response = await axios.get('/api/charts/' + this.props.chart);
 
         try {
+            const response = await axios.get('/api/charts/' + this.props.chart);
+
             if(response.data && response.data.tooltips) {
                 if (!response.data.options) {
                     response.data.options = {};
@@ -32,10 +34,13 @@ export default class Chart extends Component {
             }
 
             this.setState({
-                data: response.data
+                data: response.data,
+                status: response.data.status
             });
         } catch (error) {
-            console.log(error);
+            this.setState({
+                status: 'Access Denied'
+            })
         }
     }
 
@@ -54,14 +59,14 @@ export default class Chart extends Component {
     }
 
     render() {
+        if(this.state.status) {
+            if(this.state.status !== 'Success') {
+                let message = <p>Der Zugriff auf die Daten wurden verweigert!</p>;
 
-        const ExampleCustomInput = ({ value, onClick }) => (
-            <button className="btn btn-sm btn-primary" onClick={onClick}>
-                {value}
-            </button>
-        );
-        if(this.state.data != null) {
-            if(this.state.data.status && this.state.data.status === 'Error') {
+                if(this.state.status === 'Error') {
+                    message = <p>Die Daten konnten nicht geladen werden!</p>;
+                }
+
                 return (
                     <div className="card">
                         <div className="card-header">{this.props.title}
@@ -69,7 +74,7 @@ export default class Chart extends Component {
 
                         <div className="card-body">
                             <div className="text-center">
-                                <p>Daten konnten nicht geladen werden!</p>
+                                {message}
                             </div>
                         </div>
                     </div>
@@ -85,7 +90,7 @@ export default class Chart extends Component {
                     <div className="card">
                         <div className="card-header">{this.props.title}
                             <div className="float-right">
-                                <p>{this.state.data.from} - {this.state.data.to}</p>
+                                <span>{this.state.data.from} - {this.state.data.to}</span>
                             </div>
                         </div>
 
