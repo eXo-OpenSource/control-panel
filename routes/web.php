@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
         Route::get('logs/{log?}', 'LogController@show')->name('admin.logs.show');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
+        Route::get('users/multiaccounts', 'MultiaccountController@index')->name('admin.user.multiaccounts');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');
         Route::get('textures', 'TextureController@index')->name('admin.texture');
     });
