@@ -6,8 +6,13 @@
         }
 
         .modal-header {
-            background-color: #20202a;
-            border-color: #181924;
+            .close {
+                color: #e1e1e1;
+
+                &:hover {
+                    color: #e1e1e1;
+                }
+            }
         }
     }
 }

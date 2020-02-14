@@ -16,12 +16,10 @@
             <td>{{ $entry->Id }}</td>
             <td>{{ $entry->Date }}</td>
             <td>
-                @if($entry->user)<a href="{{ route('users.show', [$entry->UserId]) }}">{{ $entry->user->Name }}</a>@else{{ 'Unknown' }}@endif
-                                (ID: {{ $entry->UserId }})
+                @if($entry->user)<a href="{{ route('users.show', [$entry->UserId]) }}">{{ $entry->user->Name }}</a>@else{{ 'Unknown' }} (ID: {{ $entry->UserId }})@endif
             </td>
             <td>
-                @if($entry->admin)<a href="{{ route('users.show', [$entry->AdminId]) }}">{{ $entry->admin->Name }}</a>@else{{ 'Unknown' }}@endif
-                                (ID: {{ $entry->AdminId }})
+                @if($entry->admin)<a href="{{ route('users.show', [$entry->AdminId]) }}">{{ $entry->admin->Name }}</a>@else{{ 'Unknown' }} (ID: {{ $entry->AdminId }})@endif
             </td>
             <td>{{ $entry->Type }}</td>
             <td>{{ $entry->Reason }}</td>

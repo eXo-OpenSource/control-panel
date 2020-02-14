@@ -15,3 +15,7 @@ require('./bootstrap');
 require('./components/Chart');
 require('./components/HistoryDialog');
 require('./components/Vehicle');
+require('./components/BanDialog');
+require('./components/UnbanDialog');
+require('./components/KickDialog');
+require('./components/Warns');

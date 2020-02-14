@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
 
-use App\Services\MTAService;
-use App\Models\User;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Admin\Api;
+
+
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Services\MTAService;
+use App\Services\StatisticService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
@@ -16,7 +20,7 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function update(Request $request, User $user)
     {
@@ -29,7 +33,7 @@ class UserController extends Controller
                 $reason = $request->get('reason');
 
                 if (empty($reason)) {
-                    return redirect()->route('users.show', [$user->Id]);
+                    return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
                 }
 
                 $mtaService = new MTAService();
@@ -38,22 +42,20 @@ class UserController extends Controller
                 if (!empty($response)) {
                     $data = json_decode($response[0]);
                     if ($data->status === 'SUCCESS') {
-                        Session::flash('alert-success', 'Erfolgreich gekickt!');
+                        return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich gekickt.')];
                     } else {
-                        Session::flash('alert-danger', 'Spieler konnte nicht gekickt werden!');
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht gekickt werden.')];
                     }
-                } else {
-                    Session::flash('alert-danger', 'Interner Fehler!');
                 }
 
-                return redirect()->route('users.show', [$user->Id]);
+                return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
             }
         } elseif ($type === 'unban') {
             if (Gate::allows('admin-rank-5')) {
                 $reason = $request->get('reason');
 
                 if (empty($reason)) {
-                    return redirect()->route('users.show', [$user->Id]);
+                    return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
                 }
 
                 $mtaService = new MTAService();
@@ -62,15 +64,13 @@ class UserController extends Controller
                 if (!empty($response)) {
                     $data = json_decode($response[0]);
                     if ($data->status === 'SUCCESS') {
-                        Session::flash('alert-success', 'Erfolgreich entbannt!');
+                        return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich entsperrt.')];
                     } else {
-                        Session::flash('alert-danger', 'Spieler konnte nicht entbannt werden!');
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht entsperrt werden.')];
                     }
-                } else {
-                    Session::flash('alert-danger', 'Interner Fehler!');
                 }
 
-                return redirect()->route('users.show', [$user->Id]);
+                return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
             }
         } elseif ($type === 'ban') {
             if (Gate::allows('admin-rank-3')) {
@@ -78,11 +78,11 @@ class UserController extends Controller
                 $duration = $request->get('duration');
 
                 if (empty($reason)) {
-                    return redirect()->route('users.show', [$user->Id]);
+                    return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
                 }
 
                 if (empty($duration) && intval('duration') < 0) {
-                    return redirect()->route('users.show', [$user->Id]);
+                    return ['status' => 'Error', 'message' => __('Bitte gib eine gültige Dauer ein!')];
                 }
 
                 $mtaService = new MTAService();
@@ -91,18 +91,16 @@ class UserController extends Controller
                 if (!empty($response)) {
                     $data = json_decode($response[0]);
                     if ($data->status === 'SUCCESS') {
-                        Session::flash('alert-success', 'Erfolgreich gebannt!');
+                        return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich gesperrt.')];
                     } else {
-                        Session::flash('alert-danger', 'Spieler konnte nicht gebannt werden!');
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht gesperrt werden.')];
                     }
-                } else {
-                    Session::flash('alert-danger', 'Interner Fehler!');
                 }
 
-                return redirect()->route('users.show', [$user->Id]);
+                return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
             }
         }
 
-        return redirect()->route('users.show', [$user->Id]);
+        return ['status' => 'Error', 'message' => __('Zugriff verweigert')];
     }
 }

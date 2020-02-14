@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
+        Route::resource('users', 'UserController')->only('update');
     });
 
     Route::namespace('Api')->name('api.')->group(function () {

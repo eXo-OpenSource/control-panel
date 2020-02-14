@@ -27,9 +27,9 @@ class MTAService
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKBanPlayer',$adminId, $targetId, $duration, $reason);
     }
 
-    public function unbanPlayer($adminId, $targetId)
+    public function unbanPlayer($adminId, $targetId, $reason)
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKUnbanPlayer', $adminId,  $targetId);
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKUnbanPlayer', $adminId,  $targetId, $reason);
     }
 
     public function addWarn($adminId, $targetId, $duration, $reason)
