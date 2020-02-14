@@ -78,7 +78,7 @@
 
         <footer class="c-footer">
             <div>@include('layouts.partials.online')</div>
-            <div class="mfs-auto"></div>
+            <div class="mfs-auto">Release: {{ substr(config('sentry.release'), 0, 7) }}</div>
         </footer>
     </div>
 

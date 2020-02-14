@@ -12,7 +12,7 @@ class House extends Model
 
     public function getName()
     {
-        return 'Haus' + $this->Id;
+        return 'Haus' . $this->Id;
     }
 
     public function getURL()
