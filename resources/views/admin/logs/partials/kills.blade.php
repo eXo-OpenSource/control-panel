@@ -5,8 +5,8 @@
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Datum') }}</th>
+        <th>{{ __('Mörder') }}</th>
         <th>{{ __('Opfer') }}</th>
-        <th>{{ __('Target') }}</th>
         <th>{{ __('Weapon') }}</th>
         <th>{{ __('Range') }}</th>
     </tr>

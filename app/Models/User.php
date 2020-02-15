@@ -6,6 +6,7 @@ use App\Http\Controllers\WhoIsOnlineController;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
+use App\Models\Logs\Login;
 use App\Models\Logs\Punish;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -90,6 +91,11 @@ class User extends Authenticatable
     public function heal()
     {
         return $this->hasMany(Heal::class, 'UserId', 'Id');
+    }
+
+    public function logins()
+    {
+        return $this->hasMany(Login::class, 'UserId', 'Id');
     }
 
     public function damage()

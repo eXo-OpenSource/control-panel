@@ -1,16 +1,16 @@
 @php
     $money = $user->money()->orderBy('Id', 'DESC')->paginate(25);
 @endphp
-<table class="table w-full">
+<table class="table table-sm table-responsive-sm tw-full">
     <tr>
-        <th>Id</th>
-        <th>Datum</th>
-        <th>Von</th>
-        <th>Nach</th>
-        <th>Betrag</th>
-        <th>Grund</th>
-        <th>Kategorie</th>
-        <th>Unterkategorie</th>
+        <th>{{ __('Id') }}</th>
+        <th>{{ __('Datum') }}</th>
+        <th>{{ __('Von') }}</th>
+        <th>{{ __('Nach') }}</th>
+        <th>{{ __('Betrag') }}</th>
+        <th>{{ __('Grund') }}</th>
+        <th>{{ __('Kategorie') }}</th>
+        <th>{{ __('Unterkategorie') }}</th>
     </tr>
     @foreach($money as $entry)
         <tr>

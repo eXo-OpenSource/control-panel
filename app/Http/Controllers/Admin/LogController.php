@@ -12,7 +12,7 @@ class LogController extends Controller
     public function show($log = '')
     {
         if($log === '') {
-            $log = 'kills';
+            $log = 'punish';
         }
         abort_unless(Gate::allows('admin-rank-3'), 403);
 
