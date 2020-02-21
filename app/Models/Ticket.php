@@ -12,4 +12,25 @@ class Ticket extends Model
     const DELETED_AT = 'DeletedAt';
     const UPDATED_AT = 'UpdatedAt';
     protected $primaryKey = 'Id';
+
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'Id', 'UserId');
+    }
+
+    public function assignee()
+    {
+        return $this->hasOne(User::class, 'Id', 'AssigneeId');
+    }
+
+    public function resolver()
+    {
+        return $this->hasOne(User::class, 'Id', 'ResolvedBy');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(TicketCategory::class, 'Id', 'CategoryId');
+    }
 }

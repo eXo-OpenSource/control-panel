@@ -15,7 +15,40 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return Ticket::all();
+        $tickets = Ticket::with('user', 'assignee', 'category', 'resolver')->get();
+
+        $response = [];
+
+        foreach($tickets as $ticket) {
+            $entry = [
+                'Id' => $ticket->Id,
+                'UserId' => $ticket->UserId,
+                'User' => $ticket->user->Name,
+                'AssigneeId' => $ticket->AssigneeId,
+                'AssignedRank' => $ticket->AssignedRank,
+                'CategoryId' => $ticket->CategoryId,
+                'Category' => $ticket->category->Title,
+                'Title' => $ticket->Title,
+                'State' => $ticket->State,
+                'ResolvedBy' => $ticket->ResolvedBy,
+                'LastResponseAt' => $ticket->LastResponseAt,
+                'CreatedAt' => $ticket->CreatedAt,
+                'ResolvedAt' => $ticket->ResolvedAt,
+            ];
+
+            if($ticket->assignee) {
+                $entry['Assignee'] = $ticket->assignee->Name;
+            }
+
+            if($ticket->resolver) {
+                $entry['Resolver'] = $ticket->assignee->Name;
+            }
+
+
+            array_push($response, (object)$entry);
+        }
+
+        return $response;
     }
 
     /**

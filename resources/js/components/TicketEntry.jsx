@@ -4,23 +4,7 @@ import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 
-export default class Tickets extends Component {
-    constructor() {
-        super();
-        this.state = {
-            show: false,
-            data: null
-        };
-
-        this.handleClose = () => {
-            this.setState({ show: false });
-        };
-
-        this.handleShow = () => {
-            this.setState({ show: true });
-        };
-    }
-
+export default class TicketEntry extends Component {
     async componentDidMount() {
         if(this.state.data === null) {
             this.loadData();
@@ -74,14 +58,3 @@ export default class Tickets extends Component {
         );
     }
 }
-
-var tickets = document.getElementsByTagName('react-tickets');
-
-for (var index in tickets) {
-    const component = tickets[index];
-    if(typeof component === 'object') {
-        const props = Object.assign({}, component.dataset);
-        ReactDOM.render(<Tickets {...props} />, component);
-    }
-}
-
