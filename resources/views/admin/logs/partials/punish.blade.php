@@ -5,6 +5,7 @@
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Datum') }}</th>
+        <th>{{ __('User') }}</th>
         <th>{{ __('Admin') }}</th>
         <th>{{ __('Type') }}</th>
         <th>{{ __('Grund') }}</th>
@@ -22,7 +23,7 @@
             </td>
             <td>{{ $entry->Type }}</td>
             <td>{{ $entry->Reason }}</td>
-            <td>{{ $entry->Duration }}</td>
+            <td>{{ gmdate("H:i:s", $entry->Duration) }}</td>
         </tr>
     @endforeach
 </table>
