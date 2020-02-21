@@ -26,5 +26,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('charts', 'ChartController')->only('show');
         Route::resource('histories', 'HistoryController')->only('show');
         Route::resource('vehicles', 'VehicleController')->only('show');
+        Route::resource('tickets', 'TicketController');
     });
 });

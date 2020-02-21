@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
     Route::resource('textures', 'TextureController');
     Route::resource('teamspeak', 'TeamspeakController');
+    Route::resource('tickets', 'TicketController');
 
     Route::namespace('Event')->prefix('events')->name('events.')->group(function () {
         Route::resource('santa', 'SantaController')->only(['index', 'store', 'create']);
