@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\TicketAnswer;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -69,7 +70,19 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $ticket = new Ticket();
+        $ticket->UserId = auth()->user()->Id;
+        $ticket->CategoryId = $request->get('category');
+        $ticket->Title = $request->get('title');
+        $ticket->State = 'Open';
+        $ticket->save();
+
+        $answer = new TicketAnswer();
+        $answer->TicketId = $ticket->Id;
+        $answer->UserId = auth()->user()->Id;
+        $answer->MessageType = 0;
+        $answer->Message = $request->get('message');
+        $answer->save();
     }
 
     /**
@@ -80,7 +93,45 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        //
+        $entry = [
+            'Id' => $ticket->Id,
+            'UserId' => $ticket->UserId,
+            'User' => $ticket->user->Name,
+            'AssigneeId' => $ticket->AssigneeId,
+            'AssignedRank' => $ticket->AssignedRank,
+            'CategoryId' => $ticket->CategoryId,
+            'Category' => $ticket->category->Title,
+            'Title' => $ticket->Title,
+            'State' => $ticket->State,
+            'ResolvedBy' => $ticket->ResolvedBy,
+            'LastResponseAt' => $ticket->LastResponseAt,
+            'CreatedAt' => $ticket->CreatedAt,
+            'ResolvedAt' => $ticket->ResolvedAt,
+        ];
+
+        if($ticket->assignee) {
+            $entry['Assignee'] = $ticket->assignee->Name;
+        }
+
+        if($ticket->resolver) {
+            $entry['Resolver'] = $ticket->assignee->Name;
+        }
+
+        $entry['answers'] = [];
+        $answers = $ticket->answers()->with('user')->get();
+
+        foreach($answers as $answer) {
+            array_push($entry['answers'], [
+                'Id' => $answer->Id,
+                'UserId' => $answer->UserId,
+                'User' => $answer->user->Name,
+                'MessageType' => $answer->MessageType,
+                'Message' => $answer->Message,
+                'CreatedAt' => $answer->CreatedAt,
+            ]);
+        }
+
+        return $entry;
     }
 
     /**

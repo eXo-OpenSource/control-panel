@@ -4,6 +4,14 @@ import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import axios from "axios";
 
 export default class TicketListEntry extends Component {
+    constructor() {
+        super();
+
+        this.showEntry = () => {
+            this.props.open(this.props.ticket);
+        };
+    }
+
     render() {
         return (
             <tr>
@@ -13,7 +21,7 @@ export default class TicketListEntry extends Component {
                 <td>{this.props.ticket.State}</td>
                 <td>{this.props.ticket.CreatedAt}</td>
                 <td>
-                    <Button size="sm" variant="primary">
+                    <Button size="sm" variant="primary" onClick={this.showEntry}>
                         Details
                     </Button>
                 </td>

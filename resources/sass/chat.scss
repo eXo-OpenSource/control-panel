@@ -1,0 +1,33 @@
+.chat {
+    .message {
+        background-color: #20202a;
+        border-color: #181924;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+
+        &::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    }
+
+    .darker {
+        border-color: #20202a;
+        background-color: #181924;
+    }
+
+    .time-right {
+        float: right;
+        color: #aaa;
+    }
+
+    .time-left {
+        float: left;
+        color: #999;
+    }
+}
+
+
+

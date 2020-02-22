@@ -5,6 +5,12 @@ import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 
 export default class TicketEntry extends Component {
+    constructor() {
+        super();
+        this.state = {
+            data: null,
+        };
+    }
     async componentDidMount() {
         if(this.state.data === null) {
             this.loadData();
@@ -12,7 +18,7 @@ export default class TicketEntry extends Component {
     }
 
     async loadData() {
-        const response = await axios.get('/api/tickets');
+        const response = await axios.get('/api/tickets/' + this.props.ticket.Id);
 
         try {
             this.setState({
@@ -30,28 +36,47 @@ export default class TicketEntry extends Component {
 
         return (
             <>
-                <div className="card">
-                    <div className="card-header">
-                        Tickets
+                <div className="row">
+                    <div className="col-md-8">
+                        <div className="card">
+                            <div className="card-header">
+                                Chat
+                            </div>
+                            <div className="card-body">
+                                <div className="chat">
+                                    {this.state.data.answers.map((answer, i) => {
+                                        return (
+                                            <div className="message">
+                                                <p>{answer.User}</p>
+                                                <p>{answer.Message}</p>
+                                                <span className="time-right">{answer.CreatedAt}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="card-body">
-                        <table className="table table-sm">
-                            <thead>
-                            <tr>
-                                <th>Benutzer</th>
-                                <th>Kategorie</th>
-                                <th>Titel</th>
-                                <th>Status</th>
-                                <th>Datum</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.data.map((ticket, i) => {
-                                return <TicketListEntry key={ticket.Id} ticket={ticket}></TicketListEntry>;
-                            })}
-                            </tbody>
-                        </table>
+                    <div className="col-md-4">
+                        <div className="card">
+                            <div className="card-header">
+                                Details
+                            </div>
+                            <div className="card-body">
+                                <table className="table table-sm">
+                                    <tbody>
+                                        <tr>
+                                            <td>Benutzer</td>
+                                            <td>{this.state.data.User}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Status</td>
+                                            <td>{this.state.data.State}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </>

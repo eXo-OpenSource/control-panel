@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Modal, Spinner, Form } from 'react-bootstrap';
+import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 
@@ -8,39 +8,51 @@ export default class TicketCreate extends Component {
     constructor() {
         super();
         this.state = {
-            show: false,
-            data: null
-        };
-
-        this.handleClose = () => {
-            this.setState({ show: false });
-        };
-
-        this.handleShow = () => {
-            this.setState({ show: true });
+            categories: null,
+            title: '',
+            category: '',
+            message: '',
         };
     }
 
     async componentDidMount() {
-        if(this.state.data === null) {
-            this.loadData();
+        if(this.state.categories === null) {
+            this.loadCategories();
         }
     }
 
-    async loadData() {
-        const response = await axios.get('/api/tickets');
-
+    async send() {
         try {
+            const response = await axios.post('/api/tickets', {
+                title: this.state.title,
+                category: this.state.category,
+                message: this.state.message,
+            });
+
+            this.props.back(true);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async loadCategories() {
+        try {
+            const response = await axios.get('/api/tickets/categories');
+
             this.setState({
-                data: response.data
+                categories: response.data
             });
         } catch (error) {
             console.log(error);
         }
     }
 
+    async onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
     render() {
-        if(this.state.data === null) {
+        if(this.state.categories === null) {
             return <div className="text-center"><Spinner animation="border"/></div>;
         }
 
@@ -48,26 +60,38 @@ export default class TicketCreate extends Component {
             <>
                 <div className="card">
                     <div className="card-header">
-                        Tickets
+                        Ticket erstellen
                     </div>
                     <div className="card-body">
-                        <table className="table table-sm">
-                            <thead>
-                            <tr>
-                                <th>Benutzer</th>
-                                <th>Kategorie</th>
-                                <th>Titel</th>
-                                <th>Status</th>
-                                <th>Datum</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {this.state.data.map((ticket, i) => {
-                                return <TicketListEntry key={ticket.Id} ticket={ticket}></TicketListEntry>;
-                            })}
-                            </tbody>
-                        </table>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Betreff</Form.Label>
+                                <InputGroup>
+                                    <Form.Control name="title" type="text" placeholder="Betreff" onChange={this.onChange.bind(this)} />
+                                </InputGroup>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Label>Kategorie</Form.Label>
+                                <InputGroup>
+                                    <Form.Control as="select" name="category" onChange={this.onChange.bind(this)}>
+                                        <option>(Bitte auswählen)</option>
+                                        {this.state.categories.map((category, i) => {
+                                            return <option key={category.Id} value={category.Id}>{category.Title}</option>;
+                                        })}
+                                    </Form.Control>
+                                </InputGroup>
+                            </Form.Group>
+
+                            <Form.Group>
+                                <Form.Label>Nachricht</Form.Label>
+                                <InputGroup>
+                                    <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" onChange={this.onChange.bind(this)} />
+                                </InputGroup>
+                            </Form.Group>
+
+                            <Button onClick={this.send.bind(this)} className="float-right">Erstellen</Button>
+                        </Form>
                     </div>
                 </div>
             </>

@@ -10,7 +10,8 @@ class Ticket extends Model
 {
     use SoftDeletes;
     const DELETED_AT = 'DeletedAt';
-    const UPDATED_AT = 'UpdatedAt';
+    const UPDATED_AT = 'LastResponseAt';
+    const CREATED_AT = 'CreatedAt';
     protected $primaryKey = 'Id';
 
 
@@ -32,5 +33,10 @@ class Ticket extends Model
     public function category()
     {
         return $this->hasOne(TicketCategory::class, 'Id', 'CategoryId');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(TicketAnswer::class, 'TicketId', 'Id');
     }
 }
