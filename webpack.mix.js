@@ -18,6 +18,9 @@ mix.react('resources/js/app.js', 'public/js')
 mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fonts/font-awesome');
 mix.copy('./node_modules/paper/dist/paper-full.min.js', 'public/js/paper.js');
 
+mix.copy('resources/js/firebase-messaging-sw.js', 'public/firebase-messaging-sw.js')
+mix.copy('resources/js/manifest.json', 'resources/js/manifest.json')
+
 mix.setPublicPath('public');
 mix.setResourceRoot('../');
 

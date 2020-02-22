@@ -30,6 +30,7 @@
                 @guest
                     <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
                 @else
+                    <react-notification></react-notification>
                     <li class="c-header-nav-item dropdown px-3">
                         <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                             <div class="c-avatar"><img class="c-avatar-img" src="/images/skins/head/{{ Auth::user()->character->Skin }}.png" alt="{{ Auth::user()->Name }}"></div>

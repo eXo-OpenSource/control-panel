@@ -20,3 +20,4 @@ require('./components/UnbanDialog');
 require('./components/KickDialog');
 require('./components/WarnsDialog');
 require('./components/Tickets');
+require('./components/Notification');

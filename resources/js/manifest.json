@@ -1,0 +1,9 @@
+{
+    "gcm_sender_id": "588173249396",
+    "theme_color": "#0A0B18",
+    "background_color": "#20a8d8",
+    "name": "eXo-CP",
+    "display": "standalone",
+    "scope": "https://cp.exo-reallife.de/",
+    "start_url": "https://cp.exo-reallife.de/"
+}
