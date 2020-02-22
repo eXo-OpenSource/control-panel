@@ -46,7 +46,7 @@ export default class TicketEntry extends Component {
                                 <div className="chat">
                                     {this.state.data.answers.map((answer, i) => {
                                         return (
-                                            <div className="message">
+                                            <div key={answer.Id} className="message">
                                                 <p>{answer.User}</p>
                                                 <p>{answer.Message}</p>
                                                 <span className="time-right">{answer.CreatedAt}</span>
