@@ -31,6 +31,8 @@ class HistoryController extends Controller
         $data['ElementTypeName'] = $data['ElementType'] === 'faction' ? 'Fraktion' : 'Unternehmen';
         $data['ElementUrl'] = $data['ElementType'] === 'faction' ? route('factions.show', $history->ElementId) : route('companies.show', $history->ElementId);
 
+        unset($data['InternalReason']);
+
         return $data;
     }
 }

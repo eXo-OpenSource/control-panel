@@ -71,7 +71,7 @@ export default class HistoryDialog extends Component {
 
         return (
             <>
-                <Button variant="primary" onClick={this.handleShow}>
+                <Button variant="primary" size="sm" onClick={this.handleShow}>
                     Details
                 </Button>
 
