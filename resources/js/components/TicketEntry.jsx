@@ -41,6 +41,18 @@ export default class TicketEntry extends Component {
         }
     }
 
+    async close() {
+        try {
+            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
+                type: 'close',
+            });
+
+            this.loadData();
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     async loadData() {
         const response = await axios.get('/api/tickets/' + this.state.ticketId);
 
@@ -116,6 +128,7 @@ export default class TicketEntry extends Component {
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button>
                                     </div>
                                 </div>
                             </div>

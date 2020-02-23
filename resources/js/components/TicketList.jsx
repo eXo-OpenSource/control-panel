@@ -12,6 +12,7 @@ export default class TicketList extends Component {
             showCreate: false,
             data: null,
             selectedTicket: null,
+            state: 'open',
         };
     }
 
@@ -42,6 +43,11 @@ export default class TicketList extends Component {
             <>
                 <div className="row mb-4">
                     <div className="col-md-12">
+                        <div className="btn-group" role="group" aria-label="Basic example">
+                            <button className={this.state.state === 'open' ? 'btn btn-secondary active' : 'btn btn-secondary'} type="button">Open</button>
+                            <button className="btn btn-secondary" type="button">Open / Closed</button>
+                            <button className="btn btn-secondary" type="button">Closed</button>
+                        </div>
                         <Link to="/tickets/create" className="btn btn-primary float-right">Ticket erstellen</Link>
                     </div>
                 </div>

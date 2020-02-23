@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
+    const TICKET_STATE_OPEN = 'Open';
+    const TICKET_STATE_CLOSED = 'Closed';
+
     use SoftDeletes;
     const DELETED_AT = 'DeletedAt';
     const UPDATED_AT = 'LastResponseAt';

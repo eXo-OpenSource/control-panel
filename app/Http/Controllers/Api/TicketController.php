@@ -17,7 +17,9 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::with('user', 'assignee', 'category', 'resolver')->get();
+        $tickets = Ticket::with('user', 'assignee', 'category', 'resolver')->where('State', '<>', Ticket::TICKET_STATE_CLOSED);
+
+        $tickets = $tickets->get();
 
         $response = [];
 
@@ -75,7 +77,7 @@ class TicketController extends Controller
         $ticket->UserId = auth()->user()->Id;
         $ticket->CategoryId = $request->get('category');
         $ticket->Title = $request->get('title');
-        $ticket->State = 'Open';
+        $ticket->State = Ticket::TICKET_STATE_OPEN;
         $ticket->save();
 
         $fields = $request->get('fields');
@@ -193,6 +195,10 @@ class TicketController extends Controller
                 $answer->MessageType = 0;
                 $answer->Message = $request->get('message');
                 $answer->save();
+                break;
+            case 'close':
+                $ticket->State = Ticket::TICKET_STATE_CLOSED;
+                $ticket->save();
                 break;
         }
     }
