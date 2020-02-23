@@ -18,12 +18,12 @@ export default class TicketList extends Component {
 
     async componentDidMount() {
         if(this.state.data === null) {
-            this.loadData();
+            this.loadData(this.state.state);
         }
     }
 
-    async loadData() {
-        const response = await axios.get('/api/tickets');
+    async loadData(state) {
+        const response = await axios.get('/api/tickets?state=' + state);
 
         try {
             this.setState({
@@ -32,6 +32,13 @@ export default class TicketList extends Component {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async changeState(state) {
+        this.setState({
+            state: state
+        });
+        this.loadData(state);
     }
 
     render() {
@@ -44,9 +51,9 @@ export default class TicketList extends Component {
                 <div className="row mb-4">
                     <div className="col-md-12">
                         <div className="btn-group" role="group" aria-label="Basic example">
-                            <button className={this.state.state === 'open' ? 'btn btn-secondary active' : 'btn btn-secondary'} type="button">Open</button>
-                            <button className="btn btn-secondary" type="button">Open / Closed</button>
-                            <button className="btn btn-secondary" type="button">Closed</button>
+                            <Button variant="secondary" className={this.state.state === 'open' ? 'active' : ''} onClick={(evt) => this.changeState('open')}>Offen</Button>
+                            <Button variant="secondary" className={this.state.state === 'both' ? 'active' : ''} onClick={(evt) => this.changeState('both')}>Offen / Geschlossen</Button>
+                            <Button variant="secondary" className={this.state.state === 'closed' ? 'active' : ''} onClick={(evt) => this.changeState('closed')}>Geschlossen</Button>
                         </div>
                         <Link to="/tickets/create" className="btn btn-primary float-right">Ticket erstellen</Link>
                     </div>

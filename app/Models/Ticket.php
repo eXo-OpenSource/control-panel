@@ -16,6 +16,7 @@ class Ticket extends Model
     const UPDATED_AT = 'LastResponseAt';
     const CREATED_AT = 'CreatedAt';
     protected $primaryKey = 'Id';
+    protected $dates = ['DeletedAt', 'LastResponseAt', 'CreatedAt', 'ResolvedAt'];
 
 
     public function user()
@@ -41,5 +42,10 @@ class Ticket extends Model
     public function answers()
     {
         return $this->hasMany(TicketAnswer::class, 'TicketId', 'Id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'ticket_users', 'TicketId', 'UserId')->withPivot('JoinedAt', 'LeftAt');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketAnswer;
 use App\Models\TicketCategory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -17,7 +18,26 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::with('user', 'assignee', 'category', 'resolver')->where('State', '<>', Ticket::TICKET_STATE_CLOSED);
+        $state = request()->get('state');
+        if(!in_array($state, ['open', 'both', 'closed'])) {
+            $state = 'open';
+        }
+
+        $tickets = auth()->user()->tickets()->with('user', 'assignee', 'category', 'resolver');
+
+        if(auth()->user()->Rank >= 1) {
+            $tickets = Ticket::with('user', 'assignee', 'category', 'resolver');
+        }
+
+        switch($state)
+        {
+            case 'open':
+                $tickets->where('State', Ticket::TICKET_STATE_OPEN);
+                break;
+            case 'closed':
+                $tickets->where('State', Ticket::TICKET_STATE_CLOSED);
+                break;
+        }
 
         $tickets = $tickets->get();
 
@@ -34,10 +54,11 @@ class TicketController extends Controller
                 'Category' => $ticket->category->Title,
                 'Title' => $ticket->Title,
                 'State' => $ticket->State,
+                'StateText' => $ticket->State === Ticket::TICKET_STATE_OPEN ? 'Offen' : 'Geschlossen',
                 'ResolvedBy' => $ticket->ResolvedBy,
-                'LastResponseAt' => $ticket->LastResponseAt,
-                'CreatedAt' => $ticket->CreatedAt,
-                'ResolvedAt' => $ticket->ResolvedAt,
+                'LastResponseAt' => $ticket->LastResponseAt->format('d.m.Y H:i:s'),
+                'CreatedAt' => $ticket->CreatedAt->format('d.m.Y H:i:s'),
+                'ResolvedAt' => $ticket->ResolvedAt ? $ticket->ResolvedAt->format('d.m.Y H:i:s') : null,
             ];
 
             if($ticket->assignee) {
@@ -79,6 +100,8 @@ class TicketController extends Controller
         $ticket->Title = $request->get('title');
         $ticket->State = Ticket::TICKET_STATE_OPEN;
         $ticket->save();
+
+        $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon()]);
 
         $fields = $request->get('fields');
 
@@ -123,6 +146,8 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
+        abort_unless(auth()->user()->can('show', $ticket), 403);
+
         $entry = [
             'Id' => $ticket->Id,
             'UserId' => $ticket->UserId,
@@ -133,10 +158,11 @@ class TicketController extends Controller
             'Category' => $ticket->category->Title,
             'Title' => $ticket->Title,
             'State' => $ticket->State,
+            'StateText' => $ticket->State === Ticket::TICKET_STATE_OPEN ? 'Offen' : 'Geschlossen',
             'ResolvedBy' => $ticket->ResolvedBy,
-            'LastResponseAt' => $ticket->LastResponseAt,
-            'CreatedAt' => $ticket->CreatedAt,
-            'ResolvedAt' => $ticket->ResolvedAt,
+            'LastResponseAt' => $ticket->LastResponseAt->format('d.m.Y H:i:s'),
+            'CreatedAt' => $ticket->CreatedAt->format('d.m.Y H:i:s'),
+            'ResolvedAt' => $ticket->ResolvedAt ? $ticket->ResolvedAt->format('d.m.Y H:i:s') : null,
         ];
 
         if($ticket->assignee) {
@@ -145,6 +171,18 @@ class TicketController extends Controller
 
         if($ticket->resolver) {
             $entry['Resolver'] = $ticket->assignee->Name;
+        }
+
+        if($ticket->users) {
+            $entry['users'] = [];
+            foreach($ticket->users as $user) {
+                array_push($entry['users'], [
+                    'UserId' => $user->Id,
+                    'Name' => $user->Name,
+                    'JoinedAt' => (new Carbon($user->pivot->JoinedAt))->format('d.m.Y H:i:s'),
+                    'LeftAt' => $user->pivot->LeftAt ? (new Carbon($user->pivot->LeftAt))->format('d.m.Y H:i:s') : null,
+                ]);
+            }
         }
 
         $entry['answers'] = [];
@@ -157,7 +195,7 @@ class TicketController extends Controller
                 'User' => $answer->user->Name,
                 'MessageType' => $answer->MessageType,
                 'Message' => $answer->Message,
-                'CreatedAt' => $answer->CreatedAt,
+                'CreatedAt' => $answer->CreatedAt->format('d.m.Y H:i:s'),
             ]);
         }
 
@@ -184,11 +222,16 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        abort_unless(auth()->user()->can('update', $ticket), 403);
+
         $type = $request->get('type');
 
         switch($type)
         {
             case 'addMessage':
+                if($ticket->State === Ticket::TICKET_STATE_CLOSED) {
+                    return;
+                }
                 $answer = new TicketAnswer();
                 $answer->TicketId = $ticket->Id;
                 $answer->UserId = auth()->user()->Id;
@@ -199,6 +242,13 @@ class TicketController extends Controller
             case 'close':
                 $ticket->State = Ticket::TICKET_STATE_CLOSED;
                 $ticket->save();
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = auth()->user()->Id;
+                $answer->MessageType = 2;
+                $answer->Message = 'Ticket wurde geschlossen';
+                $answer->save();
                 break;
         }
     }

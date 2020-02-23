@@ -21,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Texture'    => \App\Policies\TexturePolicy::class,
         'App\Models\User'       => \App\Policies\UserPolicy::class,
         'App\Models\Vehicle'    => \App\Policies\VehiclePolicy::class,
+        'App\Models\Ticket'     => \App\Policies\TicketPolicy::class,
     ];
 
     /**

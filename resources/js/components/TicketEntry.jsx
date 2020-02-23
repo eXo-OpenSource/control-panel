@@ -70,6 +70,26 @@ export default class TicketEntry extends Component {
             return <div className="text-center"><Spinner animation="border"/></div>;
         }
 
+        let closeButton = <></>;
+        let answer = <></>;
+
+
+        if(this.state.data.State === 'Open') {
+            closeButton = <Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button>;
+            answer = (
+                <Form>
+                    <Form.Group>
+                        <Form.Label>Nachricht</Form.Label>
+                        <InputGroup>
+                            <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
+                        </InputGroup>
+                    </Form.Group>
+
+                    <Button onClick={this.send.bind(this)} className="float-right">Senden</Button>
+                </Form>
+            );
+        }
+
         return (
             <>
                 <div className="row mb-4">
@@ -97,16 +117,7 @@ export default class TicketEntry extends Component {
                                                 );
                                             })}
                                         </div>
-                                        <Form>
-                                            <Form.Group>
-                                                <Form.Label>Nachricht</Form.Label>
-                                                <InputGroup>
-                                                    <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
-                                                </InputGroup>
-                                            </Form.Group>
-
-                                            <Button onClick={this.send.bind(this)} className="float-right">Senden</Button>
-                                        </Form>
+                                        {answer}
                                     </div>
                                 </div>
                             </div>
@@ -120,15 +131,21 @@ export default class TicketEntry extends Component {
                                             <tbody>
                                             <tr>
                                                 <td>Benutzer</td>
-                                                <td>{this.state.data.User}</td>
+                                                <td>
+                                                    {this.state.data.users.map((user, i) => {
+                                                        return (
+                                                            <p key={user.UserId} style={user.LeftAt !== null ? {'text-decoration': 'line-through'} : {}}>{user.Name}</p>
+                                                        );
+                                                    })}
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Status</td>
-                                                <td>{this.state.data.State}</td>
+                                                <td>{this.state.data.StateText}</td>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button>
+                                        {closeButton}
                                     </div>
                                 </div>
                             </div>

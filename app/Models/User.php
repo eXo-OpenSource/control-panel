@@ -169,4 +169,9 @@ class User extends Authenticatable
     {
         return route('users.show', $this->Id);
     }
+
+    public function tickets()
+    {
+        return $this->belongsToMany(Ticket::class, 'ticket_users', 'UserId', 'TicketId')->withPivot('JoinedAt', 'LeftAt');
+    }
 }

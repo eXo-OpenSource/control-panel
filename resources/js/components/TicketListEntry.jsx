@@ -20,7 +20,7 @@ export default class TicketListEntry extends Component {
                 <td>{this.props.ticket.User}</td>
                 <td>{this.props.ticket.Category}</td>
                 <td>{this.props.ticket.Title}</td>
-                <td>{this.props.ticket.State}</td>
+                <td>{this.props.ticket.StateText}</td>
                 <td>{this.props.ticket.CreatedAt}</td>
                 <td>
                     <Link to={'/tickets/' + this.props.ticket.Id} className="btn btn-primary btn-sm">Details</Link>
