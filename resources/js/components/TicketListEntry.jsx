@@ -2,12 +2,14 @@ import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default class TicketListEntry extends Component {
     constructor() {
         super();
 
         this.showEntry = () => {
+
             this.props.open(this.props.ticket);
         };
     }
@@ -21,9 +23,7 @@ export default class TicketListEntry extends Component {
                 <td>{this.props.ticket.State}</td>
                 <td>{this.props.ticket.CreatedAt}</td>
                 <td>
-                    <Button size="sm" variant="primary" onClick={this.showEntry}>
-                        Details
-                    </Button>
+                    <Link to={'/tickets/' + this.props.ticket.Id} className="btn btn-primary btn-sm">Details</Link>
                 </td>
             </tr>
         );

@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
+import {Link, withRouter} from "react-router-dom";
 
-export default class TicketCreate extends Component {
+class TicketCreate extends Component {
     constructor() {
         super();
         this.state = {
@@ -31,7 +32,7 @@ export default class TicketCreate extends Component {
                 fields: this.state.fields,
             });
 
-            this.props.back(true);
+            this.props.history.push('/tickets')
         } catch(error) {
             console.log(error);
         }
@@ -97,45 +98,57 @@ export default class TicketCreate extends Component {
 
         return (
             <>
-                <div className="card">
-                    <div className="card-header">
-                        Ticket erstellen
+                <div className="row mb-4">
+                    <div className="col-md-12">
+                        <Link to="/tickets" className="btn btn-primary float-right">Zurück</Link>
                     </div>
-                    <div className="card-body">
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>Betreff</Form.Label>
-                                <InputGroup>
-                                    <Form.Control name="title" type="text" placeholder="Betreff" onChange={this.onChange.bind(this)} />
-                                </InputGroup>
-                            </Form.Group>
+                </div>
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="card">
+                            <div className="card-header">
+                                Ticket erstellen
+                            </div>
+                            <div className="card-body">
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Label>Betreff</Form.Label>
+                                        <InputGroup>
+                                            <Form.Control name="title" type="text" placeholder="Betreff" onChange={this.onChange.bind(this)} />
+                                        </InputGroup>
+                                    </Form.Group>
 
-                            <Form.Group>
-                                <Form.Label>Kategorie</Form.Label>
-                                <InputGroup>
-                                    <Form.Control as="select" name="category" onChange={this.onChangeCategory.bind(this)}>
-                                        <option>(Bitte auswählen)</option>
-                                        {this.state.categories.map((category, i) => {
-                                            return <option key={category.Id} value={category.Id}>{category.Title}</option>;
-                                        })}
-                                    </Form.Control>
-                                </InputGroup>
-                            </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label>Kategorie</Form.Label>
+                                        <InputGroup>
+                                            <Form.Control as="select" name="category" onChange={this.onChangeCategory.bind(this)}>
+                                                <option>(Bitte auswählen)</option>
+                                                {this.state.categories.map((category, i) => {
+                                                    return <option key={category.Id} value={category.Id}>{category.Title}</option>;
+                                                })}
+                                            </Form.Control>
+                                        </InputGroup>
+                                    </Form.Group>
 
-                            {categoryFields}
+                                    {categoryFields}
 
-                            <Form.Group>
-                                <Form.Label>Nachricht</Form.Label>
-                                <InputGroup>
-                                    <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" onChange={this.onChange.bind(this)} />
-                                </InputGroup>
-                            </Form.Group>
+                                    <Form.Group>
+                                        <Form.Label>Nachricht</Form.Label>
+                                        <InputGroup>
+                                            <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" onChange={this.onChange.bind(this)} />
+                                        </InputGroup>
+                                    </Form.Group>
 
-                            <Button onClick={this.send.bind(this)} className="float-right">Erstellen</Button>
-                        </Form>
+                                    <Button onClick={this.send.bind(this)} className="float-right">Erstellen</Button>
+                                </Form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </>
         );
     }
 }
+
+
+export default withRouter(TicketCreate);
