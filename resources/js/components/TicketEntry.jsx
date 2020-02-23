@@ -114,7 +114,9 @@ export default class TicketEntry extends Component {
                                                             <div className="message">
                                                                 <div className="message-center">
                                                                     <div className="message-content">
-                                                                        <pre>{answer.Message}</pre>
+                                                                        {answer.Message.split('\n').map((value, index) => {
+                                                                            return <p key={index}>{value}</p>;
+                                                                        })}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -127,8 +129,10 @@ export default class TicketEntry extends Component {
                                                         <div className="message">
                                                             <div className={answer.IsMyMessage ? 'message-right' : 'message-left'}>
                                                                 <div className="message-content">
-                                                                    <p><a href={'/users/' + answer.UserId}>{answer.User}</a></p>
-                                                                    <pre>{answer.Message}</pre>
+                                                                    <p className="message-user"><a href={'/users/' + answer.UserId}>{answer.User}</a></p>
+                                                                    {answer.Message.split('\n').map((value, index) => {
+                                                                        return <p key={index}>{value}</p>;
+                                                                    })}
                                                                 </div>
                                                                 <p className="time">{answer.CreatedAt}</p>
                                                             </div>

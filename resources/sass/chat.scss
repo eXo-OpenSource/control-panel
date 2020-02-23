@@ -18,6 +18,10 @@
                 border-radius: 5px;
                 padding: 10px;
 
+                p {
+                    margin: 0;
+                }
+
                 pre {
                     font-family: -apple-system,
                     BlinkMacSystemFont,
@@ -33,6 +37,11 @@
                     Noto Color Emoji;
                     font-size: 0.875rem;
                     color: #e1e1e1;
+                }
+
+                .message-user {
+                    margin-top: 0;
+                    margin-bottom: 1rem;
                 }
             }
 
