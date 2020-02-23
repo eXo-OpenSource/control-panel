@@ -15,6 +15,6 @@ class TicketCategoryController extends Controller
      */
     public function index()
     {
-        return TicketCategory::all();
+        return TicketCategory::with('fields')->get();
     }
 }

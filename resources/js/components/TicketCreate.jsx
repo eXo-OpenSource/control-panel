@@ -12,6 +12,7 @@ export default class TicketCreate extends Component {
             title: '',
             category: '',
             message: '',
+            fields: {},
         };
     }
 
@@ -27,6 +28,7 @@ export default class TicketCreate extends Component {
                 title: this.state.title,
                 category: this.state.category,
                 message: this.state.message,
+                fields: this.state.fields,
             });
 
             this.props.back(true);
@@ -51,9 +53,46 @@ export default class TicketCreate extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
+
+    async onChangeCategory(e) {
+        this.setState({ category: e.target.value, fields: {} });
+    }
+
+    async onChangeField(e) {
+        let fields = this.state.fields;
+        fields[e.target.name] = e.target.value;
+
+        this.setState({ fields: fields });
+    }
+
     render() {
         if(this.state.categories === null) {
             return <div className="text-center"><Spinner animation="border"/></div>;
+        }
+
+        let categoryFields = '';
+
+        if(this.state.category && this.state.category !== '') {
+            for(var index in this.state.categories) {
+                const category = this.state.categories[index];
+
+                if(parseInt(category.Id) !== parseInt(this.state.category)) {
+                    continue;
+                }
+
+                if(category && category.fields) {
+                    categoryFields = category.fields.map((field, i) => {
+                        return (
+                            <Form.Group key={field.Id}>
+                                <Form.Label>{field.Name}</Form.Label>
+                                <InputGroup>
+                                    <Form.Control name={'field' + field.Id} type={field.Type} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
+                                </InputGroup>
+                            </Form.Group>
+                        );
+                    })
+                }
+            }
         }
 
         return (
@@ -74,7 +113,7 @@ export default class TicketCreate extends Component {
                             <Form.Group>
                                 <Form.Label>Kategorie</Form.Label>
                                 <InputGroup>
-                                    <Form.Control as="select" name="category" onChange={this.onChange.bind(this)}>
+                                    <Form.Control as="select" name="category" onChange={this.onChangeCategory.bind(this)}>
                                         <option>(Bitte auswählen)</option>
                                         {this.state.categories.map((category, i) => {
                                             return <option key={category.Id} value={category.Id}>{category.Title}</option>;
@@ -82,6 +121,8 @@ export default class TicketCreate extends Component {
                                     </Form.Control>
                                 </InputGroup>
                             </Form.Group>
+
+                            {categoryFields}
 
                             <Form.Group>
                                 <Form.Label>Nachricht</Form.Label>
