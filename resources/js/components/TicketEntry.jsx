@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Modal, Spinner, Form } from 'react-bootstrap';
+import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 
@@ -9,11 +9,30 @@ export default class TicketEntry extends Component {
         super();
         this.state = {
             data: null,
+            message: '',
         };
     }
     async componentDidMount() {
         if(this.state.data === null) {
             this.loadData();
+        }
+    }
+
+    async onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    async send() {
+        try {
+            const response = await axios.put('/api/tickets/' + this.props.ticket.Id, {
+                type: 'addMessage',
+                message: this.state.message,
+            });
+
+            this.setState({message: ''});
+            this.loadData();
+        } catch(error) {
+            console.log(error);
         }
     }
 
@@ -48,12 +67,22 @@ export default class TicketEntry extends Component {
                                         return (
                                             <div key={answer.Id} className="message">
                                                 <p>{answer.User}</p>
-                                                <p>{answer.Message}</p>
+                                                <pre>{answer.Message}</pre>
                                                 <span className="time-right">{answer.CreatedAt}</span>
                                             </div>
                                         );
                                     })}
                                 </div>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Label>Nachricht</Form.Label>
+                                        <InputGroup>
+                                            <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
+                                        </InputGroup>
+                                    </Form.Group>
+
+                                    <Button onClick={this.send.bind(this)} className="float-right">Senden</Button>
+                                </Form>
                             </div>
                         </div>
                     </div>

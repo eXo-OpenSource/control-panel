@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketAnswer;
+use App\Models\TicketCategory;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -76,6 +77,33 @@ class TicketController extends Controller
         $ticket->Title = $request->get('title');
         $ticket->State = 'Open';
         $ticket->save();
+
+        $fields = $request->get('fields');
+
+        if(!empty($fields)) {
+            $category = TicketCategory::with('fields')->find($ticket->CategoryId);
+
+            $text = [];
+
+            foreach($fields as $key => $value) {
+                foreach($category->fields as $field) {
+                    if('field' . $field->Id === $key) {
+                        array_push($text, $field->Name . ': ' . $value);
+                        break;
+                    }
+                }
+            }
+
+            if(!empty($text)) {
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = auth()->user()->Id;
+                $answer->MessageType = 1;
+                $answer->Message = implode(chr(0x0A), $text);
+                $answer->save();
+            }
+        }
+
 
         $answer = new TicketAnswer();
         $answer->TicketId = $ticket->Id;
@@ -154,7 +182,19 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        //
+        $type = $request->get('type');
+
+        switch($type)
+        {
+            case 'addMessage':
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = auth()->user()->Id;
+                $answer->MessageType = 0;
+                $answer->Message = $request->get('message');
+                $answer->save();
+                break;
+        }
     }
 
     /**
