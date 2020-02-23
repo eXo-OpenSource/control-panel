@@ -108,11 +108,31 @@ export default class TicketEntry extends Component {
                                     <div className="card-body">
                                         <div className="chat">
                                             {this.state.data.answers.map((answer, i) => {
+                                                if(parseInt(answer.MessageType) === 1) {
+                                                    return (
+                                                        <div key={answer.Id} className="chat-message">
+                                                            <div className="message">
+                                                                <div className="message-center">
+                                                                    <div className="message-content">
+                                                                        <pre>{answer.Message}</pre>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                }
+
                                                 return (
-                                                    <div key={answer.Id} className="message">
-                                                        <p>{answer.User}</p>
-                                                        <pre>{answer.Message}</pre>
-                                                        <span className="time-right">{answer.CreatedAt}</span>
+                                                    <div key={answer.Id} className="chat-message">
+                                                        <div className="message">
+                                                            <div className={answer.IsMyMessage ? 'message-right' : 'message-left'}>
+                                                                <div className="message-content">
+                                                                    <p><a href={'/users/' + answer.UserId}>{answer.User}</a></p>
+                                                                    <pre>{answer.Message}</pre>
+                                                                </div>
+                                                                <p className="time">{answer.CreatedAt}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 );
                                             })}
@@ -134,7 +154,9 @@ export default class TicketEntry extends Component {
                                                 <td>
                                                     {this.state.data.users.map((user, i) => {
                                                         return (
-                                                            <p key={user.UserId} style={user.LeftAt !== null ? {'text-decoration': 'line-through'} : {}}>{user.Name}</p>
+                                                            <p key={user.UserId} style={user.LeftAt !== null ? {'textDecoration': 'line-through'} : {}}>
+                                                                <a href={'/users/' + user.UserId}>{user.Name}</a>
+                                                            </p>
                                                         );
                                                     })}
                                                 </td>

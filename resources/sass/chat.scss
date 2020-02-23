@@ -1,36 +1,88 @@
 .chat {
-    .message {
-        background-color: #20202a;
-        border-color: #181924;
-        border-radius: 5px;
-        padding: 10px;
-        margin: 10px 0;
+    .chat-message {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
 
-        &::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
+        .message {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
 
-        pre {
-            font-size: 0.875rem;
-            color: #e1e1e1;
+            .message-content {
+                background-color: #20202a;
+                border-color: #181924;
+                border-radius: 5px;
+                padding: 10px;
+
+                pre {
+                    font-family: -apple-system,
+                    BlinkMacSystemFont,
+                    Segoe UI,
+                    Roboto,
+                    Helvetica Neue,
+                    Arial,
+                    Noto Sans,
+                    sans-serif,
+                    Apple Color Emoji,
+                    Segoe UI Emoji,
+                    Segoe UI Symbol,
+                    Noto Color Emoji;
+                    font-size: 0.875rem;
+                    color: #e1e1e1;
+                }
+            }
+
+            .message-left {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-right: auto;
+
+                .time {
+                    margin-right: auto;
+                    color: #999;
+                }
+            }
+
+            .message-right {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-left: auto;
+
+                .time {
+                    margin-left: auto;
+                    color: #aaa;
+                }
+            }
+
+            .message-center {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                .message-content {
+                    margin-left: auto;
+                    margin-right: auto;
+
+                    pre {
+                        margin: 0;
+                    }
+                }
+            }
         }
     }
 
     .darker {
         border-color: #20202a;
         background-color: #181924;
-    }
-
-    .time-right {
-        float: right;
-        color: #aaa;
-    }
-
-    .time-left {
-        float: left;
-        color: #999;
     }
 }
 

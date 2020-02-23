@@ -195,6 +195,7 @@ class TicketController extends Controller
                 'User' => $answer->user->Name,
                 'MessageType' => $answer->MessageType,
                 'Message' => $answer->Message,
+                'IsMyMessage' => $answer->UserId === auth()->user()->Id,
                 'CreatedAt' => $answer->CreatedAt->format('d.m.Y H:i:s'),
             ]);
         }
@@ -246,7 +247,7 @@ class TicketController extends Controller
                 $answer = new TicketAnswer();
                 $answer->TicketId = $ticket->Id;
                 $answer->UserId = auth()->user()->Id;
-                $answer->MessageType = 2;
+                $answer->MessageType = 1;
                 $answer->Message = 'Ticket wurde geschlossen';
                 $answer->save();
                 break;
