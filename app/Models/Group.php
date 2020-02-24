@@ -55,7 +55,7 @@ class Group extends Model
 
     public function getMorphClass()
     {
-        return 4;
+        return 8;
     }
 
     public function getName()
