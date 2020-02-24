@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Ticket;
 use App\Models\TicketAnswer;
-use App\Models\TicketCategory;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\TicketCategory;
+use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
 {
@@ -226,6 +227,7 @@ class TicketController extends Controller
         abort_unless(auth()->user()->can('update', $ticket), 403);
 
         $type = $request->get('type');
+        $userId = auth()->user()->Id;
 
         switch($type)
         {
@@ -233,9 +235,20 @@ class TicketController extends Controller
                 if($ticket->State === Ticket::TICKET_STATE_CLOSED) {
                     return;
                 }
+                if (!$ticket->users->contains($userId)) {
+                    $ticket->users()->attach($userId, ['JoinedAt' => new Carbon()]);
+                    $ticket->save();
+
+                    $answer = new TicketAnswer();
+                    $answer->TicketId = $ticket->Id;
+                    $answer->UserId = $userId;
+                    $answer->MessageType = 1;
+                    $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
+                    $answer->save();
+                }
                 $answer = new TicketAnswer();
                 $answer->TicketId = $ticket->Id;
-                $answer->UserId = auth()->user()->Id;
+                $answer->UserId = $userId;
                 $answer->MessageType = 0;
                 $answer->Message = $request->get('message');
                 $answer->save();
@@ -246,9 +259,24 @@ class TicketController extends Controller
 
                 $answer = new TicketAnswer();
                 $answer->TicketId = $ticket->Id;
-                $answer->UserId = auth()->user()->Id;
+                $answer->UserId = $userId;
                 $answer->MessageType = 1;
                 $answer->Message = 'Ticket wurde geschlossen';
+                $answer->save();
+                break;
+            case 'addUser':
+                if ($ticket->users->contains($request->get('newUserId'))) {
+                    return;
+                }
+
+                $ticket->users()->attach($request->get('newUserId'), ['JoinedAt' => new Carbon()]);
+                $ticket->save();
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = $userId;
+                $answer->MessageType = 1;
+                $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", auth()->user()->Name, User::find($request->get('newUserId'))->Name);
                 $answer->save();
                 break;
         }

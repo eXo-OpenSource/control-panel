@@ -28,5 +28,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('vehicles', 'VehicleController')->only('show');
         Route::resource('tickets/categories', 'TicketCategoryController')->only('index');
         Route::resource('tickets', 'TicketController');
+        Route::post('users/search', 'User\UserSearchController@index')->name('user.search');
+
     });
 });

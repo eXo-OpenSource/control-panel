@@ -69,4 +69,9 @@ class UserPolicy
     {
         return false; // only for admins for now
     }
+
+    public function searchUser(User $authUser)
+    {
+        return true;
+    }
 }

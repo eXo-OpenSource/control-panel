@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
+import SelectUserDialog from './SelectUserDialog';
 import {
     Link,
     useParams
@@ -15,12 +16,17 @@ export default class TicketEntry extends Component {
             data: null,
             message: '',
             ticketId: match.params.ticketId,
+            showAddUserModal: false
         };
     }
     async componentDidMount() {
         if(this.state.data === null) {
             this.loadData();
         }
+    }
+
+    async toggleAddUserModal() {
+        this.setState({showAddUserModal: !this.state.showAddUserModal});
     }
 
     async onChange(e) {
@@ -61,6 +67,19 @@ export default class TicketEntry extends Component {
                 data: response.data
             });
         } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async addUser(userId) {
+        try {
+            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
+                type: 'addUser',
+                newUserId: userId
+            });
+
+            this.loadData();
+        } catch(error) {
             console.log(error);
         }
     }
@@ -171,7 +190,9 @@ export default class TicketEntry extends Component {
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <Button onClick={this.toggleAddUserModal.bind(this)} variant="primary">Benutzer hinzufügen</Button>
                                         {closeButton}
+                                        <SelectUserDialog show={this.state.showAddUserModal} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
                                     </div>
                                 </div>
                             </div>
