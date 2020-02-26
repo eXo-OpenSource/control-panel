@@ -279,7 +279,23 @@ class TicketController extends Controller
                 $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", auth()->user()->Name, User::find($request->get('newUserId'))->Name);
                 $answer->save();
                 break;
+            case 'removeUser':
+                if (!$ticket->users->contains($request->get('removeUserId'))) {
+                    return;
+                }
+
+                $ticket->users()->updateExistingPivot($request->get('removeUserId'), ['LeftAt' => new Carbon()]);
+                $ticket->save();
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = $userId;
+                $answer->MessageType = 1;
+                $answer->Message = sprintf("%s hat %s aus dem Ticket entfernt!", auth()->user()->Name, User::find($request->get('removeUserId'))->Name);
+                $answer->save();
+                break;
         }
+
     }
 
     /**

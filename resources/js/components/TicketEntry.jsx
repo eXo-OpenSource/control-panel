@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
+import {Button, Modal, Spinner, Form, InputGroup, OverlayTrigger, Tooltip, Row, Col} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 import SelectUserDialog from './SelectUserDialog';
@@ -8,6 +8,7 @@ import {
     Link,
     useParams
 } from "react-router-dom";
+import ConfirmDialog from './ConfirmDialog';
 
 export default class TicketEntry extends Component {
     constructor({match}) {
@@ -16,7 +17,8 @@ export default class TicketEntry extends Component {
             data: null,
             message: '',
             ticketId: match.params.ticketId,
-            showAddUserModal: false
+            showAddUserDialog: false,
+            showRemoveUserDialog: false
         };
     }
     async componentDidMount() {
@@ -25,8 +27,12 @@ export default class TicketEntry extends Component {
         }
     }
 
-    async toggleAddUserModal() {
-        this.setState({showAddUserModal: !this.state.showAddUserModal});
+    async toggleAddUserDialog() {
+        this.setState({showAddUserDialog: !this.state.showAddUserDialog});
+    }
+
+    async toggleRemoveUserDialog(userId) {
+        this.setState({showRemoveUserDialog: !this.state.showRemoveUserDialog, removeUserId: userId});
     }
 
     async onChange(e) {
@@ -81,6 +87,20 @@ export default class TicketEntry extends Component {
             this.loadData();
         } catch(error) {
             console.log(error);
+        }
+    }
+
+    async removeUser() {
+
+        try {
+            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
+                type: 'removeUser',
+                removeUserId: this.state.removeUserId
+            });
+
+            this.loadData();
+        } catch(error) {
+            console.log(error.response);
         }
     }
 
@@ -177,11 +197,36 @@ export default class TicketEntry extends Component {
                                                 <td>
                                                     {this.state.data.users.map((user, i) => {
                                                         return (
-                                                            <p key={user.UserId} style={user.LeftAt !== null ? {'textDecoration': 'line-through'} : {}}>
-                                                                <a href={'/users/' + user.UserId}>{user.Name}</a>
-                                                            </p>
+                                                            <div key={user.UserId} style={user.LeftAt !== null ? {'textDecoration': 'line-through'} : {}}>
+                                                                <Row>
+                                                                    <Col xs='8'>
+                                                                        <a href={'/users/' + user.UserId}>{user.Name}</a>
+                                                                    </Col>
+                                                                    <Col xs='2'>
+                                                                        <OverlayTrigger
+                                                                            placement="top"
+                                                                            overlay={
+                                                                                <Tooltip id='tooltip-info'>
+                                                                                    <strong>Beigetreten:</strong><br /> {user.JoinedAt}
+                                                                                    {user.LeftAt !== null ? <span>
+                                                                                        <strong>Verlassen:</strong><br /> {user.LeftAt}
+                                                                                    </span> : null}
+                                                                                </Tooltip>
+                                                                            }
+                                                                        >
+                                                                        <Button variant="link" style={{color: "white"}} size="sm"><i className="fas fa-info-circle"></i></Button>
+                                                                        </OverlayTrigger>
+                                                                    </Col>
+                                                                    <Col xs='2'>
+                                                                        {(user.UserId != this.state.data.UserId && user.LeftAt == null) ?
+                                                                            <Button onClick={this.toggleRemoveUserDialog.bind(this, user.UserId)} variant="link" style={{color: "#d16767"}} size="sm"><i className="fas fa-times-circle"></i></Button>
+                                                                        :null}
+                                                                    </Col>
+                                                                </Row>
+                                                            </div>
                                                         );
                                                     })}
+                                                    <Button onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -190,9 +235,17 @@ export default class TicketEntry extends Component {
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <Button onClick={this.toggleAddUserModal.bind(this)} variant="primary">Benutzer hinzufügen</Button>
                                         {closeButton}
-                                        <SelectUserDialog show={this.state.showAddUserModal} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
+                                        <SelectUserDialog show={this.state.showAddUserDialog} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
+                                        <ConfirmDialog
+                                            show={this.state.showRemoveUserDialog}
+                                            buttonText="entfernen"
+                                            buttonVariant="danger"
+                                            title="Benutzer entfernen"
+                                            text="Möchtest du den Benutzer entfernen?"
+                                            onConfirm={this.removeUser.bind(this)}
+                                        />
+
                                     </div>
                                 </div>
                             </div>
