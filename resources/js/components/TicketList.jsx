@@ -73,6 +73,7 @@ export default class TicketList extends Component {
                                         <th>Titel</th>
                                         <th>Status</th>
                                         <th>Datum</th>
+                                        <th>Antworten</th>
                                         <th></th>
                                     </tr>
                                     </thead>
