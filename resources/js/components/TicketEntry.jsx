@@ -209,7 +209,7 @@ export default class TicketEntry extends Component {
                                                                                 <Tooltip id='tooltip-info'>
                                                                                     <strong>Beigetreten:</strong><br /> {user.JoinedAt}
                                                                                     {user.LeftAt !== null ? <span>
-                                                                                        <strong>Verlassen:</strong><br /> {user.LeftAt}
+                                                                                    <br /><strong>Verlassen:</strong><br /> {user.LeftAt}
                                                                                     </span> : null}
                                                                                 </Tooltip>
                                                                             }
