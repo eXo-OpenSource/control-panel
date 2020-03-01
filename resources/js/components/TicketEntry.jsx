@@ -9,6 +9,7 @@ import {
     useParams
 } from "react-router-dom";
 import ConfirmDialog from './ConfirmDialog';
+import AddUserDialog from "./AddUserDialog";
 
 export default class TicketEntry extends Component {
     constructor({match}) {
@@ -226,7 +227,7 @@ export default class TicketEntry extends Component {
                                                             </div>
                                                         );
                                                     })}
-                                                    <Button onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button>
+                                                    <AddUserDialog />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -236,7 +237,6 @@ export default class TicketEntry extends Component {
                                             </tbody>
                                         </table>
                                         {closeButton}
-                                        <SelectUserDialog show={this.state.showAddUserDialog} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
                                         <ConfirmDialog
                                             show={this.state.showRemoveUserDialog}
                                             buttonText="entfernen"

@@ -1,0 +1,26 @@
+.react-select-container {
+    .react-select__control {
+        color: #e1e1e1;
+        background-color: rgba(255,255,255,.1);
+        border-color: rgba(255,255,255,.15);
+
+        .react-select__value-container {
+            .react-select__single-value {
+                color: #e1e1e1;
+            }
+
+            .react-select__input {
+                color: #e1e1e1 !important;
+            }
+        }
+    }
+
+    .react-select__menu {
+        background-color: rgba(255,255,255,.1);
+        border-color: rgba(255,255,255,.15);
+        .react-select__menu-list {
+            .react-select__option {
+            }
+        }
+    }
+}
