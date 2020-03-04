@@ -9,8 +9,8 @@
                         {{ __('Spielzeit-Statistik') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-hover table-outline mb-0">
-                            <thead class="thead-light">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
                             <tr>
                                 <th>#</th>
                                 <th scope="col">{{ __('Name') }}</th>
@@ -43,8 +43,8 @@
                         {{ __('Bankgeld-Statistik') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-hover table-outline mb-0">
-                            <thead class="thead-light">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
                             <tr>
                                 <th>#</th>
                                 <th scope="col">{{ __('Name') }}</th>
@@ -79,8 +79,8 @@
                         {{ __('Fische gefangen') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-hover table-outline mb-0">
-                            <thead class="thead-light">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
                             <tr>
                                 <th>#</th>
                                 <th scope="col">{{ __('Name') }}</th>
@@ -113,8 +113,8 @@
                         {{ __('Kilometer gefahren') }}
                     </div>
                     <div class="card-body">
-                        <table class="table table-sm table-hover table-outline mb-0">
-                            <thead class="thead-light">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
                             <tr>
                                 <th>#</th>
                                 <th scope="col">{{ __('Name') }}</th>

@@ -6,6 +6,12 @@ $fa-font-path: '/fonts/font-awesome';
 
 @import '../css/style.css';
 
-//@import 'header';
+@import 'header';
 @import 'modal';
 @import 'chat';
+
+.c-dark-theme .table {
+    .table-active > td {
+        color: #e1e1e1;
+    }
+}
