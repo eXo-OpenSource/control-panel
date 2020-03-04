@@ -126,14 +126,14 @@
                                 <tr @if(auth()->user() && $row->user && auth()->user()->Id == $row->user->Id)class="table-active"@endif>
                                     <td>{{$key+1}}.</td>
                                     <td>@if($row->user && $row->user->Id != -1)<a href="{{ route('users.show', [$row->user->Id]) }}">{{ $row->user->Name }}@else{{ $row->user ? $row->user->Name : "unbekannt" }}@endif</a></td>
-                                    <td>{{number_format($row->Driven, 0, ',', '.')}} km</td>
+                                    <td>{{number_format($row->Driven / 1000, 0, ',', '.')}} km</td>
                                 </tr>
                             @endforeach
                             @if($drivenMyPosition && $drivenMyPosition > 50)
                                 <tr class="table-active">
                                     <td>{{ $drivenMyPosition }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
-                                    <td>{{ number_format(auth()->user()->character->stats->Driven, 0, ',', '.') }} km</td>
+                                    <td>{{ number_format(auth()->user()->character->stats->Driven / 1000, 0, ',', '.') }} km</td>
                                 </tr>
                             @endif
                             </tbody>
