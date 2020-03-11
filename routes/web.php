@@ -62,9 +62,10 @@ Route::middleware('auth')->group(function () {
         Route::get('users/multiaccounts', 'MultiaccountController@index')->name('admin.user.multiaccounts');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');
         Route::get('textures', 'TextureController@index')->name('admin.texture');
-        Route::get('test-server', 'TestServerController@show')->name('admin.test-server.show');
-        Route::get('test-server/edit/password', 'TestServerController@editPassword')->name('admin.test-server.editPassword');
-        Route::patch('test-server/edit/password', 'TestServerController@updatePassword')->name('admin.test-server.updatePassword');
+        Route::get('server', 'ServerController@show')->name('admin.server.show');
+        Route::post('server', 'ServerController@action')->name('admin.server.action');
+        Route::get('server/edit/password', 'ServerController@editPassword')->name('admin.server.editPassword');
+        Route::patch('server/edit/password', 'ServerController@updatePassword')->name('admin.server.updatePassword');
     });
 });
 

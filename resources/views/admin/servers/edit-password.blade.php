@@ -10,7 +10,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form action="{{ route('admin.test-server.updatePassword') }}" method="POST">
+                        <form action="{{ route('admin.server.updatePassword') }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">

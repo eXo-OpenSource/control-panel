@@ -62,7 +62,7 @@
                             <a class="c-sidebar-nav-link" href="{{ route('admin.vehicles.index') }}"><span class="c-sidebar-nav-icon"></span>Fahrzeuge</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.test-server.show') }}"><span class="c-sidebar-nav-icon"></span>Testserver</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon"></span>Server</a>
                         </li>
                     </ul>
                 </li>
