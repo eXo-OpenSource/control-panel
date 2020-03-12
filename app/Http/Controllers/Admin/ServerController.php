@@ -18,8 +18,13 @@ class ServerController extends Controller
 
         $setting = SettingTest::query()->where('Index', 'ServerPassword')->first();
 
-        $logs = (new MTAWorkerService('prod'))->logs();
-        $testLogs = (new MTAWorkerService('test'))->logs();
+        $logs = null;
+        $testLogs = null;
+
+        if(auth()->user()->Rank >= 5) {
+            $logs = (new MTAWorkerService('prod'))->logs();
+            $testLogs = (new MTAWorkerService('test'))->logs();
+        }
 
         return view('admin.servers.show', compact('setting', 'logs', 'testLogs'));
     }

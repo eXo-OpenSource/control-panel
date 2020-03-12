@@ -78,11 +78,13 @@
                                     <div class="card-body">
                                         <div class="input-group">
                                             <input type="text" name="password" id="password" class="form-control" readonly value="{{ $setting->Value }}" aria-label="Testserver Passwort">
-                                            @if(auth()->user()->Rank >= 5)
-                                                <div class="input-group-append">
+
+                                            <div class="input-group-append">
+                                                @if(auth()->user()->Rank >= 5)
                                                     <a href="{{ route('admin.server.editPassword') }}" class="btn btn-primary">Ändern</a>
-                                                </div>
-                                            @endif
+                                                @endif
+                                                <a href="{{ 'mtasa://' . auth()->user()->Name . ':' . $setting->Value . '@' . env('WORKER_TEST_HOST') . ':22005' }}" class="btn btn-success">Join</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
