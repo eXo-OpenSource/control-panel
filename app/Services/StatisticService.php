@@ -461,7 +461,7 @@ class StatisticService
             if($point['time'] < $lastTime) {
                 break;
             }
-            array_push($result['labels'], $point['time']);
+            array_push($result['labels'], (new Carbon($point['time']))->format('Y-m-d H:i'));
 
             $state = 0;
             $evil = 0;
@@ -490,6 +490,7 @@ class StatisticService
                 'pointBorderColor' => 'rgba(0, 200, 255, 1)',
                 'pointBackgroundColor' => 'rgba(0, 200, 255, 1)',
                 'pointHoverBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                'pointRadius' => 2.5,
                 'data' => $factionsState,
             ],
             [
@@ -499,6 +500,7 @@ class StatisticService
                 'pointBorderColor' => 'rgba(140, 20, 0, 1)',
                 'pointBackgroundColor' => 'rgba(140, 20, 0, 1)',
                 'pointHoverBackgroundColor' => 'rgba(140, 20, 0, 1)',
+                'pointRadius' => 2.5,
                 'data' => $factionsEvil,
             ]
         ];
@@ -509,10 +511,33 @@ class StatisticService
             'options' => [
                 'maintainAspectRatio' => false,
                 'scales' => [
+                    'xAxes' => [
+                        [
+                            'type' => 'time',
+                            'time' => [
+                                'parser' => 'YYYY-MM-DD HH:mm',
+                                'minUnit' => 'minute',
+                                'unit' => 'minute',
+                                'stepSize' => 30,
+                                'displayFormats' => [
+                                    'minute' => 'H:mm',
+                                    'hour' => 'H'
+                                ]
+                            ],
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Uhrzeit'
+                            ]
+                        ]
+                    ],
                     'yAxes' => [
                         [
                             'ticks' => [
                                 'min' => 0,
+                            ],
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Spieler online'
                             ]
                         ]
                     ]
