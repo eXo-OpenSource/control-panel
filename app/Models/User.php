@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\WhoIsOnlineController;
+use App\Models\Logs\Chat;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
@@ -106,6 +107,11 @@ class User extends Authenticatable
     public function money()
     {
         return BankAccountTransaction::query()->where('FromType', 1)->where('FromId', $this->Id)->orWhere('ToType', 1)->where('ToId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
+    }
+
+    public function chat()
+    {
+        return $this->belongsToMany(Chat::class, 'ChatReceivers', 'Receiver', 'MessageId', 'Id', 'ID');
     }
 
     public function isBanned()

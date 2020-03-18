@@ -570,11 +570,11 @@ class StatisticService
         $result = self::getStateVsEvilOnline($from, $to);
 
         foreach($result['data']['datasets'][0]['data'] as $dataKey => $value) {
-            $result['data']['datasets'][0]['data'][$dataKey] = $value / $state;
+            $result['data']['datasets'][0]['data'][$dataKey] = round($value / $state, 1);
         }
 
         foreach($result['data']['datasets'][1]['data'] as $dataKey => $value) {
-            $result['data']['datasets'][1]['data'][$dataKey] = $value / $evil;
+            $result['data']['datasets'][1]['data'][$dataKey] = round($value / $evil, 1);
         }
 
         $result['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] = 'Spieler online/Anzahl Mitglieder';
@@ -600,12 +600,12 @@ class StatisticService
             ],
         ];
 
-        $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 7d GROUP BY time(2h) fill(linear)');
+        $playerCount = InfluxDB::query('select max("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 7d GROUP BY time(30m) fill(linear)');
         $points = $playerCount->getPoints();
 
         foreach($points as $point) {
             array_push($result['labels'], (new Carbon($point['time']))->format('Y-m-d H:i'));
-            array_push($result['datasets'][0]['data'], round($point['mean'], 1));
+            array_push($result['datasets'][0]['data'], round($point['max'], 1));
         }
 
         return [

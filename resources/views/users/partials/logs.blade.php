@@ -10,6 +10,7 @@
                 <li class="nav-item"><a class="nav-link @if($log === 'deaths'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'deaths']) }}">{{ __('Tode') }}</a></li>
                 <li class="nav-item"><a class="nav-link @if($log === 'heal'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'heal']) }}">{{ __('Heilung') }}</a></li>
                 <li class="nav-item"><a class="nav-link @if($log === 'damage'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'damage']) }}">{{ __('Schaden') }}</a></li>
+                <li class="nav-item"><a class="nav-link @if($log === 'chat'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'chat']) }}">{{ __('Chat') }}</a></li>
             @endif
             <li class="nav-item"><a class="nav-link @if($log === 'money'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'money']) }}">{{ __('Geld') }}</a></li>
         </ul>
@@ -30,6 +31,8 @@
                         @include('users.partials.logs.heal')
                     @elseif($log === 'damage')
                         @include('users.partials.logs.damage')
+                    @elseif($log === 'chat')
+                        @include('users.partials.logs.chat')
                     @endif
                 @endif
                 @if($log === 'money')
