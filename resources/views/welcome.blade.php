@@ -13,6 +13,12 @@
             <div class="col-xl-6 col-lg-12">
                 <react-chart data-chart="online:statevsevil" data-state="true" data-title="Aktivität Staatsfraktionen vs Mafien & Gangs"></react-chart>
             </div>
+            <div class="col-xl-6 col-lg-12">
+                <react-chart data-chart="online:statevsevilrelative" data-state="true" data-title="Relative Aktivität Staatsfraktionen vs Mafien & Gangs zu Anzahl Mitglieder"></react-chart>
+            </div>
+            <div class="col-xl-6 col-lg-12">
+                <react-chart data-chart="online:total" data-state="true" data-title="Spieler online"></react-chart>
+            </div>
         </div>
     </div>
 @endsection

@@ -103,9 +103,13 @@ class ChartController extends Controller
         {
             switch ($parts[1]) {
                 case 'total':
+                    return StatisticService::getTotalOnline($from, $to);
                     break;
                 case 'statevsevil':
                     return StatisticService::getStateVsEvilOnline($from, $to);
+                    break;
+                case 'statevsevilrelative':
+                    return StatisticService::getStateVsEvilRelativeOnline($from, $to);
                     break;
             }
         }

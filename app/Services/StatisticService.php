@@ -548,4 +548,107 @@ class StatisticService
             'status' => 'Success'
         ];
     }
+
+    public static function getStateVsEvilRelativeOnline(Carbon $from, Carbon $to)
+    {
+        $factions = Faction::all();
+
+        $state = 0;
+        $evil = 0;
+
+        foreach($factions as $faction) {
+            switch($faction->Type) {
+                case 'State':
+                    $state += $faction->membersCount();
+                    break;
+                case 'Evil':
+                    $evil += $faction->membersCount();
+                    break;
+            }
+        }
+
+        $result = self::getStateVsEvilOnline($from, $to);
+
+        foreach($result['data']['datasets'][0]['data'] as $dataKey => $value) {
+            $result['data']['datasets'][0]['data'][$dataKey] = $value / $state;
+        }
+
+        foreach($result['data']['datasets'][1]['data'] as $dataKey => $value) {
+            $result['data']['datasets'][1]['data'][$dataKey] = $value / $evil;
+        }
+
+        $result['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] = 'Spieler online/Anzahl Mitglieder';
+
+        return $result;
+    }
+
+    public static function getTotalOnline(Carbon $from, Carbon $to)
+    {
+        $result = [
+            'labels' => [],
+            'datasets' => [
+                [
+                    'label' => 'Spieler online',
+                    'borderColor' => 'rgba(0, 200, 255, 1)',
+                    'backgroundColor' => 'rgba(0, 200, 255, 0.2)',
+                    'pointBorderColor' => 'rgba(0, 200, 255, 1)',
+                    'pointBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                    'pointHoverBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                    'pointRadius' => 2.5,
+                    'data' => [],
+                ]
+            ],
+        ];
+
+        $playerCount = InfluxDB::query('select mean("loggedIn") from user_total WHERE ("branch" = \'release/production\') AND time > now() - 7d GROUP BY time(2h) fill(linear)');
+        $points = $playerCount->getPoints();
+
+        foreach($points as $point) {
+            array_push($result['labels'], (new Carbon($point['time']))->format('Y-m-d H:i'));
+            array_push($result['datasets'][0]['data'], round($point['mean'], 1));
+        }
+
+        return [
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'xAxes' => [
+                        [
+                            'type' => 'time',
+                            'time' => [
+                                'parser' => 'YYYY-MM-DD HH:mm',
+                                'minUnit' => 'hour',
+                                'unit' => 'hour',
+                                'stepSize' => 4,
+                                'displayFormats' => [
+                                    'minute' => 'H:mm',
+                                    'hour' => 'ddd H:mm'
+                                ]
+                            ],
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Datum'
+                            ]
+                        ]
+                    ],
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ],
+                            'scaleLabel' => [
+                                'display' => true,
+                                'labelString' => 'Spieler online'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'status' => 'Success'
+        ];
+    }
 }
