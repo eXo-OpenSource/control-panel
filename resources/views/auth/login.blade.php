@@ -37,7 +37,7 @@
                                             <i class="fas fa-lock"></i>
                                         </span>
                                         </div>
-                                        <input id="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" type="password" placeholder="{{ __('Passwort') }}" value="{{ old('username') }}" required>
+                                        <input id="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" type="password" placeholder="{{ __('Passwort') }}" value="{{ old('password') }}" required>
                                         @if ($errors->has('password'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('password') }}

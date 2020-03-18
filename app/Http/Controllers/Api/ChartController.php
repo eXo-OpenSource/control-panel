@@ -99,6 +99,16 @@ class ChartController extends Controller
                     break;
             }
         }
+        elseif($parts[0] === 'online')
+        {
+            switch ($parts[1]) {
+                case 'total':
+                    break;
+                case 'statevsevil':
+                    return StatisticService::getStateVsEvilOnline($from, $to);
+                    break;
+            }
+        }
 
         return ['status' => 'Error'];
     }

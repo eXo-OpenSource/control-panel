@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use TrayLabs\InfluxDB\Facades\InfluxDB;
 
 class StatisticService
 {
@@ -429,6 +430,96 @@ class StatisticService
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
             'tooltips' => 'money',
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getStateVsEvilOnline(Carbon $from, Carbon $to)
+    {
+        $result = [
+            'labels' => [],
+            'datasets' => [],
+        ];
+
+        $factions = Faction::all();
+        $factionType = [];
+
+        foreach($factions as $faction) {
+            $factionType[$faction->Name] = $faction->Type;
+        }
+
+
+        $playerFactionCount = InfluxDB::query('SELECT mean("total") FROM "user_faction" WHERE ("branch" = \'release/production\') AND time > now() - 1d GROUP BY time(15m), "name" fill(linear)');
+        $factionPoints = $playerFactionCount->getPoints();
+
+        $factionsState = [];
+        $factionsEvil = [];
+
+        $lastTime = $factionPoints[0]['time'];
+
+        foreach($factionPoints as $point) {
+            if($point['time'] < $lastTime) {
+                break;
+            }
+            array_push($result['labels'], $point['time']);
+
+            $state = 0;
+            $evil = 0;
+
+            foreach($factionPoints as $point2) {
+                if($point2['time'] === $point['time']) {
+                    $type = $factionType[$point2['name']];
+                    if($type === 'State') {
+                        $state += $point2['mean'];
+                    } elseif($type === 'Evil') {
+                        $evil += $point2['mean'];
+                    }
+                }
+            }
+            $lastTime = $point['time'];
+
+            array_push($factionsState, round($state, 1));
+            array_push($factionsEvil, round($evil, 1));
+        }
+
+        $result['datasets'] = [
+            [
+                'label' => 'Staatsfraktionen',
+                'borderColor' => 'rgba(0, 200, 255, 1)',
+                'backgroundColor' => 'rgba(0, 200, 255, 0.2)',
+                'pointBorderColor' => 'rgba(0, 200, 255, 1)',
+                'pointBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                'pointHoverBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                'data' => $factionsState,
+            ],
+            [
+                'label' => 'Gangs & Mafien',
+                'borderColor' => 'rgba(140, 20, 0, 1)',
+                'backgroundColor' => 'rgba(140, 20, 0, 0.2)',
+                'pointBorderColor' => 'rgba(140, 20, 0, 1)',
+                'pointBackgroundColor' => 'rgba(140, 20, 0, 1)',
+                'pointHoverBackgroundColor' => 'rgba(140, 20, 0, 1)',
+                'data' => $factionsEvil,
+            ]
+        ];
+
+        return [
+            'type' => 'line',
+            'data' => $result,
+            'options' => [
+                'maintainAspectRatio' => false,
+                'scales' => [
+                    'yAxes' => [
+                        [
+                            'ticks' => [
+                                'min' => 0,
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
             'status' => 'Success'
         ];
     }

@@ -61,7 +61,7 @@ export default class Chart extends Component {
     render() {
         if(this.state.status) {
             if(this.state.status !== 'Success') {
-                let message = <p>Der Zugriff auf die Daten wurden verweigert!</p>;
+                let message = <p>Der Zugriff auf die Daten wurde verweigert!</p>;
 
                 if(this.state.status === 'Error') {
                     message = <p>Die Daten konnten nicht geladen werden!</p>;
