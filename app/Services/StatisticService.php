@@ -38,6 +38,7 @@ class StatisticService
                 'pointBackgroundColor' => $faction->getColor(),
                 'pointHoverBackgroundColor' => $faction->getColor(),
                 'data' => [],
+                'fill' => false,
             ];
 
             foreach ($activity as $entry) {
@@ -65,6 +66,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -93,6 +102,7 @@ class StatisticService
                 'pointBackgroundColor' => $company->getColor(),
                 'pointHoverBackgroundColor' => $company->getColor(),
                 'data' => [],
+                'fill' => false,
             ];
 
             foreach ($activity as $entry) {
@@ -120,6 +130,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -180,6 +198,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -240,6 +266,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -288,6 +322,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -350,6 +392,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -492,6 +542,7 @@ class StatisticService
                 'pointHoverBackgroundColor' => 'rgba(0, 200, 255, 1)',
                 'pointRadius' => 2.5,
                 'data' => $factionsState,
+                'fill' => false,
             ],
             [
                 'label' => 'Gangs & Mafien',
@@ -502,6 +553,7 @@ class StatisticService
                 'pointHoverBackgroundColor' => 'rgba(140, 20, 0, 1)',
                 'pointRadius' => 2.5,
                 'data' => $factionsEvil,
+                'fill' => false,
             ]
         ];
 
@@ -541,6 +593,14 @@ class StatisticService
                             ]
                         ]
                     ]
+                ],
+                'hover' => [
+                    'mode' => 'nearest',
+                    'intersect' => true
+                ],
+                'tooltips' => [
+                    'mode' => 'index',
+                    'intersect' => false
                 ]
             ],
             'from' => $from->format('Y-m-d'),
@@ -570,11 +630,11 @@ class StatisticService
         $result = self::getStateVsEvilOnline($from, $to);
 
         foreach($result['data']['datasets'][0]['data'] as $dataKey => $value) {
-            $result['data']['datasets'][0]['data'][$dataKey] = round($value / $state, 1);
+            $result['data']['datasets'][0]['data'][$dataKey] = round($value / $state, 2);
         }
 
         foreach($result['data']['datasets'][1]['data'] as $dataKey => $value) {
-            $result['data']['datasets'][1]['data'][$dataKey] = round($value / $evil, 1);
+            $result['data']['datasets'][1]['data'][$dataKey] = round($value / $evil, 2);
         }
 
         $result['options']['scales']['yAxes'][0]['scaleLabel']['labelString'] = 'Spieler online/Anzahl Mitglieder';
