@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\WhoIsOnlineController;
+use App\Models\Logs\Advert;
 use App\Models\Logs\Chat;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
@@ -97,6 +98,11 @@ class User extends Authenticatable
     public function logins()
     {
         return $this->hasMany(Login::class, 'UserId', 'Id');
+    }
+
+    public function advert()
+    {
+        return $this->hasMany(Advert::class, 'UserId', 'Id');
     }
 
     public function damage()

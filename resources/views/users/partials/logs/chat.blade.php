@@ -12,7 +12,7 @@
         <th>{{ __('Gehört von') }}</th>
     </tr>
     @foreach($chat as $entry)
-        <tr>
+        <tr class="@if($entry->UserId !== $user->Id){{'tr-other'}}@endif">
             <td>{{ $entry->ID }}</td>
             <td>{{ $entry->Date }}</td>
             <td>

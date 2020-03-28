@@ -23,7 +23,7 @@
             </td>
             <td>{{ $entry->Type }}</td>
             <td>{{ $entry->Reason }}</td>
-            <td>{{ gmdate("H:i:s", $entry->Duration) }}</td>
+            <td>@if($entry->Duration === 0){{ '-' }}@else{{ $entry->Date->addSeconds($entry->Duration)->longAbsoluteDiffForHumans($entry->Date) }} - {{ $entry->Date->addSeconds($entry->Duration) }}@endif</td>
         </tr>
     @endforeach
 </table>

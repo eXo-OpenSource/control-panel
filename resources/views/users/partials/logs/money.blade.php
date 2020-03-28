@@ -13,7 +13,7 @@
         <th>{{ __('Unterkategorie') }}</th>
     </tr>
     @foreach($money as $entry)
-        <tr>
+        <tr class="@if($entry->ToType === 1 && $entry->ToId === $user->Id){{'tr-in'}}@else{{'tr-out'}}@endif">
             <td>{{ $entry->Id }}</td>
             <td>{{ $entry->Date }}</td>
             <td>
