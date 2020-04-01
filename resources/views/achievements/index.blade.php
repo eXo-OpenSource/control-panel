@@ -19,7 +19,7 @@
                             </thead>
                             <tbody>
                             @foreach($achievements as $key => $row)
-                                @if($row->achievement)
+                                @if($row->achievement && $row->achievement->hidden === 0)
                                 <tr>
                                     <td>{{ $row->achievement->name }}</td>
                                     <td>{{ $row->achievement->desc }}</td>
