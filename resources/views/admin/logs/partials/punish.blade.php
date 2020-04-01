@@ -23,7 +23,16 @@
             </td>
             <td>{{ $entry->Type }}</td>
             <td>{{ $entry->Reason }}</td>
-            <td>@if($entry->Duration === 0){{ '-' }}@else{{ $entry->Date->addSeconds($entry->Duration)->longAbsoluteDiffForHumans($entry->Date) }} - {{ $entry->Date->addSeconds($entry->Duration) }}@endif</td>
+            <td>
+                @if($entry->Duration === 0)
+                    {{ '-' }}
+                @else
+                    {{ $entry->Date->addSeconds($entry->Duration)->diffForHumans($entry->Date, 3) }}
+                    @if($entry->hasFixedEndDate())
+                        {{ '-' }}{{ $entry->Date->addSeconds($entry->Duration) }}
+                    @endif
+                @endif
+            </td>
         </tr>
     @endforeach
 </table>

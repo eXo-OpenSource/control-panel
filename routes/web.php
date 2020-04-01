@@ -23,6 +23,7 @@ Route::namespace('Auth')->prefix('auth')->group(function () {
 
 Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online');
 Route::get('statistics', 'StatisticsController@index')->name('statistics');
+Route::get('achievements', 'AchievementsController@index')->name('achievements');
 
 Route::resource('groups', 'GroupController')->only('index', 'show');
 Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');

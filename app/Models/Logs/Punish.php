@@ -23,4 +23,9 @@ class Punish extends Model
     {
         return $this->hasOne(User::class, 'Id', 'AdminId');
     }
+
+    public function hasFixedEndDate()
+    {
+        return $this->Type !== 'prison' && $this->Type !== 'unprison';
+    }
 }
