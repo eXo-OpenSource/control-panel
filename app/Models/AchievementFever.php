@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AchievementFever extends Model
 {
-    protected $table = 'AchievementFever';
+    protected $table = 'achievementFever';
     protected $primaryKey = 'Date';
 
     protected $dates = ['Date'];

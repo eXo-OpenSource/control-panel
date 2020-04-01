@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AchievementCache extends Model
 {
-    protected $table = 'AchievementCache';
+    protected $table = 'achievementCache';
     protected $primaryKey = 'AchievementId';
 
     public function achievement()
