@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\AchievementFever;
 use App\Models\Company;
 use App\Models\Faction;
 use App\Models\Group;
@@ -112,6 +113,74 @@ class ChartController extends Controller
                     return StatisticService::getStateVsEvilRelativeOnline($from, $to);
                     break;
             }
+        }
+        elseif($parts[0] === 'fever')
+        {
+            $result = [
+                'labels' => [],
+                'datasets' => [
+                    [
+                        'label' => 'Infizierte Spieler',
+                        'borderColor' => 'rgba(0, 200, 255, 1)',
+                        'backgroundColor' => 'rgba(0, 200, 255, 0.2)',
+                        'pointBorderColor' => 'rgba(0, 200, 255, 1)',
+                        'pointBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                        'pointHoverBackgroundColor' => 'rgba(0, 200, 255, 1)',
+                        'pointRadius' => 2.5,
+                        'data' => [],
+                    ]
+                ],
+            ];
+
+            $points = AchievementFever::whereDate('Date', '>=', Carbon::now()->subDay()->toDateString())->get();
+
+            foreach($points as $point) {
+                array_push($result['labels'], (new Carbon($point->getAttributes()['Date']))->format('Y-m-d H:i'));
+                array_push($result['datasets'][0]['data'], round($point->Value, 1));
+            }
+
+            return [
+                'type' => 'line',
+                'data' => $result,
+                'options' => [
+                    'maintainAspectRatio' => false,
+                    'scales' => [
+                        'xAxes' => [
+                            [
+                                'type' => 'time',
+                                'time' => [
+                                    'parser' => 'YYYY-MM-DD HH:mm',
+                                    'minUnit' => 'minute',
+                                    'unit' => 'minute',
+                                    'stepSize' => 30,
+                                    'displayFormats' => [
+                                        'minute' => 'H:mm',
+                                        'hour' => 'ddd H:mm'
+                                    ]
+                                ],
+                                'scaleLabel' => [
+                                    'display' => true,
+                                    'labelString' => 'Datum'
+                                ]
+                            ]
+                        ],
+                        'yAxes' => [
+                            [
+                                'ticks' => [
+                                    'min' => 0,
+                                ],
+                                'scaleLabel' => [
+                                    'display' => true,
+                                    'labelString' => 'Infizierte Spieler'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'from' => $from->format('Y-m-d'),
+                'to' => $to->format('Y-m-d'),
+                'status' => 'Success'
+            ];
         }
 
         return ['status' => 'Error'];
