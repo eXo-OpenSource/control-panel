@@ -10,20 +10,30 @@ $fa-font-path: '/fonts/font-awesome';
 @import 'modal';
 @import 'chat';
 
-.c-dark-theme .table {
-    .table-active > td {
-        color: #e1e1e1;
+.c-dark-theme {
+    .table {
+        .table-active > td {
+            color: #e1e1e1;
+        }
+
+        .tr-other {
+            background-color: #2E2F3B;
+        }
+
+        .tr-in {
+            background-color: #1c8000;
+        }
+
+        .tr-out {
+            background-color: #8e0000;
+        }
+
     }
 
-    .tr-other {
-        background-color: #2E2F3B;
-    }
-
-    .tr-in {
-        background-color: #1c8000;
-    }
-
-    .tr-out {
-        background-color: #8e0000;
+    select {
+        option {
+            background-color: #44454C;
+        }
     }
 }
+
