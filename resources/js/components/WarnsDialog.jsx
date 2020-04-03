@@ -37,9 +37,7 @@ export default class WarnsDialog extends Component {
 
         this.handleShow = () => {
             this.setState({ show: true });
-            if(this.state.data === null) {
-                this.loadData();
-            }
+            this.loadData();
         };
     }
 
