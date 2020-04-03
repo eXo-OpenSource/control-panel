@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
         Route::resource('users', 'UserController')->only('update');
-        Route::resource('users.warns', 'UserWarnController')->only('index');
+        Route::resource('users.warns', 'UserWarnController')->only('index', 'destroy', 'store');
     });
 
     Route::namespace('Api')->name('api.')->group(function () {
