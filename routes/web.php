@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
 
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
-    Route::resource('textures', 'TextureController');
+    Route::resource('textures', 'TextureController')->only(['index', 'create', 'store', 'destroy']);
     Route::resource('teamspeak', 'TeamspeakController');
     Route::get('/tickets/{path?}', [
         'uses' => 'TicketController@index',

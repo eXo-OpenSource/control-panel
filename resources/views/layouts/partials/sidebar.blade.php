@@ -36,13 +36,13 @@
                 <i class="c-sidebar-nav-icon fas fa-list-ol"></i>{{ __('Achievements') }}
             </a>
         </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('textures.index') }}">
+                <i class="c-sidebar-nav-icon fas fa-images"></i>{{ __('Texturen') }}
+            </a>
+        </li>
         @auth
             @if(auth()->user()->Rank >= 3)
-                <li class="c-sidebar-nav-item">
-                    <a class="c-sidebar-nav-link" href="{{ route('textures.index') }}">
-                        <i class="c-sidebar-nav-icon fas fa-images"></i>{{ __('Texturen') }}
-                    </a>
-                </li>
                 <li class="c-sidebar-nav-dropdown">
                     <a class="c-sidebar-nav-dropdown-toggle" href="#">
                         <i class="c-sidebar-nav-icon fas fa-toolbox"></i>{{ __('Admin') }}
