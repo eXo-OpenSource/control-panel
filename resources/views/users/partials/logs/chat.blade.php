@@ -1,6 +1,7 @@
 @php
     $chat = $user->chat()->with(['user'])->orderBy('Id', 'DESC')->simplePaginate(25);
 @endphp
+@section('title', __('Chat') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>

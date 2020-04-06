@@ -1,12 +1,12 @@
 @php
     $punish = $user->punish()->where('Type', 'nickchange')->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
+@section('title', __('Nickchanges') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm w-full table-responsive-sm">
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Datum') }}</th>
         <th>{{ __('User') }}</th>
-        <th>{{ __('Admin') }}</th>
         <th>{{ __('Änderung') }}</th>
     </tr>
     @foreach($punish as $entry)

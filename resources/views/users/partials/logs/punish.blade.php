@@ -1,6 +1,7 @@
 @php
     $punish = $user->punish()->where('Type', '<>', 'nickchange')->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
+@section('title', __('Strafen') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm w-full table-responsive-sm">
     <tr>
         <th>{{ __('Id') }}</th>

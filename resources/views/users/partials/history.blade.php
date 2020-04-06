@@ -1,3 +1,4 @@
+@section('title', __('Spielerakte') . ' - '. $user->Name)
 @can('history', $user)
     <div class="row">
         <div class="col-md-12">

@@ -1,6 +1,7 @@
 @php
     $heals = $user->heal()->with(['user'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
+@section('title', __('Heilung') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>

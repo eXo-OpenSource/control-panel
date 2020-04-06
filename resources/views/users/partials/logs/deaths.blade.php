@@ -1,6 +1,7 @@
 @php
     $deaths = $user->deaths()->with(['user'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
+@section('title', __('Tode') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>

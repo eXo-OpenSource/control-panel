@@ -49,3 +49,8 @@
         </div>
     </div>
 @endsection
+
+
+@if(!View::hasSection('title'))
+    @section('title', $user->Name)
+@endif

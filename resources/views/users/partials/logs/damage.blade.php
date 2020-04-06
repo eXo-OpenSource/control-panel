@@ -1,6 +1,7 @@
 @php
     $damage = $user->damage()->with(['user', 'target'])->orderBy('Id', 'DESC')->paginate(25);
 @endphp
+@section('title', __('Schaden') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-hover table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>

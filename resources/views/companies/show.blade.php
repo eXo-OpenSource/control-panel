@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $company->Name)
+
 @section('content')
     <div class="container-fluid">
         <h3>{{ $company->Name }}</h3>
