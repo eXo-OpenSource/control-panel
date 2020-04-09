@@ -38,7 +38,8 @@ class UserTeamspeakController extends Controller
     {
         $validatedData = $request->validate([
             'uniqueId' => 'required|unique:App\Models\TeamspeakIdentity,TeamspeakId',
-            'type' => 'required|in:1,2'
+            'type' => 'required|in:1,2',
+            'notice' => ''
         ]);
 
 
@@ -63,6 +64,7 @@ class UserTeamspeakController extends Controller
                 $teamspeak->AdminId = auth()->user()->Id;
                 $teamspeak->TeamspeakId = $validatedData['uniqueId'];
                 $teamspeak->TeamspeakDbId = intval($data->body[0]->cldbid);
+                $teamspeak->Notice = $validatedData['notice'];
                 $teamspeak->Type = intval($validatedData['type']);
                 $teamspeak->save();
 

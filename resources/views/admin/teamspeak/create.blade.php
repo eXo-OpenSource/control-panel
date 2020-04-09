@@ -29,6 +29,14 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="notice">{{ __('Notiz') }}</label>
+                                        <input type="text" id="notice" class="form-control{{ $errors->has('notice') ? ' is-invalid' : '' }}" placeholder="{{ __('Notiz') }}" name="notice" value="{{ old('notice') }}" >
+                                        @if ($errors->has('notice'))
+                                            <div class="invalid-feedback">{{ $errors->first('notice') }}</div>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group">
                                         <label>{{ __('Typ') }}</label>
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="radioUser" name="type" value="1" class="custom-control-input{{ $errors->has('type') ? ' is-invalid' : '' }}" @if(old('type') === '0'){{ 'checked' }}@endif>

@@ -23,6 +23,7 @@
                                     <th scope="col">{{ __('Type') }}</th>
                                     @if(auth()->user()->Rank >= 3)
                                         <th scope="col">{{ __('Admin') }}</th>
+                                        <th scope="col">{{ __('Notiz') }}</th>
                                     @endif
                                     <th scope="col">{{ __('Datum') }}</th>
                                 </tr>
@@ -34,6 +35,7 @@
                                         <td>@if($identity->Type === 1){{ 'Benutzer' }}@elseif($identity->Type === 2){{ 'Musikbot' }}@else{{ 'Unbekannt' }}@endif</td>
                                         @if(auth()->user()->Rank >= 3)
                                             <td>@if($identity->AdminId === null) {{ '-' }} @else @if($identity->admin)<a href="{{ route('users.show', [$identity->AdminId]) }}">{{ $identity->admin->Name }}</a>@else{{ 'Unknown' }} (ID: {{ $identity->AdminId }}) @endif @endif</td>
+                                            <td>{{ $identity->Notice }}</td>
                                         @endif
                                         <td>{{ $identity->CreatedAt->format('d.m.Y H:i:s') }}</td>
                                     </tr>
