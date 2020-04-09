@@ -63,7 +63,7 @@ class UserTeamspeakController extends Controller
                 $teamspeak->AdminId = auth()->user()->Id;
                 $teamspeak->TeamspeakId = $validatedData['uniqueId'];
                 $teamspeak->TeamspeakDbId = intval($data->body[0]->cldbid);
-                $teamspeak->Type = $validatedData['type'];
+                $teamspeak->Type = intval($validatedData['type']);
                 $teamspeak->save();
 
 
