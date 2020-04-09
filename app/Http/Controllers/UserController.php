@@ -42,7 +42,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(User $user, $page = '', $log = '')
     {
@@ -50,7 +50,7 @@ class UserController extends Controller
             $page = 'logs';
 
         abort_unless(auth()->user()->can('show', $user), 403);
-        abort_unless(array_search($page, ['', 'vehicles', 'history', 'logs']) !== false, 404);
+        abort_unless(array_search($page, ['', 'vehicles', 'history', 'logs', 'teamspeak']) !== false, 404);
         $banned = $user->isBanned();
         return view('users.show', compact('user', 'page', 'log', 'banned'));
     }

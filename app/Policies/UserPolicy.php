@@ -45,6 +45,11 @@ class UserPolicy
         return $authUser->Id == $user->Id;
     }
 
+    public function teamspeak(User $authUser, User $user)
+    {
+        return $authUser->Id == $user->Id;
+    }
+
     public function history(User $authUser, User $user)
     {
         return $authUser->Id == $user->Id;

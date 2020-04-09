@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
+        Route::resource('users.teamspeak', 'UserTeamspeakController', ['as' => 'admin'])->only('create', 'store');
+        Route::resource('teamspeak', 'TeamspeakController', ['as' => 'admin'])->only('index');
         Route::get('logs/{log?}', 'LogController@show')->name('admin.logs.show');
         Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
         Route::get('users/multiaccounts', 'MultiaccountController@index')->name('admin.user.multiaccounts');

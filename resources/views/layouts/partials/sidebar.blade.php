@@ -61,6 +61,9 @@
                             <a class="c-sidebar-nav-link" href="{{ route('admin.texture') }}"><span class="c-sidebar-nav-icon"></span>Texturen</a>
                         </li>
                         <li class="c-sidebar-nav-item">
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.teamspeak.index') }}"><span class="c-sidebar-nav-icon"></span>Teamspeak</a>
+                        </li>
+                        <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.logs.show') }}"><span class="c-sidebar-nav-icon"></span>Logs</a>
                         </li>
                         <li class="c-sidebar-nav-item">

@@ -67,14 +67,18 @@
 
         <div class="c-body">
             <main class="c-main">
-                <div class="container">
-                    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-                        @if(Session::has('alert-' . $msg))
-                            <div class="alert alert-{{ $msg }}" role="alert">
-                                {{ Session::get('alert-' . $msg) }}
-                            </div>
-                        @endif
-                    @endforeach
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                                @if(Session::has('alert-' . $msg))
+                                    <div class="alert alert-{{ $msg }}" role="alert">
+                                        {{ Session::get('alert-' . $msg) }}
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
 
                 @yield('content')
