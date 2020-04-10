@@ -48,6 +48,11 @@ class Group extends Model
         return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
     }
 
+    public function money()
+    {
+        return BankAccountTransaction::query()->where('FromType', 8)->where('FromId', $this->Id)->orWhere('ToType', 8)->where('ToId', $this->Id);
+    }
+
     public function getMorphClass()
     {
         return 8;

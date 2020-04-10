@@ -35,9 +35,9 @@
                         <table class="table table-sm table-responsive-sm">
                             <thead>
                             <tr>
-                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'name', 'direction' => $sortBy === 'name' && $direction === 'asc'  ? 'desc' : 'asc']) }}">{{ __('Name') }}</a></th>
-                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'type', 'direction' => $sortBy === 'type' && $direction === 'asc'  ? 'desc' : 'asc']) }}">{{ __('Typ') }}</a></th>
-                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'members', 'direction' => $sortBy === 'members' && $direction === 'asc'  ? 'desc' : 'asc']) }}">{{ __('# Mitglieder') }}</a></th>
+                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'name', 'direction' => $sortBy === 'name' && $direction === 'asc'  ? 'desc' : 'asc', 'name' => request()->get('name')]) }}">{{ __('Name') }}</a></th>
+                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'type', 'direction' => $sortBy === 'type' && $direction === 'asc'  ? 'desc' : 'asc', 'name' => request()->get('name')]) }}">{{ __('Typ') }}</a></th>
+                                <th scope="col"><a href="{{ route('groups.index', ['sortBy' => 'members', 'direction' => $sortBy === 'members' && $direction === 'asc'  ? 'desc' : 'asc', 'name' => request()->get('name')]) }}">{{ __('# Mitglieder') }}</a></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,7 +51,7 @@
                             </tbody>
                         </table>
 
-                        {{ $groups->appends(['name' => request()->get('name'), 'limit' => $limit])->links() }}
+                        {{ $groups->appends(['name' => request()->get('name'), 'limit' => $limit, 'sortBy' => request()->get('sortBy'), 'direction' => request()->get('direction')])->links() }}
                     </div>
                 </div>
             </div>

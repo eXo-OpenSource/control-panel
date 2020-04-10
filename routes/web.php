@@ -26,12 +26,15 @@ Route::get('statistics', 'StatisticsController@index')->name('statistics');
 Route::get('achievements', 'AchievementsController@index')->name('achievements');
 
 Route::resource('groups', 'GroupController')->only('index', 'show');
+Route::get('groups/{group}/logs/{log?}', 'GroupLogController@show')->name('groups.show.logs');
 Route::get('groups/{group}/{page}', 'GroupController@show')->name('groups.show.page');
 
 Route::resource('factions', 'FactionController')->only('index', 'show');
+Route::get('factions/{faction}/logs/{log?}', 'FactionLogController@show')->name('factions.show.logs');
 Route::get('factions/{faction}/{page}', 'FactionController@show')->name('factions.show.page');
 
 Route::resource('companies', 'CompanyController')->only('index', 'show');
+Route::get('companies/{company}/logs/{log?}', 'CompanyLogController@show')->name('companies.show.logs');
 Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
 
 

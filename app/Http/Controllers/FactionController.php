@@ -27,27 +27,6 @@ class FactionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Faction  $faction
@@ -61,39 +40,5 @@ class FactionController extends Controller
 
         abort_unless(array_search($page, ['', 'vehicles', 'logs']) !== false, 404);
         return view('factions.show', compact('faction', 'page'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Faction  $faction
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Faction $faction)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Faction  $faction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Faction $faction)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Faction  $faction
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Faction $faction)
-    {
-        //
     }
 }

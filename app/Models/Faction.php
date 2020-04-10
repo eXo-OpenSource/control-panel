@@ -40,6 +40,11 @@ class Faction extends Model
         return "rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")";
     }
 
+    public function money()
+    {
+        return BankAccountTransaction::query()->where('FromType', 2)->where('FromId', $this->Id)->orWhere('ToType', 2)->where('ToId', $this->Id);
+    }
+
     public function vehicles()
     {
         return $this->newHasMany(Vehicle::where('OwnerType', 2), $this, 'OwnerId', 'Id');

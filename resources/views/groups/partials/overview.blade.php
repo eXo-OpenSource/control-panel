@@ -15,11 +15,11 @@
                     <tbody>
                     @foreach($group->members()->with('user')->orderBy('GroupRank', 'DESC')->get() as $character)
                         <tr>
-                            <td>@if($character->user)<a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a>@else{{ 'Unknown' }}@endif</td>
+                            <td>@if($character->user)<a href="{{ route('users.show', [$character->Id]) }}">{{ $character->user->Name }}</a>@else{{ 'Unknown' }} ({{ $character->Id }})@endif</td>
                             <td>{{ $character->GroupRank }}</td>
                             @can('activity', $group)<td>{{ number_format($character->getWeekActivity() / 60, 1, ',', ' ') }} h</td>@endcan
                             <td>
-                                @if($character->user->isOnline())
+                                @if($character->user && $character->user->isOnline())
                                     <span class="badge badge-success">online</span>
                                 @else
                                     <span class="badge badge-danger">offline</span>
