@@ -17,11 +17,6 @@ class Group extends Model
         return $this->hasMany(Character::class, 'GroupId', 'Id');
     }
 
-    public function membersCount()
-    {
-        return Character::where('GroupId', $this->Id)->count();
-    }
-
     public function logs()
     {
         return GroupLog::where('GroupType', 'group')->where('GroupId', $this->Id);

@@ -10,10 +10,13 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
+        $sortBy = request()->has('sortBy') ? request()->get('sortBy') : null;
+        $direction = request()->has('direction') ? request()->get('direction') : null;
+
         $limit = 50;
 
         if(request()->has('limit')) {
@@ -21,15 +24,32 @@ class GroupController extends Controller
                 $limit = 1;
             } else if (request()->get('limit') > 500) {
                 $limit = 500;
+            } else {
+                $limit = request()->get('limit');
             }
-            $limit = request()->get('limit');
         }
 
         $groups = Group::query();
 
+        if (request()->has('name') && !empty(request()->get('name'))) {
+            $groups->where('Name', 'LIKE', '%'.request()->get('name').'%');
+        }
+
+        $groups->withCount('members');
+
+        if($sortBy && in_array($sortBy, ['name', 'type', 'members'])) {
+            if($sortBy === 'name') {
+                $groups->orderBy('Name', $direction === 'desc' ? 'DESC' : 'ASC');
+            } elseif($sortBy === 'type') {
+                $groups->orderBy('Type', $direction === 'desc' ? 'DESC' : 'ASC');
+            } elseif($sortBy === 'members') {
+                $groups->orderBy('members_count', $direction === 'desc' ? 'DESC' : 'ASC');
+            }
+        }
+
         $groups = $groups->paginate($limit);
 
-        return view('groups.index', compact('groups', 'limit'));
+        return view('groups.index', compact('groups', 'limit', 'sortBy', 'direction'));
     }
 
     /**
