@@ -87,6 +87,9 @@ export default class PunishEditDialog extends Component {
 
                     <Form.Group>
                         <Form.Check name="deleted" type="checkbox" label="Gelöscht?" checked={this.state.deleted} onChange={this.onChange.bind(this)} />
+                        <Form.Text className="text-muted">
+                            Dies geht erst ab Admin oder höher
+                        </Form.Text>
                     </Form.Group>
                 </Form>;
 

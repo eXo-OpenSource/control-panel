@@ -10,7 +10,9 @@
 @endphp
 @section('title', __('Strafen') . ' - ' . __('Logs') . ' - '. $user->Name)
 
+@if(auth()->user()->Rank >= 3)
 <react-punish-add-dialog class="float-right mb-4" data-id="{{ $user->Id }}"></react-punish-add-dialog>
+@endif
 <table class="table table-sm w-full table-responsive-sm">
     <tr>
         <th>{{ __('Id') }}</th>
