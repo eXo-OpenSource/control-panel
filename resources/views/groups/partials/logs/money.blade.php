@@ -1,5 +1,5 @@
 @php
-    $money = $group->money()->orderBy('Id', 'DESC')->paginate(25);
+    $money = $group->money()->orderBy('Id', 'DESC')->simplePaginate(25);
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $group->Name)
 <table class="table table-sm table-responsive-sm tw-full">
