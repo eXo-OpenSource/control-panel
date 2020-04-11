@@ -9,6 +9,7 @@
         <th>{{ __('Admin') }}</th>
         <th>{{ __('Type') }}</th>
         <th>{{ __('Grund') }}</th>
+        <th>{{ __('Intern') }}</th>
         <th>{{ __('Dauer') }}</th>
         <th></th>
     </tr>
@@ -24,6 +25,7 @@
             </td>
             <td>{{ $entry->Type }}</td>
             <td>{{ $entry->Reason }}</td>
+            <td>{{ $entry->InternalMessage }}</td>
             <td>
                 @if($entry->Duration === 0)
                     {{ '-' }}
