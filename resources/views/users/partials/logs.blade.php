@@ -2,9 +2,9 @@
 <div class="row">
     <div class="nav-tabs-boxed col-md-12">
         <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item"><a class="nav-link @if($log === 'punish'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'punish']) }}">{{ __('Strafen') }}</a></li>
+            <li class="nav-item"><a class="nav-link @if($log === 'nickchange'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'nickchange']) }}">{{ __('Nickchanges') }}</a></li>
             @if(auth()->user()->Rank >= 3)
-                <li class="nav-item"><a class="nav-link @if($log === 'punish'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'punish']) }}">{{ __('Strafen') }}</a></li>
-                <li class="nav-item"><a class="nav-link @if($log === 'nickchange'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'nickchange']) }}">{{ __('Nickchanges') }}</a></li>
                 <li class="nav-item"><a class="nav-link @if($log === 'login'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'login']) }}">{{ __('Logins') }}</a></li>
                 <li class="nav-item"><a class="nav-link @if($log === 'kills'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'kills']) }}">{{ __('Morde') }}</a></li>
                 <li class="nav-item"><a class="nav-link @if($log === 'deaths'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'deaths']) }}">{{ __('Tode') }}</a></li>
@@ -20,8 +20,6 @@
                 @if(auth()->user()->Rank >= 3)
                     @if($log === 'punish')
                         @include('users.partials.logs.punish')
-                    @elseif($log === 'nickchange')
-                        @include('users.partials.logs.nickchange')
                     @elseif($log === 'login')
                         @include('users.partials.logs.login')
                     @elseif($log === 'kills')
@@ -40,6 +38,8 @@
                 @endif
                 @if($log === 'money')
                     @include('users.partials.logs.money')
+                @elseif($log === 'nickchange')
+                    @include('users.partials.logs.nickchange')
                 @endif
             </div>
         </div>

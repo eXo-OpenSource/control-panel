@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Line, Doughnut } from 'react-chartjs-2';
+import {Line, Doughnut, Bar} from 'react-chartjs-2';
 import { Spinner } from 'react-bootstrap';
 
 
@@ -80,10 +80,14 @@ export default class Chart extends Component {
                     </div>
                 );
             } else {
-                let chart = <Line data={this.state.data.data} options={this.state.data.options} />;
+                let chart;
 
                 if(this.state.data.type === 'doughnut') {
                     chart = <Doughnut data={this.state.data.data} options={this.state.data.options} />;
+                } else if(this.state.data.type === 'bar') {
+                    chart = <Bar data={this.state.data.data} options={this.state.data.options} />;
+                } else {
+                    chart = <Line data={this.state.data.data} options={this.state.data.options} />;
                 }
 
                 return (

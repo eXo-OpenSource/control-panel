@@ -6,7 +6,7 @@
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Datum') }}</th>
-        <th>{{ __('User') }}</th>
+        <th>{{ __('Admin') }}</th>
         <th>{{ __('Änderung') }}</th>
     </tr>
     @foreach($punish as $entry)

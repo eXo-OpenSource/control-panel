@@ -19,10 +19,7 @@ class UserLogController extends Controller
         $page = 'logs';
 
         if($log === '') {
-            $log = 'money';
-            if(auth()->user()->Rank >= 3) {
-                $log = 'punish';
-            }
+            $log = 'punish';
         }
 
         abort_unless(auth()->user()->can('show', $user), 403);

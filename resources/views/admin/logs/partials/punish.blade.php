@@ -10,9 +10,10 @@
         <th>{{ __('Type') }}</th>
         <th>{{ __('Grund') }}</th>
         <th>{{ __('Dauer') }}</th>
+        <th></th>
     </tr>
     @foreach($punish as $entry)
-        <tr>
+        <tr @if($entry->DeletedAt !== null)style="text-decoration: line-through;"@endif>
             <td>{{ $entry->Id }}</td>
             <td>{{ $entry->Date }}</td>
             <td>
@@ -29,9 +30,12 @@
                 @else
                     {{ $entry->Date->addSeconds($entry->Duration)->diffForHumans($entry->Date, 3) }}
                     @if($entry->hasFixedEndDate())
-                        {{ '-' }}{{ $entry->Date->addSeconds($entry->Duration) }}
+                        {{ '- ' . $entry->Date->addSeconds($entry->Duration) }}
                     @endif
                 @endif
+            </td>
+            <td>
+                <react-punish-edit-dialog data-id="{{ $entry->Id }}"></react-punish-edit-dialog>
             </td>
         </tr>
     @endforeach

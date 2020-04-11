@@ -410,11 +410,14 @@ class StatisticService
 
     public static function getMoney(?Model $object, Carbon $from, Carbon $to)
     {
-        $data = ['in' => 0, 'out' => 0];
-        $labels = [
-            'Einnahmen',
-            'Ausgaben',
-        ];
+        $days = $from->diffInDays($to);
+
+        $labels = [];
+
+        for ($i = 0; $i < $days; $i++) {
+            $date = $from->copy()->addDays($i)->format('Y-m-d');
+            array_push($labels, $date);
+        }
 
         if($object !== null) {
             $bankAccount = -1;
@@ -431,27 +434,102 @@ class StatisticService
                 }
             }
 
+
             if(!Cache::has('bank:in-out:' . $bankAccount)) {
-                $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND Date BETWEEN ? AND ?', [$bankAccount, $from, $to])[0]->Amount;
-                $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND Date BETWEEN ? AND ?', [$bankAccount, $from, $to])[0]->Amount;
-                Cache::put('bank:in-out:' . $bankAccount, ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
+                $inValues = [];
+                $outValues = [];
+                $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND Date BETWEEN ? AND ? GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+                $out = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND Date BETWEEN ? AND ? GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+
+                foreach($labels as $date) {
+                    $gotValue = false;
+                    foreach($in as $entry) {
+                        if($date === $entry->Date) {
+                            array_push($inValues, $entry->Amount);
+                            $gotValue = true;
+                            break;
+                        }
+                    }
+
+                    if(!$gotValue) {
+                        array_push($inValues, 0);
+                    }
+
+                    $gotValue = false;
+                    foreach($out as $entry) {
+                        if($date === $entry->Date) {
+                            array_push($outValues, $entry->Amount);
+                            $gotValue = true;
+                            break;
+                        }
+                    }
+
+                    if(!$gotValue) {
+                        array_push($outValues, 0);
+                    }
+                }
+
+
+                Cache::put('bank:in-out:' . $bankAccount, ['in' => $inValues, 'out' => $outValues], Carbon::now()->addMinutes(15));
             }
 
             $data = Cache::get('bank:in-out:' . $bankAccount);
-        } else {
-
-            if(!Cache::has('bank:in-out:overall')) {
-                $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
-                $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
-                Cache::put('bank:in-out:overall', ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
-            }
-            $data = Cache::get('bank:in-out:overall');
-
-            $labels = [
-                'Erschaffen',
-                'Zerstört',
-            ];
         }
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'datasets' => [
+                    [
+                        'label' => 'Einnahmen',
+                        'data' => $data['in'],
+                        'backgroundColor' => 'rgba(69, 161, 100, 1)',
+                        'borderWidth' => 0,
+                    ],
+                    [
+                        'label' => 'Ausgaben',
+                        'data' => $data['out'],
+                        'backgroundColor' => 'rgba(209, 103, 103, 1)',
+                        'borderWidth' => 0,
+                    ]
+                ],
+                'labels' => $labels
+            ],
+            'options' => [
+                'maintainAspectRatio' => false,
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ]
+                ]
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'tooltips' => 'money',
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getMoneyAdmin(Carbon $from, Carbon $to)
+    {
+        $data = ['in' => 0, 'out' => 0];
+        $labels = [
+            'Einnahmen',
+            'Ausgaben',
+        ];
+
+        if(!Cache::has('bank:in-out:overall')) {
+            $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+            $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+            Cache::put('bank:in-out:overall', ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
+        }
+        $data = Cache::get('bank:in-out:overall');
+
+        $labels = [
+            'Erschaffen',
+            'Zerstört',
+        ];
 
         return [
             'type' => 'doughnut',

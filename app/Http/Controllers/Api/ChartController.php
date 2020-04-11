@@ -66,9 +66,9 @@ class ChartController extends Controller
         {
             switch($parts[1]) {
                 case 'overall':
-                    // abort_unless(auth()->user()->can('bank', $faction), 403);
+                    abort_unless(auth()->user()->Rank >= 3, 403);
 
-                    return StatisticService::getMoney(null, $from, $to);
+                    return StatisticService::getMoneyAdmin($from, $to);
                     break;
                 case 'faction':
                     $faction = Faction::find($parts[2]);
