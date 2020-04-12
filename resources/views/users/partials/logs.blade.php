@@ -18,8 +18,6 @@
         <div class="tab-content">
             <div class="tab-pane active">
                 @if(auth()->user()->Rank >= 3)
-                    @if($log === 'punish')
-                        @include('users.partials.logs.punish')
                     @elseif($log === 'login')
                         @include('users.partials.logs.login')
                     @elseif($log === 'kills')
@@ -36,7 +34,9 @@
                         @include('users.partials.logs.advert')
                     @endif
                 @endif
-                @if($log === 'money')
+                @if($log === 'punish')
+                    @include('users.partials.logs.punish')
+                @elseif($log === 'money')
                     @include('users.partials.logs.money')
                 @elseif($log === 'nickchange')
                     @include('users.partials.logs.nickchange')
