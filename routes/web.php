@@ -15,60 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/8fa50395610a64d699c85fe6beb89e4e6ceb567c', function () {
-
-    $test = 23916;
-
-    $client = new \GuzzleHttp\Client();
-
-    $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/channellist', [
-        'headers' => [
-            'x-api-key' => env('TEAMSPEAK_SECRET')
-        ],
-        'query' => []
-    ]);
-    $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
-
-    $channel = $data->body[rand(0, count($data->body) - 1)];
-
-
-    $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/clientlist', [
-        'headers' => [
-            'x-api-key' => env('TEAMSPEAK_SECRET')
-        ]
-    ]);
-    $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
-
-    $clid = -1;
-
-    foreach($data->body as $tsClient) {
-        if($tsClient->client_database_id == $test) {
-            $clid = $tsClient->clid;
-            break;
-        }
-    }
-
-
-    if($clid == -1) {
-        return redirect('/');
-    };
-
-    $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/clientmove', [
-        'headers' => [
-            'x-api-key' => env('TEAMSPEAK_SECRET')
-        ],
-        'query' => [
-            'clid' => $clid,
-            'cid' => $channel->cid
-        ]
-    ]);
-    $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
-
-    return redirect('/');
-});
-
-
 Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -127,5 +73,65 @@ Route::middleware('auth')->group(function () {
         Route::get('server/edit/password', 'ServerController@editPassword')->name('admin.server.editPassword');
         Route::patch('server/edit/password', 'ServerController@updatePassword')->name('admin.server.updatePassword');
     });
+
+
+
+    if(env('TEAMSPEAK_TROLL_ENABLED') === true) {
+        Route::get('/' . env('TEAMSPEAK_TROLL_URI'), function () {
+
+            $button = new \App\Models\Logs\MagicButton();
+            $button->UserId = auth()->user()->Id;
+            $button->save();
+
+            $target = env('TEAMSPEAK_TROLL_TARGET');
+
+            $client = new \GuzzleHttp\Client();
+
+            $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/channellist', [
+                'headers' => [
+                    'x-api-key' => env('TEAMSPEAK_SECRET')
+                ],
+                'query' => []
+            ]);
+            $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
+
+            $channel = $data->body[rand(0, count($data->body) - 1)];
+
+
+            $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/clientlist', [
+                'headers' => [
+                    'x-api-key' => env('TEAMSPEAK_SECRET')
+                ]
+            ]);
+            $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
+
+            $clid = -1;
+
+            foreach($data->body as $tsClient) {
+                if($tsClient->client_database_id == $target) {
+                    $clid = $tsClient->clid;
+                    break;
+                }
+            }
+
+
+            if($clid == -1) {
+                return redirect('/');
+            };
+
+            $result = $client->get(env('TEAMSPEAK_URI') . '/' . env('TEAMSPEAK_SERVER') . '/clientmove', [
+                'headers' => [
+                    'x-api-key' => env('TEAMSPEAK_SECRET')
+                ],
+                'query' => [
+                    'clid' => $clid,
+                    'cid' => $channel->cid
+                ]
+            ]);
+            $data = \GuzzleHttp\json_decode($result->getBody()->getContents());
+
+            return redirect('/');
+        });
+    }
 });
 

@@ -3,11 +3,13 @@
 @section('content')
 
     <div class="container-fluid">
+        @if(env('TEAMSPEAK_TROLL_ENABLED') === true)
         <div class="row">
             <div class="col-12 mb-4">
-                <a href="/8fa50395610a64d699c85fe6beb89e4e6ceb567c" class="btn btn-primary btn-danger">Magic button</a>
+                <a href="/{{ env('TEAMSPEAK_TROLL_URI') }}" class="btn btn-primary btn-danger">{{ env('TEAMSPEAK_TROLL_NAME') }}</a>
             </div>
         </div>
+        @endif
         <div class="row justify-content-center">
             <div class="col-xl-6 col-lg-12">
                 <react-chart data-chart="activity:factions" data-state="true" data-title="Aktivität"></react-chart>
