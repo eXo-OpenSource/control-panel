@@ -83,7 +83,7 @@
                                                 @if(auth()->user()->Rank >= 5)
                                                     <a href="{{ route('admin.server.editPassword') }}" class="btn btn-primary">Ändern</a>
                                                 @endif
-                                                <a href="{{ 'mtasa://' . auth()->user()->Name . ':' . $setting->Value . '@' . env('WORKER_TEST_HOST') . ':22005' }}" class="btn btn-success">Join</a>
+                                                <a href="{{ 'mtasa://' . auth()->user()->Name . ':' . $setting->Value . '@' . env('WORKER_TEST_HOST_EXTERNAL') . ':22005' }}" class="btn btn-success">Join</a>
                                             </div>
                                         </div>
                                     </div>
