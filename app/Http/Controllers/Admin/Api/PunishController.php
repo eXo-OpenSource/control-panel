@@ -51,16 +51,14 @@ class PunishController extends Controller
 
         $punish->InternalMessage = $internal;
 
-        if(!empty($deleted)) {
-            if(Gate::allows('admin-rank-5')) {
-                if($deleted) {
-                    if($punish->DeletedAt === null) {
-                        $punish->DeletedAt = new \DateTime();
-                    }
-                } else {
-                    if($punish->DeletedAt !== null) {
-                        $punish->DeletedAt = null;
-                    }
+        if(Gate::allows('admin-rank-5')) {
+            if($deleted) {
+                if($punish->DeletedAt == null) {
+                    $punish->DeletedAt = new \DateTime();
+                }
+            } else {
+                if($punish->DeletedAt != null) {
+                    $punish->DeletedAt = null;
                 }
             }
         }
