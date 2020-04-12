@@ -18,7 +18,7 @@
         <div class="tab-content">
             <div class="tab-pane active">
                 @if(auth()->user()->Rank >= 3)
-                    @elseif($log === 'login')
+                    @if($log === 'login')
                         @include('users.partials.logs.login')
                     @elseif($log === 'kills')
                         @include('users.partials.logs.kills')
