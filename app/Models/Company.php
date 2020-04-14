@@ -27,7 +27,7 @@ class Company extends Model
 
     public function getActivity(Carbon $from, Carbon $to)
     {
-        return AccountActivityGroup::getActivity($this->Id, 2, $from, $to);
+        return AccountActivityGroup::getActivity($this->Id, 3, $from, $to);
     }
 
     public function getColor($alpha = 1)
