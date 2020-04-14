@@ -168,7 +168,13 @@ export default class TicketEntry extends Component {
                                                         <div className="message">
                                                             <div className={answer.IsMyMessage ? 'message-right' : 'message-left'}>
                                                                 <div className="message-content">
-                                                                    <p className="message-user"><a href={'/users/' + answer.UserId}>{answer.User}</a></p>
+                                                                    <p className="message-user">
+                                                                        {this.props.minimal == true &&
+                                                                            answer.User
+                                                                            ||
+                                                                            <a href={'/users/' + answer.UserId}>{answer.User}</a>
+                                                                        }
+                                                                    </p>
                                                                     {answer.Message.split('\n').map((value, index) => {
                                                                         return <p key={index}>{value}</p>;
                                                                     })}
@@ -200,7 +206,11 @@ export default class TicketEntry extends Component {
                                                             <div key={user.UserId} style={user.LeftAt !== null ? {'textDecoration': 'line-through'} : {}}>
                                                                 <Row>
                                                                     <Col xs='8'>
+                                                                        {this.props.minimal == true &&
+                                                                        user.Name
+                                                                        ||
                                                                         <a href={'/users/' + user.UserId}>{user.Name}</a>
+                                                                        }
                                                                     </Col>
                                                                     <Col xs='2'>
                                                                         <OverlayTrigger

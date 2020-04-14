@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-
+Route::namespace('Api')->name('api.')->group(function () {
+    Route::get('auth', 'AuthController@auth')->name('auth');
+});
 
 Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {

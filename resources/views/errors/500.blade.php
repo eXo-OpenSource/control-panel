@@ -23,7 +23,7 @@
     @if(app()->bound('sentry') && app('sentry')->getLastEventId())
         @if(env('SENTRY_JS_DSN') && !env('APP_DEBUG'))
             <script>
-                Sentry.showReportDialog({
+                SentryMin.showReportDialog({
                     eventId: '{{ app('sentry')->getLastEventId() }}',
                     lang: '{{ app()->getLocale() }}',
                     user: {
