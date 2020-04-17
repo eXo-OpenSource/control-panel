@@ -414,7 +414,7 @@ class StatisticService
 
         $labels = [];
 
-        for ($i = 0; $i < $days; $i++) {
+        for ($i = 0; $i <= $days; $i++) {
             $date = $from->copy()->addDays($i)->format('Y-m-d');
             array_push($labels, $date);
         }
@@ -434,12 +434,11 @@ class StatisticService
                 }
             }
 
-
-            if(!Cache::has('bank:in-out:' . $bankAccount)) {
+            if(!Cache::has('bank:in-out:' . $bankAccount) || true) {
                 $inValues = [];
                 $outValues = [];
-                $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND Date BETWEEN ? AND ? GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
-                $out = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND Date BETWEEN ? AND ? GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+                $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DATE(Date) BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+                $out = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DATE(Date) BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
 
                 foreach($labels as $date) {
                     $gotValue = false;
