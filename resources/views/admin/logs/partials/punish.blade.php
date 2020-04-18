@@ -30,7 +30,7 @@
                 @if($entry->Duration === 0)
                     {{ '-' }}
                 @else
-                    {{ $entry->Date->addSeconds($entry->Duration)->diffForHumans($entry->Date, 3) }}
+                    {{ $entry->Date->addSeconds($entry->Duration)->longAbsoluteDiffForHumans($entry->Date) }}
                     @if($entry->hasFixedEndDate())
                         {{ '- ' . $entry->Date->addSeconds($entry->Duration) }}
                     @endif
