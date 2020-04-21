@@ -35,6 +35,8 @@ class GroupController extends Controller
             $groups->where('Name', 'LIKE', '%'.request()->get('name').'%');
         }
 
+        $groups->where('Id', '<>', 1);
+
         $groups->withCount('members');
 
         if($sortBy && in_array($sortBy, ['name', 'type', 'members'])) {
@@ -61,6 +63,10 @@ class GroupController extends Controller
     public function show(Group $group, $page = '')
     {
         abort_unless(array_search($page, ['', 'vehicles', 'logs']) !== false, 404);
+        if($group->Id === 1 && (!auth()->user() || auth()->user()->Rank < 7)) { // Hide eXo Versteigerung
+            abort(404);
+        }
+
         return view('groups.show', compact('group', 'page'));
     }
 }

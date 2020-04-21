@@ -73,9 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::get('server/edit/password', 'ServerController@editPassword')->name('admin.server.editPassword');
         Route::patch('server/edit/password', 'ServerController@updatePassword')->name('admin.server.updatePassword');
     });
-
-
-
+    
     if(env('TEAMSPEAK_TROLL_ENABLED') === true) {
         Route::get('/' . env('TEAMSPEAK_TROLL_URI'), function () {
 

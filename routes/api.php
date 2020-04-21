@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', 'UserController')->only('update');
         Route::resource('users.warns', 'UserWarnController')->only('index', 'destroy', 'store');
         Route::resource('users.punish', 'UserPunishController')->only('store');
+        Route::resource('punish.log', 'PunishPunishLogController')->only('index');
     });
 
     Route::namespace('Api')->name('api.')->group(function () {
@@ -33,6 +34,5 @@ Route::middleware('auth')->group(function () {
         Route::resource('tickets/categories', 'TicketCategoryController')->only('index');
         Route::resource('tickets', 'TicketController');
         Route::post('users/search', 'User\UserSearchController@index')->name('user.search');
-
     });
 });

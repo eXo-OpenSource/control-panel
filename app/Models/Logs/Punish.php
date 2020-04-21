@@ -24,6 +24,11 @@ class Punish extends Model
         return $this->hasOne(User::class, 'Id', 'AdminId');
     }
 
+    public function log()
+    {
+        return $this->hasMany(PunishLog::class, 'PunishId', 'Id');
+    }
+
     public function hasFixedEndDate()
     {
         return $this->Type !== 'prison' && $this->Type !== 'unprison';

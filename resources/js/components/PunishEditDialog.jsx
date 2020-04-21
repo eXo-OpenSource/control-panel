@@ -35,8 +35,11 @@ export default class PunishEditDialog extends Component {
         try {
             this.setState({
                 data: response.data,
-                internal: response.data.InternalMessage,
-                deleted: response.data.DeletedAt != null,
+                reason: response.data.punish.Reason,
+                duration: response.data.punish.Duration / 3600,
+                internal: response.data.punish.InternalMessage,
+                deleted: response.data.punish.DeletedAt != null,
+                rank: response.data.rank,
             });
         } catch (error) {
             this.setState({ show: false });
@@ -47,8 +50,10 @@ export default class PunishEditDialog extends Component {
     async update() {
         try {
             const response = await axios.put('/api/admin/punish/' + this.props.id, {
+                reason: this.state.reason,
                 internal: this.state.internal,
-                deleted: this.state.deleted
+                duration: this.state.duration * 3600,
+                deleted: this.state.deleted,
             });
 
             let type = 'danger';
@@ -68,7 +73,7 @@ export default class PunishEditDialog extends Component {
     }
 
     onChange(e) {
-        if(e.target.type == 'checkbox') {
+        if(e.target.type === 'checkbox') {
             this.setState({ [e.target.name]: e.target.checked });
         } else {
             this.setState({ [e.target.name]: e.target.value });
@@ -80,8 +85,40 @@ export default class PunishEditDialog extends Component {
         let footer;
 
         if(this.state.data) {
+            let deleted;
+
+            if(this.state.rank >= 5) { // Admin+
+                deleted =
+                    <Form.Group>
+                        <Form.Check name="deleted" type="checkbox" label="Gelöscht?" checked={this.state.deleted} onChange={this.onChange.bind(this)} />
+                        <Form.Text className="text-muted">
+                            Dies geht erst ab Admin oder höher
+                        </Form.Text>
+                    </Form.Group>;
+            }
+
             body =
                 <Form>
+                    <Form.Group>
+                        <Form.Label>Grund</Form.Label>
+                        <InputGroup>
+                            <Form.Control name="reason" as="textarea" value={this.state.reason} onChange={this.onChange.bind(this)} />
+                        </InputGroup>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Dauer</Form.Label>
+                        <InputGroup>
+                            <Form.Control name="duration" type="text" placeholder="Dauer" value={this.state.duration} onChange={this.onChange.bind(this)} />
+                            <InputGroup.Append>
+                                <InputGroup.Text>Stunden</InputGroup.Text>
+                            </InputGroup.Append>
+                        </InputGroup>
+                        <Form.Text className="text-muted">
+                            Falls permanent oder kein Wert einfach den Wert auf 0 lassen.
+                        </Form.Text>
+                    </Form.Group>
+
                     <Form.Group>
                         <Form.Label>Intern</Form.Label>
                         <InputGroup>
@@ -89,12 +126,7 @@ export default class PunishEditDialog extends Component {
                         </InputGroup>
                     </Form.Group>
 
-                    <Form.Group>
-                        <Form.Check name="deleted" type="checkbox" label="Gelöscht?" checked={this.state.deleted} onChange={this.onChange.bind(this)} />
-                        <Form.Text className="text-muted">
-                            Dies geht erst ab Admin oder höher
-                        </Form.Text>
-                    </Form.Group>
+                    {deleted}
                 </Form>;
 
             footer =

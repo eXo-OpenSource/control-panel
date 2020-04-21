@@ -20,12 +20,16 @@ class PunishController extends Controller
 
     /**
      * @param Punish $punish
-     * @return Punish
+     * @return array
      */
     public function show(Punish $punish)
     {
         abort_unless(Gate::allows('admin-rank-3'), 403);
-        return $punish;
+
+        return [
+            'punish' => $punish,
+            'rank' => auth()->user()->Rank,
+        ];
     }
 
     /**
@@ -39,17 +43,23 @@ class PunishController extends Controller
     {
         abort_unless(Gate::allows('admin-rank-3'), 403);
 
+        $duration = $request->get('duration');
         $internal = $request->get('internal');
+        $reason = $request->get('reason');
         $deleted = $request->get('deleted');
 
         $punishLog = new PunishLog();
         $punishLog->PunishId = $punish->Id;
         $punishLog->AdminId = auth()->user()->Id;
+        $punishLog->ReasonPrev = $punish->Reason;
+        $punishLog->DurationPrev = $punish->Duration;
         $punishLog->InternalMessagePrev = $punish->InternalMessage;
         $punishLog->DeletedAtPrev = $punish->DeletedAt;
         $punishLog->Date = new \DateTime();
 
         $punish->InternalMessage = $internal;
+        $punish->Reason = $reason;
+        $punish->Duration = $duration;
 
         if(Gate::allows('admin-rank-5')) {
             if($deleted) {
@@ -63,6 +73,8 @@ class PunishController extends Controller
             }
         }
 
+        $punishLog->Reason = $punish->Reason;
+        $punishLog->Duration = $punish->Duration;
         $punishLog->InternalMessage = $punish->InternalMessage;
         $punishLog->DeletedAt = $punish->DeletedAt;
         $punishLog->save();

@@ -21,4 +21,5 @@ require('./components/KickDialog');
 require('./components/WarnsDialog');
 require('./components/PunishAddDialog');
 require('./components/PunishEditDialog');
+require('./components/PunishHistoryDialog');
 require('./components/Tickets');

@@ -52,6 +52,7 @@
             </td>
             @if(auth()->user()->Rank >= 3)
                 <td>
+                    <react-punish-history-dialog data-id="{{ $entry->Id }}"></react-punish-history-dialog>
                     <react-punish-edit-dialog data-id="{{ $entry->Id }}"></react-punish-edit-dialog>
                 </td>
             @endif

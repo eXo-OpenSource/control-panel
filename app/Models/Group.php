@@ -65,6 +65,6 @@ class Group extends Model
 
     public function getURL()
     {
-        return route('companies.show', $this->Id);
+        return route('groups.show', $this->Id);
     }
 }
