@@ -434,7 +434,7 @@ class StatisticService
                 }
             }
 
-            if(!Cache::has('bank:in-out:' . $bankAccount) || true) {
+            if(!Cache::has('bank:in-out:' . $bankAccount)) {
                 $inValues = [];
                 $outValues = [];
                 $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DATE(Date) BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
