@@ -1,5 +1,5 @@
 @php
-    $punish =$user->advert()->with(['user'])->orderBy('Id', 'DESC')->paginate(25);
+    $punish =$user->advert()->with(['user'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 @section('title', __('Werbung') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm w-full table-responsive-sm">

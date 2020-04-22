@@ -1,5 +1,5 @@
 @php
-    $logins = $user->logins()->orderBy('Id', 'DESC')->paginate(25);
+    $logins = $user->logins()->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 @section('title', __('Logins') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">

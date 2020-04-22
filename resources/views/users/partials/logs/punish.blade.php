@@ -6,7 +6,7 @@
         $punish->where('DeletedAt', null);
     }
 
-    $punish = $punish->paginate(25);
+    $punish = $punish->paginate(request()->get('limit') ?? 25);
 @endphp
 @section('title', __('Strafen') . ' - ' . __('Logs') . ' - '. $user->Name)
 
@@ -51,7 +51,7 @@
                 @endif
             </td>
             @if(auth()->user()->Rank >= 3)
-                <td>
+                <td style="text-decoration: none;">
                     <react-punish-history-dialog data-id="{{ $entry->Id }}"></react-punish-history-dialog>
                     <react-punish-edit-dialog data-id="{{ $entry->Id }}"></react-punish-edit-dialog>
                 </td>

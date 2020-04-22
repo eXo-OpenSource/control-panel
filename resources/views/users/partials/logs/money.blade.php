@@ -1,5 +1,5 @@
 @php
-    $money = $user->money()->orderBy('Id', 'DESC')->paginate(25);
+    $money = $user->money()->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
