@@ -42,7 +42,7 @@
             </a>
         </li>
         @auth
-            @if(auth()->user()->Rank >= 5 || auth()->user()->character->FactionId === 3)
+            @if(auth()->user()->Rank >= 5 || (count(auth()->user()->character->getTrainingTargets()) > 0 && auth()->user()->character->FactionId === 3))
         <li class="c-sidebar-nav-dropdown">
             <a class="c-sidebar-nav-dropdown-toggle" href="#">
                 <i class="c-sidebar-nav-icon fas fa-toolbox"></i>{{ __('Schulungen') }}
