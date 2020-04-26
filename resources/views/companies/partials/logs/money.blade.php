@@ -1,5 +1,5 @@
 @php
-    $money = $company->money()->orderBy('Id', 'DESC')->simplePaginate(25);
+    $money = $company->money()->orderBy('Id', 'DESC')->simplePaginate(request()->get('limit') ?? 25);
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $company->Name)
 <table class="table table-sm table-responsive-sm tw-full">

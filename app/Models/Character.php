@@ -10,6 +10,7 @@ class Character extends Model
     protected $table = 'character';
     protected $primaryKey = 'Id';
     protected $connection = 'mysql';
+    public $timestamps = false;
 
     public function user()
     {
@@ -54,6 +55,38 @@ class Character extends Model
     public function stats()
     {
         return $this->hasOne(Stats::class, 'Id', 'Id');
+    }
+
+    public function getTrainingTargets()
+    {
+        $trainings = [];
+
+        if($this->FactionId !== 0 && ($this->FactionTraining > 0 || $this->FactionRank >= 5)) {
+            array_push($trainings, 'faction');
+        }
+
+        if($this->CompanyId !== 0 && ($this->CompanyTraining > 0 || $this->CompanyRank >= 4)) {
+            array_push($trainings, 'company');
+        }
+        // Maybe add groups later here too?
+
+        return $trainings;
+    }
+
+    public function getTrainingTargetsEdit()
+    {
+        $trainings = [];
+
+        if($this->FactionId !== 0 && ($this->FactionTraining === 2 || $this->FactionRank >= 5)) {
+            array_push($trainings, 'faction');
+        }
+
+        if($this->CompanyId !== 0 && ($this->CompanyTraining === 2 || $this->CompanyRank >= 4)) {
+            array_push($trainings, 'company');
+        }
+        // Maybe add groups later here too?
+
+        return $trainings;
     }
 
     public function getFactionName()

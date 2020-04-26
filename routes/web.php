@@ -47,6 +47,38 @@ Route::middleware('auth')->group(function () {
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
     Route::resource('textures', 'TextureController')->only(['index', 'create', 'store', 'destroy']);
     Route::resource('teamspeak', 'TeamspeakController');
+
+    Route::resource('trainings/templates', 'Training\\TrainingTemplateController', [
+        'as' => 'trainings'
+    ]);
+    Route::get('trainings/templates/{template}/delete', 'Training\\TrainingTemplateController@delete')->name('trainings.templates.delete');
+
+    Route::resource('trainings/templates.contents', 'Training\\TrainingTemplateContentController', [
+        'as' => 'trainings'
+    ])->only(['create', 'store']);
+    Route::resource('trainings/templates/contents', 'Training\\TrainingTemplateContentController', [
+        'as' => 'trainings.templates'
+    ])->except(['create', 'store', 'index', 'show']);;
+    Route::get('trainings/templates/contents/{content}/delete', 'Training\\TrainingTemplateContentController@delete')->name('trainings.templates.contents.delete');
+
+    Route::resource('trainings/templates.trainings', 'Training\\TrainingTemplateTrainingController', [
+        'as' => 'trainings'
+    ])->only(['create', 'store']);
+
+    Route::resource('trainings/permissions', 'Training\\PermissionController', [
+        'as' => 'trainings'
+    ])->only(['index', 'edit', 'update']);
+
+    Route::get('/trainings/{training}', [
+        'uses' => 'Training\\TrainingController@index',
+        'as' => 'trainings.show',
+    ]);
+    Route::get('/trainings/{path?}', [
+        'uses' => 'Training\\TrainingController@index',
+        'as' => 'trainings.index',
+        'where' => ['path' => '.*']
+    ]);
+
     Route::get('/tickets/{path?}', [
         'uses' => 'TicketController@index',
         'as' => 'tickets.index',
@@ -73,7 +105,7 @@ Route::middleware('auth')->group(function () {
         Route::get('server/edit/password', 'ServerController@editPassword')->name('admin.server.editPassword');
         Route::patch('server/edit/password', 'ServerController@updatePassword')->name('admin.server.updatePassword');
     });
-    
+
     if(env('TEAMSPEAK_TROLL_ENABLED') === true) {
         Route::get('/' . env('TEAMSPEAK_TROLL_URI'), function () {
 

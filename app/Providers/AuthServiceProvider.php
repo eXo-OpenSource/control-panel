@@ -15,13 +15,16 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Models\Faction'    => \App\Policies\FactionPolicy::class,
-        'App\Models\Company'    => \App\Policies\CompanyPolicy::class,
-        'App\Models\Group'      => \App\Policies\GroupPolicy::class,
-        'App\Models\Texture'    => \App\Policies\TexturePolicy::class,
-        'App\Models\User'       => \App\Policies\UserPolicy::class,
-        'App\Models\Vehicle'    => \App\Policies\VehiclePolicy::class,
-        'App\Models\Ticket'     => \App\Policies\TicketPolicy::class,
+        'App\Models\Faction'                    => \App\Policies\FactionPolicy::class,
+        'App\Models\Company'                    => \App\Policies\CompanyPolicy::class,
+        'App\Models\Group'                      => \App\Policies\GroupPolicy::class,
+        'App\Models\Texture'                    => \App\Policies\TexturePolicy::class,
+        'App\Models\User'                       => \App\Policies\UserPolicy::class,
+        'App\Models\Vehicle'                    => \App\Policies\VehiclePolicy::class,
+        'App\Models\Ticket'                     => \App\Policies\TicketPolicy::class,
+        'App\Models\Training\Training'          => \App\Policies\TrainingPolicy::class,
+        'App\Models\Training\Template'          => \App\Policies\TrainingTemplatePolicy::class,
+        'App\Models\Training\TemplateContent'   => \App\Policies\TrainingTemplateContentPolicy::class,
     ];
 
     /**

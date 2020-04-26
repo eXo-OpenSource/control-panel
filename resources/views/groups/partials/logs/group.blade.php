@@ -1,5 +1,5 @@
 @php
-    $logs = $group->logs()->orderBy('Timestamp', 'DESC')->with('user')->with('user.user')->paginate(25);
+    $logs = $group->logs()->orderBy('Timestamp', 'DESC')->with('user')->with('user.user')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

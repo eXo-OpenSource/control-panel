@@ -23,3 +23,5 @@ require('./components/PunishAddDialog');
 require('./components/PunishEditDialog');
 require('./components/PunishHistoryDialog');
 require('./components/Tickets');
+// require('./components/practices/Practices');
+require('./components/trainings/Trainings');

@@ -17,6 +17,7 @@
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "multitheftauto/mtasa-php-sdk": "^1.0",
+        "owen-it/laravel-auditing": "^10.0",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
