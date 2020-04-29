@@ -40,6 +40,7 @@ Route::get('companies/{company}/{page}', 'CompanyController@show')->name('compan
 
 
 Route::middleware('auth')->group(function () {
+    Route::get('users/search', 'UserSearchController@index')->name('users.search');
     Route::resource('users', 'UserController')->only('index', 'show');
     Route::get('users/{user}/logs/{log?}', 'UserLogController@show')->name('users.show.logs');
     Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
@@ -97,7 +98,6 @@ Route::middleware('auth')->group(function () {
         Route::get('teamspeak/{teamspeak}/delete', 'TeamspeakController@delete')->name('admin.teamspeak.delete');
         Route::resource('teamspeak', 'TeamspeakController', ['as' => 'admin'])->only('index', 'destroy');
         Route::get('logs/{log?}', 'LogController@show')->name('admin.logs.show');
-        Route::get('users/search', 'UserSearchController@index')->name('admin.user.search');
         Route::get('users/multiaccounts', 'MultiaccountController@index')->name('admin.user.multiaccounts');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');
         Route::get('textures', 'TextureController@index')->name('admin.texture');

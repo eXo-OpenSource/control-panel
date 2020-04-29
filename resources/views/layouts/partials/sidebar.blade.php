@@ -6,6 +6,13 @@
         </a>
     </div>
     <ul class="c-sidebar-nav" data-drodpown-accordion="true">
+        @auth
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('users.search') }}">
+                <i class="c-sidebar-nav-icon fas fa-user"></i>{{ __('Benutzersuche') }}
+            </a>
+        </li>
+        @endauth
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('factions.index') }}">
                 <i class="c-sidebar-nav-icon fas fa-user-friends"></i>{{ __('Fraktionen') }}
@@ -79,7 +86,7 @@
                             <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}"><span class="c-sidebar-nav-icon"></span>Dashboard</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.user.search') }}"><span class="c-sidebar-nav-icon"></span>Benutzersuche</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('users.search') }}"><span class="c-sidebar-nav-icon"></span>Benutzersuche</a>
                         </li>
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.user.multiaccounts') }}"><span class="c-sidebar-nav-icon"></span>Multiaccounts</a>

@@ -8,11 +8,15 @@
                     <div class="card-header">{{ __('Benutzersuche') }}</div>
                     <div class="card-body">
 
-                        <form method="GET" action="{{ route('admin.user.search') }}" class="mb-4">
+                        <form method="GET" action="{{ route('users.search') }}" class="mb-4">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="input-group">
                                         <input class="form-control" id="name" name="name" autocomplete="off" type="text" placeholder="Name" value="{{ request()->get('name') }}">
+                                        @if(auth()->user()->Rank >= 3)
+                                        <input class="form-control" id="serial" name="serial" autocomplete="off" type="text" placeholder="Serial" value="{{ request()->get('serial') }}">
+                                        <input class="form-control" id="ip" name="ip" autocomplete="off" type="text" placeholder="IP" value="{{ request()->get('ip') }}">
+                                        @endif
 
                                         <select class="form-control" name="limit" id="limit">
                                             <option value="10" @if($limit == 10){{ 'selected' }}@endif>10</option>
@@ -35,9 +39,11 @@
                             <tr>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Spielzeit') }}</th>
+                                @if(auth()->user()->Rank >= 3)
                                 <th>{{ __('Letzter Login') }}</th>
                                 <th>{{ __('Letzte IP') }}</th>
                                 <th>{{ __('Letzte Serial') }}</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -45,15 +51,17 @@
                                 <tr onclick="location.href = '{{ route('users.show', [$user->Id]) }}';" style="cursor: pointer;">
                                     <td>{{ $user->Name }}</td>
                                     <td>@if($user->character){{ $user->character->getPlayTime() }}@else{{ '-' }}@endif</td>
+                                    @if(auth()->user()->Rank >= 3)
                                     <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>
                                     <td>{{ $user->LastIP }}</td>
                                     <td>{{ $user->LastSerial }}</td>
+                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
 
-                        {{ $users->appends(['name' => request()->get('name'), 'limit' => $limit])->links() }}
+                        {{ $users->appends($appends)->links() }}
                     </div>
                 </div>
 
