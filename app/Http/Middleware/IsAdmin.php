@@ -20,7 +20,7 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::check() && Auth::user() && Auth::user()->Rank >= 3) {
+        if(Auth::check() && Auth::user() && Auth::user()->Rank >= 1) {
             return $next($request);
         }
 
