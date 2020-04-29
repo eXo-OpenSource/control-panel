@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\AccountTeamspeak;
 use App\Models\TeamspeakIdentity;
 use App\Models\User;
-use App\Services\TeamSpeakService;
+use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
+use Exo\TeamSpeak\Responses\TeamSpeakResponse;
+use Exo\TeamSpeak\Services\TeamSpeakService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
@@ -16,11 +17,11 @@ use Illuminate\Validation\ValidationException;
 
 class UserTeamspeakController extends Controller
 {
-    protected $teamSpeakService;
+    protected $teamSpeak;
 
-    public function __construct(TeamSpeakService $teamSpeakService)
+    public function __construct(TeamSpeakService $teamSpeak)
     {
-        $this->teamSpeakService = $teamSpeakService;
+        $this->teamSpeak = $teamSpeak;
     }
 
     /**
@@ -53,41 +54,39 @@ class UserTeamspeakController extends Controller
             'notice' => ''
         ]);
 
-        $result = $this->teamSpeakService->getClientClientDbIdFromUniqueId($validatedData['uniqueId']);
+        try {
+            $client = $this->teamSpeak->getDatabaseIdFromUniqueId($validatedData['uniqueId']);
 
-        if($result->status === 'Success') {
-            $teamspeak = new TeamspeakIdentity();
-            $teamspeak->UserId = $user->Id;
-            $teamspeak->AdminId = auth()->user()->Id;
-            $teamspeak->TeamspeakId = $validatedData['uniqueId'];
-            $teamspeak->TeamspeakDbId = $result->clientDbId;
-            $teamspeak->Notice = $validatedData['notice'];
-            $teamspeak->Type = intval($validatedData['type']);
-            $teamspeak->save();
+            if($client->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+                $teamspeak = new TeamspeakIdentity();
+                $teamspeak->UserId = $user->Id;
+                $teamspeak->AdminId = auth()->user()->Id;
+                $teamspeak->TeamspeakId = $validatedData['uniqueId'];
+                $teamspeak->TeamspeakDbId = $client->client->databaseId;
+                $teamspeak->Notice = $validatedData['notice'];
+                $teamspeak->Type = intval($validatedData['type']);
+                $teamspeak->save();
 
 
-            $result = $this->teamSpeakService->addServerGroupToClient(
-                $teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'),
-                $teamspeak->TeamspeakDbId
-            );
+                $result = $client->client->addServerGroup($teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'));
+                $client->client->setDescription(route('users.show', $user->Id));
 
-            if($result->status === 'Success') {
-                Session::flash('alert-success', 'Erfolgreich verknüpft und freigeschaltet!');
-            } else {
-                if($result->message === 'Duplicate entry') {
-                    Session::flash('alert-success', 'Erfolgreich verknüpft aber der Benutzer ist bereits freigeschaltet!');
+                if($result->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+                    Session::flash('alert-success', 'Erfolgreich verknüpft und freigeschaltet!');
                 } else {
-                    Session::flash('alert-warning', 'Erfolgreich verknüpft aber konnte nicht freigeschaltet werden!');
+                    if($result->message === 'duplicate entry') {
+                        Session::flash('alert-success', 'Erfolgreich verknüpft aber der Benutzer ist bereits freigeschaltet!');
+                    } else {
+                        Session::flash('alert-warning', 'Erfolgreich verknüpft aber konnte nicht freigeschaltet werden!');
+                    }
                 }
-            }
-        } else {
-            if($result->message === 'Failed to connect') {
-                throw ValidationException::withMessages(['uniqueId' => 'Kommunikation mit dem TeamSpeak Server ist derzeit nicht möglich!']);
+
+                return redirect()->route('users.show.page', [$user, 'teamspeak']);
             } else {
                 throw ValidationException::withMessages(['uniqueId' => 'Die eindeutige ID ist dem Server unbekannt! Bitte betrete den Server einmal mit dieser ID!']);
             }
+        } catch (TeamSpeakUnreachableException $e) {
+            throw ValidationException::withMessages(['uniqueId' => 'Kommunikation mit dem TeamSpeak Server ist derzeit nicht möglich!']);
         }
-
-        return redirect()->route('users.show.page', [$user, 'teamspeak']);
     }
 }

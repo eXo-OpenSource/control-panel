@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c553c98965aec2b0bf8989dfb47c8493",
+    "content-hash": "9cae7954a686fd908432ee3aaf55259b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -331,6 +331,43 @@
                 "validator"
             ],
             "time": "2020-02-13T22:36:52+00:00"
+        },
+        {
+            "name": "exo/teamspeak",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/exo/teamspeak",
+                "reference": "545732085840a5e4e6a3b1d8ed1d0d8330c81caf"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Exo\\TeamSpeak\\TeamSpeakServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Exo\\TeamSpeak\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MegaThorx",
+                    "email": "git@merx.dev"
+                }
+            ],
+            "transport-options": {
+                "symlink": true
+            }
         },
         {
             "name": "fideloper/proxy",
@@ -6814,7 +6851,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "exo/teamspeak": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

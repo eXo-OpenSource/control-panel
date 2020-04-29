@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\VehicleShop;
-use App\Services\TeamSpeakService;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
@@ -20,9 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(TeamSpeakService::class, function($app) {
-            return new TeamSpeakService();
-        });
+
     }
 
     /**

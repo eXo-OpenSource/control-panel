@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "ext-json": "*",
+        "exo/teamspeak": "^1.0@dev",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/psr7": "^1.6",
@@ -56,6 +57,15 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
+        }
+    },
+    "repositories": {
+        "package-name": {
+            "type": "path",
+            "url": "packages/exo/teamspeak",
+            "options": {
+                "symlink": true
+            }
         }
     },
     "minimum-stability": "dev",

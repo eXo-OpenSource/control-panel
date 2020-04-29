@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\AccountTeamspeak;
 use App\Models\TeamspeakIdentity;
 use App\Models\User;
-use App\Services\TeamSpeakService;
+use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
+use Exo\TeamSpeak\Helpers\ChannelGroup;
+use Exo\TeamSpeak\Responses\TeamSpeakResponse;
+use Exo\TeamSpeak\Services\TeamSpeakService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -14,11 +16,11 @@ use Illuminate\Validation\ValidationException;
 
 class TeamspeakController extends Controller
 {
-    protected $teamSpeakService;
+    protected $teamSpeak;
 
-    public function __construct(TeamSpeakService $teamSpeakService)
+    public function __construct(TeamSpeakService $teamSpeak)
     {
-        $this->teamSpeakService = $teamSpeakService;
+        $this->teamSpeak = $teamSpeak;
     }
 
     public function index()
@@ -85,25 +87,64 @@ class TeamspeakController extends Controller
     {
         Gate::authorize('delete', $teamspeak);
 
-        $result = $this->teamSpeakService->removeServerGroupFromClient(
-            $teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'),
-            $teamspeak->TeamspeakDbId
-        );
+        try {
+            $client = $this->teamSpeak->getDatabaseClient($teamspeak->TeamspeakDbId);
 
-        if($result->status !== 'Success' && $result->message !== 'Empty result set') {
-            throw ValidationException::withMessages(['uniqueId' => 'Die Gruppe konnte nicht entfernt werden!']);
-        }
+            if($client->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+                $serverGroups = $this->teamSpeak->getServerGroups();
+                $groups = $client->client->serverGroups();
+                foreach($groups->serverGroups as $group) {
+                    foreach($serverGroups->groups as $serverGroup) {
+                        if($group->serverGroupId === $serverGroup->id) {
+                            if(!$serverGroup->saveDb) {
+                                break;
+                            }
 
-        $teamspeak->delete();
+                            $result = $client->client->removeServerGroup($group->serverGroupId);
 
-        if($result->status === 'Success') {
-            Session::flash('alert-success', 'Erfolgreich gelöscht!');
-        } else {
-            if($result->message === 'Empty result set') {
-                Session::flash('alert-success', 'Erfolgreich gelöscht aber der Benutzer ist hatte bereits die Gruppe entfernt!');
+                            if($result->status !== TeamSpeakResponse::RESPONSE_SUCCESS && $result->message !== 'empty result set') {
+                                throw ValidationException::withMessages(['uniqueId' => 'Die Gruppe konnte nicht entfernt werden!']);
+                            }
+                            break;
+                        }
+                    }
+                }
+
+
+                $channelGroups = $this->teamSpeak->getChannelGroups();
+                $channelGroupId = -1;
+
+                foreach($channelGroups->groups as $group) {
+                    if(!$group->saveDb && $group->type === 1) {
+                        $channelGroupId = $group->id;
+                        break;
+                    }
+                }
+
+                $groups = $client->client->channelGroups();
+                foreach($groups->members as $group) {
+                    $result = $client->client->setChannelGroup($group->channelId, $channelGroupId);
+                    if($result->status !== TeamSpeakResponse::RESPONSE_SUCCESS && $result->message !== 'empty result set') {
+                        throw ValidationException::withMessages(['uniqueId' => 'Die Gruppe konnte nicht entfernt werden!']);
+                    }
+                }
+
+                $teamspeak->delete();
+
+                if($result->status === 'Success') {
+                    Session::flash('alert-success', 'Erfolgreich gelöscht!');
+                } else {
+                    if($result->message === 'Empty result set') {
+                        Session::flash('alert-success', 'Erfolgreich gelöscht aber der Benutzer ist hatte bereits die Gruppe entfernt!');
+                    }
+                }
+
+                return redirect()->route('admin.teamspeak.index');
             }
-        }
+            throw ValidationException::withMessages(['uniqueId' => 'TeamSpeak Client konnte nicht gefunden werden!']);
 
-        return redirect()->route('admin.teamspeak.index');
+        } catch (TeamSpeakUnreachableException $e) {
+            throw ValidationException::withMessages(['uniqueId' => 'TeamSpeak ist nicht erreichbar!']);
+        }
     }
 }

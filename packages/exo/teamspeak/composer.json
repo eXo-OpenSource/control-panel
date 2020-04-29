@@ -1,0 +1,33 @@
+{
+    "name": "exo/teamspeak",
+    "type": "library",
+    "license": "MIT",
+    "description": "",
+    "authors": [
+        {
+            "name": "MegaThorx",
+            "email": "git@merx.dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Exo\\TeamSpeak\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Exo\\TeamSpeak\\TeamSpeakServiceProvider"
+            ],
+            "aliases": [
+                "Exo\\TeamSpeak\\TeamSpeakFacade"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
