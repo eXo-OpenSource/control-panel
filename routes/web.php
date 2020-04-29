@@ -96,7 +96,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
         Route::resource('users.teamspeak', 'UserTeamspeakController', ['as' => 'admin'])->only('create', 'store');
         Route::get('teamspeak/{teamspeak}/delete', 'TeamspeakController@delete')->name('admin.teamspeak.delete');
-        Route::resource('teamspeak', 'TeamspeakController', ['as' => 'admin'])->only('index', 'destroy');
+        Route::resource('teamspeak', 'TeamspeakController', ['as' => 'admin'])->only('index', 'destroy', 'show');
         Route::get('logs/{log?}', 'LogController@show')->name('admin.logs.show');
         Route::get('users/multiaccounts', 'MultiaccountController@index')->name('admin.user.multiaccounts');
         Route::get('users/forum/{forumId}', 'ForumUserController@show')->name('admin.user.forum');

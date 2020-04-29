@@ -32,6 +32,11 @@ class TeamspeakIdentityPolicy
         }
     }
 
+    public function show(User $user)
+    {
+        return $user->Rank >= 3;
+    }
+
     public function create(User $user)
     {
         return $user->Rank >= 3;

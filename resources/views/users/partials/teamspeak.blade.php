@@ -42,7 +42,10 @@
                                         <td>{{ $identity->Notice }}</td>
                                         <td>{{ $identity->CreatedAt->format('d.m.Y H:i:s') }}</td>
                                         @if(auth()->user()->Rank >= 3)
-                                        <td><a class="btn btn-sm btn-danger" href="{{ route('admin.teamspeak.delete', $identity) }}">{{ __('Löschen') }}</a></td>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary" href="{{ route('admin.teamspeak.show', $identity) }}">{{ __('Details') }}</a>
+                                            <a class="btn btn-sm btn-danger" href="{{ route('admin.teamspeak.delete', $identity) }}">{{ __('Löschen') }}</a>
+                                        </td>
                                         @endif
                                     </tr>
                                 @endforeach

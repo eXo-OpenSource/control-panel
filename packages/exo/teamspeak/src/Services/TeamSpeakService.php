@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Responses\ChannelGroupMembersResponse;
 use Exo\TeamSpeak\Responses\ChannelGroupsResponse;
+use Exo\TeamSpeak\Responses\ChannelsResponse;
 use Exo\TeamSpeak\Responses\ClientInfoResponse;
 use Exo\TeamSpeak\Responses\ClientResponse;
 use Exo\TeamSpeak\Responses\ClientsResponse;
@@ -149,6 +150,33 @@ class TeamSpeakService
             return $response;
         } else {
             return new ClientsResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
+        }
+    }
+
+    /***
+     * @param bool $byPassCache
+     * @return ChannelsResponse
+     * @throws TeamSpeakUnreachableException
+     */
+    public function getChannelList($byPassCache = false)
+    {
+        if(Cache::has('teamspeak:channellist') && !$byPassCache) {
+            return Cache::get('teamspeak:channellist');
+        }
+
+        $result = $this->request('channellist', ['-topic', '-flags', '-voice', '-limits', '-icon',
+            '-secondsempty', '-banners']);
+        if($result->status->code === 0) {
+            $response = new ChannelsResponse(TeamSpeakResponse::RESPONSE_SUCCESS,
+                $result->status->message,
+                $result,
+                $result->body
+            );
+
+            Cache::put('teamspeak:channellist', $response, Carbon::now()->addMinutes(2));
+            return $response;
+        } else {
+            return new ChannelsResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
         }
     }
 

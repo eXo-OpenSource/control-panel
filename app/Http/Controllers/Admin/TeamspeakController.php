@@ -64,6 +64,32 @@ class TeamspeakController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param TeamspeakIdentity $teamspeak
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(TeamspeakIdentity $teamspeak)
+    {
+        Gate::authorize('show', $teamspeak);
+
+
+        try {
+            $channels = $this->teamSpeak->getChannelList()->channels;
+            $channelGroups = $this->teamSpeak->getChannelGroups()->groups;
+            $client = $this->teamSpeak->getDatabaseClient($teamspeak->TeamspeakDbId)->client;
+            $info = $client->info()->info;
+            $serverGroups = $client->serverGroups()->serverGroups;
+            $channelGroupMembers = $client->channelGroups()->members;
+
+            return view('admin.teamspeak.show', compact('teamspeak', 'serverGroups', 'channelGroups', 'channelGroupMembers', 'channels', 'client', 'info'));
+        } catch (TeamSpeakUnreachableException $e) {
+        }
+
+        abort(500);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param TeamspeakIdentity $teamspeak

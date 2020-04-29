@@ -51,7 +51,10 @@
                                     <td>@if($entry->AdminId === null) {{ '-' }} @else @if($entry->admin)<a href="{{ route('users.show', [$entry->AdminId]) }}">{{ $entry->admin->Name }}</a>@else{{ 'Unknown' }} (ID: {{ $entry->AdminId }}) @endif @endif</td>
                                     <td>{{ $entry->Notice }}</td>
                                     <td>{{ $entry->CreatedAt->format('d.m.Y H:i:s') }}</td>
-                                    <td><a class="btn btn-sm btn-danger" href="{{ route('admin.teamspeak.delete', $entry) }}">{{ __('Löschen') }}</a></td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary" href="{{ route('admin.teamspeak.show', $entry) }}">{{ __('Details') }}</a>
+                                        <a class="btn btn-sm btn-danger" href="{{ route('admin.teamspeak.delete', $entry) }}">{{ __('Löschen') }}</a>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
