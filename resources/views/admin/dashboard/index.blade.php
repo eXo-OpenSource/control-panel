@@ -1,12 +1,5 @@
 @extends('layouts.app')
 
-@section('top-menu')
-    <ul class="c-header-nav d-md-down-none">
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.user.search') }}">Benutzersuche</a></li>
-        <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ route('admin.texture') }}">Texturen</a></li>
-    </ul>
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <div class="row justify-content-center">
