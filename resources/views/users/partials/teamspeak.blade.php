@@ -1,5 +1,5 @@
 @section('title', __('TeamSpeak') . ' - '. $user->Name)
-@can('history', $user)
+@can('teamspeak', $user)
     <div class="row">
         <div class="col-md-12">
             @can('create', \App\Models\TeamspeakIdentity::class)
