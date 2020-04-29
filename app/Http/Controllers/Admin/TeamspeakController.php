@@ -5,12 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Models\AccountTeamspeak;
 use App\Models\TeamspeakIdentity;
 use App\Models\User;
+use App\Services\TeamSpeakService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class TeamspeakController extends Controller
 {
+    protected $teamSpeakService;
+
+    public function __construct(TeamSpeakService $teamSpeakService)
+    {
+        $this->teamSpeakService = $teamSpeakService;
+    }
+
     public function index()
     {
         abort_unless(Gate::allows('admin-rank-3'), 403);
@@ -52,40 +62,48 @@ class TeamspeakController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param TeamspeakIdentity $teamspeak
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function store(Request $request)
+    public function delete(TeamspeakIdentity $teamspeak)
     {
-        /*
-        $data = $request->validate([
-            'name' => 'required',
-            'vehicle' => 'required|in:' . implode(',', array_keys(config('constants.vehicleNames'))),
-            'type' => 'required|in:0,1',
-            'texture' => 'required|image|dimensions:max_width=600,max_height=600|max:200'
-        ]);
+        Gate::authorize('delete', $teamspeak);
 
-        $path = Storage::disk('textures')->put(
-            '', $request->file('texture')
+        return view('admin.teamspeak.delete', compact('teamspeak'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param TeamspeakIdentity $teamspeak
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
+     */
+    public function destroy(TeamspeakIdentity $teamspeak)
+    {
+        Gate::authorize('delete', $teamspeak);
+
+        $result = $this->teamSpeakService->removeServerGroupFromClient(
+            $teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'),
+            $teamspeak->TeamspeakDbId
         );
 
-        $texture = new Texture();
-        $texture->UserId = auth()->user()->Id;
-        $texture->Name = $data['name'];
-        $texture->Image = env('APP_URL') .  '/storage/textures/' . $path;
-        $texture->Model = $data['vehicle'];
-        $texture->Status = 0;
-        $texture->Public = $data['type'];
-        $texture->Admin = 0;
-        $texture->Date = new \DateTime();
-        $texture->Earnings = 0;
-        $texture->save();
+        if($result->status !== 'Success' && $result->message !== 'Empty result set') {
+            throw ValidationException::withMessages(['uniqueId' => 'Die Gruppe konnte nicht entfernt werden!']);
+        }
 
-        Session::flash('alert-success', 'Erfolgreich hochgeladen!');
-        return redirect()->route('textures.index');
-        */
-        return '';
+        $teamspeak->delete();
+
+        if($result->status === 'Success') {
+            Session::flash('alert-success', 'Erfolgreich gelöscht!');
+        } else {
+            if($result->message === 'Empty result set') {
+                Session::flash('alert-success', 'Erfolgreich gelöscht aber der Benutzer ist hatte bereits die Gruppe entfernt!');
+            }
+        }
+
+        return redirect()->route('admin.teamspeak.index');
     }
 }

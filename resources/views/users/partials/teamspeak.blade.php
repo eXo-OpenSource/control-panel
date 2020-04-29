@@ -2,13 +2,13 @@
 @can('history', $user)
     <div class="row">
         <div class="col-md-12">
+            @can('create', \App\Models\TeamspeakIdentity::class)
             <div class="row mb-4">
                 <div class="col-12">
-                    @if(auth()->user()->Rank >= 3)
                     <a href="{{ route('admin.users.teamspeak.create', [$user]) }}" class="btn btn-primary float-right">{{ __('Identität hinzufügen') }}</a>
-                    @endif
                 </div>
             </div>
+            @endcan
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -16,7 +16,7 @@
                             {{ __('TeamSpeak') }}
                         </div>
                         <div class="card-body">
-                            <table class="table table-responsive-sm">
+                            <table class="table table-sm table-responsive-sm">
                                 <thead>
                                 <tr>
                                     <th scope="col">{{ __('Eindeutige ID') }}</th>
@@ -26,6 +26,9 @@
                                     @endif
                                     <th scope="col">{{ __('Notiz') }}</th>
                                     <th scope="col">{{ __('Datum') }}</th>
+                                    @if(auth()->user()->Rank >= 3)
+                                    <th scope="col"></th>
+                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -38,6 +41,9 @@
                                         @endif
                                         <td>{{ $identity->Notice }}</td>
                                         <td>{{ $identity->CreatedAt->format('d.m.Y H:i:s') }}</td>
+                                        @if(auth()->user()->Rank >= 3)
+                                        <td><a class="btn btn-sm btn-danger" href="{{ route('admin.teamspeak.delete', $identity) }}">{{ __('Löschen') }}</a></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
