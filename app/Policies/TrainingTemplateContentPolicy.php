@@ -31,9 +31,9 @@ class TrainingTemplateContentPolicy
     {
         $targets = $user->character->getTrainingTargetsEdit();
 
-        if($templateContent->training->ElementType === 2 && $templateContent->training->ElementId === $user->character->FactionId &&  in_array('faction', $targets)) {
+        if($templateContent->template->ElementType === 2 && $templateContent->template->ElementId === $user->character->FactionId &&  in_array('faction', $targets)) {
             return true;
-        } elseif($templateContent->training->ElementType === 3 && $templateContent->training->ElementId === $user->character->CompanyId && in_array('company', $targets)) {
+        } elseif($templateContent->template->ElementType === 3 && $templateContent->template->ElementId === $user->character->CompanyId && in_array('company', $targets)) {
             return true;
         }
 
@@ -44,9 +44,9 @@ class TrainingTemplateContentPolicy
     {
         $targets = $user->character->getTrainingTargetsEdit();
 
-        if($templateContent->training->ElementType === 2 && $templateContent->training->ElementId === $user->character->FactionId &&  in_array('faction', $targets)) {
+        if($templateContent->template->ElementType === 2 && $templateContent->template->ElementId === $user->character->FactionId &&  in_array('faction', $targets)) {
             return true;
-        } elseif($templateContent->training->ElementType === 3 && $templateContent->training->ElementId === $user->character->CompanyId && in_array('company', $targets)) {
+        } elseif($templateContent->template->ElementType === 3 && $templateContent->template->ElementId === $user->character->CompanyId && in_array('company', $targets)) {
             return true;
         }
 
