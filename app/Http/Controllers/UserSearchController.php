@@ -15,8 +15,6 @@ class UserSearchController extends Controller
      */
     public function index()
     {
-        abort_unless(Gate::allows('admin-rank-3'), 403);
-
         $appends = [];
 
         $limit = 50;
