@@ -26,11 +26,15 @@ class TeamspeakIdentityPolicy
         if ($user->Rank >= 3) {
             return true;
         }
+
+        if($user->Rank === 1 && $ability === 'create') {
+            return true;
+        }
     }
 
     public function create(User $user)
     {
-        return auth()->user()->Rank >= 1;
+        return $user->Rank >= 3;
     }
 
     public function update(User $user, TeamspeakIdentity $teamspeakIdentity)

@@ -21,7 +21,11 @@ class UserPolicy
 
     public function before($user, $ability)
     {
-        if ($user->Rank >= 2) {
+        if ($user->Rank >= 3) {
+            return true;
+        }
+
+        if($user->Rank === 1 && $ability === 'teamspeak') {
             return true;
         }
     }
