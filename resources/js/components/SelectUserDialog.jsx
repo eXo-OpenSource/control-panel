@@ -65,7 +65,7 @@ export default class SelectUserDialog extends Component {
                             <Form.Group>
                                 <Form.Label>Benutzer:</Form.Label>
                                 <InputGroup>
-                                    <Form.Control name="name" type="text" placeholder="Spielername" onChange={this.onChange.bind(this)} />
+                                    <Form.Control name="name" type="text" placeholder="Spielername" autocomplete="off" onChange={this.onChange.bind(this)} />
                                     <InputGroup.Append>
                                         <Button onClick={this.search.bind(this)} variant="outline-success">suchen</Button>
                                     </InputGroup.Append>

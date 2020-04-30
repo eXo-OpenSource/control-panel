@@ -17,45 +17,38 @@
                     <a class="btn btn-danger" href="{{ route('trainings.templates.delete', [$template]) }}">{{ __('Löschen') }}</a>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
+            <div class="col-12 d-flex justify-content-between align-items-start m-4">
+                <div>
+                    <p class="h4">
                         {{ __('Inhalte') }}
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <a class="float-right btn btn-primary" href="{{ route('trainings.templates.contents.create', [$template]) }}">{{ __('Hinzufügen') }}</a>
+                    </p>
+                </div>
+                <div>
+                    <a class="float-right btn btn-primary" href="{{ route('trainings.templates.contents.create', [$template]) }}">{{ __('Inhalt hinzufügen') }}</a>
+                </div>
+            </div>
+            @foreach($template->contents()->orderBy('Order', 'ASC')->orderBy('Id', 'ASC')->get() as $content)
+                <div class="col-md-12">
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="h4">{{ $content->Name }}</span>
+                                </div>
+                                <div>
+                                    <a href="{{ route('trainings.templates.contents.edit', [$content]) }}" class="btn btn-sm btn-primary">{{ __('Bearbeiten') }}</a>
+                                    <a href="{{ route('trainings.templates.contents.delete', [$content]) }}" class="btn btn-sm btn-danger">{{ __('Löschen') }}</a>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <table class="table table-sm table-responsive-sm">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">{{ __('Name') }}</th>
-                                        <th scope="col">{{ __('Beschreibung') }}</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($template->contents()->orderBy('Order', 'ASC')->orderBy('Id', 'ASC')->get() as $content)
-                                        <tr>
-                                            <td>{{ $content->Name }}</td>
-                                            <td>{{ $content->Description }}</td>
-                                            <td>
-                                                <a href="{{ route('trainings.templates.contents.edit', [$content]) }}" class="btn btn-sm btn-primary">{{ __('Bearbeiten') }}</a>
-                                                <a href="{{ route('trainings.templates.contents.delete', [$content]) }}" class="btn btn-sm btn-danger">{{ __('Löschen') }}</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="card-body">
+                            <p>Order: {{ $content->Order }}</p>
+                            {{ $content->Description }}
                         </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection
