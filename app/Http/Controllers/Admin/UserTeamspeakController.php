@@ -70,6 +70,7 @@ class UserTeamspeakController extends Controller
 
                 $result = $client->client->addServerGroup($teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'));
                 $client->client->setDescription(route('users.show', $user->Id));
+                $client->client->removeServerGroup(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'));
 
                 if($result->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
                     Session::flash('alert-success', 'Erfolgreich verknüpft und freigeschaltet!');
