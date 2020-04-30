@@ -5,7 +5,7 @@ return [
     'dsn' => env('SENTRY_LARAVEL_DSN', env('SENTRY_DSN')),
 
     // capture release as git sha
-    'release' => trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%H" -n1 HEAD')),
+    'release' => trim( file_exists(base_path('VERSION')) ? file_get_contents(base_path('VERSION')) : ''),
 
     'breadcrumbs' => [
         // Capture Laravel logs in breadcrumbs

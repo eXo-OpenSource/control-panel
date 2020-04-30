@@ -62,7 +62,7 @@ RUN chown -R app.app /run && \
 
 # Setup document root
 RUN mkdir -p /var/www/public
-RUN crontab /etc/cron/crontab
+RUN build/crontab /etc/cron/crontab
 
 # Add application
 WORKDIR /var/www

@@ -99,6 +99,7 @@ docker:
     - export CI_PATH=$CI_REGISTRY/$(echo $CI_PROJECT_NAMESPACE | tr "[:upper:]" "[:lower:]")/$(echo $CI_PROJECT_NAME | tr "[:upper:]" "[:lower:]")
     - echo $CI_PROJECT_PATH
     - echo $CI_PROJECT_PATH_SLUG
+    - git log --pretty="%H" -n1 HEAD > VERSION
     - docker build -t $CI_JOB_ID .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - '[ "$CI_BUILD_REF_NAME" != "master" ] && docker tag $CI_JOB_ID $CI_PATH:latest-$CI_COMMIT_REF_SLUG'
