@@ -66,7 +66,7 @@ class TeamSpeakCheckNames implements ShouldQueue
                                         $client->message('Leider hast du deinen Namen immer noch nicht korrigiert hast. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 2) {
-                                        $client->message('Du hast dein Name immer noch nicht korrigiert. Falls du den Namen nicht änderst wirst du vom Server kicken. ' . $message . $suffix);
+                                        $client->message('Du hast deinen Namen immer noch nicht korrigiert. Falls du den Namen nicht änderst wirst du vom Server kicken. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 3) {
                                         $client->message('Falls du deinen Namen nicht änderst wirst du vom Server kicken! ' . $message . $suffix);

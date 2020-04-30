@@ -67,7 +67,6 @@ class UserTeamspeakController extends Controller
                 $teamspeak->Type = intval($validatedData['type']);
                 $teamspeak->save();
 
-
                 $result = $client->client->addServerGroup($teamspeak->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'));
                 $client->client->setDescription(route('users.show', $user->Id));
                 $client->client->removeServerGroup(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'));
