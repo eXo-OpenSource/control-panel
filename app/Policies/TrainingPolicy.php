@@ -42,7 +42,7 @@ class TrainingPolicy
 
     public function update(User $user, Training $training)
     {
-        $targets = $user->character->getTrainingTargetsEdit();
+        $targets = $user->character->getTrainingTargets();
 
         if($training->ElementType === 2 && $training->ElementId === $user->character->FactionId && in_array('faction', $targets)) {
             return true;
