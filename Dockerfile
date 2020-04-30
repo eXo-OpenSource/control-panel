@@ -39,7 +39,12 @@ RUN apk --update add --no-cache \
       php7-fileinfo \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
-    adduser -u 1000 -S app -G app
+    adduser -u 1000 -S app -G app && \
+    touch /var/log/php7/stdout.log && \
+    touch /var/log/php7/stderr.log && \
+    touch /var/log/nginx/stdout.log && \
+    touch /var/log/nginx/stderr.log && \
+    chown -R 1000:0 /var/log/*
 
 # Set timzone
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
