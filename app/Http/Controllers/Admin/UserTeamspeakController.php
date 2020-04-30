@@ -49,7 +49,7 @@ class UserTeamspeakController extends Controller
         Gate::authorize('create', TeamSpeakIdentity::class);
 
         $validatedData = $request->validate([
-            'uniqueId' => 'required|unique:App\Models\TeamspeakIdentity,TeamspeakId,NULL,Id,DeletedAt,NULL',
+            'uniqueId' => 'required|unique:App\Models\TeamSpeakIdentity,TeamspeakId,NULL,Id,DeletedAt,NULL',
             'type' => 'required|in:1,2',
             'notice' => ''
         ]);
