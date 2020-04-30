@@ -11,7 +11,7 @@
                         <thead>
                         <tr>
                             <th scope="col">{{ __('Fraktion/Unternehmen') }}</th>
-                            <th scope="col">{{ __('Beitritsdatum') }}</th>
+                            <th scope="col">{{ __('Beitrittsdatum') }}</th>
                             <th scope="col">{{ __('Uninvite Datum') }}</th>
                             <th scope="col">{{ __('Dauer') }}</th>
                             <th scope="col">{{ __('Uninviter') }}</th>

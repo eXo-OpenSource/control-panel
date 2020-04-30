@@ -17,6 +17,7 @@
                 <div>
                     @auth
                         @if(auth()->user()->Rank >= 3)
+                            <a class="btn btn-primary" href="{{ 'https://exo-reallife.de/index.php?page=admin&f=spieler&id=' . $user->Id }}">{{ __('Altes CP') }}</a>
                             <react-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-ban-dialog>
                             @if(auth()->user()->Rank >= 5)<react-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unban-dialog>@endif
                             <react-kick-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-kick-dialog>

@@ -37,8 +37,8 @@
                         <table class="table table-responsive-sm table-sm">
                             <thead>
                             <tr>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Spielzeit') }}</th>
+                                <th scope="col"><a href="{{ route('users.search', ['sortBy' => 'name', 'direction' => $sortBy === 'name' && $direction === 'asc'  ? 'desc' : 'asc', 'name' => request()->get('name')]) }}">{{ __('Name') }}</a></th>
+                                <th scope="col"><a href="{{ route('users.search', ['sortBy' => 'name', 'direction' => $sortBy === 'playTime' && $direction === 'asc'  ? 'desc' : 'asc', 'playTime' => request()->get('playTime')]) }}">{{ __('Spielzeit') }}</a></th>
                                 @if(auth()->user()->Rank >= 3)
                                 <th>{{ __('Letzter Login') }}</th>
                                 <th>{{ __('Letzte IP') }}</th>
@@ -48,8 +48,8 @@
                             </thead>
                             <tbody>
                             @foreach($users as $user)
-                                <tr onclick="location.href = '{{ route('users.show', [$user->Id]) }}';" style="cursor: pointer;">
-                                    <td>{{ $user->Name }}</td>
+                                <tr>
+                                    <td><a href="{{ route('users.show', [$user->Id]) }}">{{ $user->Name }}</a></td>
                                     <td>@if($user->character){{ $user->character->getPlayTime() }}@else{{ '-' }}@endif</td>
                                     @if(auth()->user()->Rank >= 3)
                                     <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>

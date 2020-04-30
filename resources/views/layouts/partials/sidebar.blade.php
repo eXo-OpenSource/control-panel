@@ -6,6 +6,11 @@
         </a>
     </div>
     <ul class="c-sidebar-nav" data-drodpown-accordion="true">
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="https://forum.exo-reallife.de">
+                <i class="c-sidebar-nav-icon fas fa-comments"></i>{{ __('Forum') }}
+            </a>
+        </li>
         @auth
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('users.search') }}">
@@ -84,9 +89,6 @@
                     <ul class="c-sidebar-nav-dropdown-items">
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}"><span class="c-sidebar-nav-icon"></span>Dashboard</a>
-                        </li>
-                        <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('users.search') }}"><span class="c-sidebar-nav-icon"></span>Benutzersuche</a>
                         </li>
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.user.multiaccounts') }}"><span class="c-sidebar-nav-icon"></span>Multiaccounts</a>

@@ -15,6 +15,8 @@ class UserSearchController extends Controller
      */
     public function index()
     {
+        $sortBy = request()->has('sortBy') ? request()->get('sortBy') : null;
+        $direction = request()->has('direction') ? request()->get('direction') : null;
         $appends = [];
 
         $limit = 50;
@@ -31,6 +33,7 @@ class UserSearchController extends Controller
         }
 
         $users = User::query();
+        $hasFilter = false;
 
         if (!empty(request()->get('name')) ||
             (auth()->user()->Rank >= 3 && (!empty(request()->get('serial')) || !empty(request()->get('ip'))))
@@ -53,13 +56,32 @@ class UserSearchController extends Controller
                 }
             }
 
-            $users->orderBy('LastLogin', 'DESC');
-        } else {
-            $users->orderBy('Id', 'DESC');
+            $hasFilter = true;
         }
+
+
+
+        if($sortBy && in_array($sortBy, ['name', 'playTime'])) {
+            if($sortBy === 'name') {
+                $users->orderBy('Name', $direction === 'desc' ? 'DESC' : 'ASC');
+            } elseif($sortBy === 'playTime') {
+                $users->orderBy('PlayTime', $direction === 'desc' ? 'DESC' : 'ASC');
+            } elseif($hasFilter) {
+                $users->orderBy('LastLogin', 'DESC');
+            } else {
+                $users->orderBy('Id', 'DESC');
+            }
+        } else {
+            if($hasFilter) {
+                $users->orderBy('LastLogin', 'DESC');
+            } else {
+                $users->orderBy('Id', 'DESC');
+            }
+        }
+
 
         $users = $users->paginate($limit);
 
-        return view('users.search.index', ['users' => $users, 'limit' => $limit, 'appends' => $appends]);
+        return view('users.search.index', ['users' => $users, 'limit' => $limit, 'appends' => $appends, 'sortBy' => $sortBy, 'direction' => $direction]);
     }
 }
