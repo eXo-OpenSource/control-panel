@@ -4,6 +4,8 @@ namespace Exo\TeamSpeak\Services;
 
 use Carbon\Carbon;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
+use Exo\TeamSpeak\Responses\BanResponse;
+use Exo\TeamSpeak\Responses\BansResponse;
 use Exo\TeamSpeak\Responses\ChannelGroupMembersResponse;
 use Exo\TeamSpeak\Responses\ChannelGroupsResponse;
 use Exo\TeamSpeak\Responses\ChannelsResponse;
@@ -103,7 +105,7 @@ class TeamSpeakService
                 }
             }
         }
-        return new ClientResponse($clients->status, $clients->message, $clients->originalResponse);
+        return new ClientResponse(TeamSpeakResponse::RESPONSE_FAILED, $clients->message, $clients->originalResponse);
     }
 
     /**
@@ -125,6 +127,65 @@ class TeamSpeakService
         }
         return new ClientResponse($clients->status, $clients->message, $clients->originalResponse);
     }
+
+    /**
+     * @throws TeamSpeakUnreachableException
+     * @return BansResponse
+     */
+    public function getBans()
+    {
+        $result = $this->request('banlist');
+
+        if($result->status->code === 0) {
+            return new BansResponse(TeamSpeakResponse::RESPONSE_SUCCESS,
+                $result->status->message,
+                $result,
+                $result->body
+            );
+        } else {
+            return new BansResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
+        }
+    }
+
+    /**
+     * @param $banId
+     * @return BanResponse
+     * @throws TeamSpeakUnreachableException
+     */
+    public function getBan($banId)
+    {
+        $bans = $this->getBans();
+
+        if($bans->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+            foreach ($bans->bans as $ban) {
+                if($ban->id === $banId) {
+                    return new BanResponse($bans->status, $bans->message, $bans->originalResponse, $ban);
+                }
+            }
+        }
+        return new BanResponse(TeamSpeakResponse::RESPONSE_FAILED, $bans->message, $bans->originalResponse);
+    }
+
+    /**
+     * @param integer $databaseId
+     * @param bool $byPassCache
+     * @throws TeamSpeakUnreachableException
+     * @return BanResponse
+     */
+    public function getBanByUniqueId($uniqueId)
+    {
+        $bans = $this->getBans();
+
+        if($bans->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+            foreach ($bans->bans as $ban) {
+                if($ban->uniqueId === $uniqueId) {
+                    return new BanResponse($bans->status, $bans->message, $bans->originalResponse, $ban);
+                }
+            }
+        }
+        return new BanResponse(TeamSpeakResponse::RESPONSE_FAILED, $bans->message, $bans->originalResponse);
+    }
+
 
     /***
      * @param bool $byPassCache
@@ -487,6 +548,40 @@ class TeamSpeakService
     public function setDatabaseClientChannelGroup($databaseId, $channelId, $channelGroupid)
     {
         $result = $this->request('setclientchannelgroup', ['cldbid' => $databaseId, 'cid' => $channelId, 'cgid' => $channelGroupid]);
+
+        if($result->status->code === 0) {
+            return new TeamSpeakResponse(TeamSpeakResponse::RESPONSE_SUCCESS, $result->status->message, $result);
+        } else {
+            return new TeamSpeakResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
+        }
+    }
+
+    /**
+     * @param $banId
+     * @return TeamSpeakResponse
+     * @throws TeamSpeakUnreachableException
+     */
+    public function removeBan($banId)
+    {
+        $result = $this->request('bandel', ['banid' => $banId]);
+
+        if($result->status->code === 0) {
+            return new TeamSpeakResponse(TeamSpeakResponse::RESPONSE_SUCCESS, $result->status->message, $result);
+        } else {
+            return new TeamSpeakResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
+        }
+    }
+
+    /**
+     * @param $uniqueId
+     * @param $reason
+     * @param int $duration
+     * @return TeamSpeakResponse
+     * @throws TeamSpeakUnreachableException
+     */
+    public function addBan($uniqueId, $reason, $duration = 0)
+    {
+        $result = $this->request('banadd', ['uid' => $uniqueId, 'banreason' => $reason, 'time' => $duration]);
 
         if($result->status->code === 0) {
             return new TeamSpeakResponse(TeamSpeakResponse::RESPONSE_SUCCESS, $result->status->message, $result);

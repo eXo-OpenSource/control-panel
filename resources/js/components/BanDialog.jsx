@@ -61,9 +61,7 @@ export default class BanDialog extends Component {
     render() {
         return (
             <>
-                <Button variant="danger" onClick={this.handleShow}>
-                    Sperren
-                </Button>
+                <span className="dropdown-item" style={{'cursor': 'pointer'}} onClick={this.handleShow}>Sperren</span>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>

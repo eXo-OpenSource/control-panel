@@ -211,6 +211,16 @@ class Client
     }
 
     /**
+     * @param $reason
+     * @throws TeamSpeakUnreachableException
+     * @return TeamSpeakResponse
+     */
+    public function ban($reason, $duration)
+    {
+        return app('teamspeak')->addBan($this->uniqueId, $reason, $duration);
+    }
+
+    /**
      * @throws TeamSpeakUnreachableException
      * @return ClientInfoResponse
      */

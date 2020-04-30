@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Services\TeamSpeakService;
 use Illuminate\Console\Command;
@@ -43,25 +43,30 @@ class TeamSpeakSetActivatedGroup extends Command
      */
     public function handle()
     {
-        $identities = TeamspeakIdentity::query()->where('Type', 1)->get();
+        $identities = TeamSpeakIdentity::all();
 
         foreach($identities as $identity) {
             try {
                 $client = $this->teamSpeak->getDatabaseClient($identity->TeamspeakDbId);
-                $response = $client->client->serverGroups();
-                $groups = [];
 
-                foreach($response->serverGroups as $group) {
-                    array_push($groups, $group->serverGroupId);
+                if($identity->Type === 1) {
+                    $response = $client->client->serverGroups();
+                    $groups = [];
+
+                    foreach($response->serverGroups as $group) {
+                        array_push($groups, $group->serverGroupId);
+                    }
+
+                    if(in_array(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'), $groups)) {
+                        $client->client->removeServerGroup(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'));
+                    }
+
+                    if(!in_array(env('TEAMSPEAK_ACTIVATED_GROUP'), $groups)) {
+                        $client->client->addServerGroup(env('TEAMSPEAK_ACTIVATED_GROUP'));
+                    }
                 }
 
-                if(in_array(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'), $groups)) {
-                    $client->client->removeServerGroup(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'));
-                }
-
-                if(!in_array(env('TEAMSPEAK_ACTIVATED_GROUP'), $groups)) {
-                    $client->client->addServerGroup(env('TEAMSPEAK_ACTIVATED_GROUP'));
-                }
+                $client->client->setDescription('https://cp.exo-reallife.de/users/' . $identity->UserId);
             } catch (TeamSpeakUnreachableException $e) {
             }
         }

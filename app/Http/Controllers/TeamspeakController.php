@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use Illuminate\Http\Request;
 
 class TeamspeakController extends Controller
@@ -43,10 +43,10 @@ class TeamspeakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamSpeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
-    public function show(TeamspeakIdentity $teamspeakIdentity)
+    public function show(TeamSpeakIdentity $teamspeakIdentity)
     {
         //
     }
@@ -54,10 +54,10 @@ class TeamspeakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamSpeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
-    public function edit(TeamspeakIdentity $teamspeakIdentity)
+    public function edit(TeamSpeakIdentity $teamspeakIdentity)
     {
         //
     }
@@ -66,20 +66,20 @@ class TeamspeakController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamSpeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TeamspeakIdentity $teamspeakIdentity) {
+    public function update(Request $request, TeamSpeakIdentity $teamspeakIdentity) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TeamspeakIdentity  $teamspeakIdentity
+     * @param  \App\Models\TeamSpeakIdentity  $teamspeakIdentity
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TeamspeakIdentity $teamspeakIdentity)
+    public function destroy(TeamSpeakIdentity $teamspeakIdentity)
     {
         //
     }

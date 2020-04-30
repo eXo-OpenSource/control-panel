@@ -18,10 +18,26 @@
                     @auth
                         @if(auth()->user()->Rank >= 3)
                             <a class="btn btn-primary" href="{{ 'https://exo-reallife.de/index.php?page=admin&f=spieler&id=' . $user->Id }}">{{ __('Altes CP') }}</a>
-                            <react-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-ban-dialog>
-                            @if(auth()->user()->Rank >= 5)<react-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unban-dialog>@endif
-                            <react-kick-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-kick-dialog>
-                            <react-warns-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-warns-dialog>
+
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ __('MTA Server') }}
+                                </button>
+                                <div class="dropdown-menu">
+                                    <react-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-ban-dialog>
+                                    @if(auth()->user()->Rank >= 5)<react-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unban-dialog>@endif
+                                    <react-kick-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-kick-dialog>
+                                    <react-warns-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-warns-dialog>
+                                </div>
+                            </div>
+
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ 'TeamSpeak' }}
+                                </button>
+                                <div class="dropdown-menu">
+                                </div>
+                            </div>
                         @endif
                     @endauth
                 </div>

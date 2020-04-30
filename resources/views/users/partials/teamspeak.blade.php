@@ -2,7 +2,7 @@
 @can('teamspeak', $user)
     <div class="row">
         <div class="col-md-12">
-            @can('create', \App\Models\TeamspeakIdentity::class)
+            @can('create', \App\Models\TeamSpeakIdentity::class)
             <div class="row mb-4">
                 <div class="col-12">
                     <a href="{{ route('admin.users.teamspeak.create', [$user]) }}" class="btn btn-primary float-right">{{ __('Identität hinzufügen') }}</a>
@@ -32,7 +32,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($user->teamspeakIdentities as $identity)
+                                @foreach($user->teamSpeakIdentities as $identity)
                                     <tr>
                                         <td>{{ $identity->TeamspeakId }}</td>
                                         <td>@if($identity->Type === 1){{ 'Benutzer' }}@elseif($identity->Type === 2){{ 'Musikbot' }}@else{{ 'Unbekannt' }}@endif</td>

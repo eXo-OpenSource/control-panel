@@ -65,9 +65,9 @@ class User extends Authenticatable
         return $this->hasMany(Texture::class, 'UserId', 'Id');
     }
 
-    public function teamspeakIdentities()
+    public function teamSpeakIdentities()
     {
-        return $this->hasMany(TeamspeakIdentity::class, 'UserId', 'Id');
+        return $this->hasMany(TeamSpeakIdentity::class, 'UserId', 'Id');
     }
 
     public function warns()

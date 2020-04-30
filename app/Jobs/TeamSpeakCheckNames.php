@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use Carbon\Carbon;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Responses\TeamSpeakResponse;
@@ -47,7 +47,7 @@ class TeamSpeakCheckNames implements ShouldQueue
                     }
                 }
 
-                $identities = TeamspeakIdentity::query()->whereIn('TeamspeakId', $uniqueIds)->with('user')->get();
+                $identities = TeamSpeakIdentity::query()->whereIn('TeamspeakId', $uniqueIds)->with('user')->get();
 
                 foreach($clients->clients as $client) {
                     if(in_array(intval(env('TEAMSPEAK_ACTIVATED_GROUP')), $client->serverGroups)) {

@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Training\Training'          => \App\Policies\TrainingPolicy::class,
         'App\Models\Training\Template'          => \App\Policies\TrainingTemplatePolicy::class,
         'App\Models\Training\TemplateContent'   => \App\Policies\TrainingTemplateContentPolicy::class,
-        'App\Models\TeamspeakIdentity'          => \App\Policies\TeamspeakIdentityPolicy::class,
+        'App\Models\TeamSpeakIdentity' => \App\Policies\TeamspeakIdentityPolicy::class,
     ];
 
     /**

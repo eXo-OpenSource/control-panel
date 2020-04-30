@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use App\Models\User;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Helpers\ChannelGroup;
@@ -38,7 +38,7 @@ class TeamspeakController extends Controller
             $limit = request()->get('limit');
         }
 
-        $teamspeak = TeamspeakIdentity::query();
+        $teamspeak = TeamSpeakIdentity::query();
 
         if (request()->has('id') && !empty(request()->get('id'))) {
             $teamspeak->where('TeamSpeakId', 'LIKE', '%'.request()->get('id').'%')->orderBy('Id', 'DESC');
@@ -66,10 +66,10 @@ class TeamspeakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param TeamspeakIdentity $teamspeak
+     * @param TeamSpeakIdentity $teamspeak
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(TeamspeakIdentity $teamspeak)
+    public function show(TeamSpeakIdentity $teamspeak)
     {
         Gate::authorize('show', $teamspeak);
 
@@ -92,10 +92,10 @@ class TeamspeakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param TeamspeakIdentity $teamspeak
+     * @param TeamSpeakIdentity $teamspeak
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function delete(TeamspeakIdentity $teamspeak)
+    public function delete(TeamSpeakIdentity $teamspeak)
     {
         Gate::authorize('delete', $teamspeak);
 
@@ -105,11 +105,11 @@ class TeamspeakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param TeamspeakIdentity $teamspeak
+     * @param TeamSpeakIdentity $teamspeak
      * @return \Illuminate\Http\RedirectResponse
      * @throws ValidationException
      */
-    public function destroy(TeamspeakIdentity $teamspeak)
+    public function destroy(TeamSpeakIdentity $teamspeak)
     {
         Gate::authorize('delete', $teamspeak);
 

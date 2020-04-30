@@ -3,6 +3,7 @@
     <div class="nav-tabs-boxed col-md-12">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"><a class="nav-link @if($log === 'punish'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'punish']) }}">{{ __('Strafen') }}</a></li>
+            <li class="nav-item"><a class="nav-link @if($log === 'teamspeak'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'teamspeak']) }}">{{ __('TeamSpeak') }}</a></li>
             <li class="nav-item"><a class="nav-link @if($log === 'nickchange'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'nickchange']) }}">{{ __('Nickchanges') }}</a></li>
             @if(auth()->user()->Rank >= 3)
                 <li class="nav-item"><a class="nav-link @if($log === 'login'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id, 'login']) }}">{{ __('Logins') }}</a></li>
@@ -36,6 +37,8 @@
                 @endif
                 @if($log === 'punish')
                     @include('users.partials.logs.punish')
+                @elseif($log === 'teamspeak')
+                    @include('users.partials.logs.teamspeak')
                 @elseif($log === 'money')
                     @include('users.partials.logs.money')
                 @elseif($log === 'nickchange')

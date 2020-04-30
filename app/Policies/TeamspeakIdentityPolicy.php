@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use App\Models\Training\Template;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -42,12 +42,12 @@ class TeamspeakIdentityPolicy
         return $user->Rank >= 3;
     }
 
-    public function update(User $user, TeamspeakIdentity $teamspeakIdentity)
+    public function update(User $user, TeamSpeakIdentity $teamspeakIdentity)
     {
         return $user->Rank >= 3;
     }
 
-    public function delete(User $user, TeamspeakIdentity $teamspeakIdentity)
+    public function delete(User $user, TeamSpeakIdentity $teamspeakIdentity)
     {
         return $user->Rank >= 3;
     }

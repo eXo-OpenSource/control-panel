@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\TeamspeakIdentity;
+use App\Models\TeamSpeakIdentity;
 use App\Models\User;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Responses\TeamSpeakResponse;
@@ -32,7 +32,7 @@ class UserTeamspeakController extends Controller
      */
     public function create(User $user)
     {
-        Gate::authorize('create', TeamspeakIdentity::class);
+        Gate::authorize('create', TeamSpeakIdentity::class);
         return view('admin.teamspeak.create', compact('user'));
     }
 
@@ -46,7 +46,7 @@ class UserTeamspeakController extends Controller
      */
     public function store(Request $request, User $user)
     {
-        Gate::authorize('create', TeamspeakIdentity::class);
+        Gate::authorize('create', TeamSpeakIdentity::class);
 
         $validatedData = $request->validate([
             'uniqueId' => 'required|unique:App\Models\TeamspeakIdentity,TeamspeakId,NULL,Id,DeletedAt,NULL',
@@ -58,7 +58,7 @@ class UserTeamspeakController extends Controller
             $client = $this->teamSpeak->getDatabaseIdFromUniqueId($validatedData['uniqueId']);
 
             if($client->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
-                $teamspeak = new TeamspeakIdentity();
+                $teamspeak = new TeamSpeakIdentity();
                 $teamspeak->UserId = $user->Id;
                 $teamspeak->AdminId = auth()->user()->Id;
                 $teamspeak->TeamspeakId = $validatedData['uniqueId'];

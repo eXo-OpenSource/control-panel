@@ -140,9 +140,7 @@ export default class WarnsDialog extends Component {
 
         return (
             <>
-                <Button variant="danger" onClick={this.handleShow}>
-                    Warns
-                </Button>
+                <span className="dropdown-item" style={{'cursor': 'pointer'}} onClick={this.handleShow}>Warns</span>
 
                 <Modal show={this.state.show} onHide={this.handleClose} size="lg">
                     <Modal.Header closeButton>

@@ -37,7 +37,14 @@ Route::resource('companies', 'CompanyController')->only('index', 'show');
 Route::get('companies/{company}/logs/{log?}', 'CompanyLogController@show')->name('companies.show.logs');
 Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
 
+Route::get('test', function() {
+   dd(app('teamspeak')->addBan('oj/0JYiPgfSr9Ug/e8Xf2KBlGjo=', 'GG & WP', 1));
+});
 
+Route::get('test', function() {
+    dd(app('teamspeak')->addBan('OCFUI4PzNOE5gx6RQw2qVzchQt4=', 'GG & WP', 1));
+    // dd(app('teamspeak')->getBan(9228));
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('users/search', 'UserSearchController@index')->name('users.search');

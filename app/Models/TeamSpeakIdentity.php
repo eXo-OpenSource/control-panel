@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TeamspeakIdentity extends Model
+class TeamSpeakIdentity extends Model
 {
     use SoftDeletes;
 

@@ -52,6 +52,16 @@ class DatabaseClient
     }
 
     /**
+     * @param $reason
+     * @throws TeamSpeakUnreachableException
+     * @return TeamSpeakResponse
+     */
+    public function ban($reason, $duration)
+    {
+        return app('teamspeak')->addBan($this->uniqueId, $reason, $duration);
+    }
+
+    /**
      * @param $description
      * @throws TeamSpeakUnreachableException
      * @return TeamSpeakResponse
