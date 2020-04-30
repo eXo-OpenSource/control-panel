@@ -96,6 +96,7 @@ docker:
   stage: build
   image: docker:dind
   script:
+    - apk update && apk add --no-cache git
     - export CI_PATH=$CI_REGISTRY/$(echo $CI_PROJECT_NAMESPACE | tr "[:upper:]" "[:lower:]")/$(echo $CI_PROJECT_NAME | tr "[:upper:]" "[:lower:]")
     - echo $CI_PROJECT_PATH
     - echo $CI_PROJECT_PATH_SLUG
