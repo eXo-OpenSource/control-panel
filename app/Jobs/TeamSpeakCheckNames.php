@@ -60,7 +60,7 @@ class TeamSpeakCheckNames implements ShouldQueue
                                     $message = 'Bitte ändere deinen Namen im TeamSpeak auf ' . $identity->user->Name . '! (' . ($count + 1) . '/5)';
                                     $suffix = PHP_EOL . 'Mehr Informationen im Regelwerk: https://forum.exo-reallife.de/thread/22539-serverregeln/?postID=212594#post212594';
                                     if($count === 0) {
-                                        $client->message('Mir ist aufgefallen das dein Name im TeamSpeak nicht mit dem Namen im Spiel übereinstimmt. ' . $message . $suffix);
+                                        $client->message('Mir ist aufgefallen, dass dein Name im TeamSpeak nicht mit dem Namen im Spiel übereinstimmt. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 1) {
                                         $client->message('Leider hast du deinen Namen immer noch nicht korrigiert hast. ' . $message . $suffix);
