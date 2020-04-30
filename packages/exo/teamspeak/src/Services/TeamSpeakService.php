@@ -158,7 +158,7 @@ class TeamSpeakService
      * @return ChannelsResponse
      * @throws TeamSpeakUnreachableException
      */
-    public function getChannelList($byPassCache = false)
+    public function getChannels($byPassCache = false)
     {
         if(Cache::has('teamspeak:channellist') && !$byPassCache) {
             return Cache::get('teamspeak:channellist');

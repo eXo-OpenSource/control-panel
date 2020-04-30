@@ -48,6 +48,9 @@ COPY build/nginx.conf /etc/nginx/nginx.conf
 COPY build/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY build/php.ini /etc/php7/conf.d/zzz_custom.ini
 
+# Configure cron
+COPY crontab /etc/cron/crontab
+
 # Configure supervisord
 COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -59,6 +62,7 @@ RUN chown -R app.app /run && \
 
 # Setup document root
 RUN mkdir -p /var/www/public
+RUN crontab /etc/cron/crontab
 
 # Add application
 WORKDIR /var/www

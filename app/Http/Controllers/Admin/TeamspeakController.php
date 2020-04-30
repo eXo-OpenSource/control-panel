@@ -75,7 +75,7 @@ class TeamspeakController extends Controller
 
 
         try {
-            $channels = $this->teamSpeak->getChannelList()->channels;
+            $channels = $this->teamSpeak->getChannels()->channels;
             $channelGroups = $this->teamSpeak->getChannelGroups()->groups;
             $client = $this->teamSpeak->getDatabaseClient($teamspeak->TeamspeakDbId)->client;
             $info = $client->info()->info;
