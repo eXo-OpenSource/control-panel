@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new TeamSpeakCheckNames)->everyFiveMinutes();
+        $schedule->job(new TeamSpeakCheckNames)->cron('*/2 * * * *');
     }
 
     /**

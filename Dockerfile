@@ -41,6 +41,10 @@ RUN apk --update add --no-cache \
     addgroup -g 1000 -S app && \
     adduser -u 1000 -S app -G app
 
+# Set timzone
+RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
+    echo "Europe/Vienna" > /etc/timezone
+
 # Configure nginx
 COPY build/nginx.conf /etc/nginx/nginx.conf
 
