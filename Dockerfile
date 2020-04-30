@@ -77,6 +77,8 @@ USER 1000
 RUN php artisan storage:link && \
     php artisan cache:clear
 
+USER 0
+
 # Expose the port nginx is reachable on
 EXPOSE 8080
 
