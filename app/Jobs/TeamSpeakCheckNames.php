@@ -63,13 +63,13 @@ class TeamSpeakCheckNames implements ShouldQueue
                                         $client->message('Mir ist aufgefallen, dass dein Name im TeamSpeak nicht mit dem Namen im Spiel übereinstimmt. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 1) {
-                                        $client->message('Leider hast du deinen Namen immer noch nicht korrigiert hast. ' . $message . $suffix);
+                                        $client->message('Leider hast du deinen Namen immer noch nicht korrigiert. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 2) {
-                                        $client->message('Du hast deinen Namen immer noch nicht korrigiert. Falls du den Namen nicht änderst wirst du vom Server kicken. ' . $message . $suffix);
+                                        $client->message('Du hast deinen Name immer noch nicht korrigiert. Falls du den Namen nicht änderst, wirst du vom Server gekickt. ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 3) {
-                                        $client->message('Falls du deinen Namen nicht änderst wirst du vom Server kicken! ' . $message . $suffix);
+                                        $client->message('Falls du deinen Namen nicht änderst, wirst du vom Server gekickt! ' . $message . $suffix);
                                         Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
                                     } elseif($count === 4) {
                                         $client->kick($message);
