@@ -59,6 +59,7 @@ class PermissionController extends Controller
                         array_push($members, [
                             'UserId' => $member->Id,
                             'Name' => $member->user->Name,
+                            'Rank' => $member->FactionRank,
                             'Permission' => $member->FactionTraining,
                         ]);
                     }
@@ -73,6 +74,7 @@ class PermissionController extends Controller
                         array_push($members, [
                             'UserId' => $member->Id,
                             'Name' => $member->user->Name,
+                            'Rank' => $member->CompanyRank,
                             'Permission' => $member->CompanyTraining,
                         ]);
                     }
@@ -81,6 +83,10 @@ class PermissionController extends Controller
                 abort(403);
             }
         }
+
+        usort($members, function($a, $b) {
+            return $a['Rank'] < $b['Rank'];
+        });
 
         return view('trainings.permissions.edit', ['members' => $members, 'type' => $permission]);
     }

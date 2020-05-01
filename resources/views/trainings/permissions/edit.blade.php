@@ -19,6 +19,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Rang') }}</th>
                                     <th scope="col">{{ __('Recht') }}</th>
                                 </tr>
                                 </thead>
@@ -26,6 +27,7 @@
                                 @foreach($members as $member)
                                     <tr>
                                         <td>{{ $member['Name'] }}</td>
+                                        <td>{{ $member['Rank'] }}</td>
                                         <td>
                                             <select class="form-control" name="permission[{{ $member['UserId'] }}]">
                                                 <option value="0" @if($member['Permission'] === 0) selected="selected" @endif>keine</option>
