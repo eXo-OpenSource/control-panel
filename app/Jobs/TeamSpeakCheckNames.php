@@ -55,7 +55,7 @@ class TeamSpeakCheckNames implements ShouldQueue
                             if($client->uniqueId === $identity->TeamspeakId) {
                                 if(substr(strtolower($client->nickname), 0, strlen($identity->user->Name))
                                     !== strtolower($identity->user->Name)) {
-                                    $count = $count = intval(Cache::get('teamspeak:names:' . $identity->UserId, 0));
+                                    $count = intval(Cache::get('teamspeak:names:' . $identity->UserId, 0));
 
                                     $message = 'Bitte ändere deinen Namen im TeamSpeak auf ' . $identity->user->Name . '! (' . ($count + 1) . '/5)';
                                     $suffix = PHP_EOL . 'Mehr Informationen im Regelwerk: https://forum.exo-reallife.de/thread/22539-serverregeln/?postID=212594#post212594';
