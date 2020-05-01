@@ -1,5 +1,5 @@
 @php
-    $punish = \App\Models\Logs\Punish::whereIn('Type', ['teamspeak', 'teamspeakBan'])->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
+    $punish = \App\Models\Logs\Punish::whereIn('Type', ['teamspeak', 'teamspeakBan', 'teamspeakUnban'])->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm w-full table-responsive-sm">
     <tr>

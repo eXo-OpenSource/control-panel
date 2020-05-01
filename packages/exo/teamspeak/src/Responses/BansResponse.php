@@ -15,7 +15,11 @@ class BansResponse extends TeamSpeakResponse
 
         if($bans) {
             foreach($bans as $ban) {
-                array_push($this->bans, new Ban($ban));
+                if($ban instanceof Ban) {
+                    array_push($this->bans, $ban);
+                } else {
+                    array_push($this->bans, new Ban($ban));
+                }
             }
         }
     }

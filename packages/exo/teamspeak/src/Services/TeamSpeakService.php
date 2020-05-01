@@ -166,6 +166,28 @@ class TeamSpeakService
         return new BanResponse(TeamSpeakResponse::RESPONSE_FAILED, $bans->message, $bans->originalResponse);
     }
 
+
+    /**
+     * @param $uniqueId
+     * @return BansResponse
+     * @throws TeamSpeakUnreachableException
+     */
+    public function getClientBans($uniqueId)
+    {
+        $bans = $this->getBans();
+
+        if($bans->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
+            $userBans = [];
+            foreach ($bans->bans as $ban) {
+                if($ban->uniqueId === $uniqueId) {
+                    array_push($userBans, $ban);
+                }
+            }
+            return new BansResponse($bans->status, $bans->message, $bans->originalResponse, $userBans);
+        }
+        return new BansResponse(TeamSpeakResponse::RESPONSE_FAILED, $bans->message, $bans->originalResponse);
+    }
+
     /**
      * @param integer $databaseId
      * @param bool $byPassCache

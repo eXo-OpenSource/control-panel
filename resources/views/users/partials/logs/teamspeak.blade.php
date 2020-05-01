@@ -1,5 +1,5 @@
 @php
-    $punish = $user->punish()->whereIn('Type', ['teamspeak', 'teamspeakBan'])->with(['user', 'admin'])->orderBy('Id', 'DESC');
+    $punish = $user->punish()->whereIn('Type', ['teamspeak', 'teamspeakBan', 'teamspeakUnban'])->with(['user', 'admin'])->orderBy('Id', 'DESC');
 
     $punish = $punish->paginate(request()->get('limit') ?? 25);
 @endphp

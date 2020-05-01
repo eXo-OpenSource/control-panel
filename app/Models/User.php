@@ -144,6 +144,30 @@ class User extends Authenticatable
         return $bans[0]->expires;
     }
 
+    public function isTeamSpeakBanned()
+    {
+        $banDuration = -1;
+
+        $bans = TeamSpeakBan::query()->where('UserId', $this->Id)->get();
+        foreach($bans as $ban) {
+            if($ban->Duration === 0) {
+                $banDuration = 0;
+                break;
+            }
+
+            if($ban->ValidUntil < Carbon::now()) {
+                $ban->delete();
+            } else {
+                $duration = $ban->ValidUntil->diffInSeconds(Carbon::now());
+                if($banDuration < $duration) {
+                    $banDuration = $duration;
+                }
+            }
+        }
+
+        return $banDuration >= 0 ?? false;
+    }
+
     public function isOnline() {
 
         $data = WhoIsOnlineController::getOnlinePlayers();

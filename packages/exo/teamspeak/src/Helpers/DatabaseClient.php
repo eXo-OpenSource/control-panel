@@ -3,6 +3,7 @@
 namespace Exo\TeamSpeak\Helpers;
 
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
+use Exo\TeamSpeak\Responses\BansResponse;
 use Exo\TeamSpeak\Responses\ChannelGroupMembersResponse;
 use Exo\TeamSpeak\Responses\DatabaseClientInfoResponse;
 use Exo\TeamSpeak\Responses\DatabaseClientServerGroupsResponse;
@@ -53,12 +54,22 @@ class DatabaseClient
 
     /**
      * @param $reason
+     * @param $duration
      * @throws TeamSpeakUnreachableException
      * @return TeamSpeakResponse
      */
     public function ban($reason, $duration)
     {
         return app('teamspeak')->addBan($this->uniqueId, $reason, $duration);
+    }
+
+    /**
+     * @throws TeamSpeakUnreachableException
+     * @return BansResponse
+     */
+    public function getBans()
+    {
+        return app('teamspeak')->getClientBans($this->uniqueId);
     }
 
     /**

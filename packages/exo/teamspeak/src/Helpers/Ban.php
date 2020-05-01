@@ -83,6 +83,6 @@ class Ban
      */
     public function unban()
     {
-        return app('teamspeak')->removeBan($this->uniqueId);
+        return app('teamspeak')->removeBan($this->id);
     }
 }

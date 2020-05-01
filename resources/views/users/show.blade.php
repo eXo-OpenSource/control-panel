@@ -36,6 +36,8 @@
                                     {{ 'TeamSpeak' }}
                                 </button>
                                 <div class="dropdown-menu">
+                                    <react-team-speak-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-ban-dialog>
+                                    <react-team-speak-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-unban-dialog>
                                 </div>
                             </div>
                         @endif

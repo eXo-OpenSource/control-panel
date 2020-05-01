@@ -25,3 +25,5 @@ require('./components/PunishHistoryDialog');
 require('./components/Tickets');
 // require('./components/practices/Practices');
 require('./components/trainings/Trainings');
+require('./components/TeamSpeakBanDialog');
+require('./components/TeamSpeakUnbanDialog');

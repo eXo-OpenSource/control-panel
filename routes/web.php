@@ -42,8 +42,16 @@ Route::get('test', function() {
 });
 
 Route::get('test', function() {
-    dd(app('teamspeak')->addBan('OCFUI4PzNOE5gx6RQw2qVzchQt4=', 'GG & WP', 1));
-    // dd(app('teamspeak')->getBan(9228));
+    /** @var \Exo\TeamSpeak\Services\TeamSpeakService $teamSpeak */
+    $teamSpeak = app('teamspeak');
+    dump($teamSpeak->addBan('OCFUI4PzNOE5gx6RQw2qVzchQt4=', 'GG & WP', 3));
+    // getClientBans
+    $client = $teamSpeak->getDatabaseIdFromUniqueId('OCFUI4PzNOE5gx6RQw2qVzchQt4=');
+    dump($client);
+    $bans = $client->client->getBans();
+    dump($bans);
+    $result = $bans->bans[0]->unban();
+    dd($result);
 });
 
 Route::middleware('auth')->group(function () {

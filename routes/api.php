@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
         Route::resource('punish', 'PunishController')->only('show', 'update');
+        Route::patch('users/{user}/teamspeak', 'UserTeamSpeakController@update')->name('users.teamspeak');
+        Route::put('users/{user}/teamspeak', 'UserTeamSpeakController@update')->name('users.teamspeak');
         Route::resource('users', 'UserController')->only('update');
         Route::resource('users.warns', 'UserWarnController')->only('index', 'destroy', 'store');
         Route::resource('users.punish', 'UserPunishController')->only('store');

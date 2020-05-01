@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\TeamSpeakBan;
 use App\Models\TeamSpeakIdentity;
 use App\Models\User;
+use Carbon\Carbon;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Responses\TeamSpeakResponse;
 use Exo\TeamSpeak\Services\TeamSpeakService;
@@ -72,7 +74,34 @@ class UserTeamspeakController extends Controller
                 $client->client->removeServerGroup(env('TEAMSPEAK_OLD_ACTIVATED_GROUP'));
 
                 if($result->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
-                    Session::flash('alert-success', 'Erfolgreich verknüpft und freigeschaltet!');
+                    $banDuration = -1;
+                    $banReason = '';
+
+                    $bans = TeamSpeakBan::query()->where('UserId', $user->Id)->get();
+                    foreach($bans as $ban) {
+                        if($ban->Duration === 0) {
+                            $banDuration = 0;
+                            $banReason = $ban->Reason;
+                            break;
+                        }
+
+                        if($ban->ValidUntil < Carbon::now()) {
+                            $ban->delete();
+                        } else {
+                            $duration = $ban->ValidUntil->diffInSeconds(Carbon::now());
+                            if($banDuration < $duration) {
+                                $banDuration = $duration;
+                                $banReason = $ban->Reason;
+                            }
+                        }
+                    }
+
+                    if($banDuration >= 0) {
+                        $client->client->ban($banReason, $banDuration);
+                        Session::flash('alert-success', 'Erfolgreich verknüpft, freigeschaltet und gesperrt!');
+                    } else {
+                        Session::flash('alert-success', 'Erfolgreich verknüpft und freigeschaltet!');
+                    }
                 } else {
                     if($result->message === 'duplicate entry') {
                         Session::flash('alert-success', 'Erfolgreich verknüpft aber der Benutzer ist bereits freigeschaltet!');
