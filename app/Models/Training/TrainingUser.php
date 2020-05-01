@@ -30,7 +30,7 @@ class TrainingUser extends Model implements Auditable
 
     public function training()
     {
-        return $this->hasOne(Training::class, 'Id', 'TemplateId');
+        return $this->hasOne(Training::class, 'Id', 'TrainingId');
     }
 
     public function templateContent()

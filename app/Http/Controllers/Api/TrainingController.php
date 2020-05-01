@@ -63,6 +63,17 @@ class TrainingController extends Controller
         $response = [];
 
         foreach($trainings as $training) {
+            $users = $training->users;
+            $participantsCount = 0;
+            $participants = [];
+            foreach($users as $user) {
+                if($user->pivot->Role === 0) {
+                    $participantsCount++;
+                    array_push($participants, $user->Name);
+                }
+            }
+
+
             $entry = [
                 'Id' => $training->Id,
                 'UserId' => $training->UserId,
@@ -74,6 +85,8 @@ class TrainingController extends Controller
                 'State' => $training->State,
                 'StateText' => $training->State === Training::TRAINING_STATE_IN_PROGRESS ? 'Offen' : 'Abgeschlossen',
                 'CreatedAt' => $training->CreatedAt->format('d.m.Y H:i:s'),
+                'ParticipantsCount' => $participantsCount,
+                'Participants' => $participants,
             ];
 
             array_push($response, (object)$entry);

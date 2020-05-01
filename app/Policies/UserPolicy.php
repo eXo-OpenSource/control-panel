@@ -69,6 +69,17 @@ class UserPolicy
         return $authUser->Id == $user->Id;
     }
 
+    public function trainings(User $authUser, User $user)
+    {
+        $targets = $authUser->character->getTrainingTargets();
+
+        if(count($targets) > 0) {
+            return true;
+        }
+
+        return $authUser->Id == $user->Id;
+    }
+
     public function logs(User $authUser, User $user)
     {
         return $authUser->Id == $user->Id;

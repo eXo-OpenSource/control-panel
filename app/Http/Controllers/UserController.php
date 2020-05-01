@@ -50,7 +50,7 @@ class UserController extends Controller
             $page = 'logs';
 
         abort_unless(auth()->user()->can('show', $user), 403);
-        abort_unless(array_search($page, ['', 'vehicles', 'history', 'logs', 'teamspeak']) !== false, 404);
+        abort_unless(array_search($page, ['', 'vehicles', 'trainings', 'history', 'logs', 'teamspeak']) !== false, 404);
         $banned = $user->isBanned();
         $teamSpeakBanned = $user->isTeamSpeakBanned();
         return view('users.show', compact('user', 'page', 'log', 'banned', 'teamSpeakBanned'));

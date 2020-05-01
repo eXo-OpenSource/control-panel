@@ -68,6 +68,7 @@ export default class TrainingList extends Component {
                                     <thead>
                                     <tr>
                                         <th>Ausbilder</th>
+                                        <th>Teilnehmer</th>
                                         <th>Übung</th>
                                         <th>Status</th>
                                         <th>Datum</th>
