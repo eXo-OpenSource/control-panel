@@ -37,7 +37,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <react-team-speak-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-ban-dialog>
-                                    <react-team-speak-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-unban-dialog>
+                                    @if(auth()->user()->Rank >= 5)<react-team-speak-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-unban-dialog>@endif
                                 </div>
                             </div>
                         @endif

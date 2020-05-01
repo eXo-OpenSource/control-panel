@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Jobs\TeamSpeakCheckNames;
 use App\Jobs\TeamSpeakOldActivationNotification;
+use App\Jobs\TeamSpeakSyncGroups;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->job(new TeamSpeakCheckNames)->cron('*/2 * * * *');
         $schedule->job(new TeamSpeakOldActivationNotification)->cron('*/2 * * * *');
+        $schedule->job(new TeamSpeakSyncGroups)->cron('*/5 * * * *');
     }
 
     /**

@@ -52,6 +52,11 @@ class Character extends Model
         return $this->hasMany(ClientStatistic::class, 'UserId', 'Id');
     }
 
+    public function teamSpeakIdentities()
+    {
+        return $this->hasMany(TeamSpeakIdentity::class, 'UserId', 'Id');
+    }
+
     public function stats()
     {
         return $this->hasOne(Stats::class, 'Id', 'Id');
