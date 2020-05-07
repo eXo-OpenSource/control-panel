@@ -437,8 +437,8 @@ class StatisticService
             if(!Cache::has('bank:in-out:' . $bankAccount)) {
                 $inValues = [];
                 $outValues = [];
-                $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DATE(Date) BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
-                $out = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DATE(Date) BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+                $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DateFormatted BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
+                $out = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DateFormatted BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);
 
                 foreach($labels as $date) {
                     $gotValue = false;
@@ -512,8 +512,6 @@ class StatisticService
 
     public static function getMoneyDetails(?Model $object, string $direction, Carbon $date)
     {
-        return [];
-
         $allowedColors = [
             'rgb(54, 162, 235)',
             'rgb(75, 192, 192)',
@@ -548,9 +546,9 @@ class StatisticService
                 $data = [];
 
                 if($direction === 'in') {
-                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DATE(Date) = ? GROUP BY Category, Subcategory, DATE(Date)', [$bankAccount, $date->format('Y-m-d')]);
+                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DateFormatted = ? GROUP BY Category, Subcategory', [$bankAccount, $date->format('Y-m-d')]);
                 } else {
-                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DATE(Date) = ? GROUP BY Category, Subcategory, DATE(Date)', [$bankAccount, $date->format('Y-m-d')]);
+                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DateFormatted = ? GROUP BY Category, Subcategory', [$bankAccount, $date->format('Y-m-d')]);
                 }
 
 
@@ -613,8 +611,8 @@ class StatisticService
         ];
 
         if(!Cache::has('bank:in-out:overall')) {
-            $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
-            $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND Date BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+            $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND DateFormatted BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+            $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND DateFormatted BETWEEN ? AND ?', [$from, $to])[0]->Amount;
             Cache::put('bank:in-out:overall', ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
         }
         $data = Cache::get('bank:in-out:overall');

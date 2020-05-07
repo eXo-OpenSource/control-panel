@@ -57,23 +57,29 @@ class TeamSpeakCheckNames implements ShouldQueue
                                     !== strtolower($identity->user->Name)) {
                                     $count = intval(Cache::get('teamspeak:names:' . $identity->UserId, 0));
 
-                                    $message = 'Bitte ändere deinen Namen im TeamSpeak auf ' . $identity->user->Name . '! (' . ($count + 1) . '/5)';
+                                    $message = 'Bitte ändere deinen Namen im TeamSpeak auf ' . $identity->user->Name . '! (' . ($count + 1) . '/7)';
                                     $suffix = PHP_EOL . 'Mehr Informationen im Regelwerk: https://forum.exo-reallife.de/thread/22539-serverregeln/?postID=212594#post212594';
                                     if($count === 0) {
                                         $client->message('Mir ist aufgefallen, dass dein Name im TeamSpeak nicht mit dem Namen im Spiel übereinstimmt. ' . $message . $suffix);
-                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
                                     } elseif($count === 1) {
                                         $client->message('Leider hast du deinen Namen immer noch nicht korrigiert. ' . $message . $suffix);
-                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
                                     } elseif($count === 2) {
                                         $client->message('Du hast deinen Name immer noch nicht korrigiert. Falls du den Namen nicht änderst, wirst du vom Server gekickt. ' . $message . $suffix);
-                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
                                     } elseif($count === 3) {
                                         $client->message('Falls du deinen Namen nicht änderst, wirst du vom Server gekickt! ' . $message . $suffix);
-                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addMinutes(15));
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
                                     } elseif($count === 4) {
                                         $client->kick($message);
-                                        Cache::put('teamspeak:names:' . $identity->UserId, $count, Carbon::now()->addMinutes(15));
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
+                                    } elseif($count === 5) {
+                                        $client->kick($message);
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count + 1, Carbon::now()->addHours(2));
+                                    } elseif($count === 6) {
+                                        $client->ban($message, 15 * 60);
+                                        Cache::put('teamspeak:names:' . $identity->UserId, $count, Carbon::now()->addHours(2));
                                     }
                                 }
                             }
