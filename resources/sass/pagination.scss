@@ -1,0 +1,31 @@
+.c-dark-theme {
+    .pagination {
+        display: flex;
+        list-style: none;
+        border-radius: .25rem;
+    }
+
+    .page-link {
+        color: #e1e1e1;
+        background-color: rgba(255,255,255,.075);
+        border-color: #181924;
+    }
+
+    .page-item.disabled .page-link {
+        color: rgba(255,255,255,.5);
+        background-color: rgba(255,255,255,.025);
+        border-color: #181924;
+    }
+
+    .page-item.active .page-link {
+        color: #fff;
+        background-color: #3b84cc;
+        border-color: #4394e6;
+    }
+
+    .page-link:hover {
+        color: #e1e1e1;
+        background-color: #181924;
+        border-color: #181924;
+    }
+}
