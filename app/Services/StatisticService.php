@@ -512,6 +512,8 @@ class StatisticService
 
     public static function getMoneyDetails(?Model $object, string $direction, Carbon $date)
     {
+        return [];
+
         $allowedColors = [
             'rgb(54, 162, 235)',
             'rgb(75, 192, 192)',
