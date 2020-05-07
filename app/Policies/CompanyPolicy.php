@@ -47,6 +47,11 @@ class CompanyPolicy
         return $user->character->CompanyId === $company->Id;
     }
 
+    public function statistics(User $user, Company $company)
+    {
+        return $user->character->CompanyId === $company->Id;
+    }
+
     public function bank(User $user, Company $company)
     {
         return $user->character->CompanyId === $company->Id;

@@ -47,6 +47,11 @@ class GroupPolicy
         return $user->character->GroupId === $group->Id;
     }
 
+    public function statistics(User $user, Group $group)
+    {
+        return $user->character->GroupId === $group->Id;
+    }
+
     public function vehicles(User $user, Group $group)
     {
         return $user->character->GroupId === $group->Id;

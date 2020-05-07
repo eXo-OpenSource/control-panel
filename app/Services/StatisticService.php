@@ -510,6 +510,98 @@ class StatisticService
         ];
     }
 
+    public static function getMoneyDetails(?Model $object, string $direction, Carbon $date)
+    {
+        $allowedColors = [
+            'rgb(54, 162, 235)',
+            'rgb(75, 192, 192)',
+            'rgb(201, 203, 207)',
+            'rgb(255, 159, 64)',
+            'rgb(153, 102, 255)',
+            'rgb(255, 99, 132)',
+            'rgb(255, 205, 86)',
+        ];
+
+        if($object !== null) {
+            $bankAccount = -1;
+
+            if($object->bank) {
+                $bankAccount = $object->bank->Id;
+            } else {
+                if($object instanceof Faction) {
+                    if($object->Id === 2 || $object->Id === 3) {
+                        $bankAccount = Faction::find(1)->bank->Id;
+                    }
+                } else {
+                    return ['status' => 'Error'];
+                }
+            }
+
+            $cacheKey = 'bank:' . $direction . ' details-' . $date->format('Y-m-d') . ':' . $bankAccount;
+
+            if(!Cache::has($cacheKey)) {
+                $labels = [];
+                $values = [];
+                $colors = [];
+                $data = [];
+
+                if($direction === 'in') {
+                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DATE(Date) = ? GROUP BY Category, Subcategory, DATE(Date)', [$bankAccount, $date->format('Y-m-d')]);
+                } else {
+                    $data = DB::connection('mysql_logs')->select('SELECT Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DATE(Date) = ? GROUP BY Category, Subcategory, DATE(Date)', [$bankAccount, $date->format('Y-m-d')]);
+                }
+
+
+                foreach($data as $entry)
+                {
+                    array_push($labels, $entry->Category . ', ' . $entry->Subcategory);
+                    array_push($values, $entry->Amount);
+
+                    if(count($allowedColors) > 0) {
+                        $index = rand(0, count($allowedColors) - 1);
+                        array_push($colors, $allowedColors[$index]);
+                        unset($allowedColors[$index]);
+                        sort($allowedColors);
+                    } else {
+                        array_push($colors, 'rgba('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1)');
+                    }
+                }
+
+
+                Cache::put($cacheKey, ['labels' => $labels, 'values' => $values, 'colors' => $colors], Carbon::now()->addMinutes(15));
+            }
+
+            $data = Cache::get($cacheKey);
+        }
+
+        return [
+            'type' => 'doughnut',
+            'data' => [
+                'datasets' => [
+                    [
+                        'label' => $direction === 'in' ? 'Einnahmen' : 'Ausgaben',
+                        'data' => $data['values'] ?? [],
+                        'backgroundColor' => $data['colors'] ?? [],
+                        'borderWidth' => 1,
+                    ]
+                ],
+                'labels' => $data['labels'] ?? []
+            ],
+            'options' => [
+                'maintainAspectRatio' => false,
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ]
+                ]
+            ],
+            'date' => $date->format('Y-m-d'),
+            'tooltips' => 'money',
+            'status' => 'Success'
+        ];
+    }
+
     public static function getMoneyAdmin(Carbon $from, Carbon $to)
     {
         $data = ['in' => 0, 'out' => 0];

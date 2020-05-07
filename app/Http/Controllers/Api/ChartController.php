@@ -75,21 +75,63 @@ class ChartController extends Controller
 
                     abort_unless(auth()->user()->can('bank', $faction), 403);
 
-                    return StatisticService::getMoney($faction, $from, $to);
+                    if(!isset($parts[3])) {
+                        return StatisticService::getMoney($faction, $from, $to);
+                    } else {
+                        $date = Carbon::parse(request()->get('date')) ?? Carbon::now();
+                        switch($parts[3])
+                        {
+                            case 'in':
+                                return StatisticService::getMoneyDetails($faction, 'in', $date);
+                                break;
+
+                            case 'out':
+                                return StatisticService::getMoneyDetails($faction, 'out', $date);
+                                break;
+                        }
+                    }
                     break;
                 case 'company':
                     $company = Company::find($parts[2]);
 
                     abort_unless(auth()->user()->can('bank', $company), 403);
 
-                    return StatisticService::getMoney($company, $from, $to);
+                    if(!isset($parts[3])) {
+                        return StatisticService::getMoney($company, $from, $to);
+                    } else {
+                        $date = Carbon::parse(request()->get('date')) ?? Carbon::now();
+                        switch($parts[3])
+                        {
+                            case 'in':
+                                return StatisticService::getMoneyDetails($company, 'in', $date);
+                                break;
+
+                            case 'out':
+                                return StatisticService::getMoneyDetails($company, 'out', $date);
+                                break;
+                        }
+                    }
                     break;
                 case 'group':
                     $group = Group::find($parts[2]);
 
                     abort_unless(auth()->user()->can('bank', $group), 403);
 
-                    return StatisticService::getMoney($group, $from, $to);
+                    if(!isset($parts[3])) {
+                        return StatisticService::getMoney($group, $from, $to);
+                    } else {
+                        $date = Carbon::parse(request()->get('date')) ?? Carbon::now();
+                        switch($parts[3])
+                        {
+                            case 'in':
+                                return StatisticService::getMoneyDetails($group, 'in', $date);
+                                break;
+
+                            case 'out':
+                                return StatisticService::getMoneyDetails($group, 'out', $date);
+                                break;
+                        }
+                    }
                     break;
                 case 'user':
                     $user = User::find($parts[2]);

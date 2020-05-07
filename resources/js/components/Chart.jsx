@@ -20,7 +20,13 @@ export default class Chart extends Component {
     async componentDidMount() {
 
         try {
-            const response = await axios.get('/api/charts/' + this.props.chart);
+            let suffix = '';
+
+            if(this.props.date) {
+                suffix = '?date=' + this.props.date;
+            }
+
+            const response = await axios.get('/api/charts/' + this.props.chart + suffix);
 
             if(response.data && response.data.tooltips) {
                 if (!response.data.options) {
@@ -81,6 +87,7 @@ export default class Chart extends Component {
                 );
             } else {
                 let chart;
+                let fromTo;
 
                 if(this.state.data.type === 'doughnut') {
                     chart = <Doughnut data={this.state.data.data} options={this.state.data.options} />;
@@ -90,11 +97,19 @@ export default class Chart extends Component {
                     chart = <Line data={this.state.data.data} options={this.state.data.options} />;
                 }
 
+                if(this.state.data.from && this.state.data.to) {
+                    fromTo = <span>{this.state.data.from} - {this.state.data.to}</span>;
+                } else if(this.state.data.date) {
+                    fromTo = <span>{this.state.data.date}</span>;
+                }
+
+
+
                 return (
                     <div className="card">
                         <div className="card-header">{this.props.title}
                             <div className="float-right">
-                                <span>{this.state.data.from} - {this.state.data.to}</span>
+                                {fromTo}
                             </div>
                         </div>
 
