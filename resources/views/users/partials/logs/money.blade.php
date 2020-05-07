@@ -1,5 +1,19 @@
 @php
-    $money = $user->money()->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
+    /** @var \App\Models\User $user */
+    $offset = request()->get('offset');
+    $limit = request()->get('limit') ?? 50;
+
+    $from = \App\Models\BankAccountTransaction::query()->where('FromType', 1)->where('FromId', $user->Id)->orderBy('Id', 'DESC')->limit($limit);
+    $to = \App\Models\BankAccountTransaction::query()->where('ToType', 1)->where('ToId', $user->Id)->orderBy('Id', 'DESC')->limit($limit);
+
+    if($offset) {
+        $from->where('Id', '<', $offset);
+        $to->where('Id', '<', $offset);
+    }
+
+    $money = $to->union($from)->orderBy('Id', 'DESC')->limit($limit)->get();
+
+    $next_offset = $money->last()->Id;
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
@@ -46,4 +60,10 @@
         </tr>
     @endforeach
 </table>
-{{ $money->links() }}
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="{{ route('users.show.logs', ['user' => $user->Id, 'log' => 'money', 'offset' => $next_offset]) }}" rel="next">Weiter »</a>
+        </li>
+    </ul>
+</nav>

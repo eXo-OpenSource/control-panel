@@ -1,5 +1,19 @@
 @php
-    $money = $group->money()->orderBy('Id', 'DESC')->simplePaginate(request()->get('limit') ?? 25);
+    /** @var \App\Models\Group $group */
+    $offset = request()->get('offset');
+    $limit = request()->get('limit') ?? 50;
+
+    $from = \App\Models\BankAccountTransaction::query()->where('FromType', 8)->where('FromId', $group->Id)->orderBy('Id', 'DESC')->limit($limit);
+    $to = \App\Models\BankAccountTransaction::query()->where('ToType', 8)->where('ToId', $group->Id)->orderBy('Id', 'DESC')->limit($limit);
+
+    if($offset) {
+        $from->where('Id', '<', $offset);
+        $to->where('Id', '<', $offset);
+    }
+
+    $money = $to->union($from)->orderBy('Id', 'DESC')->limit($limit)->get();
+
+    $next_offset = $money->last()->Id;
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $group->Name)
 <table class="table table-sm table-responsive-sm tw-full">
@@ -46,4 +60,10 @@
         </tr>
     @endforeach
 </table>
-{{ $money->links() }}
+<nav>
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="{{ route('groups.show.logs', ['group' => $group->Id, 'log' => 'money', 'offset' => $next_offset]) }}" rel="next">Weiter »</a>
+        </li>
+    </ul>
+</nav>
