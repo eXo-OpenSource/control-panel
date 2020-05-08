@@ -15,7 +15,7 @@ return [
             9 => 149, // Outlaws
             10 => 148, // Vatos
             11 => false, // Triaden
-            12 => 168, // Brigada
+            12 => false, // Brigada
         ],
         'companies' => [
             1 => 150, // Fahrschule
