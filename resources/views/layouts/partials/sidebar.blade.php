@@ -45,7 +45,7 @@
         </li>
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('achievements') }}">
-                <i class="c-sidebar-nav-icon fas fa-list-ol"></i>{{ __('Achievements') }}
+                <i class="c-sidebar-nav-icon fas fa-trophy"></i>{{ __('Achievements') }}
             </a>
         </li>
         <li class="c-sidebar-nav-item">
@@ -84,29 +84,32 @@
             @if(auth()->user()->Rank >= 3)
                 <li class="c-sidebar-nav-dropdown">
                     <a class="c-sidebar-nav-dropdown-toggle" href="#">
-                        <i class="c-sidebar-nav-icon fas fa-toolbox"></i>{{ __('Admin') }}
+                        <i class="c-sidebar-nav-icon fas fa-user-shield"></i>{{ __('Admin') }}
                     </a>
                     <ul class="c-sidebar-nav-dropdown-items">
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}"><span class="c-sidebar-nav-icon"></span>Dashboard</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.dashboard.index') }}"><span class="c-sidebar-nav-icon fas fa-tachometer-alt"></span>Dashboard</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.user.multiaccounts') }}"><span class="c-sidebar-nav-icon"></span>Multiaccounts</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.user.multiaccounts') }}"><span class="c-sidebar-nav-icon fas fa-people-arrows"></span>Multiaccounts</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.texture') }}"><span class="c-sidebar-nav-icon"></span>Texturen</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.texture') }}"><span class="c-sidebar-nav-icon fas fa-images"></span>Texturen</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.teamspeak.index') }}"><span class="c-sidebar-nav-icon"></span>Teamspeak</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.teamspeak.index') }}"><span class="c-sidebar-nav-icon fab fa-teamspeak"></span>Teamspeak</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.logs.show') }}"><span class="c-sidebar-nav-icon"></span>Logs</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.logs.show') }}"><span class="c-sidebar-nav-icon fas fa-file-alt"></span>Logs</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.vehicles.index') }}"><span class="c-sidebar-nav-icon"></span>Fahrzeuge</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.vehicles.index') }}"><span class="c-sidebar-nav-icon fas fa-car"></span>Fahrzeuge</a>
                         </li>
                         <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon"></span>Server</a>
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon fas fa-server"></span>Server</a>
+                        </li>
+                        <li class="c-sidebar-nav-item">
+                            <a class="c-sidebar-nav-link" href="https://pma.exo.cool"><span class="c-sidebar-nav-icon fas fa-database"></span>phpMyAdmin</a>
                         </li>
                     </ul>
                 </li>

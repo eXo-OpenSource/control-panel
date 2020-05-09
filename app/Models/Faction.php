@@ -55,6 +55,15 @@ class Faction extends Model
         return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
     }
 
+    public function bankAccount()
+    {
+        if($this->Id !== 2 && $this->Id !== 3) {
+            return $this->bank;
+        }
+
+        return BankAccount::query()->where('OwnerType', 2)->where('OwnerId', 1)->first();
+    }
+
     public function getMorphClass()
     {
         return 2;
