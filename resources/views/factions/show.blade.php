@@ -11,7 +11,7 @@
                 <ul class="nav nav-pills" role="tablist">
                     <li class="nav-item"><a class="nav-link @if($page === ''){{'active'}}@endif" href="{{ route('factions.show', [$faction->Id]) }}">{{ __('Übersicht') }}</a></li>
                     @can('vehicles', $faction)<li class="nav-item"><a class="nav-link @if($page === 'vehicles'){{'active'}}@endif" href="{{ route('factions.show.page', [$faction->Id, 'vehicles']) }}">{{ __('Fahrzeuge') }}</a></li>@endcan
-                    @can('statistics', $faction)<li class="nav-item"><a class="nav-link @if($page === 'statistics'){{'active'}}@endif" href="{{ route('factions.show.page', [$faction->Id, 'statistics']) }}">{{ __('Statistken') }}</a></li>@endcan
+                    @can('statistics', $faction)<li class="nav-item"><a class="nav-link @if($page === 'statistics'){{'active'}}@endif" href="{{ route('factions.show.page', [$faction->Id, 'statistics']) }}">{{ __('Statistiken') }}</a></li>@endcan
                     @can('logs', $faction)<li class="nav-item"><a class="nav-link @if($page === 'logs'){{'active'}}@endif" href="{{ route('factions.show.page', [$faction->Id, 'logs']) }}">{{ __('Logs') }}</a></li>@endcan
                 </ul>
                 <div class="tab-content pt-4">
