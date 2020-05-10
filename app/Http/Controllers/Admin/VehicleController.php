@@ -12,7 +12,12 @@ class VehicleController extends Controller
     {
         abort_unless(Gate::allows('admin-rank-3'), 403);
 
-        $vehicles = DB::select('SELECT Model, COUNT(Id) AS Count FROM vrp_vehicles GROUP BY Model ORDER BY Model');
+        $vehicles = DB::select('SELECT Model,
+            COUNT(Id) AS Count,
+            SUM(OwnerType = 1) AS PlayerCount,
+            SUM(OwnerType = 2) AS FactionCount,
+            SUM(OwnerType = 3) AS CompanyCount,
+            SUM(OwnerType = 4) AS GroupCount FROM vrp_vehicles GROUP BY Model ORDER BY Model');
 
         return view('admin.vehicles.index', compact('vehicles'));
     }
