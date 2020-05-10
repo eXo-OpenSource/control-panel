@@ -108,9 +108,11 @@
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon fas fa-server"></span>Server</a>
                         </li>
-                        <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="https://pma.exo.cool"><span class="c-sidebar-nav-icon fas fa-database"></span>phpMyAdmin</a>
-                        </li>
+                        @if(auth()->user()->Rank >= 7)
+                            <li class="c-sidebar-nav-item">
+                                <a class="c-sidebar-nav-link" href="https://pma.exo.cool"><span class="c-sidebar-nav-icon fas fa-database"></span>phpMyAdmin</a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
             @endif
