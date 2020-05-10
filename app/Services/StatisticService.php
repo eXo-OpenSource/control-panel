@@ -422,19 +422,23 @@ class StatisticService
         if($object !== null) {
             $bankAccount = -1;
 
-            if($object->bank) {
-                $bankAccount = $object->bank->Id;
+            if($object instanceof Faction) {
+                if($object->Id === 2 || $object->Id === 3) {
+                    $bankAccount = Faction::find(1)->bank->Id;
+                } elseif($object->bank) {
+                    $bankAccount = $object->bank->Id;
+                }
             } else {
-                if($object instanceof Faction) {
-                    if($object->Id === 2 || $object->Id === 3) {
-                        $bankAccount = Faction::find(1)->bank->Id;
-                    }
-                } else {
-                    return ['status' => 'Error'];
+                if($object->bank) {
+                    $bankAccount = $object->bank->Id;
                 }
             }
 
-            if(!Cache::has('bank:in-out:' . $bankAccount)) {
+            if($bankAccount === -1) {
+                return ['status' => 'Error'];
+            }
+
+            if(!Cache::has('bank:in-out:' . $bankAccount) || true) {
                 $inValues = [];
                 $outValues = [];
                 $in = DB::connection('mysql_logs')->select('SELECT DATE(Date) AS Date, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DateFormatted BETWEEN DATE(?) AND DATE(?) GROUP BY DATE(Date)', [$bankAccount, $from, $to]);

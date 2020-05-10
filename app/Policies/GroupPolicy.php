@@ -29,6 +29,12 @@ class GroupPolicy
 
     public function show(User $user, Group $group)
     {
+        if($group->Id === 1 || $group->Id === 2) {
+            if(auth()->user()->Rank < 7) {
+                return false;
+            }
+        }
+
         return true;
     }
 
