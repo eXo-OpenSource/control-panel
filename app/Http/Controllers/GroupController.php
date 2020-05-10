@@ -35,7 +35,7 @@ class GroupController extends Controller
             $groups->where('Name', 'LIKE', '%'.request()->get('name').'%');
         }
 
-        if(auth()->user()->Rank < 7) {
+        if(!auth()->user() || auth()->user()->Rank < 7) {
             $groups->where('Id', '<>', 1);
             $groups->where('Id', '<>', 2);
         }
