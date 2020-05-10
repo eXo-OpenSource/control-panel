@@ -15,25 +15,25 @@
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/psr7": "^1.6",
         "http-interop/http-factory-guzzle": "^1.0",
-        "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0",
+        "laravel/framework": "^7.0",
+        "laravel/tinker": "^2.0",
         "multitheftauto/mtasa-php-sdk": "^1.0",
         "owen-it/laravel-auditing": "^10.0",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
         "predis/predis": "^1.1",
-        "sentry/sentry-laravel": "1.6.1",
-        "tray-labs/laravel-influxdb": "^1.0"
+        "sentry/sentry-laravel": "1.7.1",
+        "tray-labs/laravel-influxdb": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
-        "facade/ignition": "^1.4",
+        "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.4",
-        "laravel-frontend-presets/tailwindcss": "^2.0",
+        "laravel-frontend-presets/tailwindcss": "^4.1",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^8.5"
     },
     "config": {
         "optimize-autoloader": true,
