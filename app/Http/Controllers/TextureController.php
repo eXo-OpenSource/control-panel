@@ -17,8 +17,6 @@ class TextureController extends Controller
      */
     public function index()
     {
-        abort_unless(Gate::allows('admin-rank-2'), 403);
-
         $textures = auth()->user()->textures;
         return view('textures.index', compact('textures'));
     }
@@ -30,8 +28,6 @@ class TextureController extends Controller
      */
     public function create()
     {
-        abort_unless(Gate::allows('admin-rank-2'), 403);
-
         $vehicles = [];
 
         foreach(config('constants.vehicleNames') as $id => $name)
@@ -57,8 +53,6 @@ class TextureController extends Controller
      */
     public function store(Request $request)
     {
-        abort_unless(Gate::allows('admin-rank-2'), 403);
-
         $data = $request->validate([
             'name' => 'required',
             'vehicle' => 'required|in:' . implode(',', array_keys(config('constants.vehicleNames'))),
@@ -87,40 +81,6 @@ class TextureController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Texture $texture
@@ -128,8 +88,6 @@ class TextureController extends Controller
      */
     public function destroy(Texture $texture)
     {
-        abort_unless(Gate::allows('admin-rank-2'), 403);
-
         abort_unless(auth()->user()->can('destroy', $texture), 403);
 
         if ($texture->isDeleteable()) {

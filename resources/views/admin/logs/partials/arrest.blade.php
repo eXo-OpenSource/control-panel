@@ -1,5 +1,5 @@
 @php
-    $arrests = \App\Models\Logs\Arrest::with(['user', 'police'])->orderBy('Id', 'DESC')->paginate(25);
+    $arrests = \App\Models\Logs\Arrest::with(['user', 'police'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

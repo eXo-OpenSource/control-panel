@@ -21,7 +21,11 @@ class UserPolicy
 
     public function before($user, $ability)
     {
-        if ($user->Rank >= 2) {
+        if ($user->Rank >= 3) {
+            return true;
+        }
+
+        if($user->Rank === 1 && $ability === 'teamspeak') {
             return true;
         }
     }
@@ -45,6 +49,11 @@ class UserPolicy
         return $authUser->Id == $user->Id;
     }
 
+    public function teamspeak(User $authUser, User $user)
+    {
+        return $authUser->Id == $user->Id;
+    }
+
     public function history(User $authUser, User $user)
     {
         return $authUser->Id == $user->Id;
@@ -57,6 +66,17 @@ class UserPolicy
 
     public function bank(User $authUser, User $user)
     {
+        return $authUser->Id == $user->Id;
+    }
+
+    public function trainings(User $authUser, User $user)
+    {
+        $targets = $authUser->character->getTrainingTargets();
+
+        if(count($targets) > 0) {
+            return true;
+        }
+
         return $authUser->Id == $user->Id;
     }
 

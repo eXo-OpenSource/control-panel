@@ -39,7 +39,16 @@ RUN apk --update add --no-cache \
       php7-fileinfo \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
-    adduser -u 1000 -S app -G app
+    adduser -u 1000 -S app -G app && \
+    touch /var/log/php7/stdout.log && \
+    touch /var/log/php7/stderr.log && \
+    touch /var/log/nginx/stdout.log && \
+    touch /var/log/nginx/stderr.log && \
+    chown -R 1000:0 /var/log/*
+
+# Set timzone
+RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
+    echo "Europe/Vienna" > /etc/timezone
 
 # Configure nginx
 COPY build/nginx.conf /etc/nginx/nginx.conf
@@ -47,6 +56,9 @@ COPY build/nginx.conf /etc/nginx/nginx.conf
 # Configure PHP-FPM
 COPY build/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY build/php.ini /etc/php7/conf.d/zzz_custom.ini
+
+# Configure cron
+COPY build/crontab /etc/cron/crontab
 
 # Configure supervisord
 COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -59,6 +71,7 @@ RUN chown -R app.app /run && \
 
 # Setup document root
 RUN mkdir -p /var/www/public
+RUN crontab /etc/cron/crontab
 
 # Add application
 WORKDIR /var/www
@@ -72,6 +85,8 @@ USER 1000
 
 RUN php artisan storage:link && \
     php artisan cache:clear
+
+USER 0
 
 # Expose the port nginx is reachable on
 EXPOSE 8080

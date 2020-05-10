@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Controllers\WhoIsOnlineController;
+use App\Models\Logs\Advert;
 use App\Models\Logs\Chat;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
@@ -64,9 +65,9 @@ class User extends Authenticatable
         return $this->hasMany(Texture::class, 'UserId', 'Id');
     }
 
-    public function teamspeakIdentities()
+    public function teamSpeakIdentities()
     {
-        return $this->hasMany(TeamspeakIdentity::class, 'UserId', 'Id');
+        return $this->hasMany(TeamSpeakIdentity::class, 'UserId', 'Id');
     }
 
     public function warns()
@@ -97,6 +98,11 @@ class User extends Authenticatable
     public function logins()
     {
         return $this->hasMany(Login::class, 'UserId', 'Id');
+    }
+
+    public function advert()
+    {
+        return $this->hasMany(Advert::class, 'UserId', 'Id');
     }
 
     public function damage()
@@ -136,6 +142,30 @@ class User extends Authenticatable
         }
 
         return $bans[0]->expires;
+    }
+
+    public function isTeamSpeakBanned()
+    {
+        $banDuration = -1;
+
+        $bans = TeamSpeakBan::query()->where('UserId', $this->Id)->get();
+        foreach($bans as $ban) {
+            if($ban->Duration === 0) {
+                $banDuration = 0;
+                break;
+            }
+
+            if($ban->ValidUntil < Carbon::now()) {
+                $ban->delete();
+            } else {
+                $duration = $ban->ValidUntil->diffInSeconds(Carbon::now());
+                if($banDuration < $duration) {
+                    $banDuration = $duration;
+                }
+            }
+        }
+
+        return $banDuration >= 0 ?? false;
     }
 
     public function isOnline() {

@@ -1,7 +1,8 @@
 @php
-    $damage = $user->damage()->with(['user', 'target'])->orderBy('Id', 'DESC')->paginate(25);
+    $damage = $user->damage()->with(['user', 'target'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
-<table class="table table-sm table-responsive-sm tw-full">
+@section('title', __('Schaden') . ' - ' . __('Logs') . ' - '. $user->Name)
+<table class="table table-hover table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Start') }}</th>
@@ -14,7 +15,7 @@
         <th>{{ __('Position') }}</th>
     </tr>
     @foreach($damage as $entry)
-        <tr class="@if($entry->UserId == $user->Id){{'bg-gray-900'}}@else{{'bg-gray-800'}}@endif">
+        <tr class="@if($entry->UserId !== $user->Id){{'tr-other'}}@endif">
             <td>{{ $entry->Id }}</td>
             <td>{{ $entry->StartTime }}</td>
             <td>{{ $entry->Date }}</td>

@@ -59,9 +59,7 @@ export default class UnbanDialog extends Component {
     render() {
         return (
             <>
-                <Button variant="danger" onClick={this.handleShow}>
-                    Entsperren
-                </Button>
+                <span className="dropdown-item" style={{'cursor': 'pointer'}} onClick={this.handleShow}>Entsperren</span>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>

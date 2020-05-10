@@ -1,10 +1,11 @@
 @php
-    $punish = \App\Models\Logs\Punish::where('Type', 'nickchange')->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(25);
+    $punish = \App\Models\Logs\Punish::where('Type', 'nickchange')->with(['user', 'admin'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm w-full table-responsive-sm">
     <tr>
         <th>{{ __('Id') }}</th>
         <th>{{ __('Datum') }}</th>
+        <th>{{ __('User') }}</th>
         <th>{{ __('Admin') }}</th>
         <th>{{ __('Änderung') }}</th>
     </tr>

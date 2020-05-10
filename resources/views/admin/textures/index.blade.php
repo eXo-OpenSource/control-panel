@@ -19,12 +19,12 @@
                         @foreach($textures as $texture)
                         <tr>
                             <td>{{ $texture->Date->format('d.m.Y H:i:s') }}</td>
-                            <td>@if($texture->user){{ $texture->user->Name }}@else{{ 'Unknown' }}@endif</td>
+                            <td>@if($texture->user)<a href="{{ route('users.show', [$texture->user]) }}">{{ $texture->user->Name }}</a>@else{{ 'Unknown' }}@endif</td>
                             <td><img style="max-height: 160px;" src="@if(strpos($texture->Image, 'http') !== 0){{'https://picupload.pewx.de/textures/'}}@endif{{ $texture->Image }}"></td>
                             <td>@vehicleName($texture->Model)<br />
                                 <img style="max-height: 150px;" src="https://exo-reallife.de/images/veh/Vehicle_{{ $texture->Model }}.jpg"></td>
                             <td>@if($texture->Public === 1)<i class="fas fa-check text-green-500"></i>@else<i class="fas fa-times text-red-500"></i>@endif</td>
-                            <td>{{ $texture->getStatus() }} - @if($texture->admin){{ $texture->admin->Name }}@else{{ 'Unknown' }}@endif</td>
+                            <td>{{ $texture->getStatus() }}@if($texture->Status !== 0 && $texture->Status !== 1) - @if($texture->admin)<a href="{{ route('users.show', [$texture->admin]) }}">{{ $texture->admin->Name }}</a>@else{{ 'Unknown' }}@endif @endif</td>
                         </tr>
                         @endforeach
                     </table>

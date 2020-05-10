@@ -9,9 +9,32 @@ $fa-font-path: '/fonts/font-awesome';
 @import 'header';
 @import 'modal';
 @import 'chat';
+@import 'pagination';
 
-.c-dark-theme .table {
-    .table-active > td {
-        color: #e1e1e1;
+.c-dark-theme {
+    .table {
+        .table-active > td {
+            color: #e1e1e1;
+        }
+
+        .tr-other {
+            background-color: #2E2F3B;
+        }
+
+        .tr-in {
+            background-color: #39ff0040;
+        }
+
+        .tr-out {
+            background-color: #ff000046;
+        }
+
+    }
+
+    select {
+        option {
+            background-color: #44454C;
+        }
     }
 }
+

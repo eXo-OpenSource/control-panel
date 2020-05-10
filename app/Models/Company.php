@@ -27,7 +27,7 @@ class Company extends Model
 
     public function getActivity(Carbon $from, Carbon $to)
     {
-        return AccountActivityGroup::getActivity($this->Id, 2, $from, $to);
+        return AccountActivityGroup::getActivity($this->Id, 3, $from, $to);
     }
 
     public function getColor($alpha = 1)
@@ -39,6 +39,11 @@ class Company extends Model
         }
 
         return "rgba(".$color[0].", ".$color[1].", ".$color[2].", ".$alpha.")";
+    }
+
+    public function money()
+    {
+        return BankAccountTransaction::query()->where('FromType', 3)->where('FromId', $this->Id)->orWhere('ToType', 3)->where('ToId', $this->Id);
     }
 
     public function vehicles()

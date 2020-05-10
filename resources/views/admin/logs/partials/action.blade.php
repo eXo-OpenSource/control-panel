@@ -1,5 +1,5 @@
 @php
-    $actions = \App\Models\Logs\Action::with(['user'])->orderBy('Id', 'DESC')->paginate(25);
+    $actions = \App\Models\Logs\Action::with(['user'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

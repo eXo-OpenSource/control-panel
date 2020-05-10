@@ -17,11 +17,6 @@ class Group extends Model
         return $this->hasMany(Character::class, 'GroupId', 'Id');
     }
 
-    public function membersCount()
-    {
-        return Character::where('GroupId', $this->Id)->count();
-    }
-
     public function logs()
     {
         return GroupLog::where('GroupType', 'group')->where('GroupId', $this->Id);
@@ -53,6 +48,11 @@ class Group extends Model
         return $this->morphOne(BankAccount::class, 'bank', 'OwnerType', 'OwnerId', 'Id');
     }
 
+    public function money()
+    {
+        return BankAccountTransaction::query()->where('FromType', 8)->where('FromId', $this->Id)->orWhere('ToType', 8)->where('ToId', $this->Id);
+    }
+
     public function getMorphClass()
     {
         return 8;
@@ -65,6 +65,6 @@ class Group extends Model
 
     public function getURL()
     {
-        return route('companies.show', $this->Id);
+        return route('groups.show', $this->Id);
     }
 }

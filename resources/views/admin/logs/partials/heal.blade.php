@@ -1,5 +1,5 @@
 @php
-    $heals = \App\Models\Logs\Heal::with(['user'])->orderBy('Id', 'DESC')->paginate(25);
+    $heals = \App\Models\Logs\Heal::with(['user'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

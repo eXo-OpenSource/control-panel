@@ -1,6 +1,7 @@
 @php
-    $kills = $user->kills()->with(['target'])->orderBy('Id', 'DESC')->paginate(25);
+    $kills = $user->kills()->with(['target'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
+@section('title', __('Morde') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>

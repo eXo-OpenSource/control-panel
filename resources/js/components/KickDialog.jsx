@@ -59,9 +59,7 @@ export default class KickDialog extends Component {
     render() {
         return (
             <>
-                <Button variant="danger" onClick={this.handleShow}>
-                    Kicken
-                </Button>
+                <span className="dropdown-item" style={{'cursor': 'pointer'}} onClick={this.handleShow}>Kicken</span>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>

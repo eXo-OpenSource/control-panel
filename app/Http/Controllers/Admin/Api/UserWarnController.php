@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\Api;
 
 use App\Models\Warn;
 use App\Models\User;
+use App\Services\MTAService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class UserWarnController extends Controller
 {
@@ -38,63 +40,42 @@ class UserWarnController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function create(User $user)
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function store(Request $request, User $user)
     {
-        //
-    }
+        if (Gate::allows('admin-rank-3')) {
+            $reason = $request->get('reason');
+            $duration = $request->get('duration');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Warn  $warn
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user, Warn $warn)
-    {
-        //
-    }
+            if (empty($reason)) {
+                return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
+            }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Warn  $warn
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user, Warn $warn)
-    {
-        //
-    }
+            if (empty($duration) && intval('duration') <= 0) {
+                return ['status' => 'Error', 'message' => __('Bitte gib eine gültige Dauer ein!')];
+            }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Warn  $warn
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, User $user, Warn $warn)
-    {
-        //
+            $mtaService = new MTAService();
+            $response = $mtaService->addWarn(auth()->user()->Id, $user->Id, $duration, $reason);
+
+            if (!empty($response)) {
+                $data = json_decode($response[0]);
+                if ($data->status === 'SUCCESS') {
+                    return ['status' => 'Success', 'message' => __('Die Verwarnung wurde erfolgreich angelegt.')];
+                } else {
+                    return ['status' => 'Error', 'message' => __('Die Verwarnung konnte nicht angelegt werden.')];
+                }
+            }
+
+            return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
+        }
+
+        return ['status' => 'Error', 'message' => __('Zugriff verweigert')];
     }
 
     /**
@@ -102,10 +83,26 @@ class UserWarnController extends Controller
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Warn  $warn
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function destroy(User $user, Warn $warn)
     {
-        //
+        if (Gate::allows('admin-rank-5')) {
+            $mtaService = new MTAService();
+            $response = $mtaService->removeWarn(auth()->user()->Id, $user->Id, $warn->Id);
+
+            if (!empty($response)) {
+                $data = json_decode($response[0]);
+                if ($data->status === 'SUCCESS') {
+                    return ['status' => 'Success', 'message' => __('Die Verwarnung wurde erfolgreich gelöscht.')];
+                } else {
+                    return ['status' => 'Error', 'message' => __('Die Verwarnung konnte nicht gelöscht werden.')];
+                }
+            }
+
+            return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
+        }
+
+        return ['status' => 'Error', 'message' => __('Zugriff verweigert')];
     }
 }

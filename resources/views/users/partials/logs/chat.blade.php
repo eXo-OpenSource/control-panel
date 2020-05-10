@@ -1,6 +1,7 @@
 @php
-    $chat = $user->chat()->with(['user'])->orderBy('Id', 'DESC')->simplePaginate(25);
+    $chat = $user->chat()->with(['user'])->orderBy('Id', 'DESC')->simplePaginate(request()->get('limit') ?? 25);
 @endphp
+@section('title', __('Chat') . ' - ' . __('Logs') . ' - '. $user->Name)
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>
         <th>{{ __('Id') }}</th>
@@ -12,7 +13,7 @@
         <th>{{ __('Gehört von') }}</th>
     </tr>
     @foreach($chat as $entry)
-        <tr>
+        <tr class="@if($entry->UserId !== $user->Id){{'tr-other'}}@endif">
             <td>{{ $entry->ID }}</td>
             <td>{{ $entry->Date }}</td>
             <td>

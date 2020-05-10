@@ -33,11 +33,32 @@
         </div>
     </div>
     <div class="col-lg-6">
+        @can('bank', $faction)
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">{{ __('Details') }}</div>
+                        <div class="card-body">
+                            <td>{{ __('Bank') }}</td>
+                            <dd>{{ number_format($faction->bankAccount()->Money, 0, ',', ' ') }}$</dd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endcan
         @can('activityTotal', $faction)
-            <react-chart data-chart="activity:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
+            <div class="row">
+                <div class="col-12">
+                    <react-chart data-chart="activity:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Aktivität') }}"></react-chart>
+                </div>
+            </div>
         @endcan
         @can('bank', $faction)
-            <react-chart data-chart="money:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Einnahmen/Ausgaben') }}"></react-chart>
+            <div class="row">
+                <div class="col-12">
+                    <react-chart data-chart="money:faction:{{ $faction->Id }}" data-state="true" data-title="{{ __('Einnahmen/Ausgaben') }}"></react-chart>
+                </div>
+            </div>
         @endcan
     </div>
 </div>

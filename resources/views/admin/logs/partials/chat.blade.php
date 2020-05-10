@@ -1,5 +1,5 @@
 @php
-    $chat = \App\Models\Logs\Chat::with(['user'])->orderBy('Id', 'DESC')->simplePaginate(25);
+    $chat = \App\Models\Logs\Chat::with(['user'])->orderBy('Id', 'DESC')->simplePaginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

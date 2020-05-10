@@ -1,7 +1,121 @@
 @extends('layouts.app')
 
+@section('title', __('Statistiken'))
+
 @section('content')
     <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Gangwar Schaden aktuelle Woche') }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Schaden') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($damageCurrentWeek as $key => $row)
+                                <tr @if(auth()->user() && auth()->user()->Id === $row->UserId)class="table-active"@endif>
+                                    <td>{{$key+1}}.</td>
+                                    <td>@if($row->UserId != -1)<a href="{{ route('users.show', [$row->UserId]) }}">{{ $row->Name }}@else{{ $row->Name }}@endif</a></td>
+                                    <td>{{ $row->Amount }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Gangwar Schaden letzte Woche') }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Schaden') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($damageLastWeek as $key => $row)
+                                <tr @if(auth()->user() && auth()->user()->Id === $row->UserId)class="table-active"@endif>
+                                    <td>{{$key+1}}.</td>
+                                    <td>@if($row->UserId != -1)<a href="{{ route('users.show', [$row->UserId]) }}">{{ $row->Name }}@else{{ $row->Name }}@endif</a></td>
+                                    <td>{{ $row->Amount }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Gangwar Kills aktuelle Woche') }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Kills') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($killsCurrentWeek as $key => $row)
+                                <tr @if(auth()->user() && auth()->user()->Id === $row->UserId)class="table-active"@endif>
+                                    <td>{{$key+1}}.</td>
+                                    <td>@if($row->UserId != -1)<a href="{{ route('users.show', [$row->UserId]) }}">{{ $row->Name }}@else{{ $row->Name }}@endif</a></td>
+                                    <td>{{ $row->Amount }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Gangwar Kills letzte Woche') }}
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th scope="col">{{ __('Name') }}</th>
+                                <th scope="col">{{ __('Kills') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($killsLastWeek as $key => $row)
+                                <tr @if(auth()->user() && auth()->user()->Id === $row->UserId)class="table-active"@endif>
+                                    <td>{{$key+1}}.</td>
+                                    <td>@if($row->UserId != -1)<a href="{{ route('users.show', [$row->UserId]) }}">{{ $row->Name }}@else{{ $row->Name }}@endif</a></td>
+                                    <td>{{ $row->Amount }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">

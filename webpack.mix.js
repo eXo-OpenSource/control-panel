@@ -17,6 +17,9 @@ mix.react('resources/js/app.js', 'public/js')
 
 mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fonts/font-awesome');
 mix.copy('./node_modules/paper/dist/paper-full.min.js', 'public/js/paper.js');
+mix.copy('resources/js/coreui.min.js', 'public/js/coreui.min.js');
+mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
+mix.copy('resources/js/sentry.min.js', 'public/js/sentry.min.js');
 
 mix.setPublicPath('public');
 mix.setResourceRoot('../');

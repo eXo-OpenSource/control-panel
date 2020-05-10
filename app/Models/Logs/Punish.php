@@ -10,7 +10,9 @@ class Punish extends Model
     protected $primaryKey = 'Id';
     protected $table = 'Punish';
     protected $connection = 'mysql_logs';
-    public $timestamps = false;
+    public $timestamps = true;
+    public const CREATED_AT = 'Date';
+    public const UPDATED_AT = null;
 
     protected $dates = ['Date'];
 
@@ -22,5 +24,15 @@ class Punish extends Model
     public function admin()
     {
         return $this->hasOne(User::class, 'Id', 'AdminId');
+    }
+
+    public function log()
+    {
+        return $this->hasMany(PunishLog::class, 'PunishId', 'Id');
+    }
+
+    public function hasFixedEndDate()
+    {
+        return $this->Type !== 'prison' && $this->Type !== 'unprison';
     }
 }

@@ -1,5 +1,5 @@
 @php
-    $damages = \App\Models\Logs\Damage::with(['user', 'target'])->orderBy('Id', 'DESC')->paginate(25);
+    $damages = \App\Models\Logs\Damage::with(['user', 'target'])->orderBy('Id', 'DESC')->paginate(request()->get('limit') ?? 25);
 @endphp
 <table class="table table-sm table-responsive-sm tw-full">
     <tr>

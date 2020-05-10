@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { Line, Doughnut } from 'react-chartjs-2';
+import {Line, Doughnut, Bar} from 'react-chartjs-2';
 import { Spinner } from 'react-bootstrap';
 
 
@@ -20,7 +20,13 @@ export default class Chart extends Component {
     async componentDidMount() {
 
         try {
-            const response = await axios.get('/api/charts/' + this.props.chart);
+            let suffix = '';
+
+            if(this.props.date) {
+                suffix = '?date=' + this.props.date;
+            }
+
+            const response = await axios.get('/api/charts/' + this.props.chart + suffix);
 
             if(response.data && response.data.tooltips) {
                 if (!response.data.options) {
@@ -80,17 +86,30 @@ export default class Chart extends Component {
                     </div>
                 );
             } else {
-                let chart = <Line data={this.state.data.data} options={this.state.data.options} />;
+                let chart;
+                let fromTo;
 
                 if(this.state.data.type === 'doughnut') {
                     chart = <Doughnut data={this.state.data.data} options={this.state.data.options} />;
+                } else if(this.state.data.type === 'bar') {
+                    chart = <Bar data={this.state.data.data} options={this.state.data.options} />;
+                } else {
+                    chart = <Line data={this.state.data.data} options={this.state.data.options} />;
                 }
+
+                if(this.state.data.from && this.state.data.to) {
+                    fromTo = <span>{this.state.data.from} - {this.state.data.to}</span>;
+                } else if(this.state.data.date) {
+                    fromTo = <span>{this.state.data.date}</span>;
+                }
+
+
 
                 return (
                     <div className="card">
                         <div className="card-header">{this.props.title}
                             <div className="float-right">
-                                <span>{this.state.data.from} - {this.state.data.to}</span>
+                                {fromTo}
                             </div>
                         </div>
 
