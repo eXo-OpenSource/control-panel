@@ -4,6 +4,12 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-12">
+
+                <div class="d-block mb-4">
+                    <a class="btn btn-primary" href="{{ route('admin.user.search') }}">Benutzersuche</a>
+                    <a class="btn btn-primary" href="{{ route('admin.texture') }}">Texturen</a>
+                </div>
+
                 <div class="row">
                     <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
                         <div class="card text-white bg-primary" style="background: linear-gradient(45deg,#321fdb 0%,#1f1498 100%);">
@@ -33,10 +39,10 @@
 
                 <div class="row">
                     <div class="col-xl-6 col-lg-12">
-                        <react-chart data-chart="activity:factions" data-state="true" data-title="Aktivität der Fraktionen"></react-chart>
+                        <react-chart data-chart="factions" data-state="true" data-title="Aktivität der Fraktionen"></react-chart>
                     </div>
                     <div class="col-xl-6 col-lg-12">
-                        <react-chart data-chart="activity:companies" data-state="true" data-title="Aktivität der Unternehmen"></react-chart>
+                        <react-chart data-chart="companies" data-state="true" data-title="Aktivität der Unternehmen"></react-chart>
                     </div>
                 </div>
 
@@ -44,74 +50,33 @@
                 <div class="row">
                     <div class="col-xl-6 col-lg-12">
                         <div class="card">
-                            <div class="card-header">
-                                Letzten Invites
-                            </div>
                             <div class="card-body">
-                                <div>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">{{ __('Datum') }}</th>
-                                                <th scope="col">{{ __('Fraktion/Unternehmen') }}</th>
-                                                <th scope="col">{{ __('Inviter') }}</th>
-                                                <th scope="col">{{ __('Name') }}</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($invites as $row)
-                                            <tr>
-                                                <td>{{ $row->JoinDate }}</td>
-                                                <td>{{ $row->element->Name }}</td>
-                                                <td>{{ $row->inviter->Name }}</td>
-                                                <td>{{ $row->user->Name }}</td>
-                                                <td><react-history-dialog data-history-id="{{ $row->Id }}"></react-history-dialog></td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Fraktionen pro Mitglied</h4>
+                                    </div>
+                                </div>
+
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-3" height="300" style="display: block;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-12">
                         <div class="card">
-                            <div class="card-header">
-                                Letzten Uninvites
-                            </div>
                             <div class="card-body">
-                                <div>
-                                    <table class="table table-sm">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">{{ __('Datum') }}</th>
-                                            <th scope="col">{{ __('Fraktion/Unternehmen') }}</th>
-                                            <th scope="col">{{ __('Uninviter') }}</th>
-                                            <th scope="col">{{ __('Name') }}</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($uninvites as $row)
-                                            <tr>
-                                                <td>{{ $row->JoinDate }}</td>
-                                                <td>{{ $row->element->Name }}</td>
-                                                <td>{{ $row->uninviter->Name }}</td>
-                                                <td>{{ $row->user->Name }}</td>
-                                                <td><react-history-dialog data-history-id="{{ $row->Id }}"></react-history-dialog></td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h4 class="card-title mb-0">Aktivität der Unternehmen pro Mitglied</h4>
+                                    </div>
+                                </div>
+
+                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                                    <canvas id="canvas-4" height="300" style="display: block;"></canvas>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-6 col-lg-12">
-                        <react-chart data-chart="money:overall" data-state="true" data-title="{{ __('Geldfluss') }}"></react-chart>
                     </div>
                 </div>
             </div>
@@ -130,6 +95,20 @@
         Chart.defaults.global.tooltips.mode = 'index';
         Chart.defaults.global.tooltips.position = 'nearest';
         Chart.defaults.global.tooltips.custom = coreui.ChartJS.customTooltips;
+
+        var dataFaction2 = {!! json_encode($factionData2) !!};
+
+        const lineChart3 = new Chart(document.getElementById('canvas-3'), {
+            type: 'line',
+            data: {
+                labels : dataFaction2.labels,
+                datasets : dataFaction2.datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        })
 
         var ticketData = {!! json_encode($tickets) !!};
 
