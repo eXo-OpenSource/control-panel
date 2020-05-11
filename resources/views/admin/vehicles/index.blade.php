@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="row">
                     @foreach($vehicles as $vehicle)
-                        <div class="col-md-2">
+                        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
                             <div class="card">
                                 @if(!$vehicle->IsInShop)<span class="image-badge image-badge-info">{{ __('Selten') }}</span>@endif
                                 <img class="bd-placeholder-img card-img-top" src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Id }}.jpg">
