@@ -70,10 +70,10 @@ class VehicleController extends Controller
 
             if($vehicle->OwnerType === 1 || $vehicle->OwnerType === 4) {
                 if($vehicle->Premium) {
-                    $vehicles[$vehicle->Model]->PremiumCount = $vehicle->Count;
+                    $vehicles[$vehicle->Model]->PremiumCount = $vehicles[$vehicle->Model]->TradeAbleCount + $vehicle->Count;
                     $vehicles[$vehicle->Model]->Count = $vehicles[$vehicle->Model]->Count + $vehicle->Count;
                 } else {
-                    $vehicles[$vehicle->Model]->TradeAbleCount = $vehicle->Count;
+                    $vehicles[$vehicle->Model]->TradeAbleCount = $vehicles[$vehicle->Model]->TradeAbleCount + $vehicle->Count;
                     $vehicles[$vehicle->Model]->Count = $vehicles[$vehicle->Model]->Count + $vehicle->Count;
                 }
             }
