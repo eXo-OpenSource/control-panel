@@ -105,6 +105,16 @@ class User extends Authenticatable
         return $this->hasMany(Advert::class, 'UserId', 'Id');
     }
 
+    public function hardware()
+    {
+        return $this->hasMany(ClientStatistic::class, 'UserId', 'Id');
+    }
+
+    public function serials()
+    {
+        return $this->hasMany(AccountSerial::class, 'PlayerId', 'Id');
+    }
+
     public function damage()
     {
         return Damage::query()->where('UserId', $this->Id)->orWhere('TargetId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
@@ -184,6 +194,13 @@ class User extends Authenticatable
     public function getActivity(Carbon $from, Carbon $to)
     {
         return AccountActivity::getActivity($this, $from, $to);
+    }
+
+    public function getMods()
+    {
+        $serials = $this->serials->pluck('Serial');
+
+        return AccountMod::query()->whereIn('Serial', $serials)->get();
     }
 
     public function bank()
