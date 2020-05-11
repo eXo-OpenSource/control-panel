@@ -104,6 +104,11 @@ Route::middleware('auth')->group(function () {
         'where' => ['path' => '.*']
     ]);
 
+    Route::namespace('Shop')->prefix('shop')->group(function () {
+        Route::resource('/', 'DashboardController')->only('index');
+        Route::resource('dashboard', 'DashboardController')->only('index');
+    });
+
     Route::namespace('Event')->prefix('events')->name('events.')->group(function () {
         Route::resource('santa', 'SantaController')->only(['index', 'store', 'create']);
     });

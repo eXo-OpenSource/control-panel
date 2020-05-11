@@ -2,16 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Models\Character;
-use App\Models\PremiumUser;
 use Carbon\Carbon;
-use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
-use Exo\TeamSpeak\Services\TeamSpeakService;
+use App\Models\Character;
 use Illuminate\Bus\Queueable;
+use App\Models\Shop\PremiumUser;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Exo\TeamSpeak\Services\TeamSpeakService;
+use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 
 class TeamSpeakSyncGroups implements ShouldQueue
 {
