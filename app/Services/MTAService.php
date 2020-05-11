@@ -42,6 +42,11 @@ class MTAService
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKRemoveWarn', $adminId,  $targetId, $warnId);
     }
 
+    public function takeScreenShot($userId)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKTakeScreenShot', $userId);
+    }
+
     public function getOnlinePlayers()
     {
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendOnlinePlayers');

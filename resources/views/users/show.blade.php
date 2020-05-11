@@ -24,6 +24,11 @@
                                     {{ __('MTA Server') }}
                                 </button>
                                 <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ route('admin.users.screenshots.store', [$user->Id]) }}" onclick="event.preventDefault(); document.getElementById('screenshot-form').submit();">{{ __('Screenshot anfordern') }}</a>
+                                    <form id="screenshot-form" action="{{ route('admin.users.screenshots.store', [$user->Id]) }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                    <a class="dropdown-item" href="{{ route('admin.users.screenshots.index', [$user->Id]) }}">{{ __('Screenshots') }}</a>
                                     <react-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-ban-dialog>
                                     @if(auth()->user()->Rank >= 5)<react-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unban-dialog>@endif
                                     <react-kick-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-kick-dialog>

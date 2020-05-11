@@ -115,6 +115,11 @@ class User extends Authenticatable
         return $this->hasMany(AccountSerial::class, 'PlayerId', 'Id');
     }
 
+    public function screenshots()
+    {
+        return $this->hasMany(AccountScreenshot::class, 'UserId', 'Id');
+    }
+
     public function damage()
     {
         return Damage::query()->where('UserId', $this->Id)->orWhere('TargetId', $this->Id); // $this->hasMany(Damage::class, 'UserId', 'Id');
@@ -200,7 +205,7 @@ class User extends Authenticatable
     {
         $serials = $this->serials->pluck('Serial');
 
-        return AccountMod::query()->whereIn('Serial', $serials)->get();
+        return AccountMod::query()->whereIn('Serial', $serials)->orderBy('LastSeenAt', 'DESC')->get();
     }
 
     public function bank()

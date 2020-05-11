@@ -15,6 +15,23 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('test', function() {
+    $response = (new \App\Services\MTAService())->takeScreenShot(4123);
+    if (!empty($response)) {
+        $data = json_decode($response[0]);
+        if($data->status === 'SUCCESS') {
+            $screenshot = new \App\Models\AccountScreenshot();
+            $screenshot->UserId = 4123;
+            $screenshot->AdminId = 4123;
+            $screenshot->Tag = $data->tag;
+            $screenshot->Status = 'Processing';
+            $screenshot->save();
+        }
+        return $data->tag;
+    }
+   return 'FAIL';
+});
+
 Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -39,23 +56,6 @@ Route::resource('companies', 'CompanyController')->only('index', 'show');
 Route::get('companies/{company}/logs/{log?}', 'CompanyLogController@show')->name('companies.show.logs');
 Route::get('companies/{company}/statistics/{statistic?}', 'CompanyStatisticController@show')->name('companies.show.statistics');
 Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
-
-Route::get('test', function() {
-   dd(app('teamspeak')->addBan('oj/0JYiPgfSr9Ug/e8Xf2KBlGjo=', 'GG & WP', 1));
-});
-
-Route::get('test', function() {
-    /** @var \Exo\TeamSpeak\Services\TeamSpeakService $teamSpeak */
-    $teamSpeak = app('teamspeak');
-    dump($teamSpeak->addBan('OCFUI4PzNOE5gx6RQw2qVzchQt4=', 'GG & WP', 3));
-    // getClientBans
-    $client = $teamSpeak->getDatabaseIdFromUniqueId('OCFUI4PzNOE5gx6RQw2qVzchQt4=');
-    dump($client);
-    $bans = $client->client->getBans();
-    dump($bans);
-    $result = $bans->bans[0]->unban();
-    dd($result);
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('users/search', 'UserSearchController@index')->name('users.search');
@@ -117,6 +117,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
+        Route::resource('users.screenshots', 'ScreenshotUserController', ['as' => 'admin'])->only('index', 'store');
         Route::resource('users.teamspeak', 'UserTeamspeakController', ['as' => 'admin'])->only('create', 'store');
         Route::get('teamspeak/{teamspeak}/delete', 'TeamspeakController@delete')->name('admin.teamspeak.delete');
         Route::resource('teamspeak', 'TeamspeakController', ['as' => 'admin'])->only('index', 'destroy', 'show');

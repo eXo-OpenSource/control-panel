@@ -18,6 +18,10 @@ Route::namespace('Api')->name('api.')->group(function () {
     Route::get('auth', 'AuthController@auth')->name('auth');
 });
 
+Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
+    Route::resource('screenshots', 'ScreenshotController')->only('store');
+});
+
 Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
