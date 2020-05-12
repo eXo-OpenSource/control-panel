@@ -44,3 +44,10 @@ Route::middleware('auth')->group(function () {
         Route::post('users/search', 'User\UserSearchController@index')->name('user.search');
     });
 });
+
+Route::namespace('Shop\\Api')->prefix('shop')->name('api.shop.')->group(function () {
+    Route::post('/payments/notifications/paypal', 'Api\PaymentNotificationController@paypal')->name('payment.notification.paypal');
+    Route::post('/payments/notifications/paysafecard', 'Api\PaymentNotificationController@paysafecard')->name('payment.notification.paysafecard');
+    Route::post('/payments/notifications/klarna', 'Api\PaymentNotificationController@klarna')->name('payment.notification.klarna');
+    Route::get('/payments/status/{payment_id}', 'Api\PaymentApiController@status')->name('payments.status');
+});

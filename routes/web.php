@@ -104,9 +104,16 @@ Route::middleware('auth')->group(function () {
         'where' => ['path' => '.*']
     ]);
 
-    Route::namespace('Shop')->prefix('shop')->group(function () {
+    Route::namespace('Shop')->middleware('admin')->prefix('shop')->group(function () { //Temporary cause shop is not finished
+    //Route::namespace('Shop')->prefix('shop')->group(function () {
         Route::resource('/', 'DashboardController')->only('index');
         Route::resource('dashboard', 'DashboardController')->only('index');
+        Route::prefix('charge')->group(function() {
+            Route::get('/', 'ChargeController@index')->name('charge.index');
+            Route::get('/{type}', 'ChargeController@create')->name('charge.create');
+            Route::post('/', 'ChargeController@store')->name('charge.store');
+            Route::get('/status/{status}', 'ChargeController@status')->name('charge.status');
+        });
     });
 
     Route::namespace('Event')->prefix('events')->name('events.')->group(function () {

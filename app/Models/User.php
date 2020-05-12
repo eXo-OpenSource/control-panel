@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\WhoIsOnlineController;
-use App\Models\Logs\Advert;
+use Carbon\Carbon;
 use App\Models\Logs\Chat;
-use App\Models\Logs\Damage;
 use App\Models\Logs\Heal;
 use App\Models\Logs\Kills;
 use App\Models\Logs\Login;
+use App\Models\Logs\Advert;
+use App\Models\Logs\Damage;
 use App\Models\Logs\Punish;
-use Carbon\Carbon;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Shop\PremiumUser;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
+use App\Http\Controllers\WhoIsOnlineController;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -231,5 +232,10 @@ class User extends Authenticatable
     public function tickets()
     {
         return $this->belongsToMany(Ticket::class, 'ticket_users', 'UserId', 'TicketId')->withPivot('JoinedAt', 'LeftAt');
+    }
+
+    public function premium()
+    {
+        return $this->hasOne(PremiumUser::class, 'UserId', 'Id');
     }
 }

@@ -27,3 +27,4 @@ require('./components/Tickets');
 require('./components/trainings/Trainings');
 require('./components/TeamSpeakBanDialog');
 require('./components/TeamSpeakUnbanDialog');
+require('./components/shop/ChargeForm');

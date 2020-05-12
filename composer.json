@@ -20,11 +20,13 @@
         "laravel/ui": "^2.0",
         "multitheftauto/mtasa-php-sdk": "^1.0",
         "owen-it/laravel-auditing": "^10.0",
+        "paypal/rest-api-sdk-php": "^1.14",
         "php-http/curl-client": "^2.0",
         "php-http/guzzle6-adapter": "^2.0",
         "php-http/message": "^1.8",
         "predis/predis": "^1.1",
         "sentry/sentry-laravel": "1.7.1",
+        "sofort/sofortlib-php": "^3.3",
         "tray-labs/laravel-influxdb": "dev-master"
     },
     "require-dev": {
