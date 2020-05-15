@@ -22,8 +22,12 @@
             $topJob = DB::connection('mysql_logs')->select('SELECT Job, SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY Job ORDER BY SumEarned DESC LIMIT 10;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
 
             if(auth()->user()) {
-                $myData = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND UserID = ? AND Date BETWEEN ? AND ?;', [1473351, auth()->user()->Id, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
-                $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND UserID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned;', [1473351, auth()->user()->Id, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
+                $myData = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND UserID = ? AND Date BETWEEN ? AND ?;', [1473351, auth()->user()->Id, '2020-05-15 05:00:00', '2020-05-18 05:00:00'])[0];
+                if(!$myData->SumEarned) {
+                    $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned DESC;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
+                } else {
+                    $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND UserID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned DESC;', [1473351, auth()->user()->Id, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
+                }
             }
 
             $jobs = [
@@ -89,7 +93,7 @@
                                 <tr class="table-active">
                                     <td>{{ count($myPos) }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
-                                    <td>@money($myData[0]->SumEarned)</td>
+                                    <td>@money($myData->SumEarned)</td>
                                 </tr>
                             @endif
                             </tbody>
