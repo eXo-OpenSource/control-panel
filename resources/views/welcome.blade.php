@@ -89,7 +89,7 @@
                                     <td>@money($row->SumEarned)</td>
                                 </tr>
                             @endforeach
-                            @if($myPos && $myData && count($myPos) > 10)
+                            @if(isset($myPos) && $myPos && $myData && count($myPos) > 10)
                                 <tr class="table-active">
                                     <td>{{ count($myPos) }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
