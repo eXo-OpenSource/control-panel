@@ -26,7 +26,7 @@
                 if(!$myData->SumEarned) {
                     $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned DESC;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
                 } else {
-                    $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID HAVING SUM(Earned) > ? ORDER BY SumEarned DESC;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00', $myData->SumEarned]);
+                    $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID HAVING SUM(Earned) >= ? ORDER BY SumEarned DESC;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00', $myData->SumEarned]);
                 }
             }
 
