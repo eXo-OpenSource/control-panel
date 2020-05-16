@@ -18,7 +18,7 @@
         @php
             use Illuminate\Support\Facades\DB;
             $total = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ?;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
-            $top = DB::connection('mysql_logs')->select('SELECT j.UserID, a.Name, SUM(j.Earned) AS SumEarned FROM vrpLogs_Job j INNER JOIN ' . config('database.connections.mysql.database') . '.vrp_account a ON a.Id = j.UserID WHERE j.ID > ? AND j.Date BETWEEN ? AND ? GROUP BY j.UserID ORDER BY SumEarned DESC LIMIT 10;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
+            $top = DB::connection('mysql_logs')->select('SELECT j.UserID, a.Name, SUM(j.Earned) AS SumEarned, SUM(j.Duration) AS SumDuration FROM vrpLogs_Job j INNER JOIN ' . config('database.connections.mysql.database') . '.vrp_account a ON a.Id = j.UserID WHERE j.ID > ? AND j.Date BETWEEN ? AND ? GROUP BY j.UserID ORDER BY SumEarned DESC LIMIT 10;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
             $topJob = DB::connection('mysql_logs')->select('SELECT Job, SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY Job ORDER BY SumEarned DESC LIMIT 10;', [1473351, '2020-05-15 05:00:00', '2020-05-18 05:00:00']);
 
             if(auth()->user()) {
@@ -79,6 +79,7 @@
                                 <th>#</th>
                                 <th scope="col">{{ __('Name') }}</th>
                                 <th scope="col">{{ __('Betrag') }}</th>
+                                <th scope="col">{{ __('Zeit') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -87,6 +88,7 @@
                                     <td>{{$key+1}}.</td>
                                     <td><a href="{{ route('users.show', [$row->UserID]) }}">{{ $row->Name }}</a></td>
                                     <td>@money($row->SumEarned)</td>
+                                    <td>{{ Carbon\Carbon::now()->longAbsoluteDiffForHumans(Carbon\Carbon::now()->addSeconds($row->SumDuration), 3) }}</td>
                                 </tr>
                             @endforeach
                             @if(isset($myPos) && $myPos && $myData && count($myPos) > 10)
@@ -94,6 +96,7 @@
                                     <td>{{ count($myPos) }}.</td>
                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
                                     <td>@money($myData->SumEarned)</td>
+                                    <td>{{ Carbon\Carbon::now()->longAbsoluteDiffForHumans(Carbon\Carbon::now()->addSeconds($myData->SumDuration), 3) }}</td>
                                 </tr>
                             @endif
                             </tbody>
