@@ -49,7 +49,7 @@
             ];
         @endphp
         <div class="row">
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="text-muted small text-uppercase font-weight-bold">{{ __('Dollar verdient') }}</div>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-body text-center">
                         <div class="text-muted small text-uppercase font-weight-bold">{{ __('Zeit die mit den Jobs verbracht wurde') }}</div>
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="row mb-4">
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
                         {{ __('Top Verdiener') }}
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header">
                         {{ __('Top Jobs') }}
