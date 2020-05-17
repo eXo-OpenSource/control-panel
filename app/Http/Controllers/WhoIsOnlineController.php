@@ -113,6 +113,17 @@ class WhoIsOnlineController extends Controller
 
         return Cache::get('players', []);
     }
+    public static function isPlayerOnline($userId){
+        $data = WhoIsOnlineController::getOnlinePlayers();
+        $online = false;
+        foreach($data->Players as $player) {
+            if ($player->Id == $userId) {
+                $online = true;
+                break;
+            }
+        }
+        return $online;
+    }
 
     function index()
     {

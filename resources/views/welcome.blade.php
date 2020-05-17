@@ -86,7 +86,14 @@
                             @foreach($top as $key => $row)
                                 <tr @if(auth()->user() && $row->UserID && auth()->user()->Id == $row->UserID)class="table-active"@endif>
                                     <td>{{$key+1}}.</td>
-                                    <td><a href="{{ route('users.show', [$row->UserID]) }}">{{ $row->Name }}</a></td>
+                                    <td>
+                                        <a href="{{ route('users.show', [$row->UserID]) }}">{{ $row->Name }}</a>
+                                        @if(\App\Http\Controllers\WhoIsOnlineController::isPlayerOnline($row->UserID))
+                                            <span class="badge badge-success">online</span>
+                                        @else
+                                            <span class="badge badge-danger">offline</span>
+                                        @endif
+                                    </td>
                                     <td>@money($row->SumEarned)</td>
                                     <td>{{ Carbon\Carbon::now()->longAbsoluteDiffForHumans(Carbon\Carbon::now()->addSeconds($row->SumDuration), 3) }}</td>
                                 </tr>
@@ -94,7 +101,14 @@
                             @if(isset($myPos) && $myPos && $myData && count($myPos) > 10)
                                 <tr class="table-active">
                                     <td>{{ count($myPos) }}.</td>
-                                    <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
+                                    <td>
+                                        <a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a>
+                                        @if(\App\Http\Controllers\WhoIsOnlineController::isPlayerOnline(auth()->user()->Id))
+                                            <span class="badge badge-success">online</span>
+                                        @else
+                                            <span class="badge badge-danger">offline</span>
+                                        @endif
+                                    </td>
                                     <td>@money($myData->SumEarned)</td>
                                     <td>{{ Carbon\Carbon::now()->longAbsoluteDiffForHumans(Carbon\Carbon::now()->addSeconds($myData->SumDuration), 3) }}</td>
                                 </tr>
