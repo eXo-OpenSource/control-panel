@@ -49,19 +49,21 @@ window.moment.locale('de');
 
 import Echo from 'laravel-echo'
 
-// window.Pusher = require('pusher-js');
-window.io = require('socket.io-client');
-
-window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
-});
-
 if(!window.Exo) {
     window.Exo = {
         UserId: null,
         UserName: null,
         Rank: null,
+        Env: null,
     };
 }
+
+// window.Pusher = require('pusher-js');
+window.io = require('socket.io-client');
+
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.Exo.Env === 'production' ? window.location.hostname : window.location.hostname + ':6001'
+});
+
 
