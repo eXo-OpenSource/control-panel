@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "multitheftauto/mtasa-php-sdk": "^1.0",
+        "orchestra/parser": "^5.0",
         "owen-it/laravel-auditing": "^10.0",
         "paypal/rest-api-sdk-php": "^1.14",
         "php-http/curl-client": "^2.0",
