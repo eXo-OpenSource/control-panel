@@ -42,10 +42,13 @@ RUN apk --update add --no-cache \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
     adduser -u 1000 -S app -G app && \
+    mkdir /var/log/echo && \
     touch /var/log/php7/stdout.log && \
     touch /var/log/php7/stderr.log && \
     touch /var/log/nginx/stdout.log && \
     touch /var/log/nginx/stderr.log && \
+    touch /var/log/echo/stdout.log && \
+    touch /var/log/echo/stderr.log && \
     chown -R 1000:0 /var/log/*
 
 # Set timzone
@@ -72,6 +75,7 @@ COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chown -R app.app /run && \
   chown -R app.app /var/lib/nginx && \
   chown -R app.app /var/log/nginx && \
+  chown -R app.app /var/log/echo && \
   chown -R app.app /var/www
 
 # Setup document root
