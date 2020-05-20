@@ -33,7 +33,7 @@
                 <i class="c-sidebar-nav-icon fas fa-user-friends"></i>{{ __('Gruppen') }}
             </a>
         </li>
-        @if(auth()->user()->Rank >= 3)
+        @if(auth()->user() && auth()->user()->Rank >= 3)
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('tickets.index') }}">
                 <i class="c-sidebar-nav-icon fas fa-headset"></i>{{ __('Tickets') }}
