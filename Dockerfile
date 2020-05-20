@@ -37,6 +37,8 @@ RUN apk --update add --no-cache \
       php7-bcmath \
       php7-redis \
       php7-fileinfo \
+      nodejs \
+      npm \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
     adduser -u 1000 -S app -G app && \
@@ -49,6 +51,9 @@ RUN apk --update add --no-cache \
 # Set timzone
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
     echo "Europe/Vienna" > /etc/timezone
+
+# Install laravel echo server
+RUN npm install -g laravel-echo-server
 
 # Configure nginx
 COPY build/nginx.conf /etc/nginx/nginx.conf

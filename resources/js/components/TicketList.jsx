@@ -4,6 +4,7 @@ import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 import {Link} from "react-router-dom";
+import {element} from "prop-types";
 
 export default class TicketList extends Component {
     constructor() {
@@ -14,6 +15,62 @@ export default class TicketList extends Component {
             selectedTicket: null,
             state: 'open',
         };
+
+        if(Exo.Rank > 0) {
+            Echo.private(`tickets`)
+                .listen('TicketCreated', this.handleNewTicket.bind(this))
+                .listen('TicketUpdated', this.updateTicket.bind(this));
+        } else {
+            Echo.private(`tickets.user.${Exo.UserId}`)
+                .listen('TicketUpdated', this.updateTicket.bind(this));
+        }
+    }
+
+    async handleNewTicket(data) {
+        console.log(data);
+        let newData = this.state.data;
+
+        let found = false;
+
+        newData.forEach((element => {
+            if(element.Id === data.ticket.Id) {
+                found = true;
+            }
+        }))
+
+
+        if(!found) {
+            this.state.data.push(data.ticket);
+            this.setState({
+                data: newData
+            });
+        }
+    }
+
+    async updateTicket(data) {
+        console.log(data);
+        let newData = this.state.data;
+
+        let index = -1;
+
+        newData.forEach((element, i) => {
+            if(element.Id === data.ticket.Id) {
+                index = i;
+            }
+        })
+
+
+        if(index !== -1) {
+            this.state.data[index] = data.ticket;
+            this.setState({
+                data: newData
+            });
+        } else {
+            this.state.data.push(data.ticket);
+            this.setState({
+                data: newData
+            });
+        }
     }
 
     async componentDidMount() {
@@ -79,7 +136,11 @@ export default class TicketList extends Component {
                                     </thead>
                                     <tbody>
                                     {this.state.data.map((ticket, i) => {
-                                        return <TicketListEntry key={ticket.Id} ticket={ticket} open={this.showEntry}></TicketListEntry>;
+                                        if(this.state.state === 'both' ||
+                                            (this.state.state === 'open' && ticket.State === 'Open') ||
+                                            (this.state.state === 'closed' && ticket.State === 'Closed')) {
+                                            return <TicketListEntry key={ticket.Id} ticket={ticket} open={this.showEntry}></TicketListEntry>;
+                                        }
                                     })}
                                     </tbody>
                                 </table>

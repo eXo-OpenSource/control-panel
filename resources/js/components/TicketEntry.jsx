@@ -20,6 +20,15 @@ export default class TicketEntry extends Component {
             showAddUserDialog: false,
             showRemoveUserDialog: false
         };
+
+        Echo.private(`tickets.${this.state.ticketId}`)
+            .listen('TicketUpdated', this.updateTicket.bind(this));
+    }
+
+    async updateTicket(data) {
+        this.setState({
+            data: data.ticket
+        });
     }
     async componentDidMount() {
         if(this.state.data === null) {
@@ -166,7 +175,7 @@ export default class TicketEntry extends Component {
                                                 return (
                                                     <div key={answer.Id} className="chat-message">
                                                         <div className="message">
-                                                            <div className={answer.IsMyMessage ? 'message-right' : 'message-left'}>
+                                                            <div className={answer.UserId === Exo.UserId ? 'message-right' : 'message-left'}>
                                                                 <div className="message-content">
                                                                     <p className="message-user">
                                                                         {this.props.minimal == true &&

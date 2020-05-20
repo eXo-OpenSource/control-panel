@@ -36,9 +36,11 @@
     },
     "dependencies": {
         "chart.js": "^2.9.3",
+        "laravel-echo": "^1.8.0",
         "react-bootstrap": "^1.0.1",
         "react-chartjs-2": "^2.9.0",
         "react-router-dom": "^5.1.2",
+        "socket.io-client": "^2.3.0",
         "vue-chartjs": "^3.5.0"
     }
 }

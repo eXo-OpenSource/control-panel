@@ -16,20 +16,18 @@ Route::get('/', function () {
 });
 
 Route::get('test', function() {
-    $response = (new \App\Services\MTAService())->takeScreenShot(4123);
-    if (!empty($response)) {
-        $data = json_decode($response[0]);
-        if($data->status === 'SUCCESS') {
-            $screenshot = new \App\Models\AccountScreenshot();
-            $screenshot->UserId = 4123;
-            $screenshot->AdminId = 4123;
-            $screenshot->Tag = $data->tag;
-            $screenshot->Status = 'Processing';
-            $screenshot->save();
-        }
-        return $data->tag;
-    }
-   return 'FAIL';
+    $user = auth()->user();
+    $id = 25;
+
+    $ticket = \App\Models\Ticket::find($id);
+
+    if(!$ticket)
+        return false;
+
+    if($user->Rank > 0)
+        return true;
+
+    return $ticket->users->pluck('Id')->contains($user->Id);
 });
 
 Route::namespace('Auth')->prefix('auth')->group(function () {

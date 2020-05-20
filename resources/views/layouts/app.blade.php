@@ -89,6 +89,15 @@
     <script src="{{ mix('js/popper.min.js') }}"></script>
     <script src="{{ mix('js/coreui.min.js') }}"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
+    @if(auth()->user())
+        <script>
+            window.Exo = {
+                UserId: {{ auth()->user()->Id }},
+                UserName: '{{ auth()->user()->Name }}',
+                Rank: {{ auth()->user()->Rank }},
+            };
+        </script>
+    @endif
     @if(env('SENTRY_JS_DSN') && !env('APP_DEBUG'))
     <script src="{{ mix('js/sentry.min.js') }}"></script>
     <script>

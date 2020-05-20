@@ -138,71 +138,20 @@ class TicketController extends Controller
         $answer->MessageType = 0;
         $answer->Message = $request->get('message');
         $answer->save();
+        event(new \App\Events\TicketCreated($ticket));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function show(Ticket $ticket)
     {
         abort_unless(auth()->user()->can('show', $ticket), 403);
 
-        $entry = [
-            'Id' => $ticket->Id,
-            'UserId' => $ticket->UserId,
-            'User' => $ticket->user->Name,
-            'AssigneeId' => $ticket->AssigneeId,
-            'AssignedRank' => $ticket->AssignedRank,
-            'CategoryId' => $ticket->CategoryId,
-            'Category' => $ticket->category->Title,
-            'Title' => $ticket->Title,
-            'State' => $ticket->State,
-            'StateText' => $ticket->State === Ticket::TICKET_STATE_OPEN ? 'Offen' : 'Geschlossen',
-            'ResolvedBy' => $ticket->ResolvedBy,
-            'LastResponseAt' => $ticket->LastResponseAt->format('d.m.Y H:i:s'),
-            'CreatedAt' => $ticket->CreatedAt->format('d.m.Y H:i:s'),
-            'ResolvedAt' => $ticket->ResolvedAt ? $ticket->ResolvedAt->format('d.m.Y H:i:s') : null,
-        ];
-
-        if($ticket->assignee) {
-            $entry['Assignee'] = $ticket->assignee->Name;
-        }
-
-        if($ticket->resolver) {
-            $entry['Resolver'] = $ticket->assignee->Name;
-        }
-
-        if($ticket->users) {
-            $entry['users'] = [];
-            foreach($ticket->users as $user) {
-                array_push($entry['users'], [
-                    'UserId' => $user->Id,
-                    'Name' => $user->Name,
-                    'JoinedAt' => (new Carbon($user->pivot->JoinedAt))->format('d.m.Y H:i:s'),
-                    'LeftAt' => $user->pivot->LeftAt ? (new Carbon($user->pivot->LeftAt))->format('d.m.Y H:i:s') : null,
-                ]);
-            }
-        }
-
-        $entry['answers'] = [];
-        $answers = $ticket->answers()->with('user')->get();
-
-        foreach($answers as $answer) {
-            array_push($entry['answers'], [
-                'Id' => $answer->Id,
-                'UserId' => $answer->UserId,
-                'User' => $answer->user->Name,
-                'MessageType' => $answer->MessageType,
-                'Message' => $answer->Message,
-                'IsMyMessage' => $answer->UserId === auth()->user()->Id,
-                'CreatedAt' => $answer->CreatedAt->format('d.m.Y H:i:s'),
-            ]);
-        }
-
-        return $entry;
+        return $ticket->getApiResponse();
     }
 
     /**
@@ -253,6 +202,7 @@ class TicketController extends Controller
                 $answer->MessageType = 0;
                 $answer->Message = $request->get('message');
                 $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
                 break;
             case 'close':
                 $ticket->State = Ticket::TICKET_STATE_CLOSED;
@@ -264,6 +214,7 @@ class TicketController extends Controller
                 $answer->MessageType = 1;
                 $answer->Message = 'Ticket wurde geschlossen';
                 $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
                 break;
             case 'addUser':
                 if ($ticket->users->contains($request->get('newUserId'))) {
@@ -279,6 +230,7 @@ class TicketController extends Controller
                 $answer->MessageType = 1;
                 $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", auth()->user()->Name, User::find($request->get('newUserId'))->Name);
                 $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
                 break;
             case 'removeUser':
                 if (!$ticket->users->contains($request->get('removeUserId'))) {
@@ -294,6 +246,7 @@ class TicketController extends Controller
                 $answer->MessageType = 1;
                 $answer->Message = sprintf("%s hat %s aus dem Ticket entfernt!", auth()->user()->Name, User::find($request->get('removeUserId'))->Name);
                 $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
                 break;
         }
 

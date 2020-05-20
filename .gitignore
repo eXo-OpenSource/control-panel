@@ -17,3 +17,4 @@ yarn-error.log
 /public/fonts
 /public/mix-manifest.json
 VERSION
+laravel-echo-server.json
