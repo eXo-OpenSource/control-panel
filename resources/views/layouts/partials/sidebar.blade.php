@@ -68,6 +68,11 @@
             </a>
             <ul class="c-sidebar-nav-dropdown-items">
                 <li class="c-sidebar-nav-item">
+                    <a class="c-sidebar-nav-link" href="{{ route('trainings.overview.index') }}"><span class="c-sidebar-nav-icon fas fa-table"></span>{{ __('Übersicht') }}</a>
+                </li>
+            </ul>
+            <ul class="c-sidebar-nav-dropdown-items">
+                <li class="c-sidebar-nav-item">
                     <a class="c-sidebar-nav-link" href="{{ route('trainings.index') }}"><span class="c-sidebar-nav-icon fas fa-chalkboard"></span>{{ __('Schulungen') }}</a>
                 </li>
             </ul>

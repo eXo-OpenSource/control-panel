@@ -361,7 +361,7 @@ export default class TrainingEntry extends Component {
                                             </tbody>
                                         </table>
 
-                                        <SelectUserFromListDialog show={this.state.showAddUserDialog} type={'faction'} id={3} multiple={true} buttonText="hinzufügen" onClosed={this.hideUserDialog.bind(this)} onSelectUser={this.addUser.bind(this)} />
+                                        <SelectUserFromListDialog show={this.state.showAddUserDialog} type={this.state.data.ElementType === 2 ? 'faction' : this.state.data.ElementType === 3 ? 'company' : ''} id={this.state.data.ElementId} multiple={true} buttonText="hinzufügen" onClosed={this.hideUserDialog.bind(this)} onSelectUser={this.addUser.bind(this)} />
                                         <ConfirmDialog
                                             show={this.state.showRemoveUserDialog}
                                             buttonText="entfernen"

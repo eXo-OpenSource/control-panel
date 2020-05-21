@@ -86,6 +86,10 @@ Route::middleware('auth')->group(function () {
         'as' => 'trainings'
     ])->only(['index', 'edit', 'update']);
 
+    Route::resource('trainings/overview', 'Training\\OverviewController', [
+        'as' => 'trainings'
+    ])->only(['index']);
+
     Route::get('/trainings/{training}', [
         'uses' => 'Training\\TrainingController@index',
         'as' => 'trainings.show',
