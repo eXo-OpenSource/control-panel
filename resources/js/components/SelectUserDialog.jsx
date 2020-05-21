@@ -12,22 +12,26 @@ export default class SelectUserDialog extends Component {
             foundUsers: []
         };
 
-        this.handleClose = () => {
+        this.handleClose = (hasSentValue) => {
             this.setState({ show: false });
+            if (this.props.onClosed) {
+                this.props.onClosed(hasSentValue);
+            }
         };
 
         this.handleShow = () => {
             this.setState({ show: true });
-            if(this.state.data === null) {
-                this.loadData();
-            }
         };
 
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.show != prevProps.show) {
-            this.setState({show: this.props.show})
+            if(this.props.show) {
+                this.handleShow();
+            } else {
+                this.handleClose();
+            }
         }
     }
 
@@ -35,7 +39,7 @@ export default class SelectUserDialog extends Component {
         if (this.props.onSelectUser) {
             this.props.onSelectUser(userId);
         }
-        this.handleClose();
+        this.handleClose(true);
     }
 
     async search() {

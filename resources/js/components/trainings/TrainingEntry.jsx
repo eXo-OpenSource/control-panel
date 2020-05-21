@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import {Button, Modal, Spinner, Form, InputGroup, OverlayTrigger, Tooltip, Row, Col} from 'react-bootstrap';
 import axios from "axios";
 
-import SelectUserDialog from './../SelectUserDialog';
 import {
     Link,
     useParams
 } from "react-router-dom";
 import ConfirmDialog from './../ConfirmDialog';
+import SelectUserDialog from './../SelectUserDialog';
+import SelectUserFromListDialog from "../SelectUserFromListDialog";
 
 export default class TrainingEntry extends Component {
     constructor({match}) {
@@ -151,6 +152,18 @@ export default class TrainingEntry extends Component {
         }
     }
 
+    async toggleAllState() {
+        try {
+            const response = await axios.put('/api/trainings/' + this.state.trainingId, {
+                type: 'toggleAllState'
+            });
+
+            this.setData(response);
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     async updateNotes() {
         try {
             const response = await axios.put('/api/trainings/' + this.state.trainingId, {
@@ -167,17 +180,20 @@ export default class TrainingEntry extends Component {
         }
     }
 
-    async addUser(userId) {
+    async addUser(userIds) {
         try {
             const response = await axios.put('/api/trainings/' + this.state.trainingId, {
                 type: 'addUser',
-                userId: userId
+                userIds: userIds
             });
 
             this.setData(response);
         } catch(error) {
             console.log(error);
         }
+    }
+    async hideUserDialog() {
+        this.setState({showAddUserDialog: false});
     }
 
     async removeUser() {
@@ -294,10 +310,10 @@ export default class TrainingEntry extends Component {
                                                                             )
                                                                         }
                                                                     </Col>
-                                                                    <Col xs='8'>
+                                                                    <Col xs='6'>
                                                                         <a href={'/users/' + user.UserId}>{user.User}</a>
                                                                     </Col>
-                                                                    <Col xs='3'>
+                                                                    <Col xs='4'>
                                                                         {(user.UserId !== this.state.data.UserId && this.state.data.State !== 1) ? (<>
                                                                                 <Button onClick={this.toggleRole.bind(this, user.UserId)} variant="link" style={{color: 'white', padding: 0, paddingRight: '8px'}} size="sm"><i className="fas fa-pencil-alt"></i></Button>
                                                                                 <Button onClick={this.toggleRemoveUserDialog.bind(this, user.UserId)} variant="link" style={{color: '#d16767', padding: 0}} size="sm"><i className="fas fa-times-circle"></i></Button>
@@ -335,10 +351,17 @@ export default class TrainingEntry extends Component {
                                                     ) : null}
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><Button onClick={this.toggleAllState.bind(this)}
+                                                            size="sm" variant="primary"
+                                                            disabled={this.state.data.State === 1}
+                                                            className="mt-2 float-right">Alle Inhalte abschließen</Button></td>
+                                            </tr>
                                             </tbody>
                                         </table>
 
-                                        <SelectUserDialog show={this.state.showAddUserDialog} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
+                                        <SelectUserFromListDialog show={this.state.showAddUserDialog} type={'faction'} id={3} multiple={true} buttonText="hinzufügen" onClosed={this.hideUserDialog.bind(this)} onSelectUser={this.addUser.bind(this)} />
                                         <ConfirmDialog
                                             show={this.state.showRemoveUserDialog}
                                             buttonText="entfernen"

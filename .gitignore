@@ -18,3 +18,4 @@ yarn-error.log
 /public/mix-manifest.json
 VERSION
 laravel-echo-server.json
+laravel-echo-server.lock

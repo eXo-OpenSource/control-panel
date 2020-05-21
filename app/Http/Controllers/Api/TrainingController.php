@@ -135,7 +135,7 @@ class TrainingController extends Controller
             ]);
         }
 
-        foreach ($training->users()->orderBy('Name', 'ASC')->get() as $user)
+        foreach ($training->users()->orderBy('pivot_Role', 'DESC')->orderBy('Name', 'ASC')->get() as $user)
         {
             array_push($result['users'], [
                 'UserId' => $user->Id,
@@ -171,17 +171,18 @@ class TrainingController extends Controller
             case 'close':
                 break;
             case 'addUser':
-                $addUserId = $request->get('userId');
-                if ($training->users->contains($addUserId)) {
-                    abort(400);
+                $addUserIds = $request->get('userIds');
+
+                if(is_numeric($addUserIds)) {
+                    $addUserIds = [$addUserIds];
                 }
 
-                if(!User::find($addUserId)) {
-                    abort(400);
+                foreach($addUserIds as $userId) {
+                    if(!$training->users->contains($addUserIds) && User::find($addUserIds)) {
+                        $training->users()->attach($userId, ['Role' => 0]);
+                        $training->save();
+                    }
                 }
-
-                $training->users()->attach($addUserId, ['Role' => 0]);
-                $training->save();
 
                 return $this->show($training);
                 break;
@@ -220,6 +221,14 @@ class TrainingController extends Controller
 
                 $content->State = !$content->State;
                 $content->save();
+
+                return $this->show($training);
+                break;
+            case 'toggleAllState':
+                foreach($training->contents as $content) {
+                    $content->State = true;
+                    $content->save();
+                }
 
                 return $this->show($training);
                 break;

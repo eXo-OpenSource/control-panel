@@ -45,7 +45,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('tickets/categories', 'TicketCategoryController')->only('index');
         Route::resource('tickets', 'TicketController');
         Route::resource('trainings', 'TrainingController')->only('index', 'show', 'update');
-        Route::post('users/search', 'User\UserSearchController@index')->name('user.search');
+        Route::post('users/search', 'User\UserSearchController@index')->name('users.search');
+        Route::get('users/list', 'User\UserListController@index')->name('users.list');
+        Route::post('users/list', 'User\UserListController@index')->name('users.list');
     });
 });
 
