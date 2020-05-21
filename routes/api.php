@@ -22,6 +22,10 @@ Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(funct
     Route::resource('screenshots', 'ScreenshotController')->only('store');
 });
 
+Route::namespace('Api')->name('api.')->group(function () {
+    Route::get('users/online', 'UserOnlineController@index')->name('users.online.index');
+});
+
 Route::middleware('auth')->group(function () {
     Route::namespace('Admin\\Api')->middleware('admin')->prefix('admin')->name('api.admin.')->group(function () {
         Route::resource('factions', 'FactionController')->only('index');
@@ -45,9 +49,9 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::namespace('Shop\\Api')->prefix('shop')->name('api.shop.')->group(function () {
-    Route::post('/payments/notifications/paypal', 'Api\PaymentNotificationController@paypal')->name('payment.notification.paypal');
-    Route::post('/payments/notifications/paysafecard', 'Api\PaymentNotificationController@paysafecard')->name('payment.notification.paysafecard');
-    Route::post('/payments/notifications/klarna', 'Api\PaymentNotificationController@klarna')->name('payment.notification.klarna');
-    Route::get('/payments/status/{payment_id}', 'Api\PaymentApiController@status')->name('payments.status');
+Route::namespace('Api\\Shop')->prefix('shop')->name('api.shop.')->group(function () {
+    Route::post('/payments/notifications/paypal', 'PaymentNotificationController@paypal')->name('payment.notification.paypal');
+    Route::post('/payments/notifications/paysafecard', 'PaymentNotificationController@paysafecard')->name('payment.notification.paysafecard');
+    Route::post('/payments/notifications/klarna', 'PaymentNotificationController@klarna')->name('payment.notification.klarna');
+    Route::get('/payments/status/{payment_id}', 'PaymentApiController@status')->name('payments.status');
 });

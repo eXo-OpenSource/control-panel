@@ -27,7 +27,11 @@ class LastUserActivity
 
             foreach($users as $key => $user) {
                 if($user->Id === Auth::user()->Id) {
+                    $user->Name = Auth::user()->Name;
                     $user->Time = Carbon::now();
+                    if($request->method() === 'GET' && !$request->ajax()) {
+                        $user->Url = $request->url();
+                    }
                     $found = true;
                 }
 
@@ -40,11 +44,12 @@ class LastUserActivity
                     'Id' => Auth::user()->Id,
                     'Time' => Carbon::now(),
                     'Name' => Auth::user()->Name,
+                    'Url' => $request->url()
                 ]);
             }
 
             usort($users, function($a, $b) {
-                return $a->Time < $b->Time;
+                return $a->Name < $b->Name;
             });
 
             Cache::forever('users-online', $users);
