@@ -32,7 +32,8 @@ class UserSearchController extends Controller
             $appends['limit'] = $limit;
         }
 
-        $users = User::query();
+
+        $users = User::join('character', 'account.Id', '=', 'character.Id'); // ->with('character');
         $hasFilter = false;
 
         if (!empty(request()->get('name')) ||
@@ -40,18 +41,18 @@ class UserSearchController extends Controller
            ) {
 
             if(!empty(request()->get('name'))) {
-                $users->where('Name', 'LIKE', '%'.request()->get('name').'%');
+                $users->where('account.Name', 'LIKE', '%'.request()->get('name').'%');
                 $appends['name'] = request()->get('name');
             }
 
             if(auth()->user()->Rank >= 3) {
                 if(!empty(request()->get('serial'))) {
-                    $users->where('LastSerial', 'LIKE', '%'.request()->get('serial').'%');
+                    $users->where('account.LastSerial', 'LIKE', '%'.request()->get('serial').'%');
                     $appends['serial'] = request()->get('serial');
                 }
 
                 if(!empty(request()->get('ip'))) {
-                    $users->where('LastIP', 'LIKE', '%'.request()->get('ip').'%');
+                    $users->where('account.LastIP', 'LIKE', '%'.request()->get('ip').'%');
                     $appends['ip'] = request()->get('ip');
                 }
             }
@@ -59,23 +60,21 @@ class UserSearchController extends Controller
             $hasFilter = true;
         }
 
-
-
         if($sortBy && in_array($sortBy, ['name', 'playTime'])) {
             if($sortBy === 'name') {
-                $users->orderBy('Name', $direction === 'desc' ? 'DESC' : 'ASC');
+                $users->orderBy('account.Name', $direction === 'desc' ? 'DESC' : 'ASC');
             } elseif($sortBy === 'playTime') {
-                $users->orderBy('PlayTime', $direction === 'desc' ? 'DESC' : 'ASC');
+                $users->orderBy('character.PlayTime', $direction === 'desc' ? 'DESC' : 'ASC');
             } elseif($hasFilter) {
-                $users->orderBy('LastLogin', 'DESC');
+                $users->orderBy('account.LastLogin', 'DESC');
             } else {
-                $users->orderBy('Id', 'DESC');
+                $users->orderBy('account.Id', 'DESC');
             }
         } else {
             if($hasFilter) {
-                $users->orderBy('LastLogin', 'DESC');
+                $users->orderBy('account.LastLogin', 'DESC');
             } else {
-                $users->orderBy('Id', 'DESC');
+                $users->orderBy('account.Id', 'DESC');
             }
         }
 
