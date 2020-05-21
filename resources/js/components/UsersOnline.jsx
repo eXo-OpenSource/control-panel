@@ -34,7 +34,7 @@ export default class UsersOnline extends Component {
     }
 
     render() {
-        let body = <Spinner animation="border" />;
+        let body = <div className="text-center"><Spinner animation="border" /></div>;
         if(this.state.data.length > 0) {
             let first = this.state.data[0];
 
@@ -51,7 +51,7 @@ export default class UsersOnline extends Component {
                     return <tr>
                         <td>{user.Name}</td>
                         {user.Time ? <th>{user.Time}</th> : ''}
-                        {user.Url ? <th>{user.Url}</th> : ''}
+                        {user.Url ? <th><a href={user.Url}>{user.Url}</a></th> : ''}
                     </tr>;
                 })}
                 </tbody>

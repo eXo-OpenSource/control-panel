@@ -29,7 +29,7 @@ class UserOnlineController extends Controller
             }
 
             if(auth()->user() && auth()->user()->Rank >= 5) {
-                $data['Url'] = $user->Url === env('APP_URL') ? '/' : str_replace(env('APP_URL'), '', $user->Url);
+                $data['Url'] = $user->Url;
             }
 
             array_push($result, $data);
