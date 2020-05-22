@@ -244,18 +244,18 @@ export default class TrainingEntry extends Component {
                                                                onChange={this.toggleState.bind(this, content.Id)}
                                                                checked={content.State} /> <span style={content.State ? {'textDecoration': 'line-through'} : {}}>{content.Name}</span>
                                                     </div>
-                                                    <div style={{height: '21px'}}>
+                                                    {/*<div style={{height: '21px'}}>
                                                         {this.state.data.State !== 1 ? (
                                                             <Button onClick={this.editContentNote.bind(this, content.Id, content.Notes)}
                                                                     variant="link" style={{color: 'white', padding: 0}} size="sm">
                                                                 <i className="fas fa-pencil-alt" style={{margin: 0}}></i>
                                                             </Button>
                                                         ) : null}
-                                                    </div>
+                                                    </div>*/}
                                                 </div>
                                             </div>
                                             {
-                                                (content.Description || content.Notes) ? (<div className="card-body">
+                                                (content.Description || content.Notes) ? (<div className="card-body" style={content.State ? {'textDecoration': 'line-through'} : {}}>
                                                     {content.Description ? content.Description : null}
                                                     {content.Notes ? <><h5 className={content.Description ? 'mt-4' : null}>Notizen</h5>{content.Notes}</> : null}
                                                 </div>) : (<></>)
