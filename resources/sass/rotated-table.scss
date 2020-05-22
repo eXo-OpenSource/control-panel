@@ -4,11 +4,11 @@
         width: 30px;
     }
     th {
-        padding: 5px 10px;
+        padding: 1px 1px;
     }
     td {
         text-align: center;
-        padding: 10px 5px;
+        padding: 1px 1px;
         border: 1px solid #ccc;
     }
     th.rotate {
@@ -18,14 +18,14 @@
         > div {
             transform:
                 // Magic Numbers
-                translate(25px, 51px)
+                translate(18px, 51px)
                     // 45 is really 360-45
                 rotate(315deg);
             width: 30px;
         }
         > div > span {
             border-bottom: 1px solid #ccc;
-            padding: 5px 10px;
+            padding: 2px 10px;
         }
     }
     th.row-header {
