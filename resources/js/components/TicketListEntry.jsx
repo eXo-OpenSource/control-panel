@@ -20,6 +20,7 @@ export default class TicketListEntry extends Component {
                 <td>{this.props.ticket.User}</td>
                 <td>{this.props.ticket.Category}</td>
                 <td>{this.props.ticket.Title}</td>
+                <td>{this.props.ticket.Assignee ? this.props.ticket.Assignee : '-'}</td>
                 <td>{this.props.ticket.StateText}</td>
                 <td>{this.props.ticket.CreatedAt}</td>
                 <td>{this.props.ticket.AnswerCount}</td>

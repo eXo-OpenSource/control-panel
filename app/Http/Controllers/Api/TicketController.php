@@ -15,11 +15,14 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function index()
     {
         $state = request()->get('state');
+        $search = request()->get('search');
+        $limit = 30;
+
         if(!in_array($state, ['open', 'both', 'closed'])) {
             $state = 'open';
         }
@@ -40,9 +43,18 @@ class TicketController extends Controller
                 break;
         }
 
-        $tickets = $tickets->get();
+        if($search && $search != '') {
+            $categoryIds = TicketCategory::query()->where('Title', 'LIKE', '%' . $search . '%')->get()->pluck('Id');
+            $userIds = User::query()->where('Name', 'LIKE', '%' . $search . '%')->get()->pluck('Id');
+            $tickets->where('Title', 'LIKE', '%' . $search . '%');
+            $tickets->orWhereIn('UserId', $userIds);
+            $tickets->orWhereIn('AssigneeId', $userIds);
+            $tickets->orWhereIn('CategoryId', $categoryIds);
+        }
 
-        $response = [];
+        $tickets = $tickets->paginate($limit);
+
+        $responseData = [];
 
         foreach($tickets as $ticket) {
             $entry = [
@@ -72,10 +84,15 @@ class TicketController extends Controller
             }
 
 
-            array_push($response, (object)$entry);
+            array_push($responseData, (object)$entry);
         }
 
-        return $response;
+        return [
+            'items' => $responseData,
+            'perPage' => $tickets->perPage(),
+            'currentPage' => $tickets->currentPage(),
+            'lastPage' => $tickets->lastPage(),
+        ];
     }
 
     /**
