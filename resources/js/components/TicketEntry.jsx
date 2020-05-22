@@ -9,6 +9,7 @@ import {
     useParams
 } from "react-router-dom";
 import ConfirmDialog from './ConfirmDialog';
+import SelectUserFromListDialog from "./SelectUserFromListDialog";
 
 export default class TicketEntry extends Component {
     constructor({match}) {
@@ -18,6 +19,7 @@ export default class TicketEntry extends Component {
             message: '',
             ticketId: match.params.ticketId,
             showAddUserDialog: false,
+            showAssignUserDialog: false,
             showRemoveUserDialog: false
         };
 
@@ -40,6 +42,10 @@ export default class TicketEntry extends Component {
         this.setState({showAddUserDialog: !this.state.showAddUserDialog});
     }
 
+    async toggleAssignUserDialog() {
+        this.setState({showAssignUserDialog: !this.state.showAssignUserDialog});
+    }
+
     async toggleRemoveUserDialog(userId) {
         this.setState({showRemoveUserDialog: !this.state.showRemoveUserDialog, removeUserId: userId});
     }
@@ -55,8 +61,10 @@ export default class TicketEntry extends Component {
                 message: this.state.message,
             });
 
-            this.setState({message: ''});
-            this.loadData();
+            this.setState({
+                message: '',
+                data: response.data
+            });
         } catch(error) {
             console.log(error);
         }
@@ -68,7 +76,9 @@ export default class TicketEntry extends Component {
                 type: 'close',
             });
 
-            this.loadData();
+            this.setState({
+                data: response.data
+            });
         } catch(error) {
             console.log(error);
         }
@@ -93,23 +103,66 @@ export default class TicketEntry extends Component {
                 newUserId: userId
             });
 
-            this.loadData();
+            this.setState({
+                data: response.data
+            });
         } catch(error) {
             console.log(error);
         }
     }
 
-    async removeUser() {
+    async hideUserDialog() {
+        this.setState({showAddUserDialog: false});
+    }
 
+    async assignUser(userId) {
+        try {
+            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
+                type: 'assignToUser',
+                assignUserId: userId
+            });
+
+            this.setState({
+                data: response.data
+            });
+
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
+    async hideAssignUserDialog() {
+        this.setState({showAssignUserDialog: false});
+    }
+
+    async removeUser() {
         try {
             const response = await axios.put('/api/tickets/' + this.state.ticketId, {
                 type: 'removeUser',
                 removeUserId: this.state.removeUserId
             });
 
-            this.loadData();
+            this.setState({
+                data: response.data
+            });
         } catch(error) {
             console.log(error.response);
+        }
+    }
+
+    async selfAssign() {
+        try {
+            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
+                type: 'assignToUser',
+                assignUserId: Exo.UserId
+            });
+
+            this.setState({
+                data: response.data
+            });
+
+        } catch(error) {
+            console.log(error);
         }
     }
 
@@ -120,10 +173,24 @@ export default class TicketEntry extends Component {
 
         let closeButton = <></>;
         let answer = <></>;
+        let assignButtons = <></>;
 
 
         if(this.state.data.State === 'Open') {
-            closeButton = <Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button>;
+            if(Exo.Rank > 0 || this.state.data.UserId == Exo.UserId) {
+                closeButton = <Row><Col><Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button></Col></Row>;
+            }
+            if(Exo.Rank >= 3) {
+                assignButtons = <Row className="mb-1">
+                    <Col>
+                        <div className="btn-group" role="group" >
+                            {this.state.data.AssigneeId === Exo.UserId ? '' : <Button variant="primary" onClick={this.selfAssign.bind(this)}>Selbst zuweisen</Button>}
+                            <Button variant="secondary" onClick={this.toggleAssignUserDialog.bind(this)}>Teammitglied zuweisen</Button>
+                        </div>
+                    </Col>
+                </Row>;
+            }
+
             answer = (
                 <Form>
                     <Form.Group>
@@ -245,17 +312,27 @@ export default class TicketEntry extends Component {
                                                             </div>
                                                         );
                                                     })}
-                                                    <Button onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button>
+                                                    {Exo.Rank >= 3 ? <Button onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button> : ''}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Status</td>
                                                 <td>{this.state.data.StateText}</td>
                                             </tr>
+                                            <tr>
+                                                <td>Rang</td>
+                                                <td>{this.state.AssignedRank ? this.state.AssignedRank : 1}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Zugw. Teammitglied</td>
+                                                <td>{this.state.data.Assignee ? this.state.data.Assignee : '-'}</td>
+                                            </tr>
                                             </tbody>
                                         </table>
+                                        {assignButtons}
                                         {closeButton}
-                                        <SelectUserDialog show={this.state.showAddUserDialog} buttonText="hinzufügen" onSelectUser={this.addUser.bind(this)} />
+                                        <SelectUserDialog show={this.state.showAddUserDialog} buttonText="hinzufügen" onClosed={this.hideUserDialog.bind(this)} onSelectUser={this.addUser.bind(this)} />
+                                        <SelectUserFromListDialog show={this.state.showAssignUserDialog} type={'admin'} id={1} multiple={false} buttonText="zuweisen" onClosed={this.hideAssignUserDialog.bind(this)} onSelectUser={this.assignUser.bind(this)} />
                                         <ConfirmDialog
                                             show={this.state.showRemoveUserDialog}
                                             buttonText="entfernen"

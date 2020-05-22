@@ -51,4 +51,9 @@ class MTAService
     {
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendOnlinePlayers');
     }
+
+    public function sendChatBox($type, $target, $message, $r, $g, $b)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendChatBox', $type, $target, $message, $r, $g, $b);
+    }
 }

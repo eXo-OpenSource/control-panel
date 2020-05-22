@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Services\MTAService;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Ticket;
@@ -31,6 +32,8 @@ class TicketController extends Controller
 
         if(auth()->user()->Rank >= 1) {
             $tickets = Ticket::with('user', 'assignee', 'category', 'resolver');
+            $tickets->where('AssignedRank', '<=', auth()->user()->Rank);
+            $tickets->orWhere('AssignedRank', '=', null);
         }
 
         switch($state)
@@ -51,6 +54,8 @@ class TicketController extends Controller
             $tickets->orWhereIn('AssigneeId', $userIds);
             $tickets->orWhereIn('CategoryId', $categoryIds);
         }
+
+        $tickets->orderBy('Id', 'DESC');
 
         $tickets = $tickets->paginate($limit);
 
@@ -109,13 +114,16 @@ class TicketController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function store(Request $request)
     {
+        $category = TicketCategory::with('fields')->find($request->get('category'));
+
         $ticket = new Ticket();
         $ticket->UserId = auth()->user()->Id;
-        $ticket->CategoryId = $request->get('category');
+        $ticket->CategoryId = $category->Id;
+        $ticket->AssignedRank = $category->AdminRank;
         $ticket->Title = $request->get('title');
         $ticket->State = Ticket::TICKET_STATE_OPEN;
         $ticket->save();
@@ -125,8 +133,6 @@ class TicketController extends Controller
         $fields = $request->get('fields');
 
         if(!empty($fields)) {
-            $category = TicketCategory::with('fields')->find($ticket->CategoryId);
-
             $text = [];
 
             foreach($fields as $key => $value) {
@@ -156,6 +162,10 @@ class TicketController extends Controller
         $answer->Message = $request->get('message');
         $answer->save();
         event(new \App\Events\TicketCreated($ticket));
+
+        $mtaService = new MTAService();
+        $response = $mtaService->sendChatBox('admin', $ticket->AssignedRank, '[TICKET] Es wurde ein neues Ticket von ' . $ticket->user->Name . ' (' . $ticket->category->Title .') erstellt!', 255, 50, 0);
+        return '';
     }
 
     /**
@@ -187,14 +197,17 @@ class TicketController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function update(Request $request, Ticket $ticket)
     {
         abort_unless(auth()->user()->can('update', $ticket), 403);
 
+        $mtaService = new MTAService();
+
         $type = $request->get('type');
         $userId = auth()->user()->Id;
+        $name = auth()->user()->Name;
 
         switch($type)
         {
@@ -220,8 +233,13 @@ class TicketController extends Controller
                 $answer->Message = $request->get('message');
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
+                $response = $mtaService->sendChatBox('admin', $ticket->AssignedRank, '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!', 255, 50, 0);
                 break;
             case 'close':
+                if (auth()->user()->Rank < 1 && $ticket->UserId !== auth()->user()->Id) {
+                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                }
+
                 $ticket->State = Ticket::TICKET_STATE_CLOSED;
                 $ticket->save();
 
@@ -229,29 +247,99 @@ class TicketController extends Controller
                 $answer->TicketId = $ticket->Id;
                 $answer->UserId = $userId;
                 $answer->MessageType = 1;
-                $answer->Message = 'Ticket wurde geschlossen';
+                $answer->Message = sprintf("Das Ticket wurde von %s geschlossen", auth()->user()->Name);
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
+                $response = $mtaService->sendChatBox('admin', $ticket->AssignedRank, '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!', 255, 50, 0);
                 break;
             case 'addUser':
                 if ($ticket->users->contains($request->get('newUserId'))) {
-                    return;
+                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist bereits im Ticket!')];
                 }
 
-                $ticket->users()->attach($request->get('newUserId'), ['JoinedAt' => new Carbon()]);
+                if (auth()->user()->Rank < 3) {
+                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                }
+
+                $addUser = User::find($request->get('newUserId'));
+
+                if (!$addUser) {
+                    return ['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')];
+                }
+
+                $ticket->users()->attach($addUser->Id, ['JoinedAt' => new Carbon()]);
                 $ticket->save();
 
                 $answer = new TicketAnswer();
                 $answer->TicketId = $ticket->Id;
                 $answer->UserId = $userId;
                 $answer->MessageType = 1;
-                $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", auth()->user()->Name, User::find($request->get('newUserId'))->Name);
+                if(auth()->user()->Id === $addUser->Id) {
+                    $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
+                } else {
+                    $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", $name, $addUser->Name);
+                }
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
                 break;
             case 'removeUser':
                 if (!$ticket->users->contains($request->get('removeUserId'))) {
-                    return;
+                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')];
+                }
+
+                if (auth()->user()->Rank < 3) {
+                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                }
+
+                $ticket->users()->updateExistingPivot($request->get('removeUserId'), ['LeftAt' => new Carbon()]);
+                $ticket->save();
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = $userId;
+                $answer->MessageType = 1;
+                $answer->Message = sprintf("%s hat %s aus dem Ticket entfernt!", auth()->user()->Name, User::find($request->get('removeUserId'))->Name);
+                $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
+                break;
+            case 'assignToUser':
+                if (auth()->user()->Rank < 3) {
+                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                }
+
+                $assignUser = User::find($request->get('assignUserId'));
+
+                if (!$assignUser) {
+                    return ['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')];
+                }
+
+                if (!$ticket->users->contains($assignUser->Id)) {
+                    $ticket->users()->attach($assignUser->Id, ['JoinedAt' => new Carbon()]);
+                    $ticket->save();
+
+                    $answer = new TicketAnswer();
+                    $answer->TicketId = $ticket->Id;
+                    $answer->UserId = $assignUser->Id;
+                    $answer->MessageType = 1;
+                    if(auth()->user()->Id === $assignUser->Id) {
+                        $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
+                    } else {
+                        $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", $name, $assignUser->Name);
+                    }
+                    $answer->save();
+                }
+
+                $ticket->AssigneeId = $assignUser->Id;
+                $ticket->save();
+                event(new \App\Events\TicketUpdated($ticket));
+                break;
+            case 'assignToRank':
+                if (!$ticket->users->contains($request->get('removeUserId'))) {
+                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')];
+                }
+
+                if (auth()->user()->Rank < 3) {
+                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
                 }
 
                 $ticket->users()->updateExistingPivot($request->get('removeUserId'), ['LeftAt' => new Carbon()]);
@@ -267,6 +355,7 @@ class TicketController extends Controller
                 break;
         }
 
+        return $ticket->getApiResponse();
     }
 
     /**
