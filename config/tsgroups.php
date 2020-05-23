@@ -11,8 +11,8 @@ return [
             5 => false, // LCN
             6 => 170, // Yakuza
             7 => false, // Grove
-            8 => false, // Ballas
-            9 => 149, // Outlaws
+            8 => 149, // Ballas
+            9 => false, // Outlaws
             10 => 148, // Vatos
             11 => false, // Triaden
             12 => false, // Brigada
