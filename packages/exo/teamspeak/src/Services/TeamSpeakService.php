@@ -508,7 +508,7 @@ class TeamSpeakService
         $result = $this->request('servergroupclientlist', ['sgid' => $serverGroupId, '-names']);
 
         if($result->status->code === 0) {
-            return new ServerGroupMembersResponse(TeamSpeakResponse::RESPONSE_SUCCESS, $result->status->message, $result, $result->body);
+            return new ServerGroupMembersResponse(TeamSpeakResponse::RESPONSE_SUCCESS, $result->status->message, $result, isset($result->body) ? $result->body : []);
         } else {
             return new ServerGroupMembersResponse(TeamSpeakResponse::RESPONSE_FAILED, $result->status->message, $result);
         }
