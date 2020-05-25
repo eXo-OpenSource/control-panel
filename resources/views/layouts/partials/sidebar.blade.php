@@ -2,7 +2,7 @@
     <div class="c-sidebar-brand">
         <a href="{{ '/' }}">
             <img class="c-sidebar-brand-full" src="/images/logo.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
-            <img class="c-sidebar-brand-minimized" src="/images/logo_small.png" width="118" height="46" alt="{{ config('app.name', 'Laravel') }}">
+            <img class="c-sidebar-brand-minimized" src="/images/logo_small.png" width="46" height="46" alt="{{ config('app.name', 'Laravel') }}">
         </a>
     </div>
     <ul class="c-sidebar-nav" data-drodpown-accordion="true">

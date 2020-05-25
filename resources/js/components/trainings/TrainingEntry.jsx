@@ -23,6 +23,7 @@ export default class TrainingEntry extends Component {
             showRemoveUserDialog: false,
             showEditNotes: false,
             contentNotes: '',
+            errorMessage: null,
             contentId: null,
         };
     }
@@ -57,7 +58,16 @@ export default class TrainingEntry extends Component {
             this.setState({message: ''});
             this.loadData();
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -69,7 +79,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -91,7 +110,16 @@ export default class TrainingEntry extends Component {
             this.handleEditNotesClose();
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -110,7 +138,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch (error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -135,7 +172,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -148,7 +194,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -160,7 +215,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -176,7 +240,16 @@ export default class TrainingEntry extends Component {
             });
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -189,7 +262,16 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
     async hideUserDialog() {
@@ -205,11 +287,24 @@ export default class TrainingEntry extends Component {
 
             this.setData(response);
         } catch(error) {
-            console.log(error.response);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
     render() {
+        if(this.state.errorMessage !== null) {
+            return <div className="text-center"><h4 className="pt-3">{this.state.errorMessage}</h4></div>;
+        }
+
         if(this.state.data === null) {
             return <div className="text-center"><Spinner animation="border"/></div>;
         }

@@ -12,6 +12,7 @@ export default class TrainingList extends Component {
             showCreate: false,
             data: null,
             selectedTicket: null,
+            errorMessage: null,
             state: 'progress',
         };
     }
@@ -23,14 +24,22 @@ export default class TrainingList extends Component {
     }
 
     async loadData(state) {
-        const response = await axios.get('/api/trainings?state=' + state);
-
         try {
+            const response = await axios.get('/api/trainings?state=' + state);
             this.setState({
                 data: response.data
             });
         } catch (error) {
-            console.log(error);
+            if(error.message === 'Request failed with status code 403') {
+                this.setState({
+                    errorMessage: 'Zugriff verweigert'
+                });
+            } else {
+                this.setState({
+                    errorMessage: 'Unbekannter Fehler: ' . error.message
+                });
+                throw error;
+            }
         }
     }
 
@@ -42,6 +51,10 @@ export default class TrainingList extends Component {
     }
 
     render() {
+        if(this.state.errorMessage !== null) {
+            return <div className="text-center"><h4 className="pt-3">{this.state.errorMessage}</h4></div>;
+        }
+
         if(this.state.data === null) {
             return <div className="text-center"><Spinner animation="border"/></div>;
         }

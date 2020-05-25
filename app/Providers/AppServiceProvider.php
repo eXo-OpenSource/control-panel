@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Queue\Events\JobFailed;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -115,5 +117,11 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('pagination.default');
 
         Paginator::defaultSimpleView('pagination.simple-default');
+
+        Queue::failing(function(JobFailed $event) {
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($event->exception);
+            }
+        });
     }
 }

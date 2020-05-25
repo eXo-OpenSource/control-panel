@@ -17,7 +17,11 @@
 
     $money = $to->union($from)->orderBy('Id', 'DESC')->limit($limit)->get();
 
-    $next_offset = $money->last()->Id;
+    if(count($money) === 0) {
+        $next_offset = $offset;
+    } else {
+        $next_offset = $money->last()->Id;
+    }
 @endphp
 @section('title', __('Geld') . ' - ' . __('Logs') . ' - '. $faction->Name)
 <table class="table table-sm table-responsive-sm tw-full">

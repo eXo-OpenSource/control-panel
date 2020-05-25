@@ -93,7 +93,9 @@ COPY --chown=app:app . /var/www
 USER 1000
 
 RUN php artisan storage:link && \
-    php artisan cache:clear
+    php artisan cache:clear && \
+    rm public/js/app.js.map && \
+    rm public/css/app.css.map
 
 USER 0
 

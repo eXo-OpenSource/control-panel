@@ -224,7 +224,7 @@ export default class TicketList extends Component {
                                     if(this.state.state === 'both' ||
                                         (this.state.state === 'open' && ticket.State === 'Open') ||
                                         (this.state.state === 'closed' && ticket.State === 'Closed')) {
-                                        return <TicketListEntry key={ticket.Id} ticket={ticket} open={this.showEntry}></TicketListEntry>;
+                                        return <TicketListEntry key={ticket.Id} ticket={ticket} minimal={this.props.minimal} open={this.showEntry}></TicketListEntry>;
                                     }
                                 })}
                                 </tbody>

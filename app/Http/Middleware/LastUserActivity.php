@@ -44,7 +44,7 @@ class LastUserActivity
                     'Id' => Auth::user()->Id,
                     'Time' => Carbon::now(),
                     'Name' => Auth::user()->Name,
-                    'Url' => $request->url()
+                    'Url' => $request->method() === 'GET' && !$request->ajax() ? $request->path() : '/'
                 ]);
             }
 

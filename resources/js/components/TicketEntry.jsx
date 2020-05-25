@@ -251,9 +251,9 @@ export default class TicketEntry extends Component {
                                                                             <a href={'/users/' + answer.UserId}>{answer.User}</a>
                                                                         }
                                                                     </p>
-                                                                    {answer.Message.split('\n').map((value, index) => {
+                                                                    {answer.Message !== null ? answer.Message.split('\n').map((value, index) => {
                                                                         return <p key={index}>{value}</p>;
-                                                                    })}
+                                                                    }) : <p className="font-italic">Keine Nachricht</p>}
                                                                 </div>
                                                                 <p className="time">{answer.CreatedAt}</p>
                                                             </div>

@@ -18,7 +18,7 @@ export default class Tickets extends Component {
                     <Switch>
                         <Route path="/tickets/create" component={TicketCreate} />
                         <Route path="/tickets/:ticketId" render={(routeProps) => (<TicketEntry {...routeProps} minimal={this.props.minimal}/>)} />
-                        <Route path="/tickets" component={TicketList} />
+                        <Route path="/tickets" render={(routeProps) => (<TicketList {...routeProps} minimal={this.props.minimal}/>)} />
                     </Switch>
                 </div>
             </Router>

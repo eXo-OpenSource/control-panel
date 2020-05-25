@@ -179,8 +179,12 @@ class TrainingController extends Controller
 
                 foreach($addUserIds as $userId) {
                     if(!$training->users->contains($addUserIds) && User::find($addUserIds)) {
-                        $training->users()->attach($userId, ['Role' => 0]);
-                        $training->save();
+                        try {
+                            $training->users()->attach($userId, ['Role' => 0]);
+                            $training->save();
+                        } catch(\Exception $exception) {
+
+                        }
                     }
                 }
 

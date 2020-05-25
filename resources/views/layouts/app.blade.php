@@ -86,8 +86,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ mix('js/popper.min.js') }}"></script>
-    <script src="{{ mix('js/coreui.min.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
     <script src="{{ mix('js/app.js') }}" defer></script>
     <script>
         @if(auth()->user())
@@ -104,9 +103,11 @@
         @endif
     </script>
     @if(env('SENTRY_JS_DSN') && !env('APP_DEBUG'))
-    <script src="{{ mix('js/sentry.min.js') }}"></script>
     <script>
         SentryMin.init({ dsn: '{{ env('SENTRY_JS_DSN') }}' });
+        if(Exo.UserId) {
+            SentryMin.setUser({id: Exo.UserId, username: Exo.UserName});
+        }
     </script>
     @endif
     @yield('script')

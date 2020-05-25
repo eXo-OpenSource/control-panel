@@ -17,10 +17,10 @@ export default class TicketListEntry extends Component {
     render() {
         return (
             <tr>
-                <td>{this.props.ticket.User}</td>
+                <td>{this.props.minimal == true ? this.props.ticket.User : <a href={'/users/' + this.props.ticket.UserId}>{this.props.ticket.User}</a>}</td>
                 <td>{this.props.ticket.Category}</td>
                 <td>{this.props.ticket.Title}</td>
-                <td>{this.props.ticket.Assignee ? this.props.ticket.Assignee : '-'}</td>
+                <td>{this.props.ticket.Assignee ? (this.props.minimal == true ? this.props.ticket.Assignee : <a href={'/users/' + this.props.ticket.AssigneeId}>{this.props.ticket.Assignee}</a>) : '-'}</td>
                 <td>{this.props.ticket.StateText}</td>
                 <td>{this.props.ticket.CreatedAt}</td>
                 <td>{this.props.ticket.AnswerCount}</td>

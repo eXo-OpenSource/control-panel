@@ -131,6 +131,7 @@ class TicketController extends Controller
         $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon()]);
 
         $fields = $request->get('fields');
+        $hasFilledFields = 0;
 
         if(!empty($fields)) {
             $text = [];
@@ -151,18 +152,25 @@ class TicketController extends Controller
                 $answer->MessageType = 1;
                 $answer->Message = implode(chr(0x0A), $text);
                 $answer->save();
+                $hasFilledFields++;
             }
         }
 
+        if(!empty($request->get('message'))) {
+            $answer = new TicketAnswer();
+            $answer->TicketId = $ticket->Id;
+            $answer->UserId = auth()->user()->Id;
+            $answer->MessageType = 0;
+            $answer->Message = $request->get('message');
+            $answer->save();
+        } else {
+            if($hasFilledFields === 0)
+            {
+                return 'BRUHH'; // TODO: check the things before?
+            }
+        }
 
-        $answer = new TicketAnswer();
-        $answer->TicketId = $ticket->Id;
-        $answer->UserId = auth()->user()->Id;
-        $answer->MessageType = 0;
-        $answer->Message = $request->get('message');
-        $answer->save();
         event(new \App\Events\TicketCreated($ticket));
-
         $mtaService = new MTAService();
         $response = $mtaService->sendChatBox('admin', $ticket->AssignedRank, '[TICKET] Es wurde ein neues Ticket von ' . $ticket->user->Name . ' (' . $ticket->category->Title .') erstellt!', 255, 50, 0);
         return '';
