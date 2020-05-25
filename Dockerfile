@@ -94,8 +94,7 @@ USER 1000
 
 RUN php artisan storage:link && \
     php artisan cache:clear && \
-    rm public/js/app.js.map && \
-    rm public/css/app.css.map
+    rm public/js/app.js.map
 
 USER 0
 
