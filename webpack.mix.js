@@ -21,15 +21,14 @@ mix.copy('./node_modules/@fortawesome/fontawesome-free/webfonts/**', 'public/fon
 /*
 mix.copy('./node_modules/paper/dist/paper-full.min.js', 'public/js/paper.js');
 mix.copy('resources/js/coreui.min.js', 'public/js/coreui.min.js');
-mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
 mix.copy('resources/js/sentry.min.js', 'public/js/sentry.min.js');
 */
+mix.copy('resources/js/popper.min.js', 'public/js/popper.min.js');
 
 mix.scripts([
     './node_modules/paper/dist/paper-full.min.js',
-    'resources/js/coreui.min.js',
-    'resources/js/popper.min.js',
     'resources/js/sentry.min.js',
+    'resources/js/coreui.min.js',
 ], 'public/js/vendor.js');
 
 mix.setPublicPath('public');
