@@ -113,6 +113,12 @@ Route::middleware('auth')->group(function () {
         Route::resource('santa', 'SantaController')->only(['index', 'store', 'create']);
     });
 
+
+    Route::namespace('Admin')->prefix('admin')->group(function () {
+        Route::post('users/{user}/impersonate', 'UserImpersonateController@start')->name('admin.users.impersonate.start');
+        Route::post('users/{user}/impersonate/stop', 'UserImpersonateController@stop')->name('admin.users.impersonate.stop');
+    });
+
     Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
@@ -128,6 +134,7 @@ Route::middleware('auth')->group(function () {
         Route::get('textures', 'TextureController@index')->name('admin.texture');
         Route::get('server', 'ServerController@show')->name('admin.server.show');
         Route::post('server', 'ServerController@action')->name('admin.server.action');
+        Route::post('users/{user}/impersonate', 'UserImpersonateController@start')->name('admin.users.impersonate.start');
         Route::get('server/edit/password', 'ServerController@editPassword')->name('admin.server.editPassword');
         Route::patch('server/edit/password', 'ServerController@updatePassword')->name('admin.server.updatePassword');
     });

@@ -45,6 +45,13 @@
                                     @if(auth()->user()->Rank >= 5)<react-team-speak-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-team-speak-unban-dialog>@endif
                                 </div>
                             </div>
+
+                            @if(auth()->user()->Id !== $user->Id && !auth()->user()->isImpersonated() && in_array(auth()->user()->Id, explode(',', env('IMPERSONATE_PERMISSION', ''))))
+                                <a class="btn btn-dark" href="{{ route('admin.users.impersonate.start', [$user->Id]) }}" onclick="event.preventDefault(); document.getElementById('impersonate-form').submit();">{{ __('Impersonate') }}</a>
+                                <form id="impersonate-form" action="{{ route('admin.users.impersonate.start', [$user->Id]) }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                            @endif
                         @endif
                     @endauth
                 </div>

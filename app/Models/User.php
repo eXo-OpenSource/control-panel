@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Controllers\WhoIsOnlineController;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Lab404\Impersonate\Models\Impersonate;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use Impersonate;
 
     protected $table = 'account';
     protected $primaryKey = 'Id';

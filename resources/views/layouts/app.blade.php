@@ -46,10 +46,17 @@
                                 <a class="dropdown-item" href="{{ route('users.show', ['user' => auth()->user()]) }}">
                                     {{ __('Character') }}
                                 </a>
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    {{ csrf_field() }}
-                                </form>
+                                @if(auth()->user()->isImpersonated())
+                                    <a class="dropdown-item" href="{{ route('admin.users.impersonate.stop', [auth()->user()->Id]) }}" onclick="event.preventDefault(); document.getElementById('stop-impersonation-form').submit();">{{ __('Stop impersonation') }}</a>
+                                    <form id="stop-impersonation-form" action="{{ route('admin.users.impersonate.stop', [auth()->user()->Id]) }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                @else
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        {{ csrf_field() }}
+                                    </form>
+                                @endif
                             </div>
                         </li>
                     @endguest
