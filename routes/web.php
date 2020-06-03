@@ -15,20 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test', function() {
-    $user = auth()->user();
-    $id = 25;
-
-    $ticket = \App\Models\Ticket::find($id);
-
-    if(!$ticket)
-        return false;
-
-    if($user->Rank > 0)
-        return true;
-
-    return $ticket->users->pluck('Id')->contains($user->Id);
+/*
+Route::get('test', function(\GrahamCampbell\GitLab\GitLabManager $gitLabManager) {
+    return $gitLabManager->repositories()->commits(3, ['ref_name' => 'release/production', 'all' => true]);
 });
+*/
 
 Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');

@@ -12,6 +12,7 @@
         "ext-json": "*",
         "exo/teamspeak": "^1.0@dev",
         "fideloper/proxy": "^4.0",
+        "graham-campbell/gitlab": "^3.1",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/psr7": "^1.6",
         "http-interop/http-factory-guzzle": "^1.0",
