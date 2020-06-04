@@ -15,12 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/*
-Route::get('test', function(\GrahamCampbell\GitLab\GitLabManager $gitLabManager) {
-    return $gitLabManager->repositories()->commits(3, ['ref_name' => 'release/production', 'all' => true]);
-});
-*/
-
 Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');
@@ -29,6 +23,7 @@ Route::namespace('Auth')->prefix('auth')->group(function () {
 
 Route::get('who-is-online', 'WhoIsOnlineController@index')->name('who.is.online');
 Route::get('statistics', 'StatisticsController@index')->name('statistics');
+Route::get('commits', 'CommitController@index')->name('commits');
 Route::get('achievements', 'AchievementsController@index')->name('achievements');
 
 Route::resource('groups', 'GroupController')->only('index', 'show');

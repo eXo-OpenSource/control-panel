@@ -51,6 +51,11 @@
             </a>
         </li>
         <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('commits') }}">
+                <i class="c-sidebar-nav-icon fas fa-code-branch"></i>{{ __('Commits') }}
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('achievements') }}">
                 <i class="c-sidebar-nav-icon fas fa-trophy"></i>{{ __('Achievements') }}
             </a>
