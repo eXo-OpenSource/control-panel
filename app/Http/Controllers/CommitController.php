@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use GrahamCampbell\GitLab\GitLabManager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CommitController extends Controller
 {
@@ -21,55 +23,118 @@ class CommitController extends Controller
 
         $selectedProject = 3;
 
+        $avatarToEmail = [];
+        if(Cache::has('gitlab:users')) {
+            $avatarToEmail = Cache::get('gitlab:users');
+        } else {
+            $users = $gitlabManager->users()->all(['per_page' => 100]);
+
+            foreach($users as $user)
+            {
+                $avatarToEmail[$user['email']] = $user['avatar_url'];
+                $emails = $gitlabManager->users()->userEmails($user['id']);
+                foreach($emails as $email)
+                {
+                    $avatarToEmail[$email['email']] = $user['avatar_url'];
+                }
+            }
+
+            Cache::put('gitlab:users', $avatarToEmail, Carbon::now()->addHours(8));
+        }
+
         if(request()->has('project') && isset($allowedProjects[intval(request()->get('project'))])) {
             $selectedProject = intval(request()->get('project'));
         }
 
-        $messages = $gitlabManager->projects()->events($selectedProject, ['action' => 'pushed', 'per_page' => 100]);
-
-        $blockElements = ['▀', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█', '▉',
-            '▊', '▋', '▌', '▍', '▎', '▏', '▐', '▔', '▕', '▖',
-            '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟'];
-
         $commits = [];
 
-        foreach($messages as $message) {
+        if(!Cache::has('gitlab:commits:' . $selectedProject))
+        {
+            $branches = $gitlabManager->repositories()->branches($selectedProject, ['per_page' => 100]);
 
-            $orgCommitMessage = $message['push_data']['commit_title'];
-            $commitMessage = '';
-            $orgBranch = $message['push_data']['ref'];
-            $branch = '';
+            $allCommits = [];
 
-            if(str_contains(strtolower($orgCommitMessage), '[hide]') || str_starts_with(strtolower($orgBranch), 'hide/'))
+            foreach($branches as $branch)
             {
-                mt_srand(crc32($message['push_data']['commit_to']));
-                for($i = 1; $i < strlen($orgCommitMessage); $i++) {
-                    $commitMessage .= $blockElements[mt_rand(0, count($blockElements) - 1)];
-                }
-                if(str_starts_with(strtolower($orgBranch), 'hide/')) {
-                    for($i = 1; $i < strlen($orgBranch); $i++) {
-                        $branch .= $blockElements[mt_rand(0, count($blockElements) - 1)];
+                if(Carbon::parse($branch['commit']['committed_date']) > Carbon::now()->subMonths(6)) // ignore branches without a commit in the last 6 months
+                {
+                    $realCommits = $gitlabManager->repositories()->commits($selectedProject, ['ref_name' => $branch['name'], 'per_page' => 100]);
+                    foreach($realCommits as $commit)
+                    {
+                        $commit['branch'] = $branch['name'];
+                        array_push($allCommits, $commit);
                     }
-                } else {
-                    $branch = $orgBranch;
                 }
-                mt_srand();
             }
-            else
+
+
+            usort($allCommits, function($a, $b) {
+                return $a['committed_date'] < $b['committed_date'];
+            });
+
+            $knownHashes = [];
+            for($i = count($allCommits) - 1; $i >= 0; $i--)
             {
-                $branch = $orgBranch;
-                $commitMessage = $orgCommitMessage;
+                if(isset($knownHashes[$allCommits[$i]['id']]))
+                {
+                    unset($allCommits[$i]);
+                }
+                else
+                {
+                    $knownHashes[$allCommits[$i]['id']] = true;
+                }
             }
 
+            $allCommits = collect($allCommits);
 
-            array_push($commits, [
-                'author' => $message['author_username'],
-                'date' => \Carbon\Carbon::parse($message['created_at']),
-                'branch' => $branch,
-                'commit' => $commitMessage,
-            ]);
+            $blockElements = ['▀', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█', '▉',
+                '▊', '▋', '▌', '▍', '▎', '▏', '▐', '▔', '▕', '▖',
+                '▗', '▘', '▙', '▚', '▛', '▜', '▝', '▞', '▟'];
+
+            foreach($allCommits->take(100) as $message) {
+
+                $orgCommitMessage = $message['title'];
+                $commitMessage = '';
+                $orgBranch = $message['branch'];
+                $branch = '';
+
+                if(str_contains(strtolower($orgCommitMessage), '[hide]') || str_starts_with(strtolower($orgBranch), 'hide/'))
+                {
+                    mt_srand(crc32($message['push_data']['commit_to']));
+                    for($i = 1; $i < strlen($orgCommitMessage); $i++) {
+                        $commitMessage .= $blockElements[mt_rand(0, count($blockElements) - 1)];
+                    }
+                    if(str_starts_with(strtolower($orgBranch), 'hide/')) {
+                        for($i = 1; $i < strlen($orgBranch); $i++) {
+                            $branch .= $blockElements[mt_rand(0, count($blockElements) - 1)];
+                        }
+                    } else {
+                        $branch = $orgBranch;
+                    }
+                    mt_srand();
+                }
+                else
+                {
+                    $branch = $orgBranch;
+                    $commitMessage = $orgCommitMessage;
+                }
+
+                array_push($commits, [
+                    'short_id' => $message['short_id'],
+                    'author' => $message['committer_name'],
+                    'avatar' => isset($avatarToEmail[$message['committer_email']]) ? $avatarToEmail[$message['committer_email']] : '',
+                    'date' => \Carbon\Carbon::parse($message['committed_date']),
+                    'branch' => $branch,
+                    'commit' => $commitMessage,
+                ]);
+            }
+
+            Cache::put('gitlab:commits:' . $selectedProject, $commits, Carbon::now()->addHour());
         }
-
+        else
+        {
+            $commits = Cache::get('gitlab:commits:' . $selectedProject);
+        }
 
         return view('commits.index', compact('commits', 'allowedProjects', 'selectedProject'));
     }
