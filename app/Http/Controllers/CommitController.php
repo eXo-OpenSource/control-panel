@@ -100,7 +100,7 @@ class CommitController extends Controller
 
                 if(str_contains(strtolower($orgCommitMessage), '[hide]') || str_starts_with(strtolower($orgBranch), 'hide/'))
                 {
-                    mt_srand(crc32($message['push_data']['commit_to']));
+                    mt_srand(crc32($message['id']));
                     for($i = 1; $i < strlen($orgCommitMessage); $i++) {
                         $commitMessage .= $blockElements[mt_rand(0, count($blockElements) - 1)];
                     }
