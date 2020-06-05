@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job(new TeamSpeakKickMusicBotsAndInactive)->cron('* * * * *');
+        // $schedule->job(new TeamSpeakKickMusicBotsAndInactive)->cron('* * * * *');
         $schedule->job(new TeamSpeakCheckNames)->cron('* * * * *');
         $schedule->job(new TeamSpeakOldActivationNotification)->cron('*/2 * * * *');
         $schedule->job(new TeamSpeakSyncGroups)->cron('*/5 * * * *');
