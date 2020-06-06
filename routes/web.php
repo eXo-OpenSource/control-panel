@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('screens', function() {
+    if(auth() && auth()->user() && auth()->user()->Rank >= 7) {
+        return view('screen');
+    }
+    return redirect('/');
+});
+
 Route::namespace('Auth')->prefix('auth')->group(function () {
     Route::get('login', 'LoginController@showLoginForm')->name('login');
     Route::post('login', 'LoginController@login');

@@ -33,3 +33,10 @@ Broadcast::channel('tickets.{id}', function ($user, $id) {
     return $ticket->users->pluck('Id')->contains($user->Id);
 });
 
+Broadcast::channel('screencaptures.{token}', function ($user, $token) {
+    if($user->Rank >= 7)
+        return true;
+
+    return false;
+});
+

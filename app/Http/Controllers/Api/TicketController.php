@@ -251,24 +251,14 @@ class TicketController extends Controller
                 $answer->Message = $request->get('message');
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
-                $mtaService->sendMessage('admin', null, '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!', ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
+                $message = '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!';
+                $mtaService->sendMessage('admin', null, $message, ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
 
                 foreach($ticket->users as $user)
                 {
                     if($user->Rank === 0 && $user->Id !== auth()->user()->Id)
                     {
-                        $result = json_decode($mtaService->sendMessage('player', $user->Id, '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!', ['r' => 255, 'g' => 50, 'b' => 0, 'offline' => true])[0]);
-
-                        if($result->status === 'SUCCESS')
-                        {
-                            if(!$result->online) {
-                                $this->forumService->sendNotification($user->ForumID, 'Ticketsystem', '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!', route('tickets.index') . '/' . $ticket->Id);
-                            }
-                        }
-                        else
-                        {
-                            $this->forumService->sendNotification($user->ForumID, 'Ticketsystem', '[TICKET] ' . $name . ' hat auf das Ticket #' . $ticket->Id . ' geantwortet!', route('tickets.index') . '/' . $ticket->Id);
-                        }
+                        $user->sendMessage($message, ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
                     }
                 }
                 break;
@@ -287,24 +277,14 @@ class TicketController extends Controller
                 $answer->Message = sprintf("Das Ticket wurde von %s geschlossen", auth()->user()->Name);
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
-                $mtaService->sendMessage('admin', null, '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!', ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
+                $message = '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!';
+                $mtaService->sendMessage('admin', null, $message, ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
 
                 foreach($ticket->users as $user)
                 {
                     if($user->Rank === 0 && $user->Id !== auth()->user()->Id)
                     {
-                        $result = json_decode($mtaService->sendMessage('player', $user->Id, '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!', ['r' => 255, 'g' => 50, 'b' => 0, 'offline' => true])[0]);
-
-                        if($result->status === 'SUCCESS')
-                        {
-                            if(!$result->online) {
-                                $this->forumService->sendNotification($user->ForumID, 'Ticketsystem', '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!', route('tickets.index') . '/' . $ticket->Id);
-                            }
-                        }
-                        else
-                        {
-                            $this->forumService->sendNotification($user->ForumID, 'Ticketsystem', '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!', route('tickets.index') . '/' . $ticket->Id);
-                        }
+                        $user->sendMessage($message, ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
                     }
                 }
                 break;
@@ -340,18 +320,7 @@ class TicketController extends Controller
 
                 if($addUser->Rank === 0)
                 {
-                    $result = json_decode($mtaService->sendMessage('player', $addUser->Id, '[TICKET] ' . $name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', ['r' => 255, 'g' => 50, 'b' => 0, 'offline' => true])[0]);
-
-                    if($result->status === 'SUCCESS')
-                    {
-                        if(!$result->online) {
-                            $this->forumService->sendNotification($addUser->ForumID, 'Ticketsystem', '[TICKET] ' . $name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', route('tickets.index') . '/' . $ticket->Id);
-                        }
-                    }
-                    else
-                    {
-                        $this->forumService->sendNotification($addUser->ForumID, 'Ticketsystem', '[TICKET] ' . $name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', route('tickets.index') . '/' . $ticket->Id);
-                    }
+                    $addUser->sendMessage('[TICKET] ' . $name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
                 }
                 break;
             case 'removeUser':

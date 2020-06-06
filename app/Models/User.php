@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\ForumService;
+use App\Services\MTAService;
 use Carbon\Carbon;
 use App\Models\Logs\Chat;
 use App\Models\Logs\Heal;
@@ -239,5 +241,15 @@ class User extends Authenticatable
     public function premium()
     {
         return $this->hasOne(PremiumUser::class, 'UserId', 'Id');
+    }
+
+    public function sendMessage($message, $color, $url)
+    {
+        $result = json_decode(resolve(MTAService::class)->sendMessage('player', $this->Id, $message, ['r' => $color['r'], 'g' => $color['g'], 'b' => $color['b'], 'offline' => true])[0]);
+
+        if($result->status !== 'SUCCESS' || !$result->online)
+        {
+            resolve(ForumService::class)->sendNotification($this->ForumID, 'Ticketsystem', $message, $url);
+        }
     }
 }

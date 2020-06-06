@@ -20,6 +20,7 @@ Route::namespace('Api')->name('api.')->group(function () {
 
 Route::namespace('Admin\\Api')->prefix('admin')->name('api.admin.')->group(function () {
     Route::resource('screenshots', 'ScreenshotController')->only('store');
+    Route::resource('screencaptures', 'ScreencaptureController')->only('store');
 });
 
 Route::namespace('Api')->name('api.')->group(function () {

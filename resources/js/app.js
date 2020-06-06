@@ -28,4 +28,5 @@ require('./components/trainings/Trainings');
 require('./components/TeamSpeakBanDialog');
 require('./components/TeamSpeakUnbanDialog');
 require('./components/UsersOnline');
+require('./components/ScreenCapture');
 require('./components/shop/ChargeForm');

@@ -2,8 +2,6 @@
 
 namespace App\Broadcasting;
 
-use ;
-
 class TicketChannel
 {
     /**
