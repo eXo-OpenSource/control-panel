@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\VehicleShop;
+use App\Services\ForumService;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
@@ -21,7 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
+        $this->app->singleton(ForumService::class, function ($app) {
+            return new ForumService(env('AUTH_ENDPOINT'), env('AUTH_SECRET'));
+        });
     }
 
     /**
