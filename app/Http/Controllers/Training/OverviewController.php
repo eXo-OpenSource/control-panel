@@ -82,13 +82,15 @@ class OverviewController extends Controller
                 'Value' => '',
                 'TemplateId' => null,
                 'UserId' => null,
-                'Rank' => false
+                'Rank' => false,
+                'Sum' => false
             ],
             [
                 'Value' => __('Rang'),
                 'TemplateId' => null,
                 'UserId' => null,
-                'Rank' => true
+                'Rank' => true,
+                'Sum' => false
             ]
         ];
         foreach($templates as $template) {
@@ -96,9 +98,18 @@ class OverviewController extends Controller
                 'Value' => $template->Name,
                 'TemplateId' => $template->Id,
                 'UserId' => null,
-                'Rank' => false
+                'Rank' => false,
+                'Sum' => false
             ]);
         }
+        array_push($row, [
+            'Value' => __('Summe'),
+            'TemplateId' => null,
+            'UserId' => null,
+            'Rank' => false,
+            'Sum' => true
+        ]);
+
         $matrixInfo['title'] = $row;
 
         foreach($members as $member) {
@@ -107,26 +118,38 @@ class OverviewController extends Controller
                     'Value' => $member->user->Name,
                     'TemplateId' => null,
                     'UserId' => $member->Id,
-                    'Rank' => false
+                    'Rank' => false,
+                    'Sum' => false
                 ],
                 [
                     'Value' => $member->FactionRank,
                     'TemplateId' => null,
                     'UserId' => null,
-                    'Rank' => true
+                    'Rank' => true,
+                    'Sum' => false
                 ]
             ];
+
+            $count = 0;
 
             foreach($templates as $template) {
                 $found = false;
                 foreach($result as $entry) {
                     if($entry->Role === $role && $template->Id === $entry->TemplateId && $entry->UserId === $member->Id) {
                         $found = true;
+
+                        if($role === 0) {
+                            $count++;
+                        } else {
+                            $count = $entry->Count;
+                        }
+
                         array_push($row, [
                             'Value' => $entry->Count,
                             'TemplateId' => $template->Id,
                             'UserId' => null,
-                            'Rank' => false
+                            'Rank' => false,
+                            'Sum' => false
                         ]);
                         break;
                     }
@@ -136,10 +159,20 @@ class OverviewController extends Controller
                         'Value' => 0,
                         'TemplateId' => $template->Id,
                         'UserId' => null,
-                        'Rank' => false
+                        'Rank' => false,
+                        'Sum' => false
                     ]);
                 }
             }
+
+            array_push($row, [
+                'Value' => $count,
+                'TemplateId' => $template->Id,
+                'UserId' => null,
+                'Rank' => false,
+                'Sum' => true
+            ]);
+
             array_push($matrixInfo['rows'], $row);
         }
 

@@ -71,7 +71,9 @@
                                                     <th class="row-header"><a href="{{ route('users.show', [$data['UserId']]) }}">{{ $data['Value'] }}</a></th>
                                                 @elseif($data['Rank'])
                                                     <th class="row-header">{{ $data['Value'] }}</th>
-                                                @elseif(true)
+                                                @elseif($data['Sum'])
+                                                    <td>{{ $data['Value'] }}</td>
+                                                @else
                                                     @if($role === 0)
                                                         <td>@if($data['Value'] > 0)<i class="fas fa-check" style="color: rgb(69, 161, 100);"></i>@else<i class="fas fa-times" style="color: rgb(209, 103, 103);"></i>@endif</td>
                                                     @else
