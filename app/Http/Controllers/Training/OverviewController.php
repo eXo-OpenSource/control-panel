@@ -141,7 +141,7 @@ class OverviewController extends Controller
                         if($role === 0) {
                             $count++;
                         } else {
-                            $count = $entry->Count;
+                            $count += $entry->Count;
                         }
 
                         array_push($row, [
