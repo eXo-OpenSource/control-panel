@@ -72,7 +72,11 @@
                                                 @elseif($data['Rank'])
                                                     <td>{{ $data['Value'] }}</td>
                                                 @elseif(true)
-                                                    <td>@if($data['Value'] > 0)<i class="fas fa-check" style="color: rgb(69, 161, 100);"></i>@else<i class="fas fa-times" style="color: rgb(209, 103, 103);"></i>@endif</td>
+                                                    @if($role === 0)
+                                                        <td>@if($data['Value'] > 0)<i class="fas fa-check" style="color: rgb(69, 161, 100);"></i>@else<i class="fas fa-times" style="color: rgb(209, 103, 103);"></i>@endif</td>
+                                                    @else
+                                                        <td>{{ $data['Value'] }}</td>
+                                                    @endif
                                                 @endif
                                             @endforeach
                                         </tr>

@@ -38,5 +38,14 @@ $fa-font-path: '/fonts/font-awesome';
             background-color: #44454C;
         }
     }
+
+    .btn-group {
+        .active {
+            color: #fff;
+            background-color: #3a3c40;
+            border-color: #343639;
+        }
+    }
+
 }
 
