@@ -70,12 +70,12 @@
                                                 @if($data['UserId'])
                                                     <th class="row-header"><a href="{{ route('users.show', [$data['UserId']]) }}">{{ $data['Value'] }}</a></th>
                                                 @elseif($data['Rank'])
-                                                    <td>{{ $data['Value'] }}</td>
+                                                    <th class="row-header">{{ $data['Value'] }}</th>
                                                 @elseif(true)
                                                     @if($role === 0)
                                                         <td>@if($data['Value'] > 0)<i class="fas fa-check" style="color: rgb(69, 161, 100);"></i>@else<i class="fas fa-times" style="color: rgb(209, 103, 103);"></i>@endif</td>
                                                     @else
-                                                        <td>{{ $data['Value'] }}</td>
+                                                        <td>@if($data['Value'] > 0){{ $data['Value'] }}@endif</td>
                                                     @endif
                                                 @endif
                                             @endforeach
