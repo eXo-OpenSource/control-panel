@@ -42,5 +42,3 @@ showAllTooltipsPlugin = {
         }
     }
 };
-
-Chart.pluginService.register(showAllTooltipsPlugin);
