@@ -67,7 +67,10 @@ class ChartController extends Controller
             switch($parts[1]) {
                 case 'overall':
                     abort_unless(auth()->user()->Rank >= 3, 403);
-
+                    if(isset($parts[2]) && $parts[2] === 'daily')
+                    {
+                        return StatisticService::getMoneyAdminDaily($from, $to);
+                    }
                     return StatisticService::getMoneyAdmin($from, $to);
                     break;
                 case 'faction':

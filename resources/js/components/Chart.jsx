@@ -90,11 +90,11 @@ export default class Chart extends Component {
                 let fromTo;
 
                 if(this.state.data.type === 'doughnut') {
-                    chart = <Doughnut data={this.state.data.data} options={this.state.data.options} />;
+                    chart = <Doughnut plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
                 } else if(this.state.data.type === 'bar') {
-                    chart = <Bar data={this.state.data.data} options={this.state.data.options} />;
+                    chart = <Bar plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
                 } else {
-                    chart = <Line data={this.state.data.data} options={this.state.data.options} />;
+                    chart = <Line plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
                 }
 
                 if(this.state.data.from && this.state.data.to) {

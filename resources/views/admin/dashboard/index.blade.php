@@ -113,6 +113,9 @@
                     <div class="col-xl-6 col-lg-12">
                         <react-chart data-chart="money:overall" data-state="true" data-title="{{ __('Geldfluss') }}"></react-chart>
                     </div>
+                    <div class="col-xl-6 col-lg-12">
+                        <react-chart data-chart="money:overall:daily" data-state="true" data-title="{{ __('Geldfluss täglich') }}"></react-chart>
+                    </div>
                 </div>
             </div>
         </div>

@@ -12,6 +12,8 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+require('./chart')
+
 require('./components/Chart');
 require('./components/HistoryDialog');
 require('./components/Vehicle');

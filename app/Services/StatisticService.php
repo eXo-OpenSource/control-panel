@@ -608,15 +608,9 @@ class StatisticService
 
     public static function getMoneyAdmin(Carbon $from, Carbon $to)
     {
-        $data = ['in' => 0, 'out' => 0];
-        $labels = [
-            'Einnahmen',
-            'Ausgaben',
-        ];
-
         if(!Cache::has('bank:in-out:overall')) {
-            $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND DateFormatted BETWEEN ? AND ?', [$from, $to])[0]->Amount;
-            $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND DateFormatted BETWEEN ? AND ?', [$from, $to])[0]->Amount;
+            $in = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND DateFormatted BETWEEN ? AND ?', [$from->format('Y-m-d'), $to->format('Y-m-d')])[0]->Amount;
+            $out = DB::connection('mysql_logs')->select('SELECT SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND DateFormatted BETWEEN ? AND ?', [$from->format('Y-m-d'), $to->format('Y-m-d')])[0]->Amount;
             Cache::put('bank:in-out:overall', ['in' => $in, 'out' => $out], Carbon::now()->addMinutes(15));
         }
         $data = Cache::get('bank:in-out:overall');
@@ -647,7 +641,92 @@ class StatisticService
                     'display' => true,
                     'labels' => [
                         'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ],
+                ],
+                'showAllTooltips' => true
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'tooltips' => 'money',
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getMoneyAdminDaily(Carbon $from, Carbon $to)
+    {
+        $days = $from->diffInDays($to);
+
+        $labels = [];
+
+        for ($i = 0; $i <= $days; $i++) {
+            $date = $from->copy()->addDays($i)->format('Y-m-d');
+            array_push($labels, $date);
+        }
+
+        if(!Cache::has('bank:in-out:daily')) {
+            $inValues = [];
+            $outValues = [];
+            $in = DB::connection('mysql_logs')->select('SELECT DateFormatted, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (FromType = 4 OR FromType = 5 OR FromType = 9) AND DateFormatted BETWEEN ? AND ? GROUP BY DateFormatted', [$from->format('Y-m-d'), $to->format('Y-m-d')]);
+            $out = DB::connection('mysql_logs')->select('SELECT DateFormatted, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE (ToType = 4 OR ToType = 5 OR ToType = 9) AND DateFormatted BETWEEN ? AND ? GROUP BY DateFormatted', [$from->format('Y-m-d'), $to->format('Y-m-d')]);
+
+
+            foreach($labels as $date) {
+                $gotValue = false;
+                foreach ($in as $entry) {
+                    if ($date === $entry->DateFormatted) {
+                        array_push($inValues, $entry->Amount);
+                        $gotValue = true;
+                        break;
+                    }
+                }
+
+                if (!$gotValue) {
+                    array_push($inValues, 0);
+                }
+
+                $gotValue = false;
+                foreach ($out as $entry) {
+                    if ($date === $entry->DateFormatted) {
+                        array_push($outValues, $entry->Amount);
+                        $gotValue = true;
+                        break;
+                    }
+                }
+
+                if (!$gotValue) {
+                    array_push($outValues, 0);
+                }
+            }
+            Cache::put('bank:in-out:daily', ['in' => $inValues, 'out' => $outValues], Carbon::now()->addMinutes(30));
+        }
+        $data = Cache::get('bank:in-out:daily');
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'datasets' => [
+                    [
+                        'label' => 'Erschaffen',
+                        'data' => $data['in'],
+                        'backgroundColor' => 'rgba(69, 161, 100, 1)',
+                        'borderWidth' => 0,
+                    ],
+                    [
+                        'label' => 'Zerstört',
+                        'data' => $data['out'],
+                        'backgroundColor' => 'rgba(209, 103, 103, 1)',
+                        'borderWidth' => 0,
                     ]
+                ],
+                'labels' => $labels
+            ],
+            'options' => [
+                'maintainAspectRatio' => false,
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ],
                 ]
             ],
             'from' => $from->format('Y-m-d'),
