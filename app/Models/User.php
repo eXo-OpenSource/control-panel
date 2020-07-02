@@ -140,36 +140,52 @@ class User extends Authenticatable
         return $this->belongsToMany(Chat::class, 'ChatReceivers', 'Receiver', 'MessageId', 'Id', 'ID');
     }
 
+    public function bans()
+    {
+        return $this->hasMany(Ban::class, 'player_id', 'Id');
+    }
+
+    public function teamSpeakBan()
+    {
+        return $this->hasMany(TeamSpeakBan::class, 'UserId', 'Id');
+    }
+
     public function isBanned()
     {
         $time = (new \DateTime())->getTimestamp();
-        $bans = DB::table('bans')
-            ->where('player_id', $this->Id)
-            ->where(function($query) use ($time) {
-                $query->where('expires', '>=', $time)
-                    ->orWhere('expires', 0);
-            })
-            ->orderBy('expires', 'DESC')
-            ->get();
 
-        if (sizeof($bans) == 0) {
-            $warns = DB::table('warns')->where('userId', $this->Id)->where('expires', '>=', $time)->orderBy('expires', 'DESC')->limit(3)->get();
-
-            if (sizeof($warns) == 3) {
-                return $warns[2]->expires;
+        foreach($this->bans as $ban) {
+            if($ban->expires >= $time || $ban->expires === 0) {
+                return $ban->expires;
             }
-            return false;
         }
 
-        return $bans[0]->expires;
+            // DB::table('warns')->where('userId', $this->Id)->where('expires', '>=', $time)->orderBy('expires', 'DESC')->limit(3)->get();
+
+        $activeWarns = 0;
+        $shortestWarn = PHP_INT_MAX;
+
+        foreach($this->warns as $warn)
+        {
+            if($warn->expires >= $time) {
+                $activeWarns++;
+                if($warn->expires < $shortestWarn) {
+                    $shortestWarn = $warn->expires; // TODO: Calculate real unban date
+                }
+            }
+        }
+
+        if ($activeWarns >= 3) {
+            return $shortestWarn;
+        }
+        return false;
     }
 
     public function isTeamSpeakBanned()
     {
         $banDuration = -1;
 
-        $bans = TeamSpeakBan::query()->where('UserId', $this->Id)->get();
-        foreach($bans as $ban) {
+        foreach($this->teamSpeakBan as $ban) {
             if($ban->Duration === 0) {
                 $banDuration = 0;
                 break;

@@ -37,6 +37,9 @@
                         <table class="table table-responsive-sm table-sm">
                             <thead>
                             <tr>
+                                @if(auth()->user()->Rank >= 3)
+                                <th>{{ __('Status') }}</th>
+                                @endif
                                 <th scope="col"><a href="{{ route('users.search', ['sortBy' => 'name', 'direction' => $sortBy === 'name' && $direction === 'asc'  ? 'desc' : 'asc', 'name' => request()->get('name')]) }}">{{ __('Name') }}</a></th>
                                 <th scope="col"><a href="{{ route('users.search', ['sortBy' => 'playTime', 'direction' => $sortBy === 'playTime' && $direction === 'asc'  ? 'desc' : 'asc', 'playTime' => request()->get('playTime')]) }}">{{ __('Spielzeit') }}</a></th>
                                 @if(auth()->user()->Rank >= 3)
@@ -49,6 +52,30 @@
                             <tbody>
                             @foreach($users as $user)
                                 <tr>
+                                    @if(auth()->user()->Rank >= 3)
+                                    <td>
+                                        @if($user->isBanned() !== false)
+                                            <i class="fas fa-gamepad text-danger"
+                                               data-toggle="tooltip"
+                                               data-placement="right"
+                                               data-animation="true"
+                                               data-original-title="@if($user->isBanned() === 0){{ 'Permanent' }}@else{{ \Carbon\Carbon::now()->addSeconds($user->isBanned())->format('d.m.Y H:i:s') }}@endif">
+                                            </i>
+                                        @else
+                                            <i class="fas fa-gamepad text-success"></i>
+                                        @endif
+                                        @if($user->isTeamSpeakBanned())
+                                            <i class="fab fa-teamspeak text-danger"
+                                               data-toggle="tooltip"
+                                               data-placement="right"
+                                               data-animation="true"
+                                               data-original-title="@if($user->isTeamSpeakBanned() === 0){{ 'Permanent' }}@else{{ \Carbon\Carbon::now()->addSeconds($user->isTeamSpeakBanned())->format('d.m.Y H:i:s') }}@endif">
+                                            </i>
+                                        @else
+                                            <i class="fab fa-teamspeak text-success"></i>
+                                        @endif
+                                    </td>
+                                    @endif
                                     <td><a href="{{ route('users.show', [$user->Id]) }}">{{ $user->Name }}</a></td>
                                     <td>@playTime($user->PlayTime)</td>
                                     @if(auth()->user()->Rank >= 3)
@@ -68,4 +95,15 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    @if(auth()->user()->Rank >= 3)
+    <script>
+        document.querySelectorAll('[data-toggle="tooltip"]').forEach(function (element) {
+            // eslint-disable-next-line no-new
+            new coreui.Tooltip(element);
+        });
+    </script>
+    @endif
 @endsection

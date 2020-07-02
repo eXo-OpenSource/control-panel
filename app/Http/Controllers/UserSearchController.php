@@ -60,6 +60,10 @@ class UserSearchController extends Controller
             $hasFilter = true;
         }
 
+        if(auth()->user()->Rank >= 3) {
+            $users->with('bans')->with('warns')->with('teamSpeakBan');
+        }
+
         if($sortBy && in_array($sortBy, ['name', 'playTime'])) {
             if($sortBy === 'name') {
                 $users->orderBy('account.Name', $direction === 'desc' ? 'DESC' : 'ASC');

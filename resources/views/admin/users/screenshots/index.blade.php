@@ -27,7 +27,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Multiaccounts') }}</div>
+                    <div class="card-header">{{ __('Screenshots') }}</div>
                     <div class="card-body">
                         <table class="table table-responsive-sm table-sm">
                             <thead>
