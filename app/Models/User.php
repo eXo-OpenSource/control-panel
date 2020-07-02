@@ -163,20 +163,19 @@ class User extends Authenticatable
             // DB::table('warns')->where('userId', $this->Id)->where('expires', '>=', $time)->orderBy('expires', 'DESC')->limit(3)->get();
 
         $activeWarns = 0;
-        $shortestWarn = PHP_INT_MAX;
+        $warns = [];
 
         foreach($this->warns as $warn)
         {
             if($warn->expires >= $time) {
+                array_push($warns, $warn->expires);
                 $activeWarns++;
-                if($warn->expires < $shortestWarn) {
-                    $shortestWarn = $warn->expires; // TODO: Calculate real unban date
-                }
             }
         }
 
         if ($activeWarns >= 3) {
-            return $shortestWarn;
+            rsort($warns);
+            return $warns[2];
         }
         return false;
     }

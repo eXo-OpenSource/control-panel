@@ -59,7 +59,7 @@
                                                data-toggle="tooltip"
                                                data-placement="right"
                                                data-animation="true"
-                                               data-original-title="@if($user->isBanned() === 0){{ 'Permanent' }}@else{{ \Carbon\Carbon::now()->addSeconds($user->isBanned())->format('d.m.Y H:i:s') }}@endif">
+                                               data-original-title="@if($user->isBanned() === 0){{ 'Permanent' }}@else{{ \Carbon\Carbon::now()->setTimestamp($user->isBanned())->format('d.m.Y H:i:s') }}@endif">
                                             </i>
                                         @else
                                             <i class="fas fa-gamepad text-success"></i>
