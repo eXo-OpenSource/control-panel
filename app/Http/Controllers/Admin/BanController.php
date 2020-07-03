@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ban;
 use App\Models\Warn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BanController extends Controller
 {
@@ -16,6 +17,8 @@ class BanController extends Controller
      */
     public function index()
     {
+        abort_unless(Gate::allows('admin-rank-3'), 403);
+
         $time = (new \DateTime())->getTimestamp();
 
         $banList = [];
