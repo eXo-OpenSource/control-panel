@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Faction extends Model
 {
     protected $primaryKey = 'Id';
+    protected $connection = 'mysql';
 
     public function members()
     {

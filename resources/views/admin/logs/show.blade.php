@@ -17,6 +17,7 @@
                     <li class="nav-item"><a class="nav-link @if($log === 'ammunation'){{'active'}}@endif" href="{{ route('admin.logs.show', ['ammunation']) }}">{{ __('Ammunation') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'chat'){{'active'}}@endif" href="{{ route('admin.logs.show', ['chat']) }}">{{ __('Chat') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'advert'){{'active'}}@endif" href="{{ route('admin.logs.show', ['advert']) }}">{{ __('Werbung') }}</a></li>
+                    <li class="nav-item"><a class="nav-link @if($log === 'group'){{'active'}}@endif" href="{{ route('admin.logs.show', ['group']) }}">{{ __('Group') }}</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active">
@@ -44,6 +45,8 @@
                             @include('admin.logs.partials.chat')
                         @elseif($log === 'advert')
                             @include('admin.logs.partials.advert')
+                        @elseif($log === 'group')
+                            @include('admin.logs.partials.group')
                         @endif
                     </div>
                 </div>

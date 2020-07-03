@@ -120,6 +120,9 @@ class AppServiceProvider extends ServiceProvider
             7 => \App\Models\House::class,
             8 => \App\Models\Group::class,
             9 => \App\Models\VehicleShop::class,
+            'faction' => \App\Models\Faction::class,
+            'company' => \App\Models\Company::class,
+            'group' => \App\Models\Group::class,
         ]);
 
         Paginator::defaultView('pagination.default');

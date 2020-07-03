@@ -11,6 +11,7 @@ class Group extends Model
     use SoftDeletes;
     const DELETED_AT = 'Deleted';
     protected $primaryKey = 'Id';
+    protected $connection = 'mysql';
 
     public function members()
     {

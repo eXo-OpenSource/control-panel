@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Company extends Model
 {
     protected $primaryKey = 'Id';
-
+    protected $connection = 'mysql';
 
     public function members()
     {
