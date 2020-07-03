@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Bans') }}</div>
                 <div class="card-body">
-                    <table class="table w-full">
+                    <table class="table table-sm w-full">
                         <tr>
                             <th>{{ __('Spieler')  }}</th>
                             <th>{{ __('Admin')  }}</th>
