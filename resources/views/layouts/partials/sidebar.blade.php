@@ -120,6 +120,9 @@
                             <a class="c-sidebar-nav-link" href="{{ route('admin.logs.show') }}"><span class="c-sidebar-nav-icon fas fa-file-alt"></span>Logs</a>
                         </li>
                         <li class="c-sidebar-nav-item">
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.bans.index') }}"><span class="c-sidebar-nav-icon fas fa-ban"></span>{{ __('Bans') }}</a>
+                        </li>
+                        <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.vehicles.index') }}"><span class="c-sidebar-nav-icon fas fa-car"></span>Fahrzeuge</a>
                         </li>
                         <li class="c-sidebar-nav-item">

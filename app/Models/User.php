@@ -160,8 +160,6 @@ class User extends Authenticatable
             }
         }
 
-            // DB::table('warns')->where('userId', $this->Id)->where('expires', '>=', $time)->orderBy('expires', 'DESC')->limit(3)->get();
-
         $activeWarns = 0;
         $warns = [];
 

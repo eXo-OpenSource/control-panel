@@ -124,6 +124,7 @@ Route::middleware('auth')->group(function () {
     Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
+        Route::resource('bans', 'BanController', ['as' => 'admin'])->only('index');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
         Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
         Route::resource('users.screenshots', 'ScreenshotUserController', ['as' => 'admin'])->only('index', 'store');
