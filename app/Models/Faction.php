@@ -22,7 +22,18 @@ class Faction extends Model
 
     public function logs()
     {
-        return GroupLog::where('GroupType', 'faction')->where('GroupId', $this->Id);
+        $groupLog = GroupLog::where('GroupType', 'faction');
+
+        if($this->Id === 1 || $this->Id === 2 || $this->Id === 3)
+        {
+            $groupLog->whereIn('GroupId', [1, 2, 3]);
+        }
+        else
+        {
+            $groupLog->where('GroupId', $this->Id);
+        }
+
+        return $groupLog;
     }
 
     public function getActivity(Carbon $from, Carbon $to)
