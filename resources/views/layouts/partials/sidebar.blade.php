@@ -33,6 +33,9 @@
                 <i class="c-sidebar-nav-icon fas fa-user-friends"></i>{{ __('Gruppen') }}
             </a>
         </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ route('vehicles.index') }}"><span class="c-sidebar-nav-icon fas fa-car"></span>{{ __('Fahrzeuge') }}</a>
+        </li>
         @if(auth()->user() && auth()->user()->Rank >= 3)
         <li class="c-sidebar-nav-item">
             <a class="c-sidebar-nav-link" href="{{ route('tickets.index') }}">
@@ -124,9 +127,6 @@
                         </li>
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.houses.index') }}"><span class="c-sidebar-nav-icon fas fa-home"></span>{{ __('Häuser') }}</a>
-                        </li>
-                        <li class="c-sidebar-nav-item">
-                            <a class="c-sidebar-nav-link" href="{{ route('admin.vehicles.index') }}"><span class="c-sidebar-nav-icon fas fa-car"></span>Fahrzeuge</a>
                         </li>
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon fas fa-server"></span>Server</a>

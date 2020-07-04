@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -10,8 +9,6 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        abort_unless(Gate::allows('admin-rank-3'), 403);
-
         $data = DB::select('SELECT   v.Model,
                                             v.OwnerType,
                                             IF(v.Premium > 0, true, false) AS Premium,
@@ -83,6 +80,6 @@ class VehicleController extends Controller
            return $a->Count < $b->Count;
         });
 
-        return view('admin.vehicles.index', compact('vehicles'));
+        return view('vehicles.index', compact('vehicles'));
     }
 }

@@ -1,12 +1,21 @@
 @extends('layouts.app')
 
+@section('title', __('Fahrzeuge'))
+
 @section('content')
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-md-12">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-info" role="alert">
+                            {{ __('Alle Fahrzeuge mit dem Badge "Selten" sind nicht im Spiel erwerbar.') }}
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     @foreach($vehicles as $vehicle)
-                        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="card">
                                 @if(!$vehicle->IsInShop)<span class="image-badge image-badge-info">{{ __('Selten') }}</span>@endif
                                 <img class="bd-placeholder-img card-img-top" src="https://exo-reallife.de/images/veh/Vehicle_{{ $vehicle->Id }}.jpg">

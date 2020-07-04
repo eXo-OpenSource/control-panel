@@ -57,10 +57,12 @@ Route::middleware('auth')->group(function () {
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');
     Route::resource('textures', 'TextureController')->only(['index', 'create', 'store', 'destroy']);
     Route::resource('teamspeak', 'TeamspeakController');
+    Route::resource('vehicles', 'VehicleController')->only('index');
 
     Route::resource('trainings/templates', 'Training\\TrainingTemplateController', [
         'as' => 'trainings'
     ]);
+
     Route::get('trainings/templates/{template}/delete', 'Training\\TrainingTemplateController@delete')->name('trainings.templates.delete');
 
     Route::resource('trainings/templates.contents', 'Training\\TrainingTemplateContentController', [
@@ -123,7 +125,6 @@ Route::middleware('auth')->group(function () {
 
     Route::namespace('Admin')->middleware('admin')->prefix('admin')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
-        Route::resource('vehicles', 'VehicleController', ['as' => 'admin'])->only('index');
         Route::resource('bans', 'BanController', ['as' => 'admin'])->only('index');
         Route::resource('houses', 'HouseController', ['as' => 'admin'])->only('index');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
