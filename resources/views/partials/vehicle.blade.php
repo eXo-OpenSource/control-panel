@@ -3,6 +3,7 @@
         data-id="{{ $vehicle->Id }}"
         data-model="{{ $vehicle->Model }}"
         data-name="{{ $vehicle->getName() }}"
+        data-premium="{{ $vehicle->Premium }}"
         data-distance="{{ number_format($vehicle->Mileage / 1000, 2, ',', ' ') }}"
         data-col1="{{ $vehicle->getTuningColor(1) }}"
         data-col2="{{ $vehicle->getTuningColor(2) }}"
