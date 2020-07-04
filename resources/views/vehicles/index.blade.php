@@ -29,7 +29,7 @@
                                                 {{ __('Fraktionsbesitz: ') }} {{ $vehicle->FactionOwned }}<br>
                                                 {{ __('Unternehmensbesitz: ') }} {{ $vehicle->CompanyOwned }}<br>
                                                 {{ __('Gruppenbesitz: ') }} {{ $vehicle->GroupOwned }}<br>">
-                                                <i class="fas fa-info-circle"></i>
+                                                <i class="fas fa-info-circle" style="pointer-events:none;"></i>
                                             </button>
                                         </div>
                                     </div>
