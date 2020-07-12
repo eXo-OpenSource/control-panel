@@ -77,7 +77,7 @@ class TrainingController extends Controller
             $entry = [
                 'Id' => $training->Id,
                 'UserId' => $training->UserId,
-                'User' => $training->user->Name,
+                'User' => $training->user ? $training->user->Name : 'Unbekannt',
                 'ElementId' => $training->ElementId,
                 'ElementType' => $training->ElementType,
                 'Name' => $training->Name,
@@ -108,7 +108,7 @@ class TrainingController extends Controller
         $result = [
             'Id' => $training->Id,
             'UserId' => $training->UserId,
-            'User' => $training->user->Name,
+            'User' => $training->user ? $training->user->Name : 'Unbekannt',
             'ElementId' => $training->ElementId,
             'ElementType' => $training->ElementType,
             'Name' => $training->Name,
@@ -126,7 +126,7 @@ class TrainingController extends Controller
                 'Id' => $content->Id,
                 'TrainingContentId' => $content->TrainingContentId,
                 'UserId' => $content->UserId,
-                'User' => $content->user->Name,
+                'User' => $content->user ? $content->user->Name : 'Unbekannt',
                 'Order' => $content->Order,
                 'Name' => $content->Name,
                 'Description' => $content->Description,

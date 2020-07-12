@@ -1,6 +1,18 @@
 <?php
 
 return [
+    'rankNames' => [
+      0 => 'Spieler',
+      1 => 'Ticketsupporter',
+      2 => 'Clanmember',
+      3 => 'Supporter',
+      4 => 'Moderator',
+      5 => 'Administrator',
+      6 => 'Nutzlos',
+      7 => 'Scripter',
+      8 => 'Stellv. Projektleiter',
+      9 => 'Projektleiter'
+    ],
     'companyColors' => [
         0 => [255, 255, 255],
         1 => [229, 125, 34],

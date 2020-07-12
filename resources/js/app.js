@@ -32,3 +32,4 @@ require('./components/TeamSpeakUnbanDialog');
 require('./components/UsersOnline');
 require('./components/ScreenCapture');
 require('./components/shop/ChargeForm');
+require('./components/admin/Polls');

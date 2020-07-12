@@ -11,7 +11,14 @@
 |
 */
 
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
+
+Broadcast::channel('admin.polls', function(User $user) {
+    if((int) $user->Rank >= 3) {
+        return ['id' => $user->Id, 'rank' => $user->Rank, 'rankName' => config('constants.rankNames')[$user->Rank], 'name' => $user->Name];
+    }
+});
 
 Broadcast::channel('tickets', function ($user) {
     return (int) $user->Rank > 0;
