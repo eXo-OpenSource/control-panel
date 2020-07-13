@@ -12,6 +12,8 @@ export default class SelectUserDialog extends Component {
             foundUsers: []
         };
 
+        this.nameInput = null;
+
         this.handleClose = (hasSentValue) => {
             this.setState({ show: false });
             if (this.props.onClosed) {
@@ -21,10 +23,15 @@ export default class SelectUserDialog extends Component {
 
         this.handleShow = () => {
             this.setState({ show: true });
+            setTimeout(function(that) {
+                if(that.nameInput)
+                {
+                    that.nameInput.focus();
+                }
+            }, 200, this)
         };
 
     }
-
     componentDidUpdate(prevProps) {
         if (this.props.show != prevProps.show) {
             if(this.props.show) {
@@ -42,13 +49,18 @@ export default class SelectUserDialog extends Component {
         this.handleClose(true);
     }
 
+    async submitSearch(event)
+    {
+        event.preventDefault();
+        await this.search();
+    }
+
     async search() {
         try{
             const response = await axios.post('/api/users/search', {
                 name: this.state.name
             });
             this.setState({foundUsers: response.data});
-            console.log(response.data);
         } catch(error) {
             console.log(error.response);
         }
@@ -65,11 +77,11 @@ export default class SelectUserDialog extends Component {
                         <Modal.Title>{this.props.title || "Benutzer auswählen"}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form>
+                        <Form onSubmit={this.submitSearch.bind(this)}>
                             <Form.Group>
                                 <Form.Label>Benutzer:</Form.Label>
                                 <InputGroup>
-                                    <Form.Control name="name" type="text" placeholder="Spielername" autocomplete="off" onChange={this.onChange.bind(this)} />
+                                    <Form.Control ref={(input) => { this.nameInput = input; }}  name="name" type="text" placeholder="Spielername" autoComplete="off" autoFocus="on" onChange={this.onChange.bind(this)} />
                                     <InputGroup.Append>
                                         <Button onClick={this.search.bind(this)} variant="outline-success">suchen</Button>
                                     </InputGroup.Append>

@@ -10,6 +10,8 @@ import {
 } from "react-router-dom";
 import ConfirmDialog from './ConfirmDialog';
 import SelectUserFromListDialog from "./SelectUserFromListDialog";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class TicketEntry extends Component {
     constructor({match}) {
@@ -20,7 +22,8 @@ export default class TicketEntry extends Component {
             ticketId: match.params.ticketId,
             showAddUserDialog: false,
             showAssignUserDialog: false,
-            showRemoveUserDialog: false
+            showRemoveUserDialog: false,
+            submitting: false,
         };
 
         Echo.private(`tickets.${this.state.ticketId}`)
@@ -55,33 +58,60 @@ export default class TicketEntry extends Component {
     }
 
     async send() {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'addMessage',
-                message: this.state.message,
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'addMessage',
+            message: this.state.message,
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-            this.setState({
-                message: '',
-                data: response.data
-            });
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async close() {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'close',
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'close',
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-            this.setState({
-                data: response.data
-            });
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async loadData() {
@@ -97,18 +127,32 @@ export default class TicketEntry extends Component {
     }
 
     async addUser(userId) {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'addUser',
-                newUserId: userId
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'addUser',
+            newUserId: userId
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-            this.setState({
-                data: response.data
-            });
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async hideUserDialog() {
@@ -116,19 +160,32 @@ export default class TicketEntry extends Component {
     }
 
     async assignUser(userId) {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'assignToUser',
-                assignUserId: userId
-            });
+        if(this.state.submitting)
+            return false;
 
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'assignToUser',
+            assignUserId: userId
+        }).then(() => {
             this.setState({
-                data: response.data
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async hideAssignUserDialog() {
@@ -136,34 +193,61 @@ export default class TicketEntry extends Component {
     }
 
     async removeUser() {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'removeUser',
-                removeUserId: this.state.removeUserId
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'removeUser',
+            removeUserId: this.state.removeUserId
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-            this.setState({
-                data: response.data
-            });
-        } catch(error) {
-            console.log(error.response);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async selfAssign() {
-        try {
-            const response = await axios.put('/api/tickets/' + this.state.ticketId, {
-                type: 'assignToUser',
-                assignUserId: Exo.UserId
-            });
+        if(this.state.submitting)
+            return false;
 
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'assignToUser',
+            assignUserId: Exo.UserId
+        }).then(() => {
             this.setState({
-                data: response.data
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     render() {
@@ -178,14 +262,14 @@ export default class TicketEntry extends Component {
 
         if(this.state.data.State === 'Open') {
             if(Exo.Rank > 0 || this.state.data.UserId == Exo.UserId) {
-                closeButton = <Row><Col><Button onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button></Col></Row>;
+                closeButton = <Row><Col><Button disabled={this.state.submitting} onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button></Col></Row>;
             }
             if(Exo.Rank >= 3) {
                 assignButtons = <Row className="mb-1">
                     <Col>
                         <div className="btn-group" role="group" >
-                            {this.state.data.AssigneeId === Exo.UserId ? '' : <Button variant="primary" onClick={this.selfAssign.bind(this)}>Selbst zuweisen</Button>}
-                            <Button variant="secondary" onClick={this.toggleAssignUserDialog.bind(this)}>Teammitglied zuweisen</Button>
+                            {this.state.data.AssigneeId === Exo.UserId ? '' : <Button disabled={this.state.submitting} variant="primary" onClick={this.selfAssign.bind(this)}>Selbst zuweisen</Button>}
+                            <Button disabled={this.state.submitting} variant="secondary" onClick={this.toggleAssignUserDialog.bind(this)}>Teammitglied zuweisen</Button>
                         </div>
                     </Col>
                 </Row>;
@@ -196,17 +280,18 @@ export default class TicketEntry extends Component {
                     <Form.Group>
                         <Form.Label>Nachricht</Form.Label>
                         <InputGroup>
-                            <Form.Control as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
+                            <Form.Control disabled={this.state.submitting} as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
                         </InputGroup>
                     </Form.Group>
 
-                    <Button onClick={this.send.bind(this)} className="float-right">Senden</Button>
+                    <Button disabled={this.state.submitting} onClick={this.send.bind(this)} className="float-right">Senden</Button>
                 </Form>
             );
         }
 
         return (
             <>
+                <ToastContainer />
                 <div className="row mb-4">
                     <div className="col-md-12">
                         <Link to="/tickets" className="btn btn-primary float-right">Zurück</Link>
@@ -305,14 +390,14 @@ export default class TicketEntry extends Component {
                                                                     </Col>
                                                                     <Col xs='2'>
                                                                         {(user.UserId != this.state.data.UserId && user.LeftAt == null) ?
-                                                                            <Button onClick={this.toggleRemoveUserDialog.bind(this, user.UserId)} variant="link" style={{color: "#d16767"}} size="sm"><i className="fas fa-times-circle"></i></Button>
+                                                                            <Button disabled={this.state.submitting} onClick={this.toggleRemoveUserDialog.bind(this, user.UserId)} variant="link" style={{color: "#d16767"}} size="sm"><i className="fas fa-times-circle"></i></Button>
                                                                         :null}
                                                                     </Col>
                                                                 </Row>
                                                             </div>
                                                         );
                                                     })}
-                                                    {Exo.Rank >= 3 ? <Button onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button> : ''}
+                                                    {Exo.Rank >= 3 ? <Button disabled={this.state.submitting} onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button> : ''}
                                                 </td>
                                             </tr>
                                             <tr>

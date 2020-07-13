@@ -248,7 +248,7 @@ class User extends Authenticatable
 
     public function tickets()
     {
-        return $this->belongsToMany(Ticket::class, 'ticket_users', 'UserId', 'TicketId')->withPivot('JoinedAt', 'LeftAt');
+        return $this->belongsToMany(Ticket::class, 'ticket_users', 'UserId', 'TicketId')->withPivot('JoinedAt', 'LeftAt', 'IsAdmin');
     }
 
     public function premium()

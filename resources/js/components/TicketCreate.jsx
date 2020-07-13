@@ -4,6 +4,7 @@ import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 import {Link, withRouter} from "react-router-dom";
+import {toast} from "react-toastify";
 
 class TicketCreate extends Component {
     constructor() {
@@ -13,6 +14,7 @@ class TicketCreate extends Component {
             title: '',
             category: '',
             message: '',
+            submitting: false,
             fields: {},
         };
     }
@@ -24,18 +26,36 @@ class TicketCreate extends Component {
     }
 
     async send() {
-        try {
-            const response = await axios.post('/api/tickets', {
-                title: this.state.title,
-                category: this.state.category,
-                message: this.state.message,
-                fields: this.state.fields,
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.post('/api/tickets', {
+            title: this.state.title,
+            category: this.state.category,
+            message: this.state.message,
+            fields: this.state.fields,
+            submitting: false,
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+            this.props.history.push('/tickets')
+        }).catch((error) => {
+            this.setState({
+                submitting: false
             });
 
-            this.props.history.push('/tickets')
-        } catch(error) {
-            console.log(error);
-        }
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
     }
 
     async loadCategories() {
@@ -139,7 +159,7 @@ class TicketCreate extends Component {
                                         </InputGroup>
                                     </Form.Group>
 
-                                    <Button onClick={this.send.bind(this)} className="float-right">Erstellen</Button>
+                                    <Button disabled={this.state.submitting} onClick={this.send.bind(this)} className="float-right">Erstellen</Button>
                                 </Form>
                             </div>
                         </div>

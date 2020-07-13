@@ -43,6 +43,8 @@ class TicketController extends Controller
             $tickets = Ticket::with('user', 'assignee', 'category', 'resolver');
             $tickets->where('AssignedRank', '<=', auth()->user()->Rank);
             $tickets->orWhere('AssignedRank', '=', null);
+        } else {
+            $tickets->where('IsAdmin', 0);
         }
 
         switch($state)
@@ -137,7 +139,7 @@ class TicketController extends Controller
         $ticket->State = Ticket::TICKET_STATE_OPEN;
         $ticket->save();
 
-        $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon()]);
+        $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
 
         $fields = $request->get('fields');
         $hasFilledFields = 0;
@@ -175,6 +177,7 @@ class TicketController extends Controller
         } else {
             if($hasFilledFields === 0)
             {
+                // return response()->json(['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')])->setStatusCode(400);
                 return 'BRUHH'; // TODO: check the things before?
             }
         }
@@ -215,7 +218,7 @@ class TicketController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Ticket $ticket
-     * @return array
+     * @return array|\Illuminate\Http\JsonResponse|object
      */
     public function update(Request $request, Ticket $ticket)
     {
@@ -234,7 +237,7 @@ class TicketController extends Controller
                     return;
                 }
                 if (!$ticket->users->contains($userId)) {
-                    $ticket->users()->attach($userId, ['JoinedAt' => new Carbon()]);
+                    $ticket->users()->attach($userId, ['JoinedAt' => new Carbon(), 'IsAdmin' => auth()->user()->Rank > 0 ? 1 : 0]);
                     $ticket->save();
 
                     $answer = new TicketAnswer();
@@ -264,7 +267,7 @@ class TicketController extends Controller
                 break;
             case 'close':
                 if (auth()->user()->Rank < 1 && $ticket->UserId !== auth()->user()->Id) {
-                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
                 $ticket->State = Ticket::TICKET_STATE_CLOSED;
@@ -290,20 +293,48 @@ class TicketController extends Controller
                 break;
             case 'addUser':
                 if ($ticket->users->contains($request->get('newUserId'))) {
-                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist bereits im Ticket!')];
+                    $data = $ticket->users()->find($request->get('newUserId'));
+
+                    if($data->pivot->LeftAt !== null) {
+                        $ticket->users()->updateExistingPivot($request->get('newUserId'), ['LeftAt' => null]);
+                        $ticket->save();
+
+                        $addUser = User::find($request->get('newUserId'));
+
+                        $answer = new TicketAnswer();
+                        $answer->TicketId = $ticket->Id;
+                        $answer->UserId = $userId;
+                        $answer->MessageType = 1;
+                        if(auth()->user()->Id === $addUser->Id) {
+                            $answer->Message = sprintf("%s ist dem Ticket wieder beigetreten!", auth()->user()->Name);
+                        } else {
+                            $answer->Message = sprintf("%s hat %s wieder zum Ticket hinzugefügt!", $name, $addUser->Name);
+                        }
+                        $answer->save();
+                        event(new \App\Events\TicketUpdated($ticket));
+
+                        if($addUser->Rank === 0)
+                        {
+                            $addUser->sendMessage('[TICKET] ' . $name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
+                        }
+                    }
+                    else
+                    {
+                        return response()->json(['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist bereits im Ticket!')])->setStatusCode(400);
+                    }
                 }
 
                 if (auth()->user()->Rank < 3) {
-                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
                 $addUser = User::find($request->get('newUserId'));
 
                 if (!$addUser) {
-                    return ['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')])->setStatusCode(400);
                 }
 
-                $ticket->users()->attach($addUser->Id, ['JoinedAt' => new Carbon()]);
+                $ticket->users()->attach($addUser->Id, ['JoinedAt' => new Carbon(), 'IsAdmin' => $addUser->Rank > 0 ? 1 : 0]);
                 $ticket->save();
 
                 $answer = new TicketAnswer();
@@ -325,11 +356,11 @@ class TicketController extends Controller
                 break;
             case 'removeUser':
                 if (!$ticket->users->contains($request->get('removeUserId'))) {
-                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')])->setStatusCode(400);
                 }
 
                 if (auth()->user()->Rank < 3) {
-                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
                 $ticket->users()->updateExistingPivot($request->get('removeUserId'), ['LeftAt' => new Carbon()]);
@@ -345,17 +376,17 @@ class TicketController extends Controller
                 break;
             case 'assignToUser':
                 if (auth()->user()->Rank < 3) {
-                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
                 $assignUser = User::find($request->get('assignUserId'));
 
                 if (!$assignUser) {
-                    return ['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')])->setStatusCode(400);
                 }
 
                 if (!$ticket->users->contains($assignUser->Id)) {
-                    $ticket->users()->attach($assignUser->Id, ['JoinedAt' => new Carbon()]);
+                    $ticket->users()->attach($assignUser->Id, ['JoinedAt' => new Carbon(), 'IsAdmin' => $assignUser->Rank > 0 ? 1 : 0]);
                     $ticket->save();
 
                     $answer = new TicketAnswer();
@@ -376,11 +407,11 @@ class TicketController extends Controller
                 break;
             case 'assignToRank':
                 if (!$ticket->users->contains($request->get('removeUserId'))) {
-                    return ['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')])->setStatusCode(400);
                 }
 
                 if (auth()->user()->Rank < 3) {
-                    return ['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')];
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
                 $ticket->users()->updateExistingPivot($request->get('removeUserId'), ['LeftAt' => new Carbon()]);
