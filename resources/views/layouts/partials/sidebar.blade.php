@@ -131,6 +131,9 @@
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.server.show') }}"><span class="c-sidebar-nav-icon fas fa-server"></span>Server</a>
                         </li>
+                        <li class="c-sidebar-nav-item">
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.polls.index') }}"><span class="c-sidebar-nav-icon fas fa-poll"></span>{{ __('Abstimmung') }}</a>
+                        </li>
                         @if(auth()->user()->Rank >= 7)
                             <li class="c-sidebar-nav-item">
                                 <a class="c-sidebar-nav-link" href="{{ route('admin.maps.index') }}"><span class="c-sidebar-nav-icon fas fa-map"></span>Maps</a>

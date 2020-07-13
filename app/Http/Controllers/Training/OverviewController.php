@@ -38,7 +38,7 @@ class OverviewController extends Controller
 
         $role = request()->get('role') == 1 ? 1 : 0;
 
-        $dateFrom = request()->get('fromDate') ? Carbon::parse(request()->get('fromDate')) : Carbon::now()->startOfWeek()->subDay();
+        $dateFrom = request()->get('fromDate') ? Carbon::parse(request()->get('fromDate')) : (Carbon::now()->endOfWeek()->subDay() < Carbon::now() ? Carbon::now()->endOfWeek()->startOfDay() : Carbon::now()->startOfWeek()->subDay());
         $dateTo = request()->get('toDate') ? Carbon::parse(request()->get('toDate')) : $dateFrom->copy()->addDays(6)->endOfDay();
 
         if($currentTarget === 'faction') {
