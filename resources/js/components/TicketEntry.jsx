@@ -258,13 +258,14 @@ export default class TicketEntry extends Component {
         let closeButton = <></>;
         let answer = <></>;
         let assignButtons = <></>;
+        let addUserButton = <></>;
 
 
         if(this.state.data.State === 'Open') {
             if(Exo.Rank > 0 || this.state.data.UserId == Exo.UserId) {
                 closeButton = <Row><Col><Button disabled={this.state.submitting} onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button></Col></Row>;
             }
-            if(Exo.Rank >= 3) {
+            if(Exo.Rank >= 1) {
                 assignButtons = <Row className="mb-1">
                     <Col>
                         <div className="btn-group" role="group" >
@@ -273,6 +274,8 @@ export default class TicketEntry extends Component {
                         </div>
                     </Col>
                 </Row>;
+
+                addUserButton = <Button disabled={this.state.submitting} onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button>;
             }
 
             answer = (
@@ -397,7 +400,7 @@ export default class TicketEntry extends Component {
                                                             </div>
                                                         );
                                                     })}
-                                                    {Exo.Rank >= 3 ? <Button disabled={this.state.submitting} onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button> : ''}
+                                                    {addUserButton}
                                                 </td>
                                             </tr>
                                             <tr>

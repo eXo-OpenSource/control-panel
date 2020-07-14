@@ -324,7 +324,7 @@ class TicketController extends Controller
                     }
                 }
 
-                if (auth()->user()->Rank < 3) {
+                if (auth()->user()->Rank < 1) {
                     return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
@@ -375,7 +375,7 @@ class TicketController extends Controller
                 event(new \App\Events\TicketUpdated($ticket));
                 break;
             case 'assignToUser':
-                if (auth()->user()->Rank < 3) {
+                if (auth()->user()->Rank < 1) {
                     return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 
