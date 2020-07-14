@@ -391,7 +391,7 @@ class TicketController extends Controller
 
                     $answer = new TicketAnswer();
                     $answer->TicketId = $ticket->Id;
-                    $answer->UserId = $assignUser->Id;
+                    $answer->UserId = auth()->user()->Id;
                     $answer->MessageType = 1;
                     if(auth()->user()->Id === $assignUser->Id) {
                         $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
@@ -400,6 +400,17 @@ class TicketController extends Controller
                     }
                     $answer->save();
                 }
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = auth()->user()->Id;
+                $answer->MessageType = 1;
+                if(auth()->user()->Id === $assignUser->Id) {
+                    $answer->Message = sprintf("%s hat sich das Ticket selbst zugewiesen!", auth()->user()->Name);
+                } else {
+                    $answer->Message = sprintf("%s hat das Ticket %s zugewiesen!", $name, $assignUser->Name);
+                };
+                $answer->save();
 
                 $ticket->AssigneeId = $assignUser->Id;
                 $ticket->save();
