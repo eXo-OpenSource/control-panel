@@ -10,7 +10,7 @@ return [
             4 => 155, // Rescue
             5 => 170, // LCN
             6 => false, // Yakuza
-            7 => false, // Grove
+            7 => 168, // Grove
             8 => 149, // Ballas
             9 => false, // Outlaws
             10 => 148, // Vatos
