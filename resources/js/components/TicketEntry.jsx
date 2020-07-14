@@ -70,7 +70,8 @@ export default class TicketEntry extends Component {
             message: this.state.message,
         }).then(() => {
             this.setState({
-                submitting: false
+                submitting: false,
+                message: ''
             });
         }).catch((error) => {
             this.setState({
