@@ -127,6 +127,11 @@ export default class TicketList extends Component {
     }
 
     async search(event) {
+        if(event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
         if(this.state.loading)
             return;
 
@@ -136,10 +141,6 @@ export default class TicketList extends Component {
             error: null
         });
 
-        if(event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
         try {
             const response = await axios.get('/api/tickets?state=' + this.state.state + '&search=' + this.state.search);
             this.setState({
@@ -211,11 +212,11 @@ export default class TicketList extends Component {
                                 <tr>
                                     <th>Benutzer</th>
                                     <th>Kategorie</th>
-                                    <th>Titel</th>
+                                    <th className="d-none d-md-table-cell">Titel</th>
                                     <th>Zugw. Teammitglied</th>
                                     <th>Status</th>
-                                    <th>Datum</th>
-                                    <th>Antworten</th>
+                                    <th className="d-none d-md-table-cell">Datum</th>
+                                    <th className="d-none d-md-table-cell">Antworten</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -250,18 +251,14 @@ export default class TicketList extends Component {
                     </div>
                 </div>
                 <div className="row mb-4">
-                    <div className="col-md-12">
+                    <div className="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                         <Form onSubmit={this.search.bind(this)}>
-                            <Row>
-                                <Col xs={6} md={3}>
-                                    <InputGroup>
-                                        <Form.Control placeholder="Suchebegriff (Benutzer/Titel/Kategorie)" name="search" value={this.state.search} onChange={this.onChange.bind(this)} />
-                                        <InputGroup.Append>
-                                            <Button variant="secondary" onClick={this.search.bind(this)}>Suchen</Button>
-                                        </InputGroup.Append>
-                                    </InputGroup>
-                                </Col>
-                            </Row>
+                            <InputGroup>
+                                <Form.Control placeholder="Suchebegriff (Benutzer/Titel/Kategorie)" name="search" value={this.state.search} onChange={this.onChange.bind(this)} />
+                                <InputGroup.Append>
+                                    <Button variant="secondary" onClick={this.search.bind(this)}>Suchen</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
                         </Form>
                     </div>
                 </div>
