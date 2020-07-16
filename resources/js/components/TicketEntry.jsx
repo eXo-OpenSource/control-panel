@@ -61,6 +61,9 @@ export default class TicketEntry extends Component {
         if(this.state.submitting)
             return false;
 
+        if(this.state.message === '')
+            return false;
+
         this.setState({
             submitting: true
         });
@@ -298,6 +301,7 @@ export default class TicketEntry extends Component {
                 <ToastContainer />
                 <div className="row mb-4">
                     <div className="col-md-12">
+                        <span className="h2">{this.state.data.Title}</span>
                         <Link to="/tickets" className="btn btn-primary float-right">Zurück</Link>
                     </div>
                 </div>
@@ -321,6 +325,9 @@ export default class TicketEntry extends Component {
                                                                         {answer.Message.split('\n').map((value, index) => {
                                                                             return <p key={index}>{value}</p>;
                                                                         })}
+                                                                        <span>
+                                                                            <span className="message-system-time">{answer.CreatedAt}</span>
+                                                                        </span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -330,21 +337,25 @@ export default class TicketEntry extends Component {
 
                                                 return (
                                                     <div key={answer.Id} className="chat-message">
-                                                        <div className="message">
+                                                        <div className={answer.IsAdmin ? 'message message-admin' : 'message'}>
                                                             <div className={answer.UserId === Exo.UserId ? 'message-right' : 'message-left'}>
                                                                 <div className="message-content">
-                                                                    <p className="message-user">
-                                                                        {this.props.minimal == true &&
+                                                                    <span className="message-header">
+                                                                        <span className="message-user">
+                                                                            {this.props.minimal == true &&
                                                                             answer.User
                                                                             ||
                                                                             <a href={'/users/' + answer.UserId}>{answer.User}</a>
-                                                                        }
-                                                                    </p>
+                                                                            }
+                                                                        </span>
+                                                                        <span className="message-time">
+                                                                            {answer.CreatedAt}
+                                                                        </span>
+                                                                    </span>
                                                                     {answer.Message !== null ? answer.Message.split('\n').map((value, index) => {
                                                                         return <p key={index}>{value}</p>;
                                                                     }) : <p className="font-italic">Keine Nachricht</p>}
                                                                 </div>
-                                                                <p className="time">{answer.CreatedAt}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -393,7 +404,7 @@ export default class TicketEntry extends Component {
                                                                         </OverlayTrigger>
                                                                     </Col>
                                                                     <Col xs='2'>
-                                                                        {(user.UserId != this.state.data.UserId && user.LeftAt == null) ?
+                                                                        {(user.UserId != this.state.data.UserId && user.LeftAt == null && this.state.data.State === 'Open') ?
                                                                             <Button disabled={this.state.submitting} onClick={this.toggleRemoveUserDialog.bind(this, user.UserId)} variant="link" style={{color: "#d16767"}} size="sm"><i className="fas fa-times-circle"></i></Button>
                                                                         :null}
                                                                     </Col>

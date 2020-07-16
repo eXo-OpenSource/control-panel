@@ -4,7 +4,7 @@ import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 import {Link, withRouter} from "react-router-dom";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 
 class TicketCreate extends Component {
     constructor() {
@@ -118,6 +118,7 @@ class TicketCreate extends Component {
 
         return (
             <>
+                <ToastContainer />
                 <div className="row mb-4">
                     <div className="col-md-12">
                         <Link to="/tickets" className="btn btn-primary float-right">Zurück</Link>

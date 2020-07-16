@@ -12,11 +12,22 @@
             flex-direction: column;
             justify-content: center;
 
+            &.message-admin {
+                .message-content {
+                    box-shadow: 0 0 6px 3px #3c9ade;
+                }
+            }
+
             .message-content {
                 background-color: #20202a;
                 border-color: #181924;
                 border-radius: 5px;
                 padding: 10px;
+
+                .message-system-time {
+                    float: right;
+                    color: #999;
+                }
 
                 p {
                     margin: 0;
@@ -39,9 +50,20 @@
                     color: #e1e1e1;
                 }
 
-                .message-user {
+                .message-header {
+                    display: block;
                     margin-top: 0;
-                    margin-bottom: 1rem;
+                    margin-bottom: 0.2rem;
+
+                    .message-user {
+                        font-weight: bold;
+                    }
+
+                    .message-time {
+                        float: right;
+                        color: #999;
+                        margin-left: 1rem;
+                    }
                 }
             }
 
@@ -51,11 +73,6 @@
                 flex-direction: column;
                 justify-content: center;
                 margin-right: auto;
-
-                .time {
-                    margin-right: auto;
-                    color: #999;
-                }
             }
 
             .message-right {
@@ -64,11 +81,6 @@
                 flex-direction: column;
                 justify-content: center;
                 margin-left: auto;
-
-                .time {
-                    margin-left: auto;
-                    color: #aaa;
-                }
             }
 
             .message-center {

@@ -46,7 +46,7 @@ class Ticket extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'ticket_users', 'TicketId', 'UserId')->withPivot('JoinedAt', 'LeftAt');
+        return $this->belongsToMany(User::class, 'ticket_users', 'TicketId', 'UserId')->withPivot('JoinedAt', 'LeftAt', 'IsAdmin');
     }
 
     public function getApiResponse()
@@ -76,12 +76,16 @@ class Ticket extends Model
             $entry['Resolver'] = $this->assignee->Name;
         }
 
+        $isAdmin = [];
+
         if($this->users) {
             $entry['users'] = [];
             foreach($this->users as $user) {
+                $isAdmin[$user->Id] = $user->pivot->IsAdmin === 1;
                 array_push($entry['users'], [
                     'UserId' => $user->Id,
                     'Name' => $user->Name,
+                    'IsAdmin' => $user->pivot->IsAdmin === 1,
                     'JoinedAt' => (new Carbon($user->pivot->JoinedAt))->format('d.m.Y H:i:s'),
                     'LeftAt' => $user->pivot->LeftAt ? (new Carbon($user->pivot->LeftAt))->format('d.m.Y H:i:s') : null,
                 ]);
@@ -96,12 +100,14 @@ class Ticket extends Model
             if($answer->MessageType === 0) {
                 $entry['AnswerCount']++;
             }
+
             array_push($entry['answers'], [
                 'Id' => $answer->Id,
                 'UserId' => $answer->UserId,
-                'User' => $answer->user->Name,
+                'User' => $answer->user ? $answer->user->Name : __('Unbekannt'),
                 'MessageType' => $answer->MessageType,
                 'Message' => $answer->Message,
+                'IsAdmin' => isset($isAdmin[$answer->UserId]) ? $isAdmin[$answer->UserId] : false,
                 'CreatedAt' => $answer->CreatedAt->format('d.m.Y H:i:s'),
             ]);
         }

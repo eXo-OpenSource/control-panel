@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\TicketAnswer;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\TicketCategory;
 use App\Http\Controllers\Controller;
@@ -41,8 +42,9 @@ class TicketController extends Controller
 
         if(auth()->user()->Rank >= 1) {
             $tickets = Ticket::with('user', 'assignee', 'category', 'resolver');
-            $tickets->where('AssignedRank', '<=', auth()->user()->Rank);
-            $tickets->orWhere('AssignedRank', '=', null);
+            $tickets->where(function (Builder $query) {
+                $query->where('AssignedRank', '<=', auth()->user()->Rank)->orWhere('AssignedRank', '=', null);
+            });
         } else {
             $tickets->where('IsAdmin', 0);
         }
@@ -76,7 +78,7 @@ class TicketController extends Controller
             $entry = [
                 'Id' => $ticket->Id,
                 'UserId' => $ticket->UserId,
-                'User' => $ticket->user->Name,
+                'User' => $ticket->user ? $ticket->user->Name : __('Unbekannt'),
                 'AssigneeId' => $ticket->AssigneeId,
                 'AssignedRank' => $ticket->AssignedRank,
                 'CategoryId' => $ticket->CategoryId,
@@ -131,6 +133,41 @@ class TicketController extends Controller
     {
         $category = TicketCategory::with('fields')->find($request->get('category'));
 
+        if(!$category) {
+            return response()->json(['Status' => 'Failed', 'Message' => __('Bitte wähle eine Kategorie aus!')])->setStatusCode(400);
+        }
+
+        if(auth()->user()->isBanned() !== false) {
+            if($category->IsAllowedForBannedUsers !== 1) {
+                return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du kein Ticket von dieser Kategorie erstellen!')])->setStatusCode(400);
+            }
+        }
+
+        $fields = $request->get('fields');
+
+        if(empty($request->get('title')) || !is_string($request->get('title'))
+                || $request->get('title') === '' || str_replace(' ', '', $request->get('title')) === '') {
+            return response()->json(['Status' => 'Failed', 'Message' => __('Bitte gib eine Titel ein!')])->setStatusCode(400);
+        }
+
+        $text = [];
+        if(!empty($fields)) {
+            foreach($fields as $key => $value) {
+                foreach($category->fields as $field) {
+                    if('field' . $field->Id === $key) {
+                        array_push($text, $field->Name . ': ' . $value);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        if(count($text) === 0 && (empty($request->get('message')) || !is_string($request->get('message'))
+                || $request->get('message') === '' || str_replace(' ', '', $request->get('message')) === '')) {
+            return response()->json(['Status' => 'Failed', 'Message' => __('Bitte gib eine Nachricht ein!')])->setStatusCode(400);
+        }
+
         $ticket = new Ticket();
         $ticket->UserId = auth()->user()->Id;
         $ticket->CategoryId = $category->Id;
@@ -141,30 +178,13 @@ class TicketController extends Controller
 
         $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
 
-        $fields = $request->get('fields');
-        $hasFilledFields = 0;
-
-        if(!empty($fields)) {
-            $text = [];
-
-            foreach($fields as $key => $value) {
-                foreach($category->fields as $field) {
-                    if('field' . $field->Id === $key) {
-                        array_push($text, $field->Name . ': ' . $value);
-                        break;
-                    }
-                }
-            }
-
-            if(!empty($text)) {
-                $answer = new TicketAnswer();
-                $answer->TicketId = $ticket->Id;
-                $answer->UserId = auth()->user()->Id;
-                $answer->MessageType = 1;
-                $answer->Message = implode(chr(0x0A), $text);
-                $answer->save();
-                $hasFilledFields++;
-            }
+        if(count($text) > 0) {
+            $answer = new TicketAnswer();
+            $answer->TicketId = $ticket->Id;
+            $answer->UserId = auth()->user()->Id;
+            $answer->MessageType = 1;
+            $answer->Message = implode(chr(0x0A), $text);
+            $answer->save();
         }
 
         if(!empty($request->get('message'))) {
@@ -174,12 +194,6 @@ class TicketController extends Controller
             $answer->MessageType = 0;
             $answer->Message = $request->get('message');
             $answer->save();
-        } else {
-            if($hasFilledFields === 0)
-            {
-                // return response()->json(['Status' => 'Failed', 'Message' => __('Dieser Benutzer ist befindet sich nicht im Ticket!')])->setStatusCode(400);
-                return 'BRUHH'; // TODO: check the things before?
-            }
         }
 
         event(new \App\Events\TicketCreated($ticket));
@@ -230,12 +244,18 @@ class TicketController extends Controller
         $userId = auth()->user()->Id;
         $name = auth()->user()->Name;
 
+        if($ticket->State === Ticket::TICKET_STATE_CLOSED) {
+            return response()->json(['Status' => 'Failed', 'Message' => __('Das Ticket ist geschlossen!')])->setStatusCode(400);
+        }
+
         switch($type)
         {
             case 'addMessage':
-                if($ticket->State === Ticket::TICKET_STATE_CLOSED) {
-                    return;
+                if (empty($request->get('message')) || !is_string($request->get('message'))
+                    || $request->get('message') === '' || str_replace(' ', '', $request->get('message')) === '') {
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Bitte gib eine Nachricht ein!')])->setStatusCode(400);
                 }
+
                 if (!$ticket->users->contains($userId)) {
                     $ticket->users()->attach($userId, ['JoinedAt' => new Carbon(), 'IsAdmin' => auth()->user()->Rank > 0 ? 1 : 0]);
                     $ticket->save();
