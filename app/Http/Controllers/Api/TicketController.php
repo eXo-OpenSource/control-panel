@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\TicketAnswer;
+use Exo\TeamSpeak\Responses\TeamSpeakResponse;
+use Exo\TeamSpeak\Services\TeamSpeakService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\TicketCategory;
@@ -15,11 +17,14 @@ use App\Http\Controllers\Controller;
 
 class TicketController extends Controller
 {
-    private $forumService;
+    protected $forumService;
 
-    public function __construct(ForumService $forumService)
+    protected $teamSpeak;
+
+    public function __construct(ForumService $forumService, TeamSpeakService $teamSpeak)
     {
         $this->forumService = $forumService;
+        $this->teamSpeak = $teamSpeak;
     }
 
 
@@ -151,22 +156,67 @@ class TicketController extends Controller
         }
 
         $text = [];
-        if(!empty($fields)) {
+
+        foreach($category->fields as $field) {
+            $found = false;
             foreach($fields as $key => $value) {
-                foreach($category->fields as $field) {
-                    if('field' . $field->Id === $key) {
-                        array_push($text, $field->Name . ': ' . $value);
-                        break;
+                if('field' . $field->Id === $key) {
+                    if($field->Required === 1 && $value === '') {
+                        return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
                     }
+                    if($field->Type === 'checkbox') {
+                        $data = json_decode($field->Data);
+                        if ($value === 'on') {
+                            if ($data && isset($data[0])) {
+                                array_push($text, $field->Name . ': ' . __($data[0]));
+                            } else {
+                                array_push($text, $field->Name . ': ' . __('Ja'));
+                            }
+                        } else {
+                            if ($data && isset($data[1])) {
+                                array_push($text, $field->Name . ': ' . __($data[1]));
+                            } else {
+                                array_push($text, $field->Name . ': ' . __('Nein'));
+                            }
+                        }
+                    } elseif($field->Type === 'uuid') {
+                        $client = $this->teamSpeak->getDatabaseIdFromUniqueId($value);
+                        if($client->status !== TeamSpeakResponse::RESPONSE_SUCCESS) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Diese eindeutige ID ist dem TeamSpeak Server nicht bekannt. Du musst zuerst einmalig auf dem TeamSpeak verbinden.')])->setStatusCode(400);
+                        }
+                        array_push($text, $field->Name . ': ' . $value);
+                    } else {
+                        if(strlen($value) > $field->MaxLength) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" ist zu lang! Maximal sind :maxLength Zeichen zulässig!', ['name' => $field->Name, 'maxLength' => $field->MaxLength])])->setStatusCode(400);
+                        }
+                        array_push($text, $field->Name . ': ' . $value);
+                    }
+                    $found = true;
+                    break;
                 }
             }
 
+            if(!$found) {
+                if($field->Required === 1) {
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
+                } else {
+                    if($field->Type === 'checkbox') {
+                        $data = json_decode($field->Data);
+                        if($data && isset($data[1])) {
+                            array_push($text, $field->Name . ': ' . __($data[1]));
+                        } else {
+                            array_push($text, $field->Name . ': ' . __('Nein'));
+                        }
+                    }
+                }
+            }
         }
 
         if(count($text) === 0 && (empty($request->get('message')) || !is_string($request->get('message'))
                 || $request->get('message') === '' || str_replace(' ', '', $request->get('message')) === '')) {
             return response()->json(['Status' => 'Failed', 'Message' => __('Bitte gib eine Nachricht ein!')])->setStatusCode(400);
         }
+
 
         $ticket = new Ticket();
         $ticket->UserId = auth()->user()->Id;
@@ -244,7 +294,7 @@ class TicketController extends Controller
         $userId = auth()->user()->Id;
         $name = auth()->user()->Name;
 
-        if($ticket->State === Ticket::TICKET_STATE_CLOSED) {
+        if($ticket->State === Ticket::TICKET_STATE_CLOSED && $type !== 'delete') {
             return response()->json(['Status' => 'Failed', 'Message' => __('Das Ticket ist geschlossen!')])->setStatusCode(400);
         }
 
@@ -456,6 +506,17 @@ class TicketController extends Controller
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
                 break;
+            case 'delete':
+                if (auth()->user()->Rank < 7) {
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
+                }
+
+                $ticket->delete();
+                return '';
+                break;
+
+            default:
+                return response()->json(['Status' => 'Failed', 'Message' => __('Unbekannte Funktion!')])->setStatusCode(400);
         }
 
         return $ticket->getApiResponse();

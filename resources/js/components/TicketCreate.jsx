@@ -103,12 +103,33 @@ class TicketCreate extends Component {
 
                 if(category && category.fields) {
                     categoryFields = category.fields.map((field, i) => {
+                        if(field.Type === 'textarea') {
+                            return (
+                                <Form.Group key={field.Id}>
+                                    <Form.Label>{field.Name}</Form.Label>
+                                    <Form.Control name={'field' + field.Id} as="textarea" rows="3" placeholder={field.Name} onChange={this.onChangeField.bind(this)}  />
+                                    {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
+                                    </Form.Text> : ''}
+                                </Form.Group>
+                            );
+                        }
+
+                        if(field.Type === 'checkbox') {
+                            return (
+                                <Form.Group key={field.Id}>
+                                    <Form.Check type="checkbox" name={'field' + field.Id} label={field.Name} onChange={this.onChangeField.bind(this)} />
+                                    {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
+                                    </Form.Text> : ''}
+                                </Form.Group>
+                            );
+                        }
+
                         return (
                             <Form.Group key={field.Id}>
                                 <Form.Label>{field.Name}</Form.Label>
-                                <InputGroup>
-                                    <Form.Control name={'field' + field.Id} type={field.Type} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
-                                </InputGroup>
+                                <Form.Control name={'field' + field.Id} type={field.Type === 'uuid' ? 'text' : field.Type} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
+                                {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
+                                </Form.Text> : ''}
                             </Form.Group>
                         );
                     })
@@ -133,9 +154,9 @@ class TicketCreate extends Component {
                             <div className="card-body">
                                 <Form>
                                     <Form.Group>
-                                        <Form.Label>Betreff</Form.Label>
+                                        <Form.Label>Titel</Form.Label>
                                         <InputGroup>
-                                            <Form.Control name="title" type="text" placeholder="Betreff" onChange={this.onChange.bind(this)} />
+                                            <Form.Control name="title" type="text" placeholder="Titel" onChange={this.onChange.bind(this)} />
                                         </InputGroup>
                                     </Form.Group>
 

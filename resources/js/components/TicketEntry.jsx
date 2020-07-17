@@ -23,6 +23,8 @@ export default class TicketEntry extends Component {
             showAddUserDialog: false,
             showAssignUserDialog: false,
             showRemoveUserDialog: false,
+            showDeleteTicketDialog: false,
+            showCloseTicketDialog: false,
             submitting: false,
         };
 
@@ -51,6 +53,26 @@ export default class TicketEntry extends Component {
 
     async toggleRemoveUserDialog(userId) {
         this.setState({showRemoveUserDialog: !this.state.showRemoveUserDialog, removeUserId: userId});
+    }
+
+    async toggleDeleteTicketDialog() {
+        this.setState({showDeleteTicketDialog: !this.state.showDeleteTicketDialog});
+    }
+
+    async toggleCloseTicketDialog() {
+        this.setState({showCloseTicketDialog: !this.state.showCloseTicketDialog});
+    }
+
+    async hideRemoveUserDialog() {
+        this.setState({showRemoveUserDialog: false});
+    }
+
+    async hideDeleteTicketDialog() {
+        this.setState({showDeleteTicketDialog: false});
+    }
+
+    async hideCloseTicketDialog() {
+        this.setState({showCloseTicketDialog: false});
     }
 
     async onChange(e) {
@@ -104,6 +126,35 @@ export default class TicketEntry extends Component {
             this.setState({
                 submitting: false
             });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
+            });
+
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
+    }
+
+    async deleteTicket() {
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'delete',
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+            this.props.history.push('/tickets')
         }).catch((error) => {
             this.setState({
                 submitting: false
@@ -264,10 +315,14 @@ export default class TicketEntry extends Component {
         let assignButtons = <></>;
         let addUserButton = <></>;
 
-
         if(this.state.data.State === 'Open') {
             if(Exo.Rank > 0 || this.state.data.UserId == Exo.UserId) {
-                closeButton = <Row><Col><Button disabled={this.state.submitting} onClick={this.close.bind(this)} variant="danger">Ticket schließen</Button></Col></Row>;
+                closeButton = <Row>
+                                <Col>
+                                    <Button disabled={this.state.submitting} onClick={this.toggleCloseTicketDialog.bind(this)} variant="danger">Ticket schließen</Button>
+                                    {Exo.Rank >= 7 ? <Button className="ml-1" disabled={this.state.submitting} onClick={this.toggleDeleteTicketDialog.bind(this)} variant="danger">Ticket löschen</Button> : ''}
+                                </Col>
+                              </Row>;
             }
             if(Exo.Rank >= 1) {
                 assignButtons = <Row className="mb-1">
@@ -294,6 +349,10 @@ export default class TicketEntry extends Component {
                     <Button disabled={this.state.submitting} onClick={this.send.bind(this)} className="float-right">Senden</Button>
                 </Form>
             );
+        } else {
+            if(Exo.Rank >= 7) {
+                closeButton = <Button disabled={this.state.submitting} onClick={this.toggleDeleteTicketDialog.bind(this)} variant="danger">Ticket löschen</Button>;
+            }
         }
 
         return (
@@ -386,7 +445,7 @@ export default class TicketEntry extends Component {
                                                                         user.Name
                                                                         ||
                                                                         <a href={'/users/' + user.UserId}>{user.Name}</a>
-                                                                        }
+                                                                        } {user.IsAdmin ? <i className="fas fa-user-shield"></i> : ''}
                                                                     </Col>
                                                                     <Col xs='2'>
                                                                         <OverlayTrigger
@@ -435,13 +494,34 @@ export default class TicketEntry extends Component {
                                         <SelectUserFromListDialog show={this.state.showAssignUserDialog} type={'admin'} id={1} multiple={false} buttonText="zuweisen" onClosed={this.hideAssignUserDialog.bind(this)} onSelectUser={this.assignUser.bind(this)} />
                                         <ConfirmDialog
                                             show={this.state.showRemoveUserDialog}
-                                            buttonText="entfernen"
+                                            onClosed={this.hideRemoveUserDialog.bind(this)}
+                                            buttonText="Entfernen"
                                             buttonVariant="danger"
                                             title="Benutzer entfernen"
                                             text="Möchtest du den Benutzer entfernen?"
                                             onConfirm={this.removeUser.bind(this)}
                                         />
 
+                                        <ConfirmDialog
+                                            show={this.state.showDeleteTicketDialog}
+                                            onClosed={this.hideDeleteTicketDialog.bind(this)}
+                                            buttonText="Löschen"
+                                            buttonVariant="danger"
+                                            title="Ticket löschen"
+                                            text="Möchtest du das Ticket wirklich löschen? ACHTUNG: Dies kann nicht mehr Rückgängig gemacht werden!"
+                                            onConfirm={this.deleteTicket.bind(this)}
+                                        />
+
+                                        <ConfirmDialog
+                                            show={this.state.showCloseTicketDialog}
+                                            onClosed={this.hideCloseTicketDialog.bind(this)}
+                                            buttonText="Bestätigen"
+                                            buttonCloseText="Abbrechen"
+                                            buttonVariant="danger"
+                                            title="Ticket schließen"
+                                            text="Möchtest du das Ticket wirklich schließen?"
+                                            onConfirm={this.close.bind(this)}
+                                        />
                                     </div>
                                 </div>
                             </div>

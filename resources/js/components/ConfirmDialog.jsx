@@ -12,6 +12,9 @@ export default class ConfirmDialog extends Component {
 
         this.handleClose = () => {
             this.setState({ show: false });
+            if (this.props.onClosed) {
+                this.props.onClosed();
+            }
         };
     }
 
@@ -40,10 +43,10 @@ export default class ConfirmDialog extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant={this.props.buttonVariant || 'primary'} onClick={this.confirm.bind(this)}>
-                            Bestätigen
+                            {this.props.buttonText}
                         </Button>
                         <Button variant="secondary" onClick={this.handleClose}>
-                            Schließen
+                            {this.props.buttonCloseText ? this.props.buttonCloseText : 'Schließen'}
                         </Button>
                     </Modal.Footer>
                 </Modal>
