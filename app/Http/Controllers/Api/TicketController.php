@@ -67,10 +67,13 @@ class TicketController extends Controller
         if($search && $search != '') {
             $categoryIds = TicketCategory::query()->where('Title', 'LIKE', '%' . $search . '%')->get()->pluck('Id');
             $userIds = User::query()->where('Name', 'LIKE', '%' . $search . '%')->get()->pluck('Id');
-            $tickets->where('Title', 'LIKE', '%' . $search . '%');
-            $tickets->orWhereIn('UserId', $userIds);
-            $tickets->orWhereIn('AssigneeId', $userIds);
-            $tickets->orWhereIn('CategoryId', $categoryIds);
+
+            $tickets->where(function (Builder $query) use ($search, $userIds, $categoryIds) {
+                $query->where('Title', 'LIKE', '%' . $search . '%');
+                $query->orWhereIn('UserId', $userIds);
+                $query->orWhereIn('AssigneeId', $userIds);
+                $query->orWhereIn('CategoryId', $categoryIds);
+            });
         }
 
         $tickets->orderBy('Id', 'DESC');
