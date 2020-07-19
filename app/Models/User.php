@@ -154,11 +154,16 @@ class User extends Authenticatable
     {
         $time = (new \DateTime())->getTimestamp();
 
+        $banned = false;
+
         foreach($this->bans as $ban) {
             if($ban->expires >= $time || $ban->expires === 0) {
-                return $ban->expires;
+                $banned = $ban->expires;
             }
         }
+
+        if($banned === 0)
+            return $banned;
 
         $activeWarns = 0;
         $warns = [];
@@ -173,9 +178,11 @@ class User extends Authenticatable
 
         if ($activeWarns >= 3) {
             rsort($warns);
-            return $warns[2];
+            if($banned === false || $warns[2] > $banned) {
+                $banned = $warns[2];
+            }
         }
-        return false;
+        return $banned;
     }
 
     public function isTeamSpeakBanned()
