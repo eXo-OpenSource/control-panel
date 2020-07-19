@@ -24,41 +24,22 @@ export default class TicketList extends Component {
 
         if(Exo.Rank > 0) {
             Echo.private(`tickets`)
-                .listen('TicketCreated', this.handleNewTicket.bind(this))
+                .listen('TicketCreated', this.updateTicket.bind(this))
                 .listen('TicketUpdated', this.updateTicket.bind(this));
         } else {
             Echo.private(`tickets.user.${Exo.UserId}`)
                 .listen('TicketUpdated', this.updateTicket.bind(this));
         }
     }
-
+/*
     async handleNewTicket(data) {
         console.log(data);
-        let newData = this.state.data;
-
-        let found = false;
-
-        newData.forEach((element => {
-            if(element.Id === data.ticket.Id) {
-                found = true;
-            }
-        }))
-
-
-        if(!found) {
-            this.state.data.push(data.ticket);
-            this.setState({
-                data: newData
-            });
-        }
-    }
-
-    async updateTicket(data) {
+        console.log(this.state.data);
         let newData = this.state.data;
 
         let index = -1;
 
-        newData.forEach((element, i) => {
+        newData.items.forEach((element, i) => {
             if(element.Id === data.ticket.Id) {
                 index = i;
             }
@@ -66,12 +47,38 @@ export default class TicketList extends Component {
 
 
         if(index !== -1) {
-            this.state.data[index] = data.ticket;
+            this.state.data.items[index] = data.ticket;
             this.setState({
                 data: newData
             });
         } else {
-            this.state.data.push(data.ticket);
+            newData.items.push(data.ticket);
+            this.setState({
+                data: newData
+            });
+        }
+    }
+    */
+
+    async updateTicket(data) {
+        let newData = this.state.data;
+
+        let index = -1;
+
+        newData.items.forEach((element, i) => {
+            if(element.Id === data.ticket.Id) {
+                index = i;
+            }
+        })
+
+
+        if(index !== -1) {
+            this.state.data.items[index] = data.ticket;
+            this.setState({
+                data: newData
+            });
+        } else {
+            newData.items.unshift(data.ticket);
             this.setState({
                 data: newData
             });
