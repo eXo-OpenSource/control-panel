@@ -217,11 +217,17 @@ export default class TicketList extends Component {
                             <table className="table table-sm">
                                 <thead>
                                 <tr>
-                                    <th>Benutzer</th>
-                                    <th>Kategorie</th>
+                                    <th className="d-sm-none">
+                                        Benutzer/<br />Kategorie
+                                    </th>
+                                    <th className="d-none d-sm-table-cell">Benutzer</th>
+                                    <th className="d-none d-sm-table-cell">Kategorie</th>
                                     <th className="d-none d-md-table-cell">Titel</th>
-                                    <th>Zugw. Teammitglied</th>
-                                    <th>Status</th>
+                                    <th className="d-sm-none">
+                                        Teammitglied/<br />Status
+                                    </th>
+                                    <th className="d-none d-sm-table-cell">Zugw. Teammitglied</th>
+                                    <th className="d-none d-sm-table-cell">Status</th>
                                     <th className="d-none d-md-table-cell">Datum</th>
                                     <th className="d-none d-md-table-cell">Antworten</th>
                                     <th></th>
