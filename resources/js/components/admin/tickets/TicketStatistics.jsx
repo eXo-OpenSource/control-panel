@@ -34,20 +34,32 @@ export default class TicketStatistics extends Component {
             response.data.map((element, i) => {
                 response.data[i]['chartData'] = {
                     'labels': [],
-                    'datasets': [{
-                        'label': 'Tickets pro Woche',
-                        'borderColor': 'rgba(206, 136, 82, 1)',
-                        'backgroundColor': 'rgba(206, 136, 82, 0.2)',
-                        'pointBorderColor': 'rgba(206, 136, 82, 1',
-                        'pointBackgroundColor': 'rgba(206, 136, 82, 1)',
-                        'pointHoverBackgroundColor': 'rgba(206, 136, 82, 1)',
-                        'data': []
-                    }]
+                    'datasets': [
+                        {
+                            'label': 'gelöste Tickets',
+                            'borderColor': 'rgba(206, 136, 82, 1)',
+                            'backgroundColor': 'rgba(206, 136, 82, 0.2)',
+                            'pointBorderColor': 'rgba(206, 136, 82, 1)',
+                            'pointBackgroundColor': 'rgba(206, 136, 82, 1)',
+                            'pointHoverBackgroundColor': 'rgba(206, 136, 82, 1)',
+                            'data': []
+                        },
+                        {
+                            'label': 'hinzugezogene Tickets',
+                            'borderColor': 'rgba(130, 216, 106, 1)',
+                            'backgroundColor': 'rgba(130, 216, 106, 0.2)',
+                            'pointBorderColor': 'rgba(130, 216, 106, 1)',
+                            'pointBackgroundColor': 'rgba(130, 216, 106, 1)',
+                            'pointHoverBackgroundColor': 'rgba(130, 216, 106, 1)',
+                            'data': []
+                        }
+                    ]
                };
 
                element.data.map((entry, i2) => {
-                   response.data[i]['chartData']['labels'].push(entry.Week);
-                   response.data[i]['chartData']['datasets'][0]['data'].push(entry.Count);
+                   response.data[i]['chartData']['labels'].push('Woche ' + entry.Week);
+                   response.data[i]['chartData']['datasets'][0]['data'].push(entry.ResolvedCount);
+                   response.data[i]['chartData']['datasets'][1]['data'].push(entry.ConsultedCount);
                });
             });
 
