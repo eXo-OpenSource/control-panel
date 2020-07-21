@@ -317,7 +317,7 @@ class TicketController extends Controller
                     $answer->TicketId = $ticket->Id;
                     $answer->UserId = $userId;
                     $answer->MessageType = 1;
-                    $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
+                    $answer->Message = sprintf("%s ist dem Ticket beigetreten.", auth()->user()->Name);
                     $answer->save();
                 }
                 $answer = new TicketAnswer();
@@ -379,9 +379,9 @@ class TicketController extends Controller
                         $answer->UserId = $userId;
                         $answer->MessageType = 1;
                         if(auth()->user()->Id === $addUser->Id) {
-                            $answer->Message = sprintf("%s ist dem Ticket wieder beigetreten!", auth()->user()->Name);
+                            $answer->Message = sprintf("%s ist dem Ticket wieder beigetreten.", auth()->user()->Name);
                         } else {
-                            $answer->Message = sprintf("%s hat %s wieder zum Ticket hinzugefügt!", $name, $addUser->Name);
+                            $answer->Message = sprintf("%s hat %s wieder zum Ticket hinzugefügt.", $name, $addUser->Name);
                         }
                         $answer->save();
                         event(new \App\Events\TicketUpdated($ticket));
@@ -415,9 +415,9 @@ class TicketController extends Controller
                 $answer->UserId = $userId;
                 $answer->MessageType = 1;
                 if(auth()->user()->Id === $addUser->Id) {
-                    $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
+                    $answer->Message = sprintf("%s ist dem Ticket beigetreten.", auth()->user()->Name);
                 } else {
-                    $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", $name, $addUser->Name);
+                    $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt.", $name, $addUser->Name);
                 }
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
@@ -453,6 +453,7 @@ class TicketController extends Controller
                 }
 
                 $assignUser = User::find($request->get('assignUserId'));
+                $joinMessage = false;
 
                 if (!$assignUser) {
                     return response()->json(['Status' => 'Failed', 'Message' => __('Benutzer existiert nicht!')])->setStatusCode(400);
@@ -462,16 +463,7 @@ class TicketController extends Controller
                     $ticket->users()->attach($assignUser->Id, ['JoinedAt' => new Carbon(), 'IsAdmin' => $assignUser->Rank > 0 ? 1 : 0]);
                     $ticket->save();
 
-                    $answer = new TicketAnswer();
-                    $answer->TicketId = $ticket->Id;
-                    $answer->UserId = auth()->user()->Id;
-                    $answer->MessageType = 1;
-                    if(auth()->user()->Id === $assignUser->Id) {
-                        $answer->Message = sprintf("%s ist dem Ticket beigetreten!", auth()->user()->Name);
-                    } else {
-                        $answer->Message = sprintf("%s hat %s zum Ticket hinzugefügt!", $name, $assignUser->Name);
-                    }
-                    $answer->save();
+                    $joinMessage = true;
                 }
 
                 $answer = new TicketAnswer();
@@ -479,10 +471,18 @@ class TicketController extends Controller
                 $answer->UserId = auth()->user()->Id;
                 $answer->MessageType = 1;
                 if(auth()->user()->Id === $assignUser->Id) {
-                    $answer->Message = sprintf("%s hat sich das Ticket selbst zugewiesen!", auth()->user()->Name);
+                    if($joinMessage) {
+                        $answer->Message = __(":name ist dem Ticket beigetreten und hat sich das Ticket selbst zugewiesen.", ['name' => auth()->user()->Name]);
+                    } else {
+                        $answer->Message = __(":name hat sich das Ticket selbst zugewiesen.", ['name' => auth()->user()->Name]);
+                    }
                 } else {
-                    $answer->Message = sprintf("%s hat das Ticket %s zugewiesen!", $name, $assignUser->Name);
-                };
+                    if($joinMessage) {
+                        $answer->Message = __(":name2 wurde von :name dem Ticket hinzugefügt und zugewiesen.", ['name' => auth()->user()->Name, 'name2' => $assignUser->Name]);
+                    } else {
+                        $answer->Message = __(":name hat das Ticket :name2 zugewiesen.", ['name' => auth()->user()->Name, 'name2' => $assignUser->Name]);
+                    }
+                }
                 $answer->save();
 
                 $ticket->AssigneeId = $assignUser->Id;
