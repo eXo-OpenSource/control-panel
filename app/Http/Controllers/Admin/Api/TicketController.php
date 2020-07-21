@@ -21,8 +21,8 @@ class TicketController extends Controller
         $weeks = 25;
 
         $members = User::query()->where('Rank', '>', 0)->get();
-        $stats = DB::select('SELECT WEEK(CreatedAt) AS Week, AssigneeId, COUNT(Id) AS Count FROM vrp_tickets WHERE AssigneeId IS NOT NULL AND State = \'Closed\' AND CreatedAt >= DATE_SUB(SUBDATE(NOW(), WEEKDAY(NOW())), INTERVAL ? WEEK) GROUP BY Week, AssigneeId;', [$weeks]);
-        $stats2 = DB::select('SELECT WEEK(t.CreatedAt) AS Week, tu.UserId, COUNT(tu.UserId) AS Count FROM vrp_ticket_users tu INNER JOIN vrp_tickets t ON t.Id = tu.TicketId WHERE t.AssigneeId IS NOT NULL AND t.AssigneeId <> tu.UserId AND t.State = \'Closed\' AND t.CreatedAt >= DATE_SUB(SUBDATE(NOW(), WEEKDAY(NOW())), INTERVAL ? WEEK) AND tu.IsAdmin = 1 AND tu.LeftAt IS NULL GROUP BY Week, UserId;', [$weeks]);
+        $stats = DB::select('SELECT WEEK(CreatedAt) + 1 AS Week, AssigneeId, COUNT(Id) AS Count FROM vrp_tickets WHERE AssigneeId IS NOT NULL AND State = \'Closed\' AND CreatedAt >= DATE_SUB(SUBDATE(NOW(), WEEKDAY(NOW())), INTERVAL ? WEEK) GROUP BY Week, AssigneeId;', [$weeks]);
+        $stats2 = DB::select('SELECT WEEK(t.CreatedAt) + 1 AS Week, tu.UserId, COUNT(tu.UserId) AS Count FROM vrp_ticket_users tu INNER JOIN vrp_tickets t ON t.Id = tu.TicketId WHERE t.AssigneeId IS NOT NULL AND t.AssigneeId <> tu.UserId AND t.State = \'Closed\' AND t.CreatedAt >= DATE_SUB(SUBDATE(NOW(), WEEKDAY(NOW())), INTERVAL ? WEEK) AND tu.IsAdmin = 1 AND tu.LeftAt IS NULL GROUP BY Week, UserId;', [$weeks]);
 
         $result = [];
 
@@ -78,6 +78,10 @@ class TicketController extends Controller
 
             array_push($result, $data);
         }
+
+        usort($result, function($a, $b) {
+           return $a['Rank'] > $b['Rank'];
+        });
 
         return $result;
     }

@@ -17,7 +17,9 @@ export default class TicketStatistics extends Component {
                     'yAxes': [
                         {
                             'ticks': {
-                                min: 0
+                                min: 0,
+                                suggestedMax: 30,
+                                stepSize: 5
                             }
                         }
                     ]
