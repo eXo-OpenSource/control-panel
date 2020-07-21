@@ -7,9 +7,9 @@ import {
     Link,
     useParams
 } from "react-router-dom";
-import ConfirmDialog from './../ConfirmDialog';
-import SelectUserDialog from './../SelectUserDialog';
-import SelectUserFromListDialog from "../SelectUserFromListDialog";
+import ConfirmDialog from '../helpers/ConfirmDialog';
+import SelectUserDialog from '../helpers/SelectUserDialog';
+import SelectUserFromListDialog from "../helpers/SelectUserFromListDialog";
 
 export default class TrainingEntry extends Component {
     constructor({match}) {

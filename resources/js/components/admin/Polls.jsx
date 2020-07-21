@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import TicketListEntry from "../TicketListEntry";
+import TicketListEntry from "../tickets/TicketListEntry";
 import { Beforeunload } from 'react-beforeunload';
 import { Pie, Doughnut } from "react-chartjs-2";
 import Button from "react-bootstrap/Button";

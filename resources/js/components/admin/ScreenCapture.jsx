@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button, Modal, Spinner, Form } from 'react-bootstrap';
 import axios from "axios";
-import TicketListEntry from "./TicketListEntry";
+import TicketListEntry from "../tickets/TicketListEntry";
 import {Link} from "react-router-dom";
 import {element} from "prop-types";
 import Row from "react-bootstrap/Row";

@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users.punish', 'UserPunishController')->only('store');
         Route::resource('punish.log', 'PunishPunishLogController')->only('index');
         Route::resource('polls', 'PollController')->only('index', 'store');
+        Route::resource('tickets', 'TicketController')->only('index');
     });
 
     Route::namespace('Api')->name('api.')->group(function () {

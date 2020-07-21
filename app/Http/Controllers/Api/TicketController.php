@@ -344,6 +344,8 @@ class TicketController extends Controller
                 }
 
                 $ticket->State = Ticket::TICKET_STATE_CLOSED;
+                $ticket->ResolvedBy = auth()->user()->Id;
+                $ticket->ResolvedAt = Carbon::now();
                 $ticket->save();
 
                 $answer = new TicketAnswer();

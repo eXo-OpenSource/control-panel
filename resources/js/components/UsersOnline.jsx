@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
-import TicketListEntry from "./TicketListEntry";
+import TicketListEntry from "./tickets/TicketListEntry";
 import {Link} from "react-router-dom";
 
 export default class UsersOnline extends Component {

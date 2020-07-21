@@ -132,6 +132,9 @@
                         <li class="c-sidebar-nav-item">
                             <a class="c-sidebar-nav-link" href="{{ route('admin.polls.index') }}"><span class="c-sidebar-nav-icon fas fa-poll"></span>{{ __('Abstimmung') }}</a>
                         </li>
+                        <li class="c-sidebar-nav-item">
+                            <a class="c-sidebar-nav-link" href="{{ route('admin.tickets.index') }}"><span class="c-sidebar-nav-icon fas fa-list-ol"></span>{{ __('Tickets') }}</a>
+                        </li>
                         @if(auth()->user()->Rank >= 7)
                             <li class="c-sidebar-nav-item">
                                 <a class="c-sidebar-nav-link" href="{{ route('admin.maps.index') }}"><span class="c-sidebar-nav-icon fas fa-map"></span>Maps</a>
