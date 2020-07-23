@@ -106,7 +106,7 @@ class TicketController extends Controller
             }
 
             if($ticket->resolver) {
-                $entry['Resolver'] = $ticket->assignee->Name;
+                $entry['Resolver'] = $ticket->resolver->Name;
             }
 
 
