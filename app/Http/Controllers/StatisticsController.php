@@ -13,10 +13,10 @@ class StatisticsController extends Controller
 {
     function index()
     {
-        $playTime = Character::orderBy('PlayTime', 'desc')->limit(50)->with('user')->get(['Id', 'PlayTime']);
-        $bankMoney = BankAccount::where('OwnerType', 1)->orderBy('Money', 'desc')->with('owner')->limit(50)->get();
-        $fishes = Stats::orderBy('FishCaught', 'desc')->limit(50)->with('user')->get();
-        $driven = Stats::orderBy('Driven', 'desc')->limit(50)->with('user')->get();
+        $playTime = Character::orderBy('PlayTime', 'desc')->limit(20)->with('user')->get(['Id', 'PlayTime']);
+        $bankMoney = BankAccount::where('OwnerType', 1)->orderBy('Money', 'desc')->with('owner')->limit(20)->get();
+        $fishes = Stats::orderBy('FishCaught', 'desc')->limit(20)->with('user')->get();
+        $driven = Stats::orderBy('Driven', 'desc')->limit(20)->with('user')->get();
 
         $playTimeMyPosition = null;
         $bankMoneyMyPosition = null;
@@ -40,10 +40,14 @@ class StatisticsController extends Controller
         $killsLastWeek = DB::connection('mysql_logs')->select($killsQuery, [Carbon::now()->subDays(7)->startOfWeek(), Carbon::now()->subDays(7)->endOfWeek(), 'Kill']);
 
 
+        $richestBankAccounts = BankAccount::query()->where('OwnerType', 5)->where('OwnerId', '<>', 56)->with('owner')->orderBy('Money', 'DESC')->limit(10)->get();
+        $poorestBankAccounts = BankAccount::query()->where('OwnerType', 5)->where('OwnerId', '<>', 56)->with('owner')->orderBy('Money', 'ASC')->limit(10)->get();
+
         return view('statistics.index', compact(
             'playTime', 'bankMoney', 'fishes', 'driven',
             'playTimeMyPosition', 'bankMoneyMyPosition', 'fishesMyPosition', 'drivenMyPosition',
-            'damageCurrentWeek', 'killsCurrentWeek', 'damageLastWeek', 'killsLastWeek'
+            'damageCurrentWeek', 'killsCurrentWeek', 'damageLastWeek', 'killsLastWeek',
+            'poorestBankAccounts', 'richestBankAccounts'
         ));
     }
 }
