@@ -73,7 +73,7 @@ class Ticket extends Model
         }
 
         if($this->resolver) {
-            $entry['Resolver'] = $this->assignee->Name;
+            $entry['Resolver'] = $this->resolver->Name;
         }
 
         $isAdmin = [];
