@@ -205,7 +205,7 @@ class User extends Authenticatable
             }
         }
 
-        return $banDuration >= 0 ?? false;
+        return $banDuration === -1 ? false : $banDuration;
     }
 
     public function isOnline() {
