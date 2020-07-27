@@ -13,10 +13,12 @@ class StatisticsController extends Controller
 {
     function index()
     {
-        $playTime = Character::orderBy('PlayTime', 'desc')->limit(20)->with('user')->get(['Id', 'PlayTime']);
-        $bankMoney = BankAccount::where('OwnerType', 1)->orderBy('Money', 'desc')->with('owner')->limit(20)->get();
-        $fishes = Stats::orderBy('FishCaught', 'desc')->limit(20)->with('user')->get();
-        $driven = Stats::orderBy('Driven', 'desc')->limit(20)->with('user')->get();
+        $displayCount = 20;
+
+        $playTime = Character::orderBy('PlayTime', 'desc')->limit($displayCount)->with('user')->get(['Id', 'PlayTime']);
+        $bankMoney = BankAccount::where('OwnerType', 1)->orderBy('Money', 'desc')->with('owner')->limit($displayCount)->get();
+        $fishes = Stats::orderBy('FishCaught', 'desc')->limit($displayCount)->with('user')->get();
+        $driven = Stats::orderBy('Driven', 'desc')->limit($displayCount)->with('user')->get();
 
         $playTimeMyPosition = null;
         $bankMoneyMyPosition = null;
@@ -47,7 +49,7 @@ class StatisticsController extends Controller
             'playTime', 'bankMoney', 'fishes', 'driven',
             'playTimeMyPosition', 'bankMoneyMyPosition', 'fishesMyPosition', 'drivenMyPosition',
             'damageCurrentWeek', 'killsCurrentWeek', 'damageLastWeek', 'killsLastWeek',
-            'poorestBankAccounts', 'richestBankAccounts'
+            'poorestBankAccounts', 'richestBankAccounts', 'displayCount'
         ));
     }
 }

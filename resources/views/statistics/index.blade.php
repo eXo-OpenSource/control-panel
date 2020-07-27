@@ -42,7 +42,7 @@
                                                     <td>{{ $row->getPlayTime() }}</td>
                                                 </tr>
                                             @endforeach
-                                            @if($playTimeMyPosition && $playTimeMyPosition > 50)
+                                            @if($playTimeMyPosition && $playTimeMyPosition > $displayCount)
                                                 <tr class="table-active">
                                                     <td>{{ $playTimeMyPosition }}.</td>
                                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
@@ -76,7 +76,7 @@
                                                     <td>@money($row->Money)</td>
                                                 </tr>
                                             @endforeach
-                                            @if($bankMoneyMyPosition && $bankMoneyMyPosition > 50)
+                                            @if($bankMoneyMyPosition && $bankMoneyMyPosition > $displayCount)
                                                 <tr class="table-active">
                                                     <td>{{ $bankMoneyMyPosition }}.</td>
                                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
@@ -112,7 +112,7 @@
                                                     <td>{{number_format($row->FishCaught, 0, '', '.')}}</td>
                                                 </tr>
                                             @endforeach
-                                            @if($fishesMyPosition && $fishesMyPosition > 50)
+                                            @if($fishesMyPosition && $fishesMyPosition > $displayCount)
                                                 <tr class="table-active">
                                                     <td>{{ $fishesMyPosition }}.</td>
                                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
@@ -146,7 +146,7 @@
                                                     <td>{{number_format($row->Driven / 1000, 0, ',', '.')}} km</td>
                                                 </tr>
                                             @endforeach
-                                            @if($drivenMyPosition && $drivenMyPosition > 50)
+                                            @if($drivenMyPosition && $drivenMyPosition > $displayCount)
                                                 <tr class="table-active">
                                                     <td>{{ $drivenMyPosition }}.</td>
                                                     <td><a href="{{ route('users.show', [auth()->user()->Id]) }}">{{ auth()->user()->Name }}</a></td>
