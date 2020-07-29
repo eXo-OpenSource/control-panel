@@ -61,7 +61,6 @@ if(!window.Exo) {
 // window.Pusher = require('pusher-js');
 window.io = require('socket.io-client');
 
-window.LEcho = Echo;
 window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production') ? 'cp-echo.exo-reallife.de' : window.location.hostname + ':6001'
