@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/health', function () {
+    return 'SUCCESS';
+});
+
 Route::get('screens', function() {
     if(auth() && auth()->user() && auth()->user()->Rank >= 7) {
         return view('screen');
