@@ -64,7 +64,7 @@ window.io = require('socket.io-client');
 window.LEcho = Echo;
 window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production') ? (window.Exo.UserId === 4123 ? 'cp-echo.exo-reallife.de' : window.location.hostname) : window.location.hostname + ':6001'
+    host: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production') ? 'cp-echo.exo-reallife.de' : window.location.hostname + ':6001'
 });
 
 
