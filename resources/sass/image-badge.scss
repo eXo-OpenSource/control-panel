@@ -1,4 +1,4 @@
-.image-badge {
+.image-badge-right {
     position: absolute;
     right: 0;
     top: 0;
@@ -8,7 +8,22 @@
     border-top-right-radius: calc(0.25rem - 1px);
 }
 
+.image-badge-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 2px 5px;
+    font-size: 16px;
+    text-align: center;
+    border-top-left-radius: calc(0.25rem - 1px);
+}
+
 .image-badge-info {
     background: #4799eb;
+    color: #fff;
+}
+
+.image-badge-success {
+    background: #45a164;
     color: #fff;
 }
