@@ -673,7 +673,7 @@ class StatisticService
 
             $cacheKey = 'bank:details:' . $bankAccount;
 
-            if(!Cache::has($cacheKey) || true) {
+            if(!Cache::has($cacheKey)) {
                 $categoriesIn = [];
                 $categoriesOut = [];
 
