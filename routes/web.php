@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('users/search', 'UserSearchController@index')->name('users.search');
     Route::resource('users', 'UserController')->only('index', 'show');
     Route::get('users/{user}/logs/{log?}', 'UserLogController@show')->name('users.show.logs');
+    Route::get('users/{user}/statistics/{statistic?}', 'UserStatisticController@show')->name('users.show.statistics');
     Route::get('users/{user}/{page}', 'UserController@show')->name('users.show.page');
 
     Route::get('companies/{company}/{page}', 'CompanyController@show')->name('companies.show.page');

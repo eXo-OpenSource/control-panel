@@ -153,7 +153,16 @@ class ChartController extends Controller
 
                     abort_unless(auth()->user()->can('bank', $user), 403);
 
-                    return StatisticService::getMoney($user, $from, $to);
+                    if(!isset($parts[3])) {
+                        return StatisticService::getMoney($user, $from, $to);
+                    } else {
+                        switch($parts[3])
+                        {
+                            case 'both':
+                                return StatisticService::getMoneyDetailsCombined($user, $from, $to);
+                                break;
+                        }
+                    }
                     break;
             }
         }

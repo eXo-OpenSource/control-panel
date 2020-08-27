@@ -85,6 +85,11 @@ class UserPolicy
         return $authUser->Id == $user->Id;
     }
 
+    public function statistics(User $authUser, User $user)
+    {
+        return $authUser->Id == $user->Id;
+    }
+
     public function hardware(User $authUser, User $user)
     {
         return false; // only for admins for now

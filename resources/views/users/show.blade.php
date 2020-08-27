@@ -68,6 +68,7 @@
                     @can('history', $user)<li class="nav-item"><a class="nav-link @if($page === 'history'){{'active'}}@endif" href="{{ route('users.show.page', [$user->Id, 'history']) }}">{{ __('Spielerakte') }}</a></li>@endcan
                     @can('mods', $user)<li class="nav-item"><a class="nav-link @if($page === 'mods'){{'active'}}@endif" href="{{ route('users.show.page', [$user->Id, 'mods']) }}">{{ __('Mods') }}</a></li>@endcan
                     @can('hardware', $user)<li class="nav-item"><a class="nav-link @if($page === 'hardware'){{'active'}}@endif" href="{{ route('users.show.page', [$user->Id, 'hardware']) }}">{{ __('Hardware') }}</a></li>@endcan
+                    @can('statistics', $user)<li class="nav-item"><a class="nav-link @if($page === 'statistics'){{'active'}}@endif" href="{{ route('users.show.page', [$user->Id, 'statistics']) }}">{{ __('Statistiken') }}</a></li>@endcan
                     @can('logs', $user)<li class="nav-item"><a class="nav-link @if($page === 'logs'){{'active'}}@endif" href="{{ route('users.show.logs', [$user->Id]) }}">{{ __('Logs') }}</a></li>@endcan
                 </ul>
                 </ul>
@@ -88,6 +89,8 @@
                         @include('users.partials.mods')
                     @elseif($page === 'hardware')
                         @include('users.partials.hardware')
+                    @elseif($page === 'statistics')
+                        @include('users.partials.statistics')
                     @endif
                 </div>
             </div>
