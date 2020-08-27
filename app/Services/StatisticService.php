@@ -509,7 +509,7 @@ class StatisticService
             ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
-            'tooltips' => 'money',
+            'tooltipsLabel' => 'money',
             'status' => 'Success'
         ];
     }
@@ -601,7 +601,229 @@ class StatisticService
                 ]
             ],
             'date' => $date->format('Y-m-d'),
-            'tooltips' => 'money',
+            'tooltipsLabel' => 'money',
+            'status' => 'Success'
+        ];
+    }
+
+    public static function getMoneyDetailsCombined(?Model $object, Carbon $from, Carbon $to)
+    {
+        $days = $from->diffInDays($to);
+
+        $labels = [];
+        $data = [];
+
+        for ($i = 0; $i <= $days; $i++) {
+            $date = $from->copy()->addDays($i)->format('Y-m-d');
+            array_push($labels, $date);
+        }
+
+        $outColors = [
+            '#d84545',
+            '#f24d4d',
+            '#ff5151',
+            '#bf3d3d',
+            '#a53535',
+            '#8c2c2c',
+            '#d82f2f',
+            '#f23535',
+            '#bf2a2a',
+            '#a52424',
+            '#8c1e1e',
+            '#d81a1a',
+            '#f21d1d',
+            '#bf1616',
+            '#a51313',
+            '#8c1010'
+        ];
+
+        $inColors = [
+            '#47d845',
+            '#50f24d',
+            '#54ff51',
+            '#3fbf3d',
+            '#36a535',
+            '#2e8c2c',
+            '#32d82f',
+            '#38f235',
+            '#2cbf2a',
+            '#26a524',
+            '#208c1e',
+            '#1dd81a',
+            '#20f21d',
+            '#19bf16',
+            '#16a513',
+            '#128c10'
+        ];
+
+        if($object !== null) {
+            $bankAccount = -1;
+
+            if($object->bank) {
+                $bankAccount = $object->bank->Id;
+            } else {
+                if($object instanceof Faction) {
+                    if($object->Id === 2 || $object->Id === 3) {
+                        $bankAccount = Faction::find(1)->bank->Id;
+                    }
+                } else {
+                    return ['status' => 'Error'];
+                }
+            }
+
+            $cacheKey = 'bank:details:' . $bankAccount;
+
+            if(!Cache::has($cacheKey) || true) {
+                $categoriesIn = [];
+                $categoriesOut = [];
+
+                $datasets = [];
+                $values = [];
+                $colors = [];
+
+                $in = DB::connection('mysql_logs')->select('SELECT DateFormatted AS Date, Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE ToBank = ? AND DateFormatted BETWEEN ? AND ? GROUP BY DateFormatted, Category, Subcategory', [$bankAccount, $from->format('Y-m-d'), $to->format('Y-m-d')]);
+                $out = DB::connection('mysql_logs')->select('SELECT DateFormatted AS Date, Category, Subcategory, SUM(Amount) AS Amount FROM vrpLogs_MoneyNew WHERE FromBank = ? AND DateFormatted BETWEEN ? AND ? GROUP BY DateFormatted, Category, Subcategory', [$bankAccount, $from->format('Y-m-d'), $to->format('Y-m-d')]);
+
+                foreach($in as $value)
+                {
+                    $name = $value->Subcategory ? $value->Category . ', ' . $value->Subcategory : $value->Category;
+                    if(!in_array($name, $categoriesIn))
+                    {
+                        array_push($categoriesIn, $name);
+                    }
+                }
+
+                foreach($out as $value)
+                {
+                    $name = $value->Subcategory ? $value->Category . ', ' . $value->Subcategory : $value->Category;
+                    if(!in_array($name, $categoriesOut))
+                    {
+                        array_push($categoriesOut, $name);
+                    }
+                }
+
+                foreach($categoriesIn as $category) {
+                    $values = [];
+                    $colors = [];
+
+                    $color = 'rgba('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1)';
+
+                    if(count($inColors) > 0) {
+                        $index = rand(0, count($inColors) - 1);
+                        $color = $inColors[$index];
+                        unset($inColors[$index]);
+                        sort($inColors);
+                    }
+
+                    foreach($labels as $date) {
+                        $value = null;
+                        foreach ($in as $entry) {
+                            $name = $entry->Subcategory ? $entry->Category . ', ' . $entry->Subcategory : $entry->Category;
+
+                            if ($date === $entry->Date && $category === $name) {
+                                $value = $entry->Amount;
+                                break;
+                            }
+                        }
+
+                        if ($value === null) {
+                            $value = 0;
+                        }
+
+                        array_push($values, (int)$value);
+                        array_push($colors, $color);
+                    }
+
+                    array_push($datasets, [
+                        'label' => $category,
+                        'stack' => 'Einnahmen',
+                        'data' => $values,
+                        'backgroundColor' => $colors,
+                        'borderWidth' => 1,
+                    ]);
+                }
+
+                foreach($categoriesOut as $category) {
+                    $values = [];
+                    $colors = [];
+
+                    $color = 'rgba('.rand(0, 255).', '.rand(0, 255).', '.rand(0, 255).', 1)';
+
+                    if(count($outColors) > 0) {
+                        $index = rand(0, count($outColors) - 1);
+                        $color = $outColors[$index];
+                        unset($outColors[$index]);
+                        sort($outColors);
+                    }
+
+                    foreach($labels as $date) {
+                        $value = null;
+                        foreach ($out as $entry) {
+                            $name = $entry->Subcategory ? $entry->Category . ', ' . $entry->Subcategory : $entry->Category;
+
+                            if ($date === $entry->Date && $category === $name) {
+                                $value = $entry->Amount;
+                                break;
+                            }
+                        }
+
+                        if ($value === null) {
+                            $value = 0;
+                        }
+
+                        array_push($values, (int)$value);
+                        array_push($colors, $color);
+                    }
+
+                    array_push($datasets, [
+                        'label' => $category,
+                        'stack' => 'Ausgaben',
+                        'data' => $values,
+                        'backgroundColor' => $colors,
+                        'borderWidth' => 1,
+                    ]);
+                }
+
+                Cache::put($cacheKey, ['labels' => $labels, 'datasets' => $datasets], Carbon::now()->addMinutes(15));
+            }
+
+            $data = Cache::get($cacheKey);
+        }
+
+        return [
+            'type' => 'bar',
+            'data' => [
+                'datasets' => $data['datasets'] ?? [],
+                'labels' => $data['labels'] ?? []
+            ],
+            'options' => [
+                'maintainAspectRatio' => false,
+                'legend' => [
+                    'display' => true,
+                    'labels' => [
+                        'fontColor' => 'rgba(255, 255, 255, 1)'
+                    ]
+                ],
+                'tooltips' => [
+                    'mode' => 'nearest',
+                    'intersect' => false
+                ],
+                'scales' => [
+                    'xAxes' => [
+                        [
+                            'stacked' => true
+                        ]
+                    ],
+                    'yAxes' => [
+                        [
+                            'stacked' => true
+                        ]
+                    ]
+                ]
+            ],
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'tooltipsLabel' => 'money',
             'status' => 'Success'
         ];
     }
@@ -647,7 +869,7 @@ class StatisticService
             ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
-            'tooltips' => 'money',
+            'tooltipsLabel' => 'money',
             'status' => 'Success'
         ];
     }
@@ -731,7 +953,7 @@ class StatisticService
             ],
             'from' => $from->format('Y-m-d'),
             'to' => $to->format('Y-m-d'),
-            'tooltips' => 'money',
+            'tooltipsLabel' => 'money',
             'status' => 'Success'
         ];
     }

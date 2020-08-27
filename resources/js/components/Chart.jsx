@@ -28,7 +28,7 @@ export default class Chart extends Component {
 
             const response = await axios.get('/api/charts/' + this.props.chart + suffix);
 
-            if(response.data && response.data.tooltips) {
+            if(response.data && response.data.tooltipsLabel) {
                 if (!response.data.options) {
                     response.data.options = {};
                 }
@@ -37,6 +37,17 @@ export default class Chart extends Component {
                 }
                 response.data.options.tooltips.callbacks = {};
                 response.data.options.tooltips.callbacks.label = this.handleLabel.bind(this);
+            }
+
+            if(response.data && response.data.tooltipsTitle) {
+                if (!response.data.options) {
+                    response.data.options = {};
+                }
+                if (!response.data.options.tooltips) {
+                    response.data.options.tooltips = {};
+                }
+                response.data.options.tooltips.callbacks = {};
+                response.data.options.tooltips.callbacks.title = this.handleTitle.bind(this);
             }
 
             this.setState({
@@ -51,10 +62,22 @@ export default class Chart extends Component {
     }
 
     handleLabel(tooltipItem, data) {
-        var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] || '';
+        var label = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]
+            ? data.datasets[tooltipItem.datasetIndex].label + ': ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]
+            : '';
 
-        if(this.state.data.tooltips === 'money') {
-            return '$ ' + Number(label).toLocaleString('de-AT');
+        if(this.state.data.tooltipsLabel === 'money') {
+            return data.datasets[tooltipItem.datasetIndex].label + ': ' + '$ ' + Number(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString('de-AT');
+        }
+
+        return label;
+    }
+
+    handleTitle(tooltipItems, data) {
+        var label = data.label;
+
+        if(this.state.data.tooltipsTitle === 'datasetLabel') {
+            return data.datasets[tooltipItems[0].datasetIndex].label;
         }
 
         return label;
@@ -113,7 +136,7 @@ export default class Chart extends Component {
                             </div>
                         </div>
 
-                        <div className="card-body"  style={{'height': '40vh'}}>
+                        <div className="card-body"  style={{'height': this.props.height ? this.props.height : '40vh'}}>
                             {chart}
                         </div>
                     </div>

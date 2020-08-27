@@ -91,6 +91,10 @@ class ChartController extends Controller
                             case 'out':
                                 return StatisticService::getMoneyDetails($faction, 'out', $date);
                                 break;
+
+                            case 'both':
+                                return StatisticService::getMoneyDetailsCombined($faction, $from, $to);
+                                break;
                         }
                     }
                     break;
@@ -112,6 +116,10 @@ class ChartController extends Controller
                             case 'out':
                                 return StatisticService::getMoneyDetails($company, 'out', $date);
                                 break;
+
+                            case 'both':
+                                return StatisticService::getMoneyDetailsCombined($company, $from, $to);
+                                break;
                         }
                     }
                     break;
@@ -132,6 +140,10 @@ class ChartController extends Controller
 
                             case 'out':
                                 return StatisticService::getMoneyDetails($group, 'out', $date);
+                                break;
+
+                            case 'both':
+                                return StatisticService::getMoneyDetailsCombined($group, $from, $to);
                                 break;
                         }
                     }
