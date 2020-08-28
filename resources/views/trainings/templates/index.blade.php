@@ -20,6 +20,7 @@
                             <thead>
                             <tr>
                                 <th scope="col">{{ __('Type') }}</th>
+                                <th scope="col">{{ __('Reihenfolge') }}</th>
                                 <th scope="col">{{ __('Name') }}</th>
                             </tr>
                             </thead>
@@ -27,6 +28,7 @@
                             @foreach($templates as $template)
                                 <tr>
                                     <td>{{ $template->getTarget() }}</td>
+                                    <td>{{ $template->Order }}</td>
                                     <td><a href="{{ route('trainings.templates.show', [$template]) }}">{{ $template->Name }}</a></td>
                                 </tr>
                             @endforeach

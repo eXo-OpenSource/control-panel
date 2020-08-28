@@ -34,6 +34,8 @@ class TrainingTemplateController extends Controller
             $templates->orWhere('ElementType', 3)->where('ElementId', $character->CompanyId);
         }
 
+        $templates->orderBy('Order', 'ASC')->orderBy('Id', 'ASC');
+
         $templates = $templates->get();
 
         return view('trainings.templates.index', compact('templates'));
@@ -90,6 +92,7 @@ class TrainingTemplateController extends Controller
 
         $template = new Template();
         $template->Name = $request->get('name');
+        $template->Order = $request->get('order') ?? 0;
         $template->UserId = auth()->user()->Id;
         $template->ElementId = $elementId;
         $template->ElementType = $elementType;
@@ -140,6 +143,7 @@ class TrainingTemplateController extends Controller
         ]);
 
         $template->Name = $request->get('name');
+        $template->Order = $request->get('order') ?? 0;
         $template->save();
 
         return redirect()->route('trainings.templates.show', [$template]);

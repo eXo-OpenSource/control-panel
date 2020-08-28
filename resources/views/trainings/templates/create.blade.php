@@ -45,6 +45,14 @@
                                 @endif
                             </div>
 
+                            <div class="form-group">
+                                <label for="order">{{ __('Reihenfolge') }}</label>
+                                <input type="number" id="order" class="form-control{{ $errors->has('order') ? ' is-invalid' : '' }}" placeholder="{{ __('Reihenfolge') }}" name="order" value="{{ old('order') }}" >
+                                @if ($errors->has('order'))
+                                    <div class="invalid-feedback">{{ $errors->first('order') }}</div>
+                                @endif
+                            </div>
+
                             <div class="float-right">
                                 <button type="submit" class="btn btn-primary">{{ __('Speichern') }}</button>
                                 <a class="btn btn-secondary" href="{{ route('trainings.templates.index') }}">{{ __('Abbrechen') }}</a>
