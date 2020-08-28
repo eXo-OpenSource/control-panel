@@ -49,6 +49,7 @@ class OverviewController extends Controller
             $templates->orWhere('ElementType', 3)->where('ElementId', $character->CompanyId);
         }
 
+        $templates->orderBy('Order', 'ASC')->orderBy('Id', 'ASC');
         $templates = $templates->get();
         $members = [];
 
@@ -69,7 +70,6 @@ class OverviewController extends Controller
         $query->groupBy('training_users.Role');
         $query->groupBy('trainings.TemplateId');
         $query->select('trainings.TemplateId', 'training_users.UserId', 'training_users.Role', DB::raw('COUNT(vrp_training_users.UserId) AS Count'));
-
         $result = $query->get();
 
         $matrixInfo = [
