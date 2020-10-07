@@ -156,14 +156,7 @@ class TeamspeakController extends Controller
                 }
 
                 $teamspeak->delete();
-
-                if($result->status === 'Success') {
-                    Session::flash('alert-success', 'Erfolgreich gelöscht!');
-                } else {
-                    if($result->message === 'Empty result set') {
-                        Session::flash('alert-success', 'Erfolgreich gelöscht aber der Benutzer ist hatte bereits die Gruppe entfernt!');
-                    }
-                }
+                Session::flash('alert-success', 'Erfolgreich gelöscht!');
 
                 return redirect()->route('admin.teamspeak.index');
             }

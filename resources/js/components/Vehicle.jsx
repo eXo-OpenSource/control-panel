@@ -93,7 +93,17 @@ export default class Vehicle extends Component {
             <>
                 <div className="card">
                     {this.props.premium > 0 ? <span className="image-badge-left image-badge-success">Premium</span> : <></>}
-                    {!this.props.rare ? <span className="image-badge-right image-badge-info">Selten</span> : <></>}
+                    {
+                        this.props.unique ?
+                            <span className="image-badge-right image-badge-danger">Einzelstück</span>
+                            : (this.props.ultraRare ?
+                                <span className="image-badge-right image-badge-warning">Sehr Selten</span>
+                                : (this.props.rare ?
+                                    <span className="image-badge-right image-badge-info">Selten</span>
+                                    : <></>))
+                    }
+                    {this.props.premium > 0 && this.props.premiumOwner ? <span className="image-badge-left-bottom image-badge-success">{this.props.premiumOwner}</span> : <></>}
+
                     <img className="bd-placeholder-img card-img-top" src={'https://exo-reallife.de/images/veh/Vehicle_' + this.props.model + '.jpg'} />
 
                     <div className="card-body">

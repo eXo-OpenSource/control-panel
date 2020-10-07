@@ -18,6 +18,26 @@
     border-top-left-radius: calc(0.25rem - 1px);
 }
 
+.image-badge-right-bottom {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 2px 5px;
+    font-size: 16px;
+    text-align: center;
+    border-bottom-right-radius: calc(0.25rem - 1px);
+}
+
+.image-badge-left-bottom {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 2px 5px;
+    font-size: 16px;
+    text-align: center;
+    border-bottom-left-radius: calc(0.25rem - 1px);
+}
+
 .image-badge-info {
     background: #4799eb;
     color: #fff;
@@ -25,5 +45,15 @@
 
 .image-badge-success {
     background: #45a164;
+    color: #fff;
+}
+
+.image-badge-danger {
+    background: #d16767;
+    color: #fff;
+}
+
+.image-badge-warning {
+    background: #e1a82d;
     color: #fff;
 }

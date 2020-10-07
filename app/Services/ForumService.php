@@ -36,4 +36,21 @@ class ForumService
             return false;
         }
     }
+
+    public function deleteUser($userId, $renameBeforeDeletion = true)
+    {
+        try {
+            $this->client->post($this->endpoint . '?user-api&method=delete', [
+                'form_params' => [
+                    'secret' => $this->secret,
+                    'userID' => $userId,
+                    'renameBeforeDeletion' => $renameBeforeDeletion,
+                ]
+            ]);
+
+            return true;
+        } catch (GuzzleException $exception) {
+            return false;
+        }
+    }
 }

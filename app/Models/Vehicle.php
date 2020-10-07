@@ -13,6 +13,7 @@ class Vehicle extends Model
     protected $primaryKey = 'Id';
 
     static $shopVehicles = null;
+    static $rares = null;
 
     public function getName()
     {
@@ -38,16 +39,6 @@ class Vehicle extends Model
     public function isInShop()
     {
         if(!Vehicle::$shopVehicles) {
-
-            $data = DB::select('SELECT   v.Model,
-                                            v.OwnerType,
-                                            IF(v.Premium > 0, true, false) AS Premium,
-                                            COUNT(v.Id) AS Count
-                                        FROM vrp_vehicles v
-                                        WHERE v.Deleted IS NULL
-                                        GROUP BY v.OwnerType, IF(v.Premium > 0, true, false), v.Model
-                                        ORDER BY v.Model');
-
             Vehicle::$shopVehicles = DB::select('SELECT Model FROM vrp_vehicle_shop_veh');
         }
 
@@ -56,6 +47,60 @@ class Vehicle extends Model
             if($shopVehicle->Model === $this->Model) {
                 return true;
                 break;
+            }
+        }
+
+        return false;
+    }
+
+    public function isUnique()
+    {
+
+        if(!Vehicle::$rares)
+        {
+            $data = DB::select('SELECT v.Model,
+                                            COUNT(v.Id) AS Count
+                                        FROM vrp_vehicles v
+                                        WHERE v.Deleted IS NULL AND (v.OwnerType = 1 OR v.OwnerType = 4)
+                                        GROUP BY v.Model
+                                        ORDER BY v.Model');
+
+
+            Vehicle::$rares = [];
+
+            foreach($data as $entry)
+            {
+                Vehicle::$rares[$entry->Model] = $entry->Count;
+            }
+        }
+
+        if(isset(Vehicle::$rares[$this->Model]) && Vehicle::$rares[$this->Model] <= 1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function isUltraRare()
+    {
+        $this->isUnique();
+
+        if(isset(Vehicle::$rares[$this->Model]) && Vehicle::$rares[$this->Model] <= 4)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function getPremiumOwner()
+    {
+        if($this->Premium > 0 && $this->OwnerType !== 1)
+        {
+            $user = User::find($this->Premium);
+
+            if($user)
+            {
+                return $user->Name;
             }
         }
 
