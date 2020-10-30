@@ -22,6 +22,14 @@ class TicketCategoryController extends Controller
             $query->where('IsAllowedForBannedUsers', 1);
         }
 
-        return $query->orderBy('Order', 'ASC')->orderBy('Id', 'ASC')->with('fields')->get();
+        $result = $query->orderBy('Order', 'ASC')->orderBy('Id', 'ASC')->with('fields')->get()->toArray();
+
+        foreach($result as $i => $entry)
+        {
+            usort($entry['fields'], function($a, $b) { return $a['Order'] > $b['Order']; });
+            $result[$i] = $entry;
+        }
+
+        return $result;
     }
 }

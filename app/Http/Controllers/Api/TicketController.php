@@ -160,7 +160,9 @@ class TicketController extends Controller
 
         $text = [];
 
-        foreach($category->fields as $field) {
+        $addUsers = [];
+
+        foreach($category->fields()->orderBy('Order', 'ASC')->get() as $field) {
             $found = false;
             foreach($fields as $key => $value) {
                 if('field' . $field->Id === $key) {
@@ -188,6 +190,28 @@ class TicketController extends Controller
                             return response()->json(['Status' => 'Failed', 'Message' => __('Diese eindeutige ID ist dem TeamSpeak Server nicht bekannt. Du musst zuerst einmalig auf dem TeamSpeak verbinden.')])->setStatusCode(400);
                         }
                         array_push($text, $field->Name . ': ' . $value);
+                    } elseif($field->Type === 'user') {
+                        $user = User::find($value);
+
+                        if ($user == null && $field->Required) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
+                        }
+
+                        array_push($text, $field->Name . ': ' . $user->Name);
+                        array_push($addUsers, $user);
+                    } elseif($field->Type === 'users') {
+                        $names = [];
+                        foreach($value as $userId) {
+                            $user = User::find($userId);
+
+                            if ($user == null && $field->Required) {
+                                return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
+                            }
+
+                            array_push($names, $user->Name);
+                            array_push($addUsers, $user);
+                        }
+                        array_push($text, $field->Name . ': ' . implode(', ', $names));
                     } else {
                         if(strlen($value) > $field->MaxLength) {
                             return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" ist zu lang! Maximal sind :maxLength Zeichen zulässig!', ['name' => $field->Name, 'maxLength' => $field->MaxLength])])->setStatusCode(400);
@@ -237,6 +261,27 @@ class TicketController extends Controller
             $answer->UserId = auth()->user()->Id;
             $answer->MessageType = 1;
             $answer->Message = implode(chr(0x0A), $text);
+            $answer->save();
+        }
+
+        $addedNames = [];
+        foreach($addUsers as $user) {
+            if (!$ticket->users->contains($user)) {
+                array_push($addedNames, $user->Name);
+                $ticket->users()->attach($user, ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
+
+                if($user->Rank === 0) {
+                    $user->sendMessage('[TICKET] ' . auth()->user()->Name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
+                }
+            }
+        }
+
+        if(count($addedNames) > 0) {
+            $answer = new TicketAnswer();
+            $answer->TicketId = $ticket->Id;
+            $answer->UserId = auth()->user()->Id;
+            $answer->MessageType = 1;
+            $answer->Message = sprintf("%s wurden zum Ticket hinzugefügt von %s.", implode(', ', $addedNames), auth()->user()->Name);
             $answer->save();
         }
 

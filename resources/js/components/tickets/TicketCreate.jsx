@@ -5,6 +5,15 @@ import axios from "axios";
 import TicketListEntry from "./TicketListEntry";
 import {Link, withRouter} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import {forEach} from "react-bootstrap/cjs/ElementChildren";
+
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+];
 
 class TicketCreate extends Component {
     constructor() {
@@ -86,6 +95,51 @@ class TicketCreate extends Component {
         this.setState({ fields: fields });
     }
 
+    async onChangeSelect(field, newValue) {
+        let fields = this.state.fields;
+
+        fields[field] = null;
+
+        if (Array.isArray(newValue)) {
+            var entries = [];
+
+            for(var index in newValue)
+            {
+                entries.push(newValue[index].value);
+            }
+
+            fields[field] = entries;
+        } else {
+            if (newValue && newValue.value) {
+                fields[field] = newValue.value;
+            }
+        }
+
+
+        this.setState({ fields: fields });
+    }
+
+    async loadUsers(inputValue, callback) {
+        try {
+            const response = await axios.post('/api/users/search', {
+                name: inputValue
+            });
+
+            let users = [];
+
+            response.data.forEach((entry) => {
+               users.push({
+                   value: entry.Id,
+                   label: entry.Name
+               });
+            });
+
+            callback(users);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     render() {
         if(this.state.categories === null) {
             return <div className="text-center"><Spinner animation="border"/></div>;
@@ -103,7 +157,7 @@ class TicketCreate extends Component {
 
                 if(category && category.fields) {
                     categoryFields = category.fields.map((field, i) => {
-                        if(field.Type === 'textarea') {
+                        if (field.Type === 'textarea') {
                             return (
                                 <Form.Group key={field.Id}>
                                     <Form.Label>{field.Name}</Form.Label>
@@ -114,7 +168,7 @@ class TicketCreate extends Component {
                             );
                         }
 
-                        if(field.Type === 'checkbox') {
+                        if (field.Type === 'checkbox') {
                             return (
                                 <Form.Group key={field.Id}>
                                     <Form.Check type="checkbox" name={'field' + field.Id} label={field.Name} onChange={this.onChangeField.bind(this)} />
@@ -122,6 +176,50 @@ class TicketCreate extends Component {
                                     </Form.Text> : ''}
                                 </Form.Group>
                             );
+                        }
+
+                        if (field.Type === 'user') {
+                            return (
+                                <Form.Group key={field.Id}>
+                                    <Form.Label>{field.Name}</Form.Label>
+                                    <AsyncSelect
+                                        className="react-select-container"
+                                        classNamePrefix="react-select"
+                                        name={'field' + field.Id}
+                                        loadOptions={this.loadUsers.bind(this)}
+                                        styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                                        onChange={this.onChangeSelect.bind(this, 'field' + field.Id)}
+                                    />
+                                </Form.Group>
+                            );
+                        }
+
+                        if (field.Type === 'users') {
+                            return (
+                                <Form.Group key={field.Id}>
+                                    <Form.Label>{field.Name}</Form.Label>
+                                    <AsyncSelect
+                                        closeMenuOnSelect={false}
+                                        name={'field' + field.Id}
+                                        isMulti
+                                        cacheOptions
+                                        defaultOptions
+                                        className="react-select-container"
+                                        classNamePrefix="react-select"
+                                        loadOptions={this.loadUsers.bind(this)}
+                                        styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                                        onChange={this.onChangeSelect.bind(this, 'field' + field.Id)}
+                                    />
+                                </Form.Group>
+                            );
+
+                            /*
+                                <Form.Group key={field.Id}>
+                                    <Form.Check type="checkbox" name={'field' + field.Id} label={field.Name} onChange={this.onChangeField.bind(this)} />
+                                    {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
+                                    </Form.Text> : ''}
+                                </Form.Group>
+                             */
                         }
 
                         return (
