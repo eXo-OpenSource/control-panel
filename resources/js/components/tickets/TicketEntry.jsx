@@ -11,6 +11,7 @@ import {
 import ConfirmDialog from '../helpers/ConfirmDialog';
 import SelectUserFromListDialog from "../helpers/SelectUserFromListDialog";
 import { ToastContainer, toast } from 'react-toastify';
+import Linkify from 'react-linkify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default class TicketEntry extends Component {
@@ -381,9 +382,11 @@ export default class TicketEntry extends Component {
                                                             <div className="message">
                                                                 <div className="message-center">
                                                                     <div className="message-content">
-                                                                        {answer.Message.split('\n').map((value, index) => {
-                                                                            return <p key={index}>{value}</p>;
-                                                                        })}
+                                                                        <Linkify>
+                                                                            {answer.Message.split('\n').map((value, index) => {
+                                                                                return <p key={index}>{value}</p>;
+                                                                            })}
+                                                                        </Linkify>
                                                                         <span>
                                                                             <span className="message-system-time">{answer.CreatedAt}</span>
                                                                         </span>
@@ -411,9 +414,11 @@ export default class TicketEntry extends Component {
                                                                             {answer.CreatedAt}
                                                                         </span>
                                                                     </span>
-                                                                    {answer.Message !== null ? answer.Message.split('\n').map((value, index) => {
-                                                                        return <p key={index}>{value}</p>;
-                                                                    }) : <p className="font-italic">Keine Nachricht</p>}
+                                                                    <Linkify>
+                                                                        {answer.Message !== null ? answer.Message.split('\n').map((value, index) => {
+                                                                            return <p key={index}>{value}</p>;
+                                                                        }) : <p className="font-italic">Keine Nachricht</p>}
+                                                                    </Linkify>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -41,6 +41,7 @@
         "react-beforeunload": "^2.2.1",
         "react-bootstrap": "^1.0.1",
         "react-chartjs-2": "^2.9.0",
+        "react-linkify": "^1.0.0-alpha",
         "react-router-dom": "^5.2.0",
         "react-select": "^3.1.0",
         "react-toastify": "^6.0.8",
