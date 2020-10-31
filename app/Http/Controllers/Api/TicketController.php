@@ -36,11 +36,24 @@ class TicketController extends Controller
     public function index()
     {
         $state = request()->get('state');
+        $assignee = request()->get('assignee');
+        $categories = request()->get('categories') ?? null;
         $search = request()->get('search');
         $limit = 30;
 
+        if($categories && auth()->user()->Rank >= 1) {
+            $categories = explode(',', $categories);
+        } else {
+            $categories = null;
+        }
+
+
         if(!in_array($state, ['open', 'both', 'closed'])) {
             $state = 'open';
+        }
+
+        if(!in_array($assignee, ['all', 'unassigned', 'assigned', 'me'])) {
+            $assignee = 'all';
         }
 
         $tickets = auth()->user()->tickets()->with('user', 'assignee', 'category', 'resolver');
@@ -52,6 +65,7 @@ class TicketController extends Controller
             });
         } else {
             $tickets->where('IsAdmin', 0);
+            $assignee = 'all';
         }
 
         switch($state)
@@ -62,6 +76,25 @@ class TicketController extends Controller
             case 'closed':
                 $tickets->where('State', Ticket::TICKET_STATE_CLOSED);
                 break;
+        }
+
+        switch($assignee)
+        {
+            case 'all':
+                break;
+            case 'unassigned':
+                $tickets->where('AssigneeId', null);
+                break;
+            case 'assigned':
+                $tickets->where('AssigneeId', '<>', null);
+                break;
+            case 'me':
+                $tickets->where('AssigneeId', auth()->user()->Id);
+                break;
+        }
+
+        if($categories) {
+            $tickets->whereIn('CategoryId', $categories);
         }
 
         if($search && $search != '') {

@@ -34,8 +34,11 @@
         color: #e1e1e1;
         background-color: #44454C;
         border-color: rgba(255, 255, 255, 0.15);
+        z-index: 100;
 
         .react-select__option {
+            z-index: 100;
+
             &:hover {
                 background-color: #4799eb;
             }

@@ -20,6 +20,7 @@ class TicketCreate extends Component {
         super();
         this.state = {
             categories: null,
+            categoryOptions: null,
             title: '',
             category: '',
             message: '',
@@ -70,9 +71,15 @@ class TicketCreate extends Component {
     async loadCategories() {
         try {
             const response = await axios.get('/api/tickets/categories');
+            let options = [];
+
+            response.data.forEach((category) => {
+               options.push({value: category.Id, label: category.Title});
+            });
 
             this.setState({
-                categories: response.data
+                categories: response.data,
+                categoryOptions: options
             });
         } catch (error) {
             console.log(error);
@@ -83,9 +90,8 @@ class TicketCreate extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-
-    async onChangeCategory(e) {
-        this.setState({ category: e.target.value, fields: {} });
+    async onChangeCategory(value) {
+        this.setState({ category: value.value, fields: {} });
     }
 
     async onChangeField(e) {
@@ -185,11 +191,14 @@ class TicketCreate extends Component {
                                     <AsyncSelect
                                         className="react-select-container"
                                         classNamePrefix="react-select"
+                                        placeholder={field.Name}
                                         name={'field' + field.Id}
                                         loadOptions={this.loadUsers.bind(this)}
                                         styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
                                         onChange={this.onChangeSelect.bind(this, 'field' + field.Id)}
                                     />
+                                    {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
+                                    </Form.Text> : ''}
                                 </Form.Group>
                             );
                         }
@@ -201,6 +210,7 @@ class TicketCreate extends Component {
                                     <AsyncSelect
                                         closeMenuOnSelect={false}
                                         name={'field' + field.Id}
+                                        placeholder={field.Name}
                                         isMulti
                                         cacheOptions
                                         defaultOptions
@@ -210,16 +220,10 @@ class TicketCreate extends Component {
                                         styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
                                         onChange={this.onChangeSelect.bind(this, 'field' + field.Id)}
                                     />
-                                </Form.Group>
-                            );
-
-                            /*
-                                <Form.Group key={field.Id}>
-                                    <Form.Check type="checkbox" name={'field' + field.Id} label={field.Name} onChange={this.onChangeField.bind(this)} />
                                     {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
                                     </Form.Text> : ''}
                                 </Form.Group>
-                             */
+                            );
                         }
 
                         return (
@@ -260,14 +264,14 @@ class TicketCreate extends Component {
 
                                     <Form.Group>
                                         <Form.Label>Kategorie</Form.Label>
-                                        <InputGroup>
-                                            <Form.Control as="select" name="category" onChange={this.onChangeCategory.bind(this)}>
-                                                <option>(Bitte auswählen)</option>
-                                                {this.state.categories.map((category, i) => {
-                                                    return <option key={category.Id} value={category.Id}>{category.Title}</option>;
-                                                })}
-                                            </Form.Control>
-                                        </InputGroup>
+                                        <Select
+                                            placeholder="Auswählen"
+                                            className="react-select-container"
+                                            classNamePrefix="react-select"
+                                            options={this.state.categoryOptions}
+                                            styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                                            onChange={this.onChangeCategory.bind(this)}
+                                        />
                                     </Form.Group>
 
                                     {categoryFields}

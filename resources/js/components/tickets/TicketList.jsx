@@ -8,6 +8,8 @@ import {element} from "prop-types";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
+import Select from "react-select";
+import AsyncSelect from "react-select/async/dist/react-select.esm";
 
 export default class TicketList extends Component {
     constructor() {
@@ -15,8 +17,12 @@ export default class TicketList extends Component {
         this.state = {
             showCreate: false,
             data: null,
+            categories: null,
+            categoryOptions: null,
             selectedTicket: null,
+            selectedCategories: [],
             state: 'open',
+            assignee: 'all',
             search: '',
             page: 0,
             loading: false,
@@ -31,34 +37,6 @@ export default class TicketList extends Component {
                 .listen('TicketUpdated', this.updateTicket.bind(this));
         }
     }
-/*
-    async handleNewTicket(data) {
-        console.log(data);
-        console.log(this.state.data);
-        let newData = this.state.data;
-
-        let index = -1;
-
-        newData.items.forEach((element, i) => {
-            if(element.Id === data.ticket.Id) {
-                index = i;
-            }
-        })
-
-
-        if(index !== -1) {
-            this.state.data.items[index] = data.ticket;
-            this.setState({
-                data: newData
-            });
-        } else {
-            newData.items.push(data.ticket);
-            this.setState({
-                data: newData
-            });
-        }
-    }
-    */
 
     async updateTicket(data) {
         let newData = this.state.data;
@@ -87,11 +65,15 @@ export default class TicketList extends Component {
 
     async componentDidMount() {
         if(this.state.data === null) {
-            this.loadData(this.state.state);
+            await this.loadData();
+        }
+
+        if(this.state.categories === null) {
+            await this.loadCategories();
         }
     }
 
-    async loadData(state) {
+    async loadData() {
         if(this.state.loading)
             return;
 
@@ -101,9 +83,9 @@ export default class TicketList extends Component {
             error: null
         });
 
-        const response = await axios.get('/api/tickets?state=' + state);
-
         try {
+            const categories = this.state.selectedCategories.join(',');
+            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories);
             this.setState({
                 data: response.data,
                 loading: false
@@ -117,12 +99,52 @@ export default class TicketList extends Component {
         }
     }
 
+    async loadCategories() {
+        try {
+            const response = await axios.get('/api/tickets/categories');
+            let options = [];
+
+            response.data.forEach((category) => {
+                options.push({value: category.Id, label: category.Title});
+            });
+
+            this.setState({
+                categories: response.data,
+                categoryOptions: options
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async changeState(state) {
         this.setState({
             state: state,
             search: ''
         });
-        this.loadData(state);
+        await this.loadData();
+    }
+
+    async onCategoryChange(newValue) {
+        let categories = [];
+
+        newValue.forEach((value) => {
+           categories.push(value.value);
+        });
+
+        this.setState({
+            selectedCategories: categories
+        });
+
+        await this.loadData();
+    }
+
+    async changeAssignee(assignee) {
+        this.setState({
+            assignee: assignee,
+            search: ''
+        });
+        await this.loadData();
     }
 
     async onChange(e) {
@@ -149,7 +171,7 @@ export default class TicketList extends Component {
         });
 
         try {
-            const response = await axios.get('/api/tickets?state=' + this.state.state + '&search=' + this.state.search);
+            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&search=' + this.state.search);
             this.setState({
                 data: response.data,
                 loading: false
@@ -174,7 +196,7 @@ export default class TicketList extends Component {
         });
 
         try {
-            const response = await axios.get('/api/tickets?state=' + this.state.state + '&search=' + this.state.search + '&page=' + this.state.page);
+            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&search=' + this.state.search + '&page=' + this.state.page);
             this.setState({
                 data: response.data,
                 loading: false
@@ -238,7 +260,12 @@ export default class TicketList extends Component {
                                     if(this.state.state === 'both' ||
                                         (this.state.state === 'open' && ticket.State === 'Open') ||
                                         (this.state.state === 'closed' && ticket.State === 'Closed')) {
-                                        return <TicketListEntry key={ticket.Id} ticket={ticket} minimal={this.props.minimal} open={this.showEntry}></TicketListEntry>;
+                                        if(this.state.assignee === 'all' ||
+                                            (this.state.assignee === 'unassigned' && ticket.AssigneeId === null) ||
+                                            (this.state.assignee === 'assigned' && ticket.AssigneeId !== null) ||
+                                            (this.state.assignee === 'me' && ticket.AssigneeId === Exo.UserId)) {
+                                            return <TicketListEntry key={ticket.Id} ticket={ticket} minimal={this.props.minimal} open={this.showEntry}></TicketListEntry>;
+                                        }
                                     }
                                 })}
                                 </tbody>
@@ -253,7 +280,7 @@ export default class TicketList extends Component {
 
         return (
             <>
-                <div className="row mb-4">
+                <div className="row mb-2">
                     <div className="col-md-12">
                         <div className="btn-group" role="group" aria-label="Basic example">
                             <Button variant="secondary" className={this.state.state === 'open' ? 'active' : ''} onClick={(evt) => this.changeState('open')}>Offen</Button>
@@ -263,6 +290,26 @@ export default class TicketList extends Component {
                         <Link to="/tickets/create" className="btn btn-primary float-right">Ticket erstellen</Link>
                     </div>
                 </div>
+                {Exo.Rank > 0 ? <div className="row mb-2">
+                    <div className="col-md-12">
+                        <div className="btn-group" role="group" aria-label="Basic example">
+                            <Button variant="secondary" className={this.state.assignee === 'all' ? 'active' : ''} onClick={(evt) => this.changeAssignee('all')}>Alle</Button>
+                            <Button variant="secondary" className={this.state.assignee === 'unassigned' ? 'active' : ''} onClick={(evt) => this.changeAssignee('unassigned')}>Nicht zugewiesen</Button>
+                            <Button variant="secondary" className={this.state.assignee === 'assigned' ? 'active' : ''} onClick={(evt) => this.changeAssignee('assigned')}>Zugewiesen</Button>
+                            <Button variant="secondary" className={this.state.assignee === 'me' ? 'active' : ''} onClick={(evt) => this.changeAssignee('me')}>Mir zugewiesen</Button>
+                        </div>
+                    </div>
+                    <div className="col-md-12 mt-2">
+                        <Select
+                            className="react-select-container"
+                            isMulti
+                            classNamePrefix="react-select"
+                            options={this.state.categoryOptions}
+                            styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                            onChange={this.onCategoryChange.bind(this)}
+                        />
+                    </div>
+                </div> : '' }
                 <div className="row mb-4">
                     <div className="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
                         <Form onSubmit={this.search.bind(this)}>
