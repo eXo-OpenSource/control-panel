@@ -128,9 +128,11 @@ export default class TicketList extends Component {
     async onCategoryChange(newValue) {
         let categories = [];
 
-        newValue.forEach((value) => {
-           categories.push(value.value);
-        });
+        if(newValue !== null && Array.isArray(newValue)) {
+            newValue.forEach((value) => {
+                categories.push(value.value);
+            });
+        }
 
         this.setState({
             selectedCategories: categories
@@ -171,7 +173,8 @@ export default class TicketList extends Component {
         });
 
         try {
-            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&search=' + this.state.search);
+            const categories = this.state.selectedCategories.join(',');
+            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories + '&search=' + this.state.search);
             this.setState({
                 data: response.data,
                 loading: false
@@ -196,7 +199,8 @@ export default class TicketList extends Component {
         });
 
         try {
-            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&search=' + this.state.search + '&page=' + this.state.page);
+            const categories = this.state.selectedCategories.join(',');
+            const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories + '&search=' + this.state.search + '&page=' + this.state.page);
             this.setState({
                 data: response.data,
                 loading: false
