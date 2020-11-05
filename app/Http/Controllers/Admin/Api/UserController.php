@@ -61,7 +61,7 @@ class UserController extends Controller
                     if ($data->status === 'SUCCESS') {
                         return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich gekickt.')];
                     } else {
-                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht gekickt werden.')];
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht gekickt werden (:type).', ['type' => $data->error])];
                     }
                 }
 
