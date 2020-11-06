@@ -32,7 +32,7 @@
                                     <react-ban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-ban-dialog>
                                     @if(auth()->user()->Rank >= 5)<react-unban-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unban-dialog>@endif
                                     <react-prison-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-prison-dialog>
-                                    <react-unprison-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unprison-dialog>
+                                    @if(auth()->user()->Rank >= 5)<react-unprison-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-unprison-dialog>@endif
                                     <react-kick-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-kick-dialog>
                                     <react-warns-dialog data-id="{{ $user->Id }}" data-name="{{ $user->Name }}"></react-warns-dialog>
                                 </div>

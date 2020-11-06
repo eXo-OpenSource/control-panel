@@ -87,7 +87,7 @@
         @if(!request()->exists('minimal'))
             <footer class="c-footer">
                 <div>@include('layouts.partials.online')</div>
-                <div class="mfs-auto">{{ __('Release: :version', ['version' => substr(config('sentry.release'), 0, 7)]) }}</div>
+                <div class="mfs-auto">{{ __('Release: :version', ['version' => substr(config('sentry.release'), 0, 8)]) }}</div>
             </footer>
         @endif
     </div>
