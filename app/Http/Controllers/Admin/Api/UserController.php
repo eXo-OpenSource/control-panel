@@ -116,6 +116,55 @@ class UserController extends Controller
 
                 return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
             }
+        } elseif ($type === 'unprison') {
+            if (Gate::allows('admin-rank-4')) {
+                $reason = $request->get('reason');
+
+                if (empty($reason)) {
+                    return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
+                }
+
+                $mtaService = new MTAService();
+                $response = $mtaService->unprisonPlayer(auth()->user()->Id, $user->Id, $reason);
+
+                if (!empty($response)) {
+                    $data = json_decode($response[0]);
+                    if ($data->status === 'SUCCESS') {
+                        return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich aus dem Pirson entfernt.')];
+                    } else {
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht aus dem Pirson entfernt werden.')];
+                    }
+                }
+
+                return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
+            }
+        } elseif ($type === 'prison') {
+            if (Gate::allows('admin-rank-3')) {
+                $reason = $request->get('reason');
+                $duration = $request->get('duration');
+
+                if (empty($reason)) {
+                    return ['status' => 'Error', 'message' => __('Bitte gib einen Grund an!')];
+                }
+
+                if (empty($duration) && intval('duration') < 1) {
+                    return ['status' => 'Error', 'message' => __('Bitte gib eine gültige Dauer ein!')];
+                }
+
+                $mtaService = new MTAService();
+                $response = $mtaService->prisonPlayer(auth()->user()->Id, $user->Id, intval($duration), $reason);
+
+                if (!empty($response)) {
+                    $data = json_decode($response[0]);
+                    if ($data->status === 'SUCCESS') {
+                        return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich in das Prison gesteckt.')];
+                    } else {
+                        return ['status' => 'Error', 'message' => __('Spieler konnte nicht in das Prison gesteckt werden.')];
+                    }
+                }
+
+                return ['status' => 'Error', 'message' => __('Es ist ein interner Fehler aufgetreten.')];
+            }
         } elseif ($type === 'delete') {
             if(in_array($user->Id, [1, 2, 13, 20, 37, 220, 404, 1194, 4123]))
                 return ['status' => 'Error', 'message' => __('Sir are you drunk?')];

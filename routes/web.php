@@ -133,7 +133,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('bans', 'BanController', ['as' => 'admin'])->only('index');
         Route::resource('houses', 'HouseController', ['as' => 'admin'])->only('index');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
-        Route::resource('users', 'UserController', ['as' => 'admin'])->only('update');
         Route::resource('polls', 'PollController', ['as' => 'admin'])->only('index');
         Route::resource('tickets', 'TicketController', ['as' => 'admin'])->only('index');
         Route::resource('users.screenshots', 'ScreenshotUserController', ['as' => 'admin'])->only('index', 'store');

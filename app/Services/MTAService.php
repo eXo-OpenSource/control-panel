@@ -32,6 +32,16 @@ class MTAService
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKUnbanPlayer', $adminId,  $targetId, $reason);
     }
 
+    public function prisonPlayer($adminId, $targetId, $duration, $reason)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKPrisonPlayer', $adminId, $targetId, $duration, $reason);
+    }
+
+    public function unprisonPlayer($adminId, $targetId, $reason)
+    {
+        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKUnprisonPlayer', $adminId,  $targetId, $reason);
+    }
+
     public function addWarn($adminId, $targetId, $duration, $reason)
     {
         return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKAddWarn', $adminId,  $targetId, $duration, $reason);

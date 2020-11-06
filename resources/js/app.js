@@ -19,6 +19,8 @@ require('./components/HistoryDialog');
 require('./components/Vehicle');
 require('./components/admin/BanDialog');
 require('./components/admin/UnbanDialog');
+require('./components/admin/PrisonDialog');
+require('./components/admin/UnprisonDialog');
 require('./components/admin/KickDialog');
 require('./components/admin/WarnsDialog');
 require('./components/admin/PunishAddDialog');
