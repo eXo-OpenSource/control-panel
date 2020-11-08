@@ -20,3 +20,6 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
+Route::namespace('Api\\User')->name('user-api.')->group(function () {
+    Route::resource('factions', 'FactionController')->only('index', 'show');
+});
