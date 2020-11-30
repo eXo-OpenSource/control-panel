@@ -49,7 +49,7 @@ export default class TicketEntryThread extends Component {
         ) : '';
 
         return (
-            <div className="card">
+            <div className="card thread">
                 <div className="card-body">
                     {this.props.answers.map((answer, i) => {
                         if(parseInt(answer.MessageType) === 1) {
