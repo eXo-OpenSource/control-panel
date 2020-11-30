@@ -11,6 +11,7 @@ export default class TicketStatistics extends Component {
         super();
         this.state = {
             data: null,
+            rawData: null,
             options: {
                 'maintainAspectRatio': false,
                 'scales': {
@@ -32,6 +33,10 @@ export default class TicketStatistics extends Component {
 
         try {
             const response = await axios.get('/api/admin/tickets');
+
+            this.setState({
+                rawData: response.data
+            });
 
             response.data.map((element, i) => {
                 response.data[i]['chartData'] = {
@@ -78,79 +83,57 @@ export default class TicketStatistics extends Component {
             return <div className="text-center"><Spinner animation="border" /></div>;
 
         return (
-            <div className="row">
-                {this.state.data.map((element, i) => {
-                    return (
-                        <div className="col-6" key={element.Id}>
-                            <div className="card">
-                                <div className="card-header">
-                                    {element.Name}
-                                </div>
-                                <div className="card-body" style={{'height': '40vh'}}>
-                                    <Line data={element.chartData} options={this.state.options} />
-                                </div>
+            <div>
+                <div className="row">
+                    <div className="col-12">
+                        <div className="card">
+                            <div className="card-header">
+                                Tickets
+                            </div>
+                            <div className="card-body">
+                                <table className="table table-sm">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Rang</th>
+                                        {this.state.rawData[0].data.map((element, i) => {
+                                            return <th key={element.Week}>{element.Week}</th>;
+                                        })}
+                                    </tr>
+                                    {this.state.rawData.map((element, i) => {
+                                        return (
+                                            <tr key={element.Id}>
+                                                <td>{element.Name}</td>
+                                                <td>{element.Rank}</td>
+                                                {element.data.map((element2, i2) => {
+                                                    return <td key={element2.Week}>{element2.ResolvedCount > 0 ? element2.ResolvedCount : '-'}</td>;
+                                                })}
+                                            </tr>
+                                        );
+                                    })}
+                                </table>
                             </div>
                         </div>
-                    );
-                })}
+                    </div>
+                </div>
+
+                <div className="row">
+                    {this.state.data.map((element, i) => {
+                        return (
+                            <div className="col-6" key={element.Id}>
+                                <div className="card">
+                                    <div className="card-header">
+                                        {element.Name}
+                                    </div>
+                                    <div className="card-body" style={{'height': '40vh'}}>
+                                        <Line data={element.chartData} options={this.state.options} />
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-        )
-
-        if(this.state.status) {
-            if(this.state.status !== 'Success') {
-                let message = <p>Der Zugriff auf die Daten wurde verweigert!</p>;
-
-                if(this.state.status === 'Error') {
-                    message = <p>Die Daten konnten nicht geladen werden!</p>;
-                }
-
-                return (
-                    <div className="card">
-                        <div className="card-header">{this.props.title}
-                        </div>
-
-                        <div className="card-body">
-                            <div className="text-center">
-                                {message}
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else {
-                let chart;
-                let fromTo;
-
-                if(this.state.data.type === 'doughnut') {
-                    chart = <Doughnut plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
-                } else if(this.state.data.type === 'bar') {
-                    chart = <Bar plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
-                } else {
-                    chart = <Line plugins={[showAllTooltipsPlugin]} data={this.state.data.data} options={this.state.data.options} />;
-                }
-
-                if(this.state.data.from && this.state.data.to) {
-                    fromTo = <span>{this.state.data.from} - {this.state.data.to}</span>;
-                } else if(this.state.data.date) {
-                    fromTo = <span>{this.state.data.date}</span>;
-                }
-
-
-
-                return (
-                    <div className="card">
-                        <div className="card-header">{this.props.title}
-                            <div className="float-right">
-                                {fromTo}
-                            </div>
-                        </div>
-
-                        <div className="card-body"  style={{'height': '40vh'}}>
-                            {chart}
-                        </div>
-                    </div>
-                );
-            }
-        }
+        );
     }
 }
 
