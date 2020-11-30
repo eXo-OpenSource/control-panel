@@ -13,6 +13,8 @@ import SelectUserFromListDialog from "../helpers/SelectUserFromListDialog";
 import { ToastContainer, toast } from 'react-toastify';
 import Linkify from 'react-linkify';
 import 'react-toastify/dist/ReactToastify.css';
+import TicketEntryChat from "./TicketEntryChat";
+import TicketEntryThread from "./TicketEntryThread";
 
 export default class TicketEntry extends Component {
     constructor({match}) {
@@ -80,9 +82,13 @@ export default class TicketEntry extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    async send() {
+    async send(message) {
         if(this.state.submitting)
             return false;
+
+        await this.setState({
+            message: message
+        });
 
         if(this.state.message === '')
             return false;
@@ -111,6 +117,7 @@ export default class TicketEntry extends Component {
                 console.error(error);
             }
         });
+        return true;
     }
 
     async close() {
@@ -312,7 +319,7 @@ export default class TicketEntry extends Component {
         }
 
         let closeButton = <></>;
-        let answer = <></>;
+        let canAnswer = false;
         let assignButtons = <></>;
         let addUserButton = <></>;
 
@@ -338,18 +345,7 @@ export default class TicketEntry extends Component {
                 addUserButton = <Button disabled={this.state.submitting} onClick={this.toggleAddUserDialog.bind(this)} size="sm" variant="secondary">Benutzer hinzufügen</Button>;
             }
 
-            answer = (
-                <Form>
-                    <Form.Group>
-                        <Form.Label>Nachricht</Form.Label>
-                        <InputGroup>
-                            <Form.Control disabled={this.state.submitting} as="textarea" rows="3" name="message" placeholder="Nachricht" value={this.state.message} onChange={this.onChange.bind(this)} />
-                        </InputGroup>
-                    </Form.Group>
-
-                    <Button disabled={this.state.submitting} onClick={this.send.bind(this)} className="float-right">Senden</Button>
-                </Form>
-            );
+            canAnswer = true;
         } else {
             if(Exo.Rank >= 7) {
                 closeButton = <Button disabled={this.state.submitting} onClick={this.toggleDeleteTicketDialog.bind(this)} variant="danger">Ticket löschen</Button>;
@@ -369,66 +365,9 @@ export default class TicketEntry extends Component {
                     <div className="col-md-12">
                         <div className="row">
                             <div className="col-md-8">
-                                <div className="card">
-                                    <div className="card-header">
-                                        Chat
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="chat">
-                                            {this.state.data.answers.map((answer, i) => {
-                                                if(parseInt(answer.MessageType) === 1) {
-                                                    return (
-                                                        <div key={answer.Id} className="chat-message">
-                                                            <div className="message">
-                                                                <div className="message-center">
-                                                                    <div className="message-content">
-                                                                        <Linkify>
-                                                                            {answer.Message.split('\n').map((value, index) => {
-                                                                                return <p key={index}>{value}</p>;
-                                                                            })}
-                                                                        </Linkify>
-                                                                        <span>
-                                                                            <span className="message-system-time">{answer.CreatedAt}</span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                }
-
-                                                return (
-                                                    <div key={answer.Id} className="chat-message">
-                                                        <div className={answer.IsAdmin ? 'message message-admin' : 'message'}>
-                                                            <div className={answer.UserId === Exo.UserId ? 'message-right' : 'message-left'}>
-                                                                <div className="message-content">
-                                                                    <span className="message-header">
-                                                                        <span className="message-user">
-                                                                            {this.props.minimal == true &&
-                                                                            answer.User
-                                                                            ||
-                                                                            <a href={'/users/' + answer.UserId}>{answer.User}</a>
-                                                                            }
-                                                                        </span>
-                                                                        <span className="message-time">
-                                                                            {answer.CreatedAt}
-                                                                        </span>
-                                                                    </span>
-                                                                    <Linkify>
-                                                                        {answer.Message !== null ? answer.Message.split('\n').map((value, index) => {
-                                                                            return <p key={index}>{value}</p>;
-                                                                        }) : <p className="font-italic">Keine Nachricht</p>}
-                                                                    </Linkify>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                        {answer}
-                                    </div>
-                                </div>
+                                {this.state.data.settings.display === 0
+                                    ? <TicketEntryChat minimal={this.props.minimal} answers={this.state.data.answers} canAnswer={canAnswer} submitting={this.state.submitting} sendMessage={this.send.bind(this)} />
+                                    : <TicketEntryThread minimal={this.props.minimal} answers={this.state.data.answers} canAnswer={canAnswer} submitting={this.state.submitting} sendMessage={this.send.bind(this)} /> }
                             </div>
                             <div className="col-md-4">
                                 <div className="card">

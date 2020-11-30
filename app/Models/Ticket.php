@@ -66,6 +66,9 @@ class Ticket extends Model
             'LastResponseAt' => $this->LastResponseAt->format('d.m.Y H:i:s'),
             'CreatedAt' => $this->CreatedAt->format('d.m.Y H:i:s'),
             'ResolvedAt' => $this->ResolvedAt ? $this->ResolvedAt->format('d.m.Y H:i:s') : null,
+            'settings' => [
+                'display' => auth()->user()->TicketDisplay
+            ]
         ];
 
         if($this->assignee) {

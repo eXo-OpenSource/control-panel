@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Select from "react-select";
-import AsyncSelect from "react-select/async/dist/react-select.esm";
+import {toast, ToastContainer} from "react-toastify";
 
 export default class TicketList extends Component {
     constructor() {
@@ -26,6 +26,10 @@ export default class TicketList extends Component {
             search: '',
             page: 0,
             loading: false,
+            showSettings: false,
+            settings: null,
+            settingsTmp: null,
+            displaySettings: [{value: 0, label: 'Chat'}, {value: 1, label: 'Thread'}]
         };
 
         if(Exo.Rank > 0) {
@@ -88,6 +92,7 @@ export default class TicketList extends Component {
             const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories);
             this.setState({
                 data: response.data,
+                settings: response.data.settings,
                 loading: false
             });
         } catch (error) {
@@ -177,6 +182,7 @@ export default class TicketList extends Component {
             const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories + '&search=' + this.state.search);
             this.setState({
                 data: response.data,
+                settings: response.data.settings,
                 loading: false
             });
         } catch(error) {
@@ -203,6 +209,7 @@ export default class TicketList extends Component {
             const response = await axios.get('/api/tickets?state=' + this.state.state + '&assignee=' + this.state.assignee + '&categories=' + categories + '&search=' + this.state.search + '&page=' + this.state.page);
             this.setState({
                 data: response.data,
+                settings: response.data.settings,
                 loading: false
             });
         } catch(error) {
@@ -212,6 +219,62 @@ export default class TicketList extends Component {
             });
             console.log(error);
         }
+    }
+
+    async showSettings()
+    {
+        await this.setState({
+            showSettings: true,
+        });
+    }
+
+    async updateSettings()
+    {
+        var settings = this.state.settingsTmp;
+        if (settings == null) {
+            settings = this.state.settings;
+        }
+
+        axios.put('/api/tickets/settings', settings).then((response) => {
+            this.setState({
+                showSettings: false,
+                settings: settings,
+            });
+            toast.success(response.data.Message);
+        }).catch((error) => {
+            this.setState({
+                showSettings: false,
+            });
+
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
+    }
+
+    async onChangeSettingDisplay(value)
+    {
+        var settings = this.state.settingsTmp;
+        if (settings == null) {
+            settings = this.state.settings;
+        }
+
+        settings.display = value.value;
+
+
+        await this.setState({
+            settingsTmp: settings,
+        });
+    }
+
+    async handleSettingsClose()
+    {
+        await this.setState({
+            showSettings: false,
+        });
     }
 
     render() {
@@ -284,6 +347,7 @@ export default class TicketList extends Component {
 
         return (
             <>
+                <ToastContainer />
                 <div className="row mb-2">
                     <div className="col-md-12">
                         <div className="btn-group" role="group" aria-label="Basic example">
@@ -291,7 +355,10 @@ export default class TicketList extends Component {
                             <Button variant="secondary" className={this.state.state === 'both' ? 'active' : ''} onClick={(evt) => this.changeState('both')}>Offen / Geschlossen</Button>
                             <Button variant="secondary" className={this.state.state === 'closed' ? 'active' : ''} onClick={(evt) => this.changeState('closed')}>Geschlossen</Button>
                         </div>
-                        <Link to="/tickets/create" className="btn btn-primary float-right">Ticket erstellen</Link>
+                        <div className="float-right">
+                            <Button variant="secondary" className="mr-2" onClick={this.showSettings.bind(this)}><i className="fas fa-cog"></i></Button>
+                            <Link to="/tickets/create" className="btn btn-primary">Ticket erstellen</Link>
+                        </div>
                     </div>
                 </div>
                 {Exo.Rank > 0 ? <div className="row mb-2">
@@ -327,6 +394,38 @@ export default class TicketList extends Component {
                     </div>
                 </div>
                 {body}
+
+
+                {this.state.settings != null ?
+                <Modal show={this.state.showSettings} onHide={this.handleSettingsClose.bind(this)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Einstellungen</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Darstellung der Tickets</Form.Label>
+                                <Select
+                                    className="react-select-container"
+                                    classNamePrefix="react-select"
+                                    isSearchable={false}
+                                    defaultValue={this.state.displaySettings[this.state.settings.display]}
+                                    options={this.state.displaySettings}
+                                    styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                                    onChange={this.onChangeSettingDisplay.bind(this)}
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={this.updateSettings.bind(this)}>
+                            Speichern
+                        </Button>
+                        <Button variant="secondary" onClick={this.handleSettingsClose.bind(this)}>
+                            Schließen
+                        </Button>
+                    </Modal.Footer>
+                </Modal> : ''}
             </>
         );
     }

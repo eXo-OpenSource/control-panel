@@ -155,7 +155,6 @@ class User extends Authenticatable
         $time = (new \DateTime())->getTimestamp();
 
         $banned = false;
-
         foreach($this->bans as $ban) {
             if($ban->expires >= $time || $ban->expires === 0) {
                 $banned = $ban->expires;

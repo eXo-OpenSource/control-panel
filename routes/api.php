@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('histories', 'HistoryController')->only('show');
         Route::resource('vehicles', 'VehicleController')->only('show');
         Route::resource('tickets/categories', 'TicketCategoryController')->only('index');
+        Route::put('tickets/settings', 'TicketSettingController@update')->name('tickets.settings.update');
+        Route::patch('tickets/settings', 'TicketSettingController@update')->name('tickets.settings.update');
         Route::resource('tickets', 'TicketController');
         Route::resource('trainings', 'TrainingController')->only('index', 'show', 'update');
         Route::post('users/search', 'User\UserSearchController@index')->name('users.search');

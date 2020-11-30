@@ -151,6 +151,9 @@ class TicketController extends Controller
             'perPage' => $tickets->perPage(),
             'currentPage' => $tickets->currentPage(),
             'lastPage' => $tickets->lastPage(),
+            'settings' => [
+                'display' => auth()->user()->TicketDisplay
+            ]
         ];
     }
 
@@ -181,6 +184,10 @@ class TicketController extends Controller
         if(auth()->user()->isBanned() !== false) {
             if($category->IsAllowedForBannedUsers !== 1) {
                 return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du kein Ticket von dieser Kategorie erstellen!')])->setStatusCode(400);
+            }
+
+            if (Ticket::where('UserId', auth()->user()->Id)->where('CreatedAt', '>=', Carbon::now()->subDay())->count() > 2) {
+                return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du nur zwei Tickets innerhalb von 24h erstellen!')])->setStatusCode(400);
             }
         }
 
@@ -233,6 +240,8 @@ class TicketController extends Controller
                         array_push($text, $field->Name . ': ' . $user->Name);
                         array_push($addUsers, $user);
                     } elseif($field->Type === 'users') {
+                        $maxUsers = $field->Data ?? -1;
+                        $users = 0;
                         $names = [];
                         foreach($value as $userId) {
                             $user = User::find($userId);
@@ -240,10 +249,15 @@ class TicketController extends Controller
                             if ($user == null && $field->Required) {
                                 return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
                             }
-
+                            $users++;
                             array_push($names, $user->Name);
                             array_push($addUsers, $user);
                         }
+
+                        if($users > $maxUsers && $maxUsers !== -1) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Beim Feld ":name" können maximal :count Benutzer hinzugefügt werden!', ['name' => $field->Name, 'count' => $maxUsers])])->setStatusCode(400);
+                        }
+
                         array_push($text, $field->Name . ': ' . implode(', ', $names));
                     } else {
                         if(strlen($value) > $field->MaxLength) {

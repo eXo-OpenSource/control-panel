@@ -1,3 +1,67 @@
+.thread-message {
+    .spacer {
+        margin-left: .25em;
+        margin-right: .25em;
+    }
+    .message {
+
+        &.message-admin {
+            .message-content {
+                box-shadow: 0 0 6px 3px #3c9ade;
+            }
+        }
+
+        .message-content {
+            /*
+            background-color: #20202a;
+            border-color: #181924;
+            border-radius: 5px;
+            */
+            padding: 10px;
+
+            .message-system-time {
+                float: right;
+                color: #999;
+            }
+
+            p {
+                margin: 0;
+            }
+
+            pre {
+                font-family: -apple-system,
+                BlinkMacSystemFont,
+                Segoe UI,
+                Roboto,
+                Helvetica Neue,
+                Arial,
+                Noto Sans,
+                sans-serif,
+                Apple Color Emoji,
+                Segoe UI Emoji,
+                Segoe UI Symbol,
+                Noto Color Emoji;
+                font-size: 0.875rem;
+                color: #e1e1e1;
+            }
+
+            .message-header {
+                display: block;
+                margin-top: 0;
+                margin-bottom: 0.2rem;
+
+                .message-user {
+                    font-weight: bold;
+                }
+
+                .message-time {
+                    color: #999;
+                }
+            }
+        }
+
+    }
+}
 .chat {
     .chat-message {
         margin-top: 10px;
