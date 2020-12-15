@@ -106,7 +106,8 @@ docker:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - '[ "$CI_BUILD_REF_NAME" != "master" ] && docker tag $CI_JOB_ID $CI_PATH:latest-$CI_COMMIT_REF_SLUG'
     - '[ "$CI_BUILD_REF_NAME" == "master" ] && docker tag $CI_JOB_ID $CI_PATH:latest'
-    - docker push $CI_PATH
+    - '[ "$CI_BUILD_REF_NAME" != "master" ] && docker push $CI_PATH:latest-$CI_COMMIT_REF_SLUG'
+    - '[ "$CI_BUILD_REF_NAME" == "master" ] && docker push $CI_PATH:latest'
     - docker logout
     - docker rmi $CI_JOB_ID
   only:
