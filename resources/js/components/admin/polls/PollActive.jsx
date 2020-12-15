@@ -1,14 +1,15 @@
 import React, { Component, useState } from 'react';
 import ReactDOM from 'react-dom';
-import TicketListEntry from "../tickets/TicketListEntry";
+import TicketListEntry from "../../tickets/TicketListEntry";
 import { Beforeunload } from 'react-beforeunload';
 import { Pie, Doughnut } from "react-chartjs-2";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import {Form, InputGroup, Modal, Spinner} from "react-bootstrap";
 import classNames from 'classnames'
+import {Link} from "react-router-dom";
 
-export default class AdminPolls extends Component {
+export default class PollActive extends Component {
     constructor() {
         super();
         this.state = {
@@ -23,28 +24,6 @@ export default class AdminPolls extends Component {
             chartData: {},
             chartOptions: {'maintainAspectRatio': false}
         };
-
-        /*
-        this.state.data = {
-            'datasets': [
-                {
-                    'data': [6, 4, 5],
-                    'backgroundColor': ['rgba(69, 161, 100, 1)', 'rgba(170, 170, 170, 1)', 'rgba(209, 103, 103, 1)'],
-                    'borderWidth': 0
-                }
-            ],
-            'labels': ['Dafür', 'Enthalten', 'Dagegen']
-        };
-        this.state.options = {
-
-            'legend': {
-                'display': true,
-                'labels': {
-                    'fontColor': 'rgba(255, 255, 255, 1)'
-                }
-            }
-        };
-        */
 
         Echo.private(`admin.polls`)
             .listen('Admin\\PollUpdate', this.pollUpdate.bind(this));
@@ -90,7 +69,7 @@ export default class AdminPolls extends Component {
     async loadData()
     {
         try {
-            const response = await axios.get('/api/admin/polls');
+            const response = await axios.get('/api/admin/polls?active');
             this.setState({
                 data: response.data === '' ? null : response.data,
                 loading: false
@@ -253,13 +232,31 @@ export default class AdminPolls extends Component {
         const activeUsers = <div className="row">
             <div className="col-12 mt-4">
                 <h3>Aktive Benutzer</h3>
-                <span className="d-block">{users}</span>
+                <span className="d-block">
+                    {this.state.users.map((user, i) => {
+                        let voted = false;
+                        if (this.state.data != null) {
+                            this.state.data.votes.map((vote) => {
+                                if (vote.AdminId === user.id) {
+                                    voted = true;
+                                }
+                            });
+                        }
+
+                        return <span key={user.id}>{i !== 0 ? ' ' : ''}<span className={`${voted ? 'text-secondary' : ''}`}>{user.name}</span></span>;
+                    })}
+                </span>
             </div>
         </div>;
 
         if(this.state.data === null)
         {
             return <div className="col-12">
+                <div className="row mb-2">
+                    <div className="col-12">
+                        <Link to={'/admin/polls/history'} className="btn btn-primary float-right">History</Link>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-6">
                         <Form>
@@ -296,6 +293,11 @@ export default class AdminPolls extends Component {
 
         return (
             <div className="col-12">
+                <div className="row mb-2">
+                    <div className="col-12">
+                        <Link to={'/admin/polls/history'} className="btn btn-primary float-right">History</Link>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-6">
                         <h2>{this.state.data.Title}</h2>
@@ -336,14 +338,3 @@ export default class AdminPolls extends Component {
         );
     }
 }
-
-var polls = document.getElementsByTagName('react-admin-polls');
-
-for (var index in polls) {
-    const component = polls[index];
-    if(typeof component === 'object') {
-        const props = Object.assign({}, component.dataset);
-        ReactDOM.render(<AdminPolls {...props} />, component);
-    }
-}
-

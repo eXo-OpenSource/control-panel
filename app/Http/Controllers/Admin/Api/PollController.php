@@ -20,9 +20,14 @@ class PollController extends Controller
     public function index()
     {
         abort_unless(auth()->user()->Rank >= 3, 403);
+        $active = request()->has('active');
 
-        $poll = Poll::query()->whereNull('FinishedAt')->get();
-        return $poll->first();
+        if ($active) {
+            $poll = Poll::query()->whereNull('FinishedAt')->get();
+            return $poll->first();
+        }
+
+        return Poll::query()->whereNotNull('FinishedAt')->orderBy('Id', 'DESC')->get();
     }
 
     /**
@@ -106,7 +111,9 @@ class PollController extends Controller
      */
     public function show($id)
     {
-        //
+        abort_unless(auth()->user()->Rank >= 3, 403);
+
+        return Poll::find($id);
     }
 
     /**

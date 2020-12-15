@@ -13,6 +13,7 @@ class Poll extends Model
     protected $table = 'admin_poll';
     public const CREATED_AT = 'CreatedAt';
     public const UPDATED_AT = 'UpdatedAt';
+    protected $dates = ['CreatedAt', 'UpdatedAt', 'FinishedAt'];
 
     public function user()
     {
@@ -28,6 +29,9 @@ class Poll extends Model
     {
         $data = parent::toArray();
         $data['Admin'] = $this->user ? $this->user->Name : 'Unbekannt';
+        $data['CreatedAt'] = $data['CreatedAt'] ? (new \Carbon\Carbon($data['CreatedAt']))->format('d.m.Y H:i:s') : null;
+        $data['UpdatedAt'] = $data['UpdatedAt'] ? (new \Carbon\Carbon($data['UpdatedAt']))->format('d.m.Y H:i:s') : null;
+        $data['FinishedAt'] = $data['FinishedAt'] ? (new \Carbon\Carbon($data['FinishedAt']))->format('d.m.Y H:i:s') : null;
 
         $data['votes'] = [];
 
@@ -37,7 +41,7 @@ class Poll extends Model
                 'AdminId' => $vote->AdminId,
                 'Admin' => $vote->user ? $vote->user->Name : 'Unbekannt',
                 'Vote' => $vote->Vote,
-                'CreatedAt' => $vote->CreatedAt,
+                'CreatedAt' => (new \Carbon\Carbon($vote->CreatedAt))->format('d.m.Y H:i:s'),
             ]);
         }
 

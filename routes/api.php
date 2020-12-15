@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('users.warns', 'UserWarnController')->only('index', 'destroy', 'store');
         Route::resource('users.punish', 'UserPunishController')->only('store');
         Route::resource('punish.log', 'PunishPunishLogController')->only('index');
-        Route::resource('polls', 'PollController')->only('index', 'store');
+        Route::resource('polls', 'PollController')->only('index', 'store', 'show');
         Route::resource('tickets', 'TicketController')->only('index');
     });
 

@@ -133,7 +133,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('bans', 'BanController', ['as' => 'admin'])->only('index');
         Route::resource('houses', 'HouseController', ['as' => 'admin'])->only('index');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
-        Route::resource('polls', 'PollController', ['as' => 'admin'])->only('index');
+
+        Route::get('/polls/{path?}', [
+            'uses' => 'PollController@index',
+            'as' => 'admin.polls.index',
+            'where' => ['path' => '.*']
+        ]);
+
         Route::resource('tickets', 'TicketController', ['as' => 'admin'])->only('index');
         Route::resource('users.screenshots', 'ScreenshotUserController', ['as' => 'admin'])->only('index', 'store');
         Route::resource('users.teamspeak', 'UserTeamspeakController', ['as' => 'admin'])->only('create', 'store');

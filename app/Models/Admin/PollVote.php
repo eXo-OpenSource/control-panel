@@ -12,6 +12,7 @@ class PollVote extends Model
     protected $table = 'admin_poll_vote';
     public const CREATED_AT = 'CreatedAt';
     public const UPDATED_AT = null;
+    protected $dates = ['CreatedAt'];
 
     public function user()
     {

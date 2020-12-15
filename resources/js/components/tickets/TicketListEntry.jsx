@@ -9,7 +9,6 @@ export default class TicketListEntry extends Component {
         super();
 
         this.showEntry = () => {
-
             this.props.open(this.props.ticket);
         };
     }
