@@ -26,8 +26,10 @@ class TicketController extends Controller
 
         $result = [];
 
-        $firstWeek = Carbon::now()->startOfWeek()->subWeeks($weeks)->week;
-        $endWeek = Carbon::now()->week;
+        $firstWeekCarbon = Carbon::now()->startOfWeek()->subWeeks($weeks);
+        $endWeekCarbon = Carbon::now();
+        $firstWeek = $firstWeekCarbon->week;
+        // $endWeek = $endWeekCarbon->week;
 
         foreach($members as $member)
         {
@@ -38,9 +40,13 @@ class TicketController extends Controller
                 'data' => []
             ];
 
-            for($i = $firstWeek; $i <= $endWeek; $i++) {
+
+            for($i = 0; $i < $firstWeekCarbon->diffInWeeks($endWeekCarbon); $i++) {
+                $week = $firstWeek + $i;
+                if ($week > 52)
+                    $week -= 52;
                 array_push($data['data'], [
-                    'Week' => $i,
+                    'Week' => $week,
                     'ResolvedCount' => 0,
                     'ConsultedCount' => 0
                 ]);
