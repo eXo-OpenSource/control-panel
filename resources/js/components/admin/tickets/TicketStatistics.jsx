@@ -12,6 +12,7 @@ export default class TicketStatistics extends Component {
         this.state = {
             data: null,
             rawData: null,
+            showOnlyLowRanks: true,
             options: {
                 'maintainAspectRatio': false,
                 'scales': {
@@ -27,6 +28,12 @@ export default class TicketStatistics extends Component {
                 }
             }
         };
+    }
+
+    async toggleShowLowRanks() {
+        this.setState({
+            showOnlyLowRanks: !this.state.showOnlyLowRanks
+        });
     }
 
     async componentDidMount() {
@@ -91,19 +98,28 @@ export default class TicketStatistics extends Component {
                                 Tickets
                             </div>
                             <div className="card-body">
+                                <div className="custom-control custom-checkbox mb-4">
+                                    <input type="checkbox" className="custom-control-input" id="customCheck1" checked={!this.state.showOnlyLowRanks} onClick={this.toggleShowLowRanks.bind(this)} />
+                                    <label className="custom-control-label" htmlFor="customCheck1">Teammitglieder mit dem Rang 7 und höher anzeigen</label>
+                                </div>
                                 <table className="table table-sm">
                                     <tr>
                                         <th>Name</th>
                                         <th>Rang</th>
+                                        <th>Gesamt</th>
                                         {this.state.rawData[0].data.map((element, i) => {
                                             return <th key={element.Week}>{element.Week}</th>;
                                         })}
                                     </tr>
                                     {this.state.rawData.map((element, i) => {
+                                        if (this.state.showOnlyLowRanks && element.Rank >= 7)
+                                            return null;
+
                                         return (
                                             <tr key={element.Id}>
                                                 <td>{element.Name}</td>
                                                 <td>{element.Rank}</td>
+                                                <td>{element.Total}</td>
                                                 {element.data.map((element2, i2) => {
                                                     return <td key={element2.Week}>{element2.ResolvedCount > 0 ? element2.ResolvedCount : '-'}</td>;
                                                 })}
@@ -118,11 +134,14 @@ export default class TicketStatistics extends Component {
 
                 <div className="row">
                     {this.state.data.map((element, i) => {
+                        if (this.state.showOnlyLowRanks && element.Rank >= 7)
+                            return null;
+
                         return (
                             <div className="col-6" key={element.Id}>
                                 <div className="card">
                                     <div className="card-header">
-                                        {element.Name}
+                                        {element.Name} - Rang {element.Rank}
                                     </div>
                                     <div className="card-body" style={{'height': '40vh'}}>
                                         <Line data={element.chartData} options={this.state.options} />
