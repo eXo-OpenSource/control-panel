@@ -20,7 +20,7 @@ Route::get('/health', function () {
 });
 
 Route::get('screens', function() {
-    if(auth() && auth()->user() && auth()->user()->Rank >= 7) {
+    if(auth() && auth()->user() && auth()->user()->Rank >= 3) {
         return view('screen');
     }
     return redirect('/');
