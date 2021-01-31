@@ -41,7 +41,7 @@ Broadcast::channel('tickets.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('screencaptures.{token}', function ($user, $token) {
-    if($user->Rank >= 7)
+    if($user->Rank >= 3)
         return true;
 
     return false;
