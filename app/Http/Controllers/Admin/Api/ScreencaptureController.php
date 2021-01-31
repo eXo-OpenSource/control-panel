@@ -29,7 +29,6 @@ class ScreencaptureController extends Controller
         $token = $request->get('token');
         $data = $request->get('data');
 
-        /*
         if(!Storage::disk('screencaptures')->exists($token)) {
             Storage::disk('screencaptures')->makeDirectory($token);
         }
@@ -37,7 +36,6 @@ class ScreencaptureController extends Controller
         Storage::disk('screencaptures')->put(
             $token . '/' . $id . '.jpeg', $data
         );
-        */
 
         event(new ScreencaptureReceive($token, 'data:image/jpeg;base64,' . base64_encode($data)));
 
