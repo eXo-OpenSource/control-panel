@@ -91,6 +91,7 @@ class TeamSpeakSyncActivation implements ShouldQueue
                 }
             }
         } catch (TeamSpeakUnreachableException $e) {
+            Log::error($e);
         }
     }
 }
