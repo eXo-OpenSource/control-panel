@@ -2,26 +2,26 @@
 
 return [
     'serverGroups' => [
-        'premium' => 160,
+        'premium' => 39,
         'factions' => [
-            1 => 146, // PD
-            2 => 147, // FBI
-            3 => 173, // SASF
-            4 => 155, // Rescue
-            5 => 170, // LCN
-            6 => 148, // Yakuza
-            7 => 168, // Grove
-            8 => 149, // Ballas
-            9 => false, // Outlaws
-            10 => false, // Vatos
-            11 => false, // Triaden
+            1 => 27, // PD
+            2 => 28, // FBI
+            3 => 29, // SASF
+            4 => 30, // Rescue
+            5 => 33, // LCN
+            6 => 31, // Yakuza
+            7 => 32, // Grove
+            8 => 34, // Ballas
+            9 => 40, // Outlaws
+            10 => 41, // Vatos
+            11 => 42, // Triaden
             12 => false, // Brigada
         ],
         'companies' => [
-            1 => 150, // Fahrschule
-            2 => 161, // Mechanic and Tow
-            3 => 151, // San News
-            4 => 162, // Public Transport
+            1 => 37, // Fahrschule
+            2 => 36, // Mechanic and Tow
+            3 => 35, // San News
+            4 => 38, // Public Transport
         ]
     ]
 ];
