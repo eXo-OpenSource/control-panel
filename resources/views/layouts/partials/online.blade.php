@@ -4,7 +4,7 @@
     $count = 0;
 
     try {
-        $count = count($usersOnline)
+        $count = count($usersOnline);
     } catch (Exception $e) {
 
     }
