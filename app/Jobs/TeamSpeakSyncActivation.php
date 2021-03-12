@@ -54,8 +54,8 @@ class TeamSpeakSyncActivation implements ShouldQueue
                         foreach($identities as $identity) {
                             if($client->uniqueId === $identity->TeamspeakId) {
 
-                                $result = $client->client->addServerGroup($identity->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'));
-                                $client->client->setDescription(route('users.show', $identity->user->Id));
+                                $result = $client->addServerGroup($identity->Type === 1 ? env('TEAMSPEAK_ACTIVATED_GROUP') : env('TEAMSPEAK_MUSICBOT_GROUP'));
+                                $client->setDescription(route('users.show', $identity->user->Id));
 
                                 if($result->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
                                     $banDuration = -1;
@@ -78,6 +78,10 @@ class TeamSpeakSyncActivation implements ShouldQueue
                                                 $banReason = $ban->Reason;
                                             }
                                         }
+                                    }
+                                    
+                                    if($banDuration >= 0) {
+                                        $client->ban($banReason, $banDuration);
                                     }
                                 }
                             }
