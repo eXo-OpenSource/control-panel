@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\TeamSpeakIdentity;
+use App\Models\TeamSpeakBan;
 use Carbon\Carbon;
 use Exo\TeamSpeak\Exceptions\TeamSpeakUnreachableException;
 use Exo\TeamSpeak\Responses\TeamSpeakResponse;
