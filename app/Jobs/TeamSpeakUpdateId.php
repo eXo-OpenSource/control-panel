@@ -37,7 +37,7 @@ class TeamSpeakUpdateId implements ShouldQueue
     public function handle(TeamSpeakService $teamSpeak)
     {
         try {
-            $clients = $teamSpeak->getClients();                
+            $clients = $teamSpeak->getClients(true);                
 
 
             if($clients->status === TeamSpeakResponse::RESPONSE_SUCCESS) {
@@ -46,7 +46,7 @@ class TeamSpeakUpdateId implements ShouldQueue
                 foreach($identities as $identity) {
                     $teamspeakDbId = null;
 
-                    foreach($clients as $client)
+                    foreach($clients->clients as $client)
                     {
                         if ($client->uniqueId === $identity->TeamspeakId) {
                             $teamspeakDbId = $client->databaseId;

@@ -13,7 +13,7 @@
         "@babel/preset-react": "^7.9.4",
         "@fortawesome/fontawesome-free": "^5.13.0",
         "@tailwindcss/custom-forms": "^0.2.1",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "bootstrap-daterangepicker": "^3.0.5",
         "cross-env": "^5.1",
         "jquery": "^3.5.1",

@@ -49,26 +49,56 @@ class MTAService
 
     public function removeWarn($adminId, $targetId, $warnId)
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKRemoveWarn', $adminId,  $targetId, $warnId);
+        try {
+            return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKRemoveWarn', $adminId,  $targetId, $warnId);
+        } catch (\Psr\Http\Client\RequestExceptionInterface $e) {
+            return [];
+        } catch (\Psr\Http\Client\NetworkExceptionInterface $e) {
+            return [];
+        }
     }
 
     public function takeScreenShot($userId)
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKTakeScreenShot', $userId);
+        try {
+            return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKTakeScreenShot', $userId);
+        } catch (\Psr\Http\Client\RequestExceptionInterface $e) {
+            return [];
+        } catch (\Psr\Http\Client\NetworkExceptionInterface $e) {
+            return [];
+        }
     }
 
     public function getOnlinePlayers()
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendOnlinePlayers');
+        try {
+            return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendOnlinePlayers');
+        } catch (\Psr\Http\Client\RequestExceptionInterface $e) {
+            return [];
+        } catch (\Psr\Http\Client\NetworkExceptionInterface $e) {
+            return [];
+        }
     }
 
     public function sendChatBox($type, $target, $message, $r, $g, $b)
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendChatBox', $type, $target, $message, $r, $g, $b);
+        try {
+            return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendChatBox', $type, $target, $message, $r, $g, $b);
+        } catch (\Psr\Http\Client\RequestExceptionInterface $e) {
+            return [];
+        } catch (\Psr\Http\Client\NetworkExceptionInterface $e) {
+            return [];
+        }
     }
 
     public function sendMessage($targetType, $targetId, $message, $options = [])
     {
-        return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendMessage', $targetType, $targetId, $message, $options);
+        try {
+            return $this->mta->getResource(env('MTA_SERVER_RESOURCE'))->call('phpSDKSendMessage', $targetType, $targetId, $message, $options);
+        } catch (\Psr\Http\Client\RequestExceptionInterface $e) {
+            return [];
+        } catch (\Psr\Http\Client\NetworkExceptionInterface $e) {
+            return [];
+        }
     }
 }

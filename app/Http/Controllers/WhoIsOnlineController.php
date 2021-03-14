@@ -108,6 +108,13 @@ class WhoIsOnlineController extends Controller
                     'Companies' => $companiesCount,
                     'Total' => count($playersNew)
                 ], now()->addMinutes(5));
+            } else {
+                Cache::put('players', (object)[
+                    'Players' => [],
+                    'Factions' => [],
+                    'Companies' => [],
+                    'Total' => 0
+                ], now()->addMinutes(5));
             }
         }
 
