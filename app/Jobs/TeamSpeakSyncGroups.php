@@ -56,7 +56,7 @@ class TeamSpeakSyncGroups implements ShouldQueue
                     foreach($characters as $character) {
                         if($character->FactionId === $factionId) {
                             foreach($character->teamSpeakIdentities as $identity) {
-                                if($identity->Type === 1) {
+                                if($identity->Type === 1 && $identity->TeamspeakDbId !== null) {
                                     array_push($shouldDatabaseId, $identity->TeamspeakDbId);
                                     array_push($addDatabaseId, $identity->TeamspeakDbId);
                                 }
