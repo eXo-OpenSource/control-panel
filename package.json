@@ -38,6 +38,7 @@
         "chart.js": "^2.9.3",
         "classnames": "^2.2.6",
         "laravel-echo": "^1.8.0",
+        "pusher-js": "^7.0.3",
         "react-beforeunload": "^2.2.1",
         "react-bootstrap": "^1.0.1",
         "react-chartjs-2": "^2.9.0",
@@ -45,7 +46,6 @@
         "react-router-dom": "^5.2.0",
         "react-select": "^3.1.0",
         "react-toastify": "^6.0.8",
-        "socket.io-client": "^2.3.0",
         "vue-chartjs": "^3.5.0"
     }
 }

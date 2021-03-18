@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Support\Facades\Log;
 
 class ExoUserProvider implements UserProvider
 {
@@ -80,6 +81,7 @@ class ExoUserProvider implements UserProvider
             }
             return null;
         } catch (GuzzleException $exception) {
+            Log::error($exception);
             return null;
         }
     }

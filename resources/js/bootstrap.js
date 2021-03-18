@@ -58,12 +58,12 @@ if(!window.Exo) {
     };
 }
 
-// window.Pusher = require('pusher-js');
-window.io = require('socket.io-client');
+window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production') ? 'cp.exo-reallife.de' : window.location.hostname + ':6001'
+    broadcaster: 'pusher',
+    key: window.Exo.PusherKey,
+    wsHost: window.location.hostname,
+    wsPort: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production') ? 443 : 6001,
+    forceTLS: (window.Exo.Env === 'production' || window.Exo.Env === 'release-production')
 });
-
-

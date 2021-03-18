@@ -103,10 +103,12 @@
                 UserName: '{{ auth()->user()->Name }}',
                 Rank: {{ auth()->user()->Rank }},
                 Env: '{{ env('APP_ENV') }}',
+                PusherKey: '{{ env('PUSHER_APP_KEY') }}'
             };
         @else
             window.Exo = {
-                Env: '{{ env('APP_ENV') }}',
+                Env: '{{ env('APP_ENV') }}',,
+                PusherKey: '{{ env('PUSHER_APP_KEY') }}'
             };
         @endif
     </script>

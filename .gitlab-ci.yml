@@ -1,4 +1,4 @@
-image: lorisleiva/laravel-docker:7.3
+image: lorisleiva/laravel-docker:8.0
 
 stages:
   - prepare

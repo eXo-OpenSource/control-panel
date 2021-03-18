@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Blade::directive('vehicleName', function ($model) {
-            return "<?php echo config('constants.vehicleNames')[$model]; ?>";
+            return "<?php echo (array_key_exists($model, config('constants.vehicleNames')) ? config('constants.vehicleNames')[$model] : 'Unknown'); ?>";
         });
 
         Blade::directive('factionColor', function ($value) {

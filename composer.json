@@ -8,11 +8,12 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "ext-json": "*",
+        "beyondcode/laravel-websockets": "^1.11",
         "exo/teamspeak": "^1.0@dev",
         "fideloper/proxy": "^4.0",
-        "graham-campbell/gitlab": "^3.1",
+        "graham-campbell/gitlab": "^3.1 || ^5.3",
         "guzzlehttp/guzzle": "^7.0.1",
         "guzzlehttp/psr7": "^1.6",
         "http-interop/http-factory-guzzle": "^1.0",
@@ -20,7 +21,7 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "multitheftauto/mtasa-php-sdk": "^1.0",
+        "multitheftauto/mtasa-php-sdk": "dev-master",
         "orchestra/parser": "^6.0",
         "owen-it/laravel-auditing": "^10.0",
         "paypal/rest-api-sdk-php": "^1.14",
@@ -76,6 +77,10 @@
         {
             "type": "git",
             "url": "https://github.com/MegaThorx/laravel-influxdb.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/MegaThorx/mtasa-php-sdk.git"
         }
     ],
     "minimum-stability": "dev",

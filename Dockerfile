@@ -14,56 +14,52 @@ RUN apk --update add --no-cache \
       libpng-dev \
       nodejs \
       git \
-      php7 \
-      php7-dom \
-      php7-fpm \
-      php7-mbstring \
-      php7-mcrypt \
-      php7-opcache \
-      php7-pdo \
-      php7-pdo_mysql \
-      php7-pdo_pgsql \
-      php7-pdo_sqlite \
-      php7-xml \
-      php7-phar \
-      php7-openssl \
-      php7-json \
-      php7-curl \
-      php7-ctype \
-      php7-session \
-      php7-gd \
-      php7-zlib \
-      php7-tokenizer \
-      php7-bcmath \
-      php7-redis \
-      php7-fileinfo \
+      php8 \
+      php8-dom \
+      php8-fpm \
+      php8-mbstring \
+      php8-opcache \
+      php8-pdo \
+      php8-pdo_mysql \
+      php8-pdo_pgsql \
+      php8-pdo_sqlite \
+      php8-xml \
+      php8-phar \
+      php8-openssl \
+      php8-json \
+      php8-curl \
+      php8-ctype \
+      php8-session \
+      php8-gd \
+      php8-zlib \
+      php8-tokenizer \
+      php8-bcmath \
+      php8-redis \
+      php8-fileinfo \
       nodejs \
       npm \
     && rm -rf /var/cache/apk/* && \
     addgroup -g 1000 -S app && \
     adduser -u 1000 -S app -G app && \
-    mkdir /var/log/echo && \
-    touch /var/log/php7/stdout.log && \
-    touch /var/log/php7/stderr.log && \
+    mkdir /var/log/websockets && \
+    touch /var/log/php8/stdout.log && \
+    touch /var/log/php8/stderr.log && \
     touch /var/log/nginx/stdout.log && \
     touch /var/log/nginx/stderr.log && \
-    touch /var/log/echo/stdout.log && \
-    touch /var/log/echo/stderr.log && \
+    touch /var/log/websockets/stdout.log && \
+    touch /var/log/websockets/stderr.log && \
     chown -R 1000:0 /var/log/*
 
 # Set timzone
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
     echo "Europe/Vienna" > /etc/timezone
 
-# Install laravel echo server
-RUN npm install -g laravel-echo-server
-
 # Configure nginx
 COPY build/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
-COPY build/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY build/php.ini /etc/php7/conf.d/zzz_custom.ini
+COPY build/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
+COPY build/php.ini /etc/php8/conf.d/zzz_custom.ini
 
 # Configure cron
 COPY build/crontab /etc/cron/crontab
@@ -75,7 +71,7 @@ COPY build/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chown -R app.app /run && \
   chown -R app.app /var/lib/nginx && \
   chown -R app.app /var/log/nginx && \
-  chown -R app.app /var/log/echo && \
+  chown -R app.app /var/log/websockets && \
   chown -R app.app /var/www
 
 # Setup document root
@@ -92,8 +88,8 @@ COPY --chown=app:app . /var/www
 # Switch to use a non-root user from here on
 USER 1000
 
-RUN php artisan storage:link && \
-    php artisan cache:clear && \
+RUN php8 artisan storage:link && \
+    php8 artisan cache:clear && \
     rm public/js/app.js.map
 
 USER 0
