@@ -29,7 +29,7 @@
         "php-http/guzzle7-adapter": "^0.1",
         "php-http/message": "^1.8",
         "predis/predis": "^1.1",
-        "sentry/sentry-laravel": "2.3.1",
+        "sentry/sentry-laravel": "2.4.1",
         "sofort/sofortlib-php": "^3.3",
         "tray-labs/laravel-influxdb": "dev-master"
     },
