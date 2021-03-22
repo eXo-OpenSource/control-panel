@@ -77,7 +77,7 @@ class VehicleController extends Controller
         }
 
         usort($vehicles, function($a, $b) {
-           return $a->Count < $b->Count;
+           return $a->Count < $b->Count ? -1 : 1;
         });
 
         return view('vehicles.index', compact('vehicles'));

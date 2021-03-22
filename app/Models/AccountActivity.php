@@ -40,7 +40,7 @@ class AccountActivity extends Model
         }
 
         usort($activity, function($a, $b) {
-            return strcmp($a->Date, $b->Date);
+            return strcmp($a->Date, $b->Date) ? 1 : -1;
         });
 
         return $activity;

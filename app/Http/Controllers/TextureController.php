@@ -39,7 +39,7 @@ class TextureController extends Controller
         }
 
         usort($vehicles, function($a, $b) {
-            return strcmp($a['Name'], $b['Name']);
+            return strcmp($a['Name'], $b['Name']) ? 1 : -1;
         });
 
         return view('textures.create', compact('vehicles'));

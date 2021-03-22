@@ -49,7 +49,7 @@ class LastUserActivity
             }
 
             usort($users, function($a, $b) {
-                return $a->Name < $b->Name;
+                return $a->Name < $b->Name ? -1 : 1;
             });
 
             Cache::forever('users-online', $users);

@@ -85,7 +85,7 @@ class PermissionController extends Controller
         }
 
         usort($members, function($a, $b) {
-            return $a['Rank'] < $b['Rank'];
+            return $a['Rank'] < $b['Rank'] ? -1 : 1;
         });
 
         return view('trainings.permissions.edit', ['members' => $members, 'type' => $permission]);

@@ -118,7 +118,7 @@ class TicketController extends Controller
 
 
         usort($result, function($a, $b) {
-           return $a['Rank'] > $b['Rank'];
+           return $a['Rank'] > $b['Rank'] ? 1 : -1;
         });
 
         return $result;

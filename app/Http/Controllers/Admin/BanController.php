@@ -61,7 +61,7 @@ class BanController extends Controller
                 ];
 
                 usort($warns, function($a, $b) {
-                    return $a->expires < $b->expires;
+                    return $a->expires < $b->expires ? -1 : 1;
                 });
 
                 if($warns[2]->user)
@@ -70,7 +70,7 @@ class BanController extends Controller
                     $data['User'] = $warns[2]->user->Name;
 
                     usort($warns, function($a, $b) {
-                        return $a->created < $b->created;
+                        return $a->created < $b->created ? -1 : 1;
                     });
 
                     $data['AdminId'] = $warns[0]->adminId;
@@ -86,12 +86,12 @@ class BanController extends Controller
 
         usort($banList, function($a, $b) {
             if($a->Expires === 0)
-                return true;
+                return 1;
 
             if($b->Expires === 0)
-                return false;
+                return -1;
 
-            return $a->Expires > $b->Expires;
+            return $a->Expires > $b->Expires ? 1 : -1;
         });
 
         return view('admin.bans.index', compact('banList'));

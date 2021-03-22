@@ -26,7 +26,7 @@ class TicketCategoryController extends Controller
 
         foreach($result as $i => $entry)
         {
-            usort($entry['fields'], function($a, $b) { return $a['Order'] > $b['Order']; });
+            usort($entry['fields'], function($a, $b) { return $a['Order'] > $b['Order'] ? 1 : -1; });
             $result[$i] = $entry;
         }
 

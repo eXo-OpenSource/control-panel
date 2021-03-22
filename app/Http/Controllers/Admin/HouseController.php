@@ -22,12 +22,12 @@ class HouseController extends Controller
 
         usort($houses, function($a, $b) {
             if(!isset($a['user']))
-                return false;
+                return -1;
 
             if(!isset($b['user']))
-                return true;
+                return 1;
 
-            return $a['user']['LastLogin'] > $b['user']['LastLogin'];
+            return $a['user']['LastLogin'] > $b['user']['LastLogin'] ? 1 : -1;
         });
 
         return view('admin.houses.index', compact('houses'));
