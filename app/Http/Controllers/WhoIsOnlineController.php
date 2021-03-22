@@ -20,24 +20,24 @@ class WhoIsOnlineController extends Controller
 
                 usort($players, function($a, $b) {
                     if ($a->Id === -1 && $b->Id === -1) {
-                        return strcmp($a->Name, $b->Name);
+                        return strcmp($a->Name, $b->Name) ? 1 : -1;
                     } else if ($a->Id === -1) {
-                        return false;
+                        return -1;
                     } else if ($b->Id === -1) {
-                        return true;
+                        return 1;
                     }
                     if ($a->Faction == $b->Faction) {
                         if ($a->Company == $b->Company) {
                             if ($a->GroupId == $b->GroupId) {
-                                return strcmp($a->Name, $b->Name);
+                                return strcmp($a->Name, $b->Name) ? 1 : -1;
                             } else {
-                                return $a->GroupId > $b->GroupId;
+                                return $a->GroupId > $b->GroupId ? 1 : -1;
                             }
                         } else {
-                            return $a->Company > $b->Company;
+                            return $a->Company > $b->Company ? 1 : -1;
                         }
                     } else {
-                        return $a->Faction > $b->Faction;
+                        return $a->Faction > $b->Faction ? 1 : -1;
                     }
                 });
 

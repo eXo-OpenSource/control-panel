@@ -3,10 +3,8 @@
 
     $count = 0;
 
-    try {
-        $count = count($usersOnline);
-    } catch (Exception $e) {
-
+    if (is_countable($usersOnline)) {
+      $count = count($usersOnline);
     }
 @endphp
 <react-users-online data-children="{{ __(':online Benutzer online', ['online' => $count]) }}"></react-users-online>
