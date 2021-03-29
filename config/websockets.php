@@ -70,7 +70,6 @@ return [
      */
     'middleware' => [
         'web',
-        Authorize::class,
         'admin'
     ],
 
@@ -80,7 +79,7 @@ return [
          * The only requirement is that the model should extend
          * `WebSocketsStatisticsEntry` provided by this package.
          */
-        'model' => \App\Models\WebSocketStatistic::class,
+        'model' => App\Models\WebSocketStatistic::class,
 
         /**
          * The Statistics Logger will, by default, handle the incoming statistics, store them
@@ -103,7 +102,7 @@ return [
          * Use an DNS resolver to make the requests to the statistics logger
          * default is to resolve everything to 127.0.0.1.
          */
-        'perform_dns_lookup' => false,
+        'perform_dns_lookup' => true,
     ],
 
     /*

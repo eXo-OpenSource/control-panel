@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use BeyondCode\LaravelWebSockets\Statistics\Models\WebSocketsStatisticsEntry;
 
-class WebSocketStatistic extends Model
+class WebSocketStatistic extends WebSocketsStatisticsEntry
 {
     protected $guarded = [];
 
-    protected $table = 'WebSocketStatistic';
+    protected $table = 'websockets_statistics_entries';
 }

@@ -186,8 +186,8 @@ class TicketController extends Controller
                 return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du kein Ticket von dieser Kategorie erstellen!')])->setStatusCode(400);
             }
 
-            if (Ticket::where('UserId', auth()->user()->Id)->where('CreatedAt', '>=', Carbon::now()->subDay())->count() > 2) {
-                return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du nur zwei Tickets innerhalb von 24h erstellen!')])->setStatusCode(400);
+            if (Ticket::where('UserId', auth()->user()->Id)->where('CreatedAt', '>=', Carbon::now()->subDay())->count() >= 1) {
+                return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du nur ein Ticket innerhalb von 24h erstellen!')])->setStatusCode(400);
             }
         }
 
