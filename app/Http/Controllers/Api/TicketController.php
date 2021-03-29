@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\TicketBan;
 use App\Services\ForumService;
 use App\Services\MTAService;
 use Carbon\Carbon;
@@ -189,6 +190,11 @@ class TicketController extends Controller
             if (Ticket::where('UserId', auth()->user()->Id)->where('CreatedAt', '>=', Carbon::now()->subDay())->count() >= 1) {
                 return response()->json(['Status' => 'Failed', 'Message' => __('Aufgrund deiner Sperre kannst du nur ein Ticket innerhalb von 24h erstellen!')])->setStatusCode(400);
             }
+        }
+
+        $ticketBan = TicketBan::where('UserId', auth()->user()->Id)->where('BannedUntil', '>=', Carbon::now())->orderBy('BannedUntil', 'DESC')->first();
+        if ($ticketBan !== null) {
+            return response()->json(['Status' => 'Failed', 'Message' => __('Du wurdest bis zum :date mit dem Grund ":reason" aus dem Ticketsystem ausgeschlossen!', ['date' => $ticketBan->BannedUntil->format('d.m.Y H:m:s'), 'reason' => $ticketBan->Reason])])->setStatusCode(400);
         }
 
         $fields = $request->get('fields');
