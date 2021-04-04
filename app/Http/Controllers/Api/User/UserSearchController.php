@@ -18,6 +18,10 @@ class UserSearchController extends Controller
             return User::where('Name', 'LIKE', '%'.request()->get('name').'%')->orderBy('LastLogin', 'DESC')->limit(10)->get(['Name', 'Id']);
         }
 
+        if (request()->has('id') && !empty(request()->get('id'))) {
+            return User::where('Id', request()->get('id'))->orderBy('LastLogin', 'DESC')->limit(10)->get(['Name', 'Id']);
+        }
+
         return [];
     }
 }

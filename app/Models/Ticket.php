@@ -104,6 +104,12 @@ class Ticket extends Model
                 $entry['AnswerCount']++;
             }
 
+            if ($answer->MessageType === 2) {
+                if (auth()->user()->Rank === 0) {
+                    continue;
+                }
+            }
+
             array_push($entry['answers'], [
                 'Id' => $answer->Id,
                 'UserId' => $answer->UserId,

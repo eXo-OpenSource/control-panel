@@ -1,19 +1,11 @@
 import React, { Component, useState } from 'react';
-import ReactDOM from 'react-dom';
 import {Button, Modal, Spinner, Form, InputGroup} from 'react-bootstrap';
 import axios from "axios";
-import TicketListEntry from "./TicketListEntry";
 import {Link, withRouter} from "react-router-dom";
 import {toast, ToastContainer} from "react-toastify";
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
-import {forEach} from "react-bootstrap/cjs/ElementChildren";
-
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
+import queryString from 'query-string';
 
 class TicketCreate extends Component {
     constructor() {
@@ -21,6 +13,9 @@ class TicketCreate extends Component {
         this.state = {
             categories: null,
             categoryOptions: null,
+            createFor: null,
+            createForOption: null,
+            closeTicket: false,
             title: '',
             category: '',
             message: '',
@@ -30,8 +25,37 @@ class TicketCreate extends Component {
     }
 
     async componentDidMount() {
+        let params = queryString.parse(this.props.location.search)
         if(this.state.categories === null) {
             this.loadCategories();
+        } else {
+            if (params.category) {
+                options.forEach((category) => {
+                    if (category.value === Number(params.category)) {
+                        this.setState({
+                            category: category.value
+                        });
+                    }
+                });
+            }
+        }
+
+        if (params.createFor) {
+            try {
+                const response = await axios.post('/api/users/search', {
+                    id: Number(params.createFor)
+
+                });
+
+                if (response.data && response.data[0] && response.data[0].Id) {
+                    this.setState({
+                        createFor: response.data[0].Id,
+                        createForOption: {value: response.data[0].Id, label: response.data[0].Name}
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -45,6 +69,8 @@ class TicketCreate extends Component {
 
         axios.post('/api/tickets', {
             title: this.state.title,
+            createFor: this.state.createFor,
+            closeTicket: this.state.closeTicket,
             category: this.state.category,
             message: this.state.message,
             fields: this.state.fields,
@@ -81,6 +107,19 @@ class TicketCreate extends Component {
                 categories: response.data,
                 categoryOptions: options
             });
+
+
+            let params = queryString.parse(this.props.location.search)
+            if (params.category) {
+                options.forEach((category) => {
+                    if (category.value === Number(params.category)) {
+                        this.setState({
+                            category: category.value
+                        });
+                    }
+                });
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -123,6 +162,17 @@ class TicketCreate extends Component {
 
 
         this.setState({ fields: fields });
+    }
+
+    async onChangeCreateForSelect(newValue) {
+        this.setState({
+            createFor: newValue.value,
+            createForOption: newValue
+        });
+    }
+
+    async onChangeCloseTicket(e) {
+        this.setState({ closeTicket: e.target.checked });
     }
 
     async loadUsers(inputValue, callback) {
@@ -203,7 +253,7 @@ class TicketCreate extends Component {
                             );
                         }
 
-                        if (field.Type === 'users') {
+                        if (field.Type === 'users' || field.Type === 'admins') {
                             return (
                                 <Form.Group key={field.Id}>
                                     <Form.Label>{field.Name}</Form.Label>
@@ -239,6 +289,37 @@ class TicketCreate extends Component {
             }
         }
 
+        let category = this.state.category;
+
+        let createFor = null;
+
+        if(Exo.Rank >= 1) {
+            createFor = (
+                <div>
+                    <Form.Group>
+                        <Form.Label>Benutzer*</Form.Label>
+                        <AsyncSelect
+                            className="react-select-container"
+                            classNamePrefix="react-select"
+                            placeholder='Benutzer'
+                            name='createFor'
+                            loadOptions={this.loadUsers.bind(this)}
+                            value={this.state.createForOption}
+                            styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
+                            onChange={this.onChangeCreateForSelect.bind(this)}
+                        />
+                        <Form.Text className="text-muted">
+                            Ticket für einen Benutzer erstellen
+                        </Form.Text>
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Check type="checkbox" name="closeTicket" label="Ticket direkt schließen" onChange={this.onChangeCloseTicket.bind(this)} />
+                    </Form.Group>
+                </div>
+            );
+        }
+
         return (
             <>
                 <ToastContainer />
@@ -262,6 +343,8 @@ class TicketCreate extends Component {
                                         </InputGroup>
                                     </Form.Group>
 
+                                    {createFor}
+
                                     <Form.Group>
                                         <Form.Label>Kategorie</Form.Label>
                                         <Select
@@ -269,6 +352,9 @@ class TicketCreate extends Component {
                                             className="react-select-container"
                                             classNamePrefix="react-select"
                                             options={this.state.categoryOptions}
+                                            value={this.state.categoryOptions.filter(function(option) {
+                                                return option.value === category;
+                                            })}
                                             styles={{option: (provided, state) => { return {...provided, backgroundColor: 'transparent'}}}}
                                             onChange={this.onChangeCategory.bind(this)}
                                         />

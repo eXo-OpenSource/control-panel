@@ -52,9 +52,9 @@ export default class TicketEntryThread extends Component {
             <div className="card thread">
                 <div className="card-body">
                     {this.props.answers.map((answer, i) => {
-                        if(parseInt(answer.MessageType) === 1) {
+                        if(parseInt(answer.MessageType) === 1 || parseInt(answer.MessageType) === 2) {
                             return (
-                                <div>
+                                <div key={answer.Id}>
                                     <div key={answer.Id} className="thread-message">
                                         <div className="message">
                                             <div className="message-content">

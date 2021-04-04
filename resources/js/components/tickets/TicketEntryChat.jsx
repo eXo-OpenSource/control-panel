@@ -55,7 +55,7 @@ export default class TicketEntryChat extends Component {
             <div className="card-body">
                 <div className="chat">
                     {this.props.answers.map((answer, i) => {
-                        if(parseInt(answer.MessageType) === 1) {
+                        if(parseInt(answer.MessageType) === 1 || parseInt(answer.MessageType) === 2) {
                             return (
                                 <div key={answer.Id} className="chat-message">
                                     <div className="message">

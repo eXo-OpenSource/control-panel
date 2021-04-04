@@ -205,8 +205,11 @@ class TicketController extends Controller
         }
 
         $text = [];
+        $textInternal = [];
 
         $addUsers = [];
+        $addUserIds = [];
+        $addAdminIds = [];
 
         foreach($category->fields()->orderBy('Order', 'ASC')->get() as $field) {
             $found = false;
@@ -215,7 +218,12 @@ class TicketController extends Controller
                     if($field->Required === 1 && $value === '') {
                         return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
                     }
-                    if($field->Type === 'checkbox') {
+                    if($field->Type === 'internal') {
+                        if(strlen($value) > $field->MaxLength) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" ist zu lang! Maximal sind :maxLength Zeichen zulässig!', ['name' => $field->Name, 'maxLength' => $field->MaxLength])])->setStatusCode(400);
+                        }
+                        array_push($textInternal, $field->Name . ': ' . $value);
+                    } elseif($field->Type === 'checkbox') {
                         $data = json_decode($field->Data);
                         if ($value === 'on') {
                             if ($data && isset($data[0])) {
@@ -243,10 +251,13 @@ class TicketController extends Controller
                             return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
                         }
 
-                        array_push($text, $field->Name . ': ' . $user->Name);
-                        array_push($addUsers, $user);
+                        if (!in_array($user->Id, $addUserIds)) {
+                            array_push($text, $field->Name . ': ' . $user->Name);
+                            array_push($addUsers, $user);
+                            array_push($addUserIds, $user->Id);
+                        }
                     } elseif($field->Type === 'users') {
-                        $maxUsers = $field->Data ?? -1;
+                        $maxUsers = intval($field->Data) ?? -1;
                         $users = 0;
                         $names = [];
                         foreach($value as $userId) {
@@ -255,9 +266,37 @@ class TicketController extends Controller
                             if ($user == null && $field->Required) {
                                 return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
                             }
-                            $users++;
-                            array_push($names, $user->Name);
-                            array_push($addUsers, $user);
+
+                            if (!in_array($user->Id, $addUserIds)) {
+                                $users++;
+                                array_push($names, $user->Name);
+                                array_push($addUsers, $user);
+                                array_push($addUserIds, $user->Id);
+                            }
+                        }
+
+                        if($users > $maxUsers && $maxUsers !== -1) {
+                            return response()->json(['Status' => 'Failed', 'Message' => __('Beim Feld ":name" können maximal :count Benutzer hinzugefügt werden!', ['name' => $field->Name, 'count' => $maxUsers])])->setStatusCode(400);
+                        }
+
+                        array_push($text, $field->Name . ': ' . implode(', ', $names));
+                    } elseif($field->Type === 'admins') {
+                        $maxUsers = intval($field->Data) ?? -1;
+                        $users = 0;
+                        $names = [];
+                        foreach($value as $userId) {
+                            $user = User::find($userId);
+
+                            if ($user == null && $field->Required) {
+                                return response()->json(['Status' => 'Failed', 'Message' => __('Das Feld ":name" muss ausgefüllt sein!', ['name' => $field->Name])])->setStatusCode(400);
+                            }
+                            if (!in_array($user->Id, $addUserIds)) {
+                                $users++;
+                                array_push($names, $user->Name);
+                                array_push($addUsers, $user);
+                                array_push($addUserIds, $user->Id);
+                                array_push($addAdminIds, $user->Id);
+                            }
                         }
 
                         if($users > $maxUsers && $maxUsers !== -1) {
@@ -297,16 +336,49 @@ class TicketController extends Controller
             return response()->json(['Status' => 'Failed', 'Message' => __('Bitte gib eine Nachricht ein!')])->setStatusCode(400);
         }
 
+        $userId = auth()->user()->Id;
+        $user = auth()->user();
+        $createdFor = false;
+
+        if (!empty($request->get('createFor'))) {
+            if (auth()->user()->Rank >= 1) {
+                $user = User::find($request->get('createFor'));
+                if ($user === null) {
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Der Benutzer existiert nicht!')])->setStatusCode(400);
+                }
+                $userId = $user->Id;
+                $createdFor = true;
+
+                if (!in_array(auth()->user()->Id, $addUserIds)) {
+                    array_push($names, auth()->user()->Name);
+                    array_push($addUsers, auth()->user());
+                }
+                array_push($addAdminIds, auth()->user()->Id);
+
+                array_unshift($text, __(':name hat ein Ticket für :target erstellt!', ['name' => auth()->user()->Name, 'target' => $user->Name]));
+            }
+        }
 
         $ticket = new Ticket();
-        $ticket->UserId = auth()->user()->Id;
+        $ticket->UserId = $userId;
         $ticket->CategoryId = $category->Id;
         $ticket->AssignedRank = $category->AdminRank;
         $ticket->Title = $request->get('title');
         $ticket->State = Ticket::TICKET_STATE_OPEN;
+
+        if ($createdFor) {
+            $ticket->AssigneeId = auth()->user()->Id;
+
+            if ($request->get('closeTicket')) {
+                $ticket->ResolvedBy = auth()->user()->Id;
+                $ticket->ResolvedAt = Carbon::now();
+                $ticket->State = Ticket::TICKET_STATE_CLOSED;
+            }
+        }
+
         $ticket->save();
 
-        $ticket->users()->attach(auth()->user(), ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
+        $ticket->users()->attach($user, ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
 
         if(count($text) > 0) {
             $answer = new TicketAnswer();
@@ -317,13 +389,24 @@ class TicketController extends Controller
             $answer->save();
         }
 
+        if (count($textInternal) > 0)
+        {
+            $answer = new TicketAnswer();
+            $answer->TicketId = $ticket->Id;
+            $answer->UserId = auth()->user()->Id;
+            $answer->MessageType = 2;
+            $answer->Message = implode(chr(0x0A), $textInternal);
+            $answer->save();
+        }
+
         $addedNames = [];
         foreach($addUsers as $user) {
             if (!$ticket->users->contains($user)) {
                 array_push($addedNames, $user->Name);
-                $ticket->users()->attach($user, ['JoinedAt' => new Carbon(), 'IsAdmin' => 0]);
+                $isAdmin = in_array($user->Id, $addAdminIds) ? 1 : 0;
+                $ticket->users()->attach($user, ['JoinedAt' => new Carbon(), 'IsAdmin' => $isAdmin]);
 
-                if($user->Rank === 0) {
+                if($user->Rank === 0 && !$createdFor) {
                     $user->sendMessage('[TICKET] ' . auth()->user()->Name . ' hat dich zu dem Ticket #' . $ticket->Id . ' hinzugefügt!', ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
                 }
             }
@@ -338,6 +421,15 @@ class TicketController extends Controller
             $answer->save();
         }
 
+        if ($createdFor) {
+            $answer = new TicketAnswer();
+            $answer->TicketId = $ticket->Id;
+            $answer->UserId = auth()->user()->Id;
+            $answer->MessageType = 1;
+            $answer->Message = __(":name hat sich das Ticket selbst zugewiesen.", ['name' => auth()->user()->Name]);
+            $answer->save();
+        }
+
         if(!empty($request->get('message'))) {
             $answer = new TicketAnswer();
             $answer->TicketId = $ticket->Id;
@@ -347,9 +439,22 @@ class TicketController extends Controller
             $answer->save();
         }
 
-        event(new \App\Events\TicketCreated($ticket));
-        $mtaService = new MTAService();
-        $mtaService->sendMessage('admin', null, '[TICKET] Es wurde ein neues Ticket von ' . $ticket->user->Name . ' (' . $ticket->category->Title .') erstellt!', ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
+        if ($createdFor) {
+            if ($request->get('closeTicket')) {
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = auth()->user()->Id;
+                $answer->MessageType = 1;
+                $answer->Message = sprintf("Das Ticket wurde von %s geschlossen", auth()->user()->Name);
+                $answer->save();
+            }
+        }
+
+        if (!$createdFor) {
+            event(new \App\Events\TicketCreated($ticket));
+            $mtaService = new MTAService();
+            $mtaService->sendMessage('admin', null, '[TICKET] Es wurde ein neues Ticket von ' . $ticket->user->Name . ' (' . $ticket->category->Title .') erstellt!', ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
+        }
 
         return '';
     }

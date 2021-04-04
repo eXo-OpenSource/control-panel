@@ -22,6 +22,10 @@ class TicketCategoryController extends Controller
             $query->where('IsAllowedForBannedUsers', 1);
         }
 
+        if (auth()->user()->Rank == 0) {
+            $query->where('AdminOnly', 0);
+        }
+
         $result = $query->orderBy('Order', 'ASC')->orderBy('Id', 'ASC')->with('fields')->get()->toArray();
 
         foreach($result as $i => $entry)

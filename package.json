@@ -39,6 +39,7 @@
         "classnames": "^2.2.6",
         "laravel-echo": "^1.8.0",
         "pusher-js": "^7.0.3",
+        "query-string": "^7.0.0",
         "react-beforeunload": "^2.2.1",
         "react-bootstrap": "^1.0.1",
         "react-chartjs-2": "^2.9.0",
