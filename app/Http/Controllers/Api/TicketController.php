@@ -354,7 +354,7 @@ class TicketController extends Controller
                 }
                 array_push($addAdminIds, auth()->user()->Id);
 
-                array_unshift($text, __(':name hat ein Ticket für :target erstellt!', ['name' => auth()->user()->Name, 'target' => $user->Name]));
+                array_unshift($text, __(':name hat dieses Ticket für :target erstellt.', ['name' => auth()->user()->Name, 'target' => $user->Name]));
             }
         }
 
@@ -401,7 +401,9 @@ class TicketController extends Controller
         $addedNames = [];
         foreach($addUsers as $user) {
             if (!$ticket->users->contains($user)) {
-                array_push($addedNames, $user->Name);
+                if ($user->Id !== auth()->user()->Id) {
+                    array_push($addedNames, $user->Name);
+                }
                 $isAdmin = in_array($user->Id, $addAdminIds) ? 1 : 0;
                 $ticket->users()->attach($user, ['JoinedAt' => new Carbon(), 'IsAdmin' => $isAdmin]);
 
@@ -416,7 +418,7 @@ class TicketController extends Controller
             $answer->TicketId = $ticket->Id;
             $answer->UserId = auth()->user()->Id;
             $answer->MessageType = 1;
-            $answer->Message = sprintf("%s wurden zum Ticket hinzugefügt von %s.", implode(', ', $addedNames), auth()->user()->Name);
+            $answer->Message = sprintf("%s wurde(n) zum Ticket hinzugefügt von %s.", implode(', ', $addedNames), auth()->user()->Name);
             $answer->save();
         }
 
