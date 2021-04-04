@@ -350,7 +350,6 @@ class TicketController extends Controller
                 $createdFor = true;
 
                 if (!in_array(auth()->user()->Id, $addUserIds)) {
-                    array_push($names, auth()->user()->Name);
                     array_push($addUsers, auth()->user());
                 }
                 array_push($addAdminIds, auth()->user()->Id);
