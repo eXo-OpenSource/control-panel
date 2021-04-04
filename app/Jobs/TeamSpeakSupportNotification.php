@@ -114,7 +114,7 @@ class TeamSpeakSupportNotification implements ShouldQueue
                         $mtaService = new MTAService();
                         $mtaService->sendMessage('admin', null, __('[TEAMSPEAK] :name wartet im Support!', ['name' => $support[$client->databaseId]['name']]), ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => 1]);
 
-                        $client->message(__('Ein Teammitglied wurde verständigt und wird sich in kürze bei dir melden. Alternativ kannst du auch ein Ticket erstellen. https://cp.exo-reallife.de/tickets/create'));
+                        $client->message(__('Ein Teammitglied wurde verständigt und wird sich in Kürze bei dir melden. Alternativ kannst du auch ein Ticket erstellen. https://cp.exo-reallife.de/tickets/create'));
                     }
                 }
 
