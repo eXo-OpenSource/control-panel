@@ -82,14 +82,24 @@ class TeamSpeakSupportNotification implements ShouldQueue
                 }
 
                 foreach($clientsInSupport as $client) {
+
                     if (isset($support[$client->databaseId])) {
                         if (Carbon::parse($support[$client->databaseId]['lastNotification']) < Carbon::now()->subMinutes(5)) {
                             $support[$client->databaseId]['lastNotification'] = Carbon::now();
                             $duration = Carbon::parse($support[$client->databaseId]['supportSince'])->longAbsoluteDiffForHumans(Carbon::now());
-                            $ticket = 'https://cp.exo-reallife.de/tickets/create?category=' . env('TEAMSPEAK_SUPPORT_TICKET_CATEGORY') . '&createFor=' . $support[$client->databaseId]['id'];
+
+
+                            $lines = [
+                                __(':name wartet schon seit :duration im Support!', ['name' => $support[$client->databaseId]['name'], 'duration' => $duration]),
+                                'Ticket: https://cp.exo-reallife.de/tickets/create?category=' . env('TEAMSPEAK_SUPPORT_TICKET_CATEGORY') . '&createFor=' . $support[$client->databaseId]['id'],
+                                'User: [URL=client://' . $client->id . '/' . $client->uniqueId . '~' . $client->nickname .']' . $support[$client->databaseId]['name'] .'[/URL]',
+                                'CP: https://cp.exo-reallife.de/users/' . $support[$client->databaseId]['id'],
+                            ];
 
                             foreach($admins as $admin) {
-                                $admin->message(__(':name wartet schon seit :duration im Support! :ticket', ['name' => $support[$client->databaseId]['name'], 'duration' => $duration, 'ticket' => $ticket]));
+                                foreach($lines as $line) {
+                                    $admin->message($line);
+                                }
                             }
 
                             $mtaService = new MTAService();
@@ -105,10 +115,17 @@ class TeamSpeakSupportNotification implements ShouldQueue
                             'id' => $identity->user->Id
                         ];
 
-                        $ticket = 'https://cp.exo-reallife.de/tickets/create?category=' . env('TEAMSPEAK_SUPPORT_TICKET_CATEGORY') . '&createFor=' . $support[$client->databaseId]['id'];
+                        $lines = [
+                            __(':name wartet im Support!', ['name' => $support[$client->databaseId]['name']]),
+                            'Ticket: https://cp.exo-reallife.de/tickets/create?category=' . env('TEAMSPEAK_SUPPORT_TICKET_CATEGORY') . '&createFor=' . $support[$client->databaseId]['id'],
+                            'User: [URL=client://' . $client->id . '/' . $client->uniqueId . '~' . $client->nickname .']' . $support[$client->databaseId]['name'] .'[/URL]',
+                            'CP: https://cp.exo-reallife.de/users/' . $support[$client->databaseId]['id'],
+                        ];
 
                         foreach($admins as $admin) {
-                            $admin->message(__(':name wartet im Support! :ticket', ['name' => $support[$client->databaseId]['name'], 'ticket' => $ticket]));
+                            foreach($lines as $line) {
+                                $admin->message($line);
+                            }
                         }
 
                         $mtaService = new MTAService();
