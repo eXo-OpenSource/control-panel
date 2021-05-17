@@ -126,7 +126,7 @@ class TicketCreate extends Component {
 
                                 if (!isNaN(id)) {
                                     let fields = this.state.fields;
-                                    fields[id] = params[param];
+                                    fields['field' + id] = params[param];
 
                                     this.setState({
                                         fields: fields
@@ -297,7 +297,7 @@ class TicketCreate extends Component {
                         return (
                             <Form.Group key={field.Id}>
                                 <Form.Label>{field.Name}</Form.Label>
-                                <Form.Control name={'field' + field.Id} type={field.Type === 'uuid' ? 'text' : field.Type} value={this.state.fields[field.Id]} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
+                                <Form.Control name={'field' + field.Id} type={field.Type === 'uuid' ? 'text' : field.Type} value={this.state.fields['field' + field.Id]} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
                                 {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
                                 </Form.Text> : ''}
                             </Form.Group>
