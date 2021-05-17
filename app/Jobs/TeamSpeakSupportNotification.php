@@ -92,7 +92,7 @@ class TeamSpeakSupportNotification implements ShouldQueue
                             $lines = [
                                 __(':name wartet schon seit :duration im Support!', ['name' => $support[$client->databaseId]['name'], 'duration' => $duration]),
                                 'Ticket: https://cp.exo-reallife.de/tickets/create?category=' . env('TEAMSPEAK_SUPPORT_TICKET_CATEGORY') . '&createFor=' . $support[$client->databaseId]['id'],
-                                'User: [URL=client://' . $client->id . '/' . $client->uniqueId . '~' . $client->nickname .']' . $support[$client->databaseId]['name'] .'[/URL]',
+                                'User: [URL=client://' . $client->id . '/' . $client->uniqueId . '~' . str_replace(' ', '%20', $client->nickname) .']' . $support[$client->databaseId]['name'] .'[/URL]',
                                 'CP: https://cp.exo-reallife.de/users/' . $support[$client->databaseId]['id'],
                             ];
 
