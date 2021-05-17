@@ -4,14 +4,14 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class TeamSpeakKickMusicBotsAndInactive extends Command
+class TeamSpeakNotifyNotActivatedUsers extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'teamspeak:not-activated';
+    protected $signature = 'teamspeak:check-names';
 
     /**
      * The console command description.
@@ -37,6 +37,6 @@ class TeamSpeakKickMusicBotsAndInactive extends Command
      */
     public function handle()
     {
-        \App\Jobs\TeamSpeakNotifyNotActivatedUsers::dispatch();
+        \App\Jobs\TeamSpeakCheckNames::dispatch();
     }
 }

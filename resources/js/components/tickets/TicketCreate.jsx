@@ -110,12 +110,30 @@ class TicketCreate extends Component {
 
 
             let params = queryString.parse(this.props.location.search)
+
             if (params.category) {
                 options.forEach((category) => {
                     if (category.value === Number(params.category)) {
                         this.setState({
                             category: category.value
                         });
+
+                        for(let param in params)
+                        {
+                            if (param.startsWith('fields_'))
+                            {
+                                let id = Number(param.replace('fields_', ''));
+
+                                if (!isNaN(id)) {
+                                    let fields = this.state.fields;
+                                    fields[id] = params[param];
+
+                                    this.setState({
+                                        fields: fields
+                                    });
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -279,7 +297,7 @@ class TicketCreate extends Component {
                         return (
                             <Form.Group key={field.Id}>
                                 <Form.Label>{field.Name}</Form.Label>
-                                <Form.Control name={'field' + field.Id} type={field.Type === 'uuid' ? 'text' : field.Type} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
+                                <Form.Control name={'field' + field.Id} type={field.Type === 'uuid' ? 'text' : field.Type} value={this.state.fields[field.Id]} placeholder={field.Name} onChange={this.onChangeField.bind(this)} />
                                 {field.Description ? <Form.Text className="text-muted" dangerouslySetInnerHTML={{__html: field.Description}}>
                                 </Form.Text> : ''}
                             </Form.Group>
