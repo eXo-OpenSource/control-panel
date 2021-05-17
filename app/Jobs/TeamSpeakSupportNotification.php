@@ -108,12 +108,21 @@ class TeamSpeakSupportNotification implements ShouldQueue
                     } else {
                         $identity = TeamSpeakIdentity::query()->where('TeamspeakId', $client->uniqueId)->with('user')->first();
 
-                        $support[$client->databaseId] = [
-                            'lastNotification' => Carbon::now(),
-                            'supportSince' => Carbon::now(),
-                            'name' => $identity->user->Name,
-                            'id' => $identity->user->Id
-                        ];
+                        if ($identity) {
+                            $support[$client->databaseId] = [
+                                'lastNotification' => Carbon::now(),
+                                'supportSince' => Carbon::now(),
+                                'name' => $identity->user->Name,
+                                'id' => $identity->user->Id
+                            ];
+                        } else {
+                            $support[$client->databaseId] = [
+                                'lastNotification' => Carbon::now(),
+                                'supportSince' => Carbon::now(),
+                                'name' => $client->nickname,
+                                'id' => -1
+                            ];
+                        }
 
                         $lines = [
                             __(':name wartet im Support!', ['name' => $support[$client->databaseId]['name']]),
@@ -127,7 +136,6 @@ class TeamSpeakSupportNotification implements ShouldQueue
                                 $admin->message($line);
                             }
                         }
-
                         $mtaService = new MTAService();
                         $mtaService->sendMessage('admin', null, __('[TEAMSPEAK] :name wartet im Support!', ['name' => $support[$client->databaseId]['name']]), ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => 1]);
 
