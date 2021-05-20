@@ -13,21 +13,21 @@
 
             <div class="row mb-2">
                 <div class="col-12">
-                    <span class="h2">{{ __('Event: 1.5x Lohn bei den Jobs vom 21.05. 5 Uhr bis 25.05. 5 Uhr') }}</span>
+                    <span class="h2">{{ __('Event: 1.5x Lohn bei den Jobs vom 21.05. 5 Uhr bis 26.05. 5 Uhr') }}</span>
                 </div>
             </div>
             @php
                 use Illuminate\Support\Facades\DB;
-                $total = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ?;', [2005506, '2021-05-21 05:00:00', '2021-05-25 05:00:00']);
-                $top = DB::connection('mysql_logs')->select('SELECT j.UserID, a.Name, SUM(j.Earned) AS SumEarned, SUM(j.Duration) AS SumDuration FROM vrpLogs_Job j INNER JOIN ' . config('database.connections.mysql.database') . '.vrp_account a ON a.Id = j.UserID WHERE j.ID > ? AND j.Date BETWEEN ? AND ? GROUP BY j.UserID ORDER BY SumEarned DESC LIMIT 10;', [2005506, '2021-05-21 05:00:00', '2021-05-25 05:00:00']);
-                $topJob = DB::connection('mysql_logs')->select('SELECT Job, SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY Job ORDER BY SumEarned DESC LIMIT 10;', [2005506, '2021-05-21 05:00:00', '2021-05-25 05:00:00']);
+                $total = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ?;', [2005506, '2021-05-21 05:00:00', '2021-05-26 05:00:00']);
+                $top = DB::connection('mysql_logs')->select('SELECT j.UserID, a.Name, SUM(j.Earned) AS SumEarned, SUM(j.Duration) AS SumDuration FROM vrpLogs_Job j INNER JOIN ' . config('database.connections.mysql.database') . '.vrp_account a ON a.Id = j.UserID WHERE j.ID > ? AND j.Date BETWEEN ? AND ? GROUP BY j.UserID ORDER BY SumEarned DESC LIMIT 10;', [2005506, '2021-05-21 05:00:00', '2021-05-26 05:00:00']);
+                $topJob = DB::connection('mysql_logs')->select('SELECT Job, SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY Job ORDER BY SumEarned DESC LIMIT 10;', [2005506, '2021-05-21 05:00:00', '2021-05-26 05:00:00']);
 
                 if(auth()->user()) {
-                    $myData = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND UserID = ? AND Date BETWEEN ? AND ?;', [2005506, auth()->user()->Id, '2021-05-15 05:00:00', '2021-05-25 05:00:00'])[0];
+                    $myData = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned, SUM(Duration) AS SumDuration FROM vrpLogs_Job WHERE ID > ? AND UserID = ? AND Date BETWEEN ? AND ?;', [2005506, auth()->user()->Id, '2021-05-15 05:00:00', '2021-05-26 05:00:00'])[0];
                     if(!$myData->SumEarned) {
-                        $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned DESC;', [2005506, '2021-05-21 05:00:00', '2021-05-25 05:00:00']);
+                        $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID ORDER BY SumEarned DESC;', [2005506, '2021-05-21 05:00:00', '2021-05-26 05:00:00']);
                     } else {
-                        $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID HAVING SUM(Earned) >= ? ORDER BY SumEarned DESC;', [2005506, '2021-05-21 05:00:00', '2021-05-25 05:00:00', $myData->SumEarned]);
+                        $myPos = DB::connection('mysql_logs')->select('SELECT SUM(Earned) AS SumEarned FROM vrpLogs_Job WHERE ID > ? AND Date BETWEEN ? AND ? GROUP BY UserID HAVING SUM(Earned) >= ? ORDER BY SumEarned DESC;', [2005506, '2021-05-21 05:00:00', '2021-05-26 05:00:00', $myData->SumEarned]);
                     }
                 }
 
