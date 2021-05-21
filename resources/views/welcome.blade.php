@@ -142,7 +142,11 @@
                                         <td>{{ $jobs[$row->Job] }}</td>
                                         <td>@money($row->SumEarned)</td>
                                         <td>{{ Carbon\Carbon::now()->longAbsoluteDiffForHumans(Carbon\Carbon::now()->addSeconds($row->SumDuration), 3) }}</td>
-                                        <td>@money(($row->SumEarned / $row->SumDuration) * 60)</td>
+                                        @if ($row->SumEarned <= 0 && $row->SumDuration <= 0)
+                                            <td>@money(0)</td>
+                                        @else
+                                            <td>@money(($row->SumEarned / $row->SumDuration) * 60)</td>
+                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
