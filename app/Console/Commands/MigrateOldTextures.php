@@ -41,30 +41,28 @@ class MigrateOldTextures extends Command
      */
     public function handle()
     {
-        $textures = Texture::where('Image', 'NOT LIKE', '%/storage/textures/%')->get();
+        $textures = Texture::where('OldImage', '<>', null)->get();
         $client = new \GuzzleHttp\Client();
         // https://picupload.pewx.de/textures/exo_trust-1.png
 
-
         foreach($textures as $texture) {
-            $this->info("Downloading texture {$texture->Name}");
-            $fileName = Str::random(40) . '.' . pathinfo($texture->Image, PATHINFO_EXTENSION);
+            $this->info("Downloading texture {$texture->OldImage}");
+            $fileName = str_replace('https://cp.exo-reallife.de/storage/textures/', '', $texture->Image);
+            $fileName = str_replace('http://localhost:8000/storage/textures/', '', $fileName);
 
-            while(true) {
-                if(!Storage::disk('textures')->exists($fileName)) {
-                    break;
-                }
-                $fileName = Str::random(40) . '.' . pathinfo($texture->Image, PATHINFO_EXTENSION);
+
+            if(Storage::disk('textures')->exists($fileName)) {
+                $this->error("Texture {$texture->Name} already exists?");
+                continue;
             }
 
             try {
-                $response = $client->request('GET', 'https://picupload.pewx.de/textures/' . $texture->Image, [
+                $response = $client->request('GET', 'https://files.deangur.com/textures/' . $texture->OldImage, [
                     'sink' => storage_path('app/public/textures/' . $fileName)
                 ]);
 
                 if($response->getStatusCode() === 200) {
                     $this->info("Downloaded texture {$texture->Name} successfully");
-                    $texture->OldImage = $texture->Image;
                     $texture->Image = env('APP_URL') .  '/storage/textures/' . $fileName;
                     $texture->save();
                 } else {

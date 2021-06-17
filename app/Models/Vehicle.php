@@ -10,6 +10,8 @@ class Vehicle extends Model
 {
     use SoftDeletes;
     const DELETED_AT = 'Deleted';
+    const UPDATED_AT = null;
+    const CREATED_AT = null;
     protected $primaryKey = 'Id';
 
     static $shopVehicles = null;
