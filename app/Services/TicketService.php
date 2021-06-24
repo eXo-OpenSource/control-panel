@@ -43,7 +43,7 @@ class TicketService
         }
 
         usort($activity, function($a, $b) {
-            return strcmp($a->Date, $b->Date) ? 1 : -1;
+            return strtotime($a->Date) > strtotime($b->Date) ? 1 : -1;
         });
 
         if ($chart) {

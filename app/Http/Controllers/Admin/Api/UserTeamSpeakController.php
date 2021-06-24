@@ -107,6 +107,7 @@ class UserTeamSpeakController extends Controller
                 $identities = TeamSpeakIdentity::query()->where('UserId', $user->Id)->get();
 
                 $success = true;
+                $successCount = 0;
 
                 foreach($identities as $identity) {
                     try {
@@ -118,6 +119,8 @@ class UserTeamSpeakController extends Controller
                             foreach($bans->bans as $ban) {
                                 if($ban->unban()->status !== TeamSpeakResponse::RESPONSE_SUCCESS) {
                                     $success = false;
+                                } else {
+                                    $successCount++;
                                 }
                             }
                         } else {
@@ -143,7 +146,10 @@ class UserTeamSpeakController extends Controller
                     }
                     return ['status' => 'Success', 'message' => __('Der Spieler wurde erfolgreich entsperrt.')];
                 } else {
-                    return ['status' => 'Error', 'message' => __('Spieler konnte nicht entsperrt werden.')];
+                    return ['status' => 'Error', 'message' => __('Spieler konnte nicht entsperrt werden. Es wurden :count/:banned Identitäten entsperrt!', [
+                        'count' => $successCount,
+                        'banned' => count($identities)
+                    ])];
                 }
             }
         } elseif ($type === 'ban') {
@@ -214,7 +220,7 @@ class UserTeamSpeakController extends Controller
                     } else {
                         return [
                             'status' => 'Error',
-                            'message' => __('Es konnten nicht alle Identitäten gesperrt werden! Es wurden von :count Identitäten :banned gesperrt!', [
+                            'message' => __('Es konnten nicht alle Identitäten gesperrt werden! Es wurden von :banned/:count Identitäten gesperrt!', [
                                 'count' => count($identities),
                                 'banned' => $bannedIdentities
                             ])

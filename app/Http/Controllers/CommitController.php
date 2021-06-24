@@ -69,7 +69,7 @@ class CommitController extends Controller
 
 
             usort($allCommits, function($a, $b) {
-                return $a['committed_date'] < $b['committed_date'] ? -1 : 1;
+                return strtotime($a['committed_date']) > strtotime($b['committed_date']) ? -1 : 1;
             });
 
             $knownHashes = [];

@@ -160,7 +160,11 @@ class TeamspeakController extends Controller
 
                 return redirect()->route('admin.teamspeak.index');
             }
-            throw ValidationException::withMessages(['uniqueId' => 'TeamSpeak Client konnte nicht gefunden werden!']);
+            else
+            {
+                $teamspeak->delete();
+                Session::flash('alert-success', 'Erfolgreich gelöscht!');
+            }
 
         } catch (TeamSpeakUnreachableException $e) {
             throw ValidationException::withMessages(['uniqueId' => 'TeamSpeak ist nicht erreichbar!']);
