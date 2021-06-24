@@ -164,6 +164,8 @@ class TeamspeakController extends Controller
             {
                 $teamspeak->delete();
                 Session::flash('alert-success', 'Erfolgreich gelöscht!');
+
+                return redirect()->route('admin.teamspeak.index');
             }
 
         } catch (TeamSpeakUnreachableException $e) {
