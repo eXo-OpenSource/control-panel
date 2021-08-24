@@ -24,7 +24,7 @@
                                 Land: {{ $ipHub->CountryName }}<br>
                                 ASN: {{ $ipHub->ASN }}<br>
                                 ISP: {{ $ipHub->ISP }}<br>
-                                Block: {{ $ipHub->Block }}<br><br>
+                                Typ: {{ $ipHub->Block }}<br><br>
 
                                 <table class="table table-sm">
                                     <tr>
