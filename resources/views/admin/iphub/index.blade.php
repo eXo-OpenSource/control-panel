@@ -5,7 +5,14 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                <p class="m-0">Typ 0: Residential or business IP (i.e. safe IP)</p>
+                <p class="m-0">Typ 1: Non-residential IP (hosting provider, proxy, etc.)</p>
+                <p class="m-0">Typ 2: Non-residential & residential IP (warning, may flag innocent people)</p>
+            </div>
+        </div>
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">{{ __('IP Hub') }}</div>
                 <div class="card-body">
