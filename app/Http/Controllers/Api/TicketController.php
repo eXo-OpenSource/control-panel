@@ -501,7 +501,7 @@ class TicketController extends Controller
         $userId = auth()->user()->Id;
         $name = auth()->user()->Name;
 
-        if($ticket->State === Ticket::TICKET_STATE_CLOSED && $type !== 'delete') {
+        if($ticket->State === Ticket::TICKET_STATE_CLOSED && $type !== 'delete' && $type !== 'open') {
             return response()->json(['Status' => 'Failed', 'Message' => __('Das Ticket ist geschlossen!')])->setStatusCode(400);
         }
 
@@ -560,6 +560,34 @@ class TicketController extends Controller
                 $answer->save();
                 event(new \App\Events\TicketUpdated($ticket));
                 $message = '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geschlossen!';
+                $mtaService->sendMessage('admin', null, $message, ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
+
+                foreach($ticket->users as $user)
+                {
+                    if($user->Rank === 0 && $user->Id !== auth()->user()->Id)
+                    {
+                        $user->sendMessage($message, ['r' => 255, 'g' => 50, 'b' => 0], route('tickets.index') . '/' . $ticket->Id);
+                    }
+                }
+                break;
+            case 'open':
+                if (auth()->user()->Rank < 4) {
+                    return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
+                }
+
+                $ticket->State = Ticket::TICKET_STATE_OPEN;
+                $ticket->ResolvedBy = null;
+                $ticket->ResolvedAt = null;
+                $ticket->save();
+
+                $answer = new TicketAnswer();
+                $answer->TicketId = $ticket->Id;
+                $answer->UserId = $userId;
+                $answer->MessageType = 1;
+                $answer->Message = sprintf("Das Ticket wurde von %s geöffnet", auth()->user()->Name);
+                $answer->save();
+                event(new \App\Events\TicketUpdated($ticket));
+                $message = '[TICKET] Das Ticket #' . $ticket->Id . ' wurde von ' . $name . ' geöffnet!';
                 $mtaService->sendMessage('admin', null, $message, ['r' => 255, 'g' => 50, 'b' => 0, 'minRank' => $ticket->AssignedRank]);
 
                 foreach($ticket->users as $user)

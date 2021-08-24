@@ -7,7 +7,6 @@
                 <div class="card">
                     <div class="card-header">{{ __('Benutzersuche') }}</div>
                     <div class="card-body">
-
                         <form method="GET" action="{{ route('users.search') }}" class="mb-4">
                             <div class="row">
                                 <div class="col-md-4">
@@ -80,7 +79,27 @@
                                     <td>@playTime($user->PlayTime)</td>
                                     @if(auth()->user()->Rank >= 3)
                                     <td>{{ $user->LastLogin->format('d.m.Y H:i:s') }}</td>
-                                    <td>{{ $user->LastIP }}</td>
+                                    <td>
+                                        @if(!isset($user->ipHub))
+                                            <i class="fas fa-network-wired text-muted"
+                                               data-toggle="tooltip"
+                                               data-trigger="hover focus click"
+                                               data-placement="right"
+                                               data-animation="true"
+                                               data-original-title="Es existieren noch keine Informationen zu dieser IP.">
+                                            </i>
+                                        @else
+                                            <i class="fas fa-network-wired @if($user->ipHub->Block === 0){{ 'text-success' }}@elseif($user->ipHub->Block === 1){{ 'text-danger' }}@else{{ 'text-warning' }}@endif"
+                                               data-toggle="tooltip"
+                                               data-trigger="hover focus click"
+                                               data-placement="right"
+                                               data-animation="true"
+                                               data-html="true"
+                                               data-original-title="Typ: {{ ($user->ipHub->Block === 0 ? 'Residential or business IP' : ($user->ipHub->Block === 1 ? 'Non-residential IP (hosting provider, proxy, etc.)' : 'Non-residential & residential IP (warning, may flag innocent people)')) }}<br>Hostname: {{ $user->ipHub->Hostname }}<br>ISP: {{ $user->ipHub->ISP }}<br>ASN: {{ $user->ipHub->ASN }}<br>Land: {{ $user->ipHub->CountryName }}">
+                                            </i>
+                                        @endif
+                                        {{ $user->LastIP }}
+                                    </td>
                                     <td>{{ $user->LastSerial }}</td>
                                     @endif
                                 </tr>

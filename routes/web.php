@@ -132,6 +132,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('dashboard', 'DashboardController', ['as' => 'admin'])->only('index');
         Route::resource('bans', 'BanController', ['as' => 'admin'])->only('index');
         Route::resource('houses', 'HouseController', ['as' => 'admin'])->only('index');
+        Route::resource('ip-hub', 'IpHubController', ['as' => 'admin'])->only('index');
+        Route::get('ip-hub/{ip}', 'IpHubController@show')->name('admin.ip-hub.show');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
 
         Route::get('/polls/{path?}', [

@@ -100,6 +100,14 @@
     </div>
 @endsection
 
+@section('script'))
+    <script>
+        document.querySelectorAll('[data-toggle="tooltip"]').forEach(function (element) {
+            // eslint-disable-next-line no-new
+            new coreui.Tooltip(element);
+        });
+    </script>
+@endsection
 
 @if(!View::hasSection('title'))
     @section('title', $user->Name)

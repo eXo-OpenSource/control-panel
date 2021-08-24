@@ -10,6 +10,7 @@ use App\Jobs\TeamSpeakSupportNotification;
 use App\Jobs\TeamSpeakSyncGroups;
 use App\Jobs\TeamSpeakSyncActivation;
 use App\Jobs\TeamSpeakUpdateId;
+use App\Jobs\IpHubLookup;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -40,6 +41,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new TeamSpeakUpdateId)->cron('* * * * *');
         $schedule->job(new TeamSpeakSupportNotification())->cron('* * * * *');
         $schedule->job(new TeamSpeakNotifyNotActivatedUsers())->cron('* * * * *');
+        $schedule->job(new IpHubLookup)->cron('*/5 * * * *');
     }
 
     /**

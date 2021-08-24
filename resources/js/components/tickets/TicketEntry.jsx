@@ -28,6 +28,7 @@ export default class TicketEntry extends Component {
             showRemoveUserDialog: false,
             showDeleteTicketDialog: false,
             showCloseTicketDialog: false,
+            showOpenTicketDialog: false,
             submitting: false,
         };
 
@@ -66,6 +67,10 @@ export default class TicketEntry extends Component {
         this.setState({showCloseTicketDialog: !this.state.showCloseTicketDialog});
     }
 
+    async toggleOpenTicketDialog() {
+        this.setState({showOpenTicketDialog: !this.state.showOpenTicketDialog});
+    }
+
     async hideRemoveUserDialog() {
         this.setState({showRemoveUserDialog: false});
     }
@@ -76,6 +81,10 @@ export default class TicketEntry extends Component {
 
     async hideCloseTicketDialog() {
         this.setState({showCloseTicketDialog: false});
+    }
+
+    async hideOpenTicketDialog() {
+        this.setState({showOpenTicketDialog: false});
     }
 
     async onChange(e) {
@@ -130,6 +139,34 @@ export default class TicketEntry extends Component {
 
         axios.put('/api/tickets/' + this.state.ticketId, {
             type: 'close',
+        }).then(() => {
+            this.setState({
+                submitting: false
+            });
+        }).catch((error) => {
+            this.setState({
+                submitting: false
+            });
+
+            if(error.response) {
+                toast.error(error.response.data.Message);
+            } else {
+                toast.error('Unbekannter Fehler');
+                console.error(error);
+            }
+        });
+    }
+
+    async open() {
+        if(this.state.submitting)
+            return false;
+
+        this.setState({
+            submitting: true
+        });
+
+        axios.put('/api/tickets/' + this.state.ticketId, {
+            type: 'open',
         }).then(() => {
             this.setState({
                 submitting: false
@@ -347,8 +384,13 @@ export default class TicketEntry extends Component {
 
             canAnswer = true;
         } else {
-            if(Exo.Rank >= 7) {
-                closeButton = <Button disabled={this.state.submitting} onClick={this.toggleDeleteTicketDialog.bind(this)} variant="danger">Ticket löschen</Button>;
+            if(Exo.Rank >= 4) {
+                closeButton = <Row>
+                                <Col>
+                                    <Button disabled={this.state.submitting} onClick={this.toggleOpenTicketDialog.bind(this)} variant="danger">Ticket öffnen</Button>
+                                    {Exo.Rank >= 7 ? <Button className="ml-1" disabled={this.state.submitting} onClick={this.toggleDeleteTicketDialog.bind(this)} variant="danger">Ticket löschen</Button> : ''}
+                                </Col>
+                              </Row>;
             }
         }
 
@@ -465,6 +507,17 @@ export default class TicketEntry extends Component {
                                             title="Ticket schließen"
                                             text="Möchtest du das Ticket wirklich schließen?"
                                             onConfirm={this.close.bind(this)}
+                                        />
+
+                                        <ConfirmDialog
+                                            show={this.state.showOpenTicketDialog}
+                                            onClosed={this.hideOpenTicketDialog.bind(this)}
+                                            buttonText="Bestätigen"
+                                            buttonCloseText="Abbrechen"
+                                            buttonVariant="danger"
+                                            title="Ticket öffnen"
+                                            text="Möchtest du das Ticket wirklich öffnen?"
+                                            onConfirm={this.open.bind(this)}
                                         />
                                     </div>
                                 </div>

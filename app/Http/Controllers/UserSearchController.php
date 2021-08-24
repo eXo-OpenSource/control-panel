@@ -61,7 +61,7 @@ class UserSearchController extends Controller
         }
 
         if(auth()->user()->Rank >= 3) {
-            $users->with('bans')->with('warns')->with('teamSpeakBan');
+            $users->with('bans')->with('warns')->with('teamSpeakBan')->with('ipHub');
         }
 
         if($sortBy && in_array($sortBy, ['name', 'playTime'])) {

@@ -13,6 +13,7 @@ use App\Models\Logs\Advert;
 use App\Models\Logs\Damage;
 use App\Models\Logs\Punish;
 use App\Models\Shop\PremiumUser;
+use App\Models\IpHub;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Controllers\WhoIsOnlineController;
@@ -148,6 +149,11 @@ class User extends Authenticatable
     public function teamSpeakBan()
     {
         return $this->hasMany(TeamSpeakBan::class, 'UserId', 'Id');
+    }
+
+    public function ipHub()
+    {
+        return $this->hasOne(IpHub::class, 'Ip', 'LastIP');
     }
 
     public function isBanned()
