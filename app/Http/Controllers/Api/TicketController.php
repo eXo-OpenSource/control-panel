@@ -571,7 +571,7 @@ class TicketController extends Controller
                 }
                 break;
             case 'open':
-                if (auth()->user()->Rank < 4) {
+                if (auth()->user()->Rank < 3) {
                     return response()->json(['Status' => 'Failed', 'Message' => __('Du bist dazu nicht berechtigt!')])->setStatusCode(400);
                 }
 

@@ -384,7 +384,7 @@ export default class TicketEntry extends Component {
 
             canAnswer = true;
         } else {
-            if(Exo.Rank >= 4) {
+            if(Exo.Rank >= 3) {
                 closeButton = <Row>
                                 <Col>
                                     <Button disabled={this.state.submitting} onClick={this.toggleOpenTicketDialog.bind(this)} variant="danger">Ticket öffnen</Button>
