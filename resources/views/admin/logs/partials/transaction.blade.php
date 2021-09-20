@@ -14,7 +14,7 @@
 
 
 
-    $query = \App\Models\BankAccountTransaction::query()->where('FromType', 1)->where('ToType', 1)->orderBy('Id', 'DESC');
+    $query = \App\Models\BankAccountTransaction::query()->where('FromType', 1)->where('ToType', 1)->whereColumn('FromId', '<>', 'ToId')->orderBy('Id', 'DESC');
 
     if (request()->has('amount')) {
         $appends['amount'] = request()->get('amount');
