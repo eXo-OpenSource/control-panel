@@ -10,6 +10,8 @@
                     <li class="nav-item"><a class="nav-link @if($log === 'nickchange'){{'active'}}@endif" href="{{ route('admin.logs.show', ['nickchange']) }}">{{ __('Nickchanges') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'kills'){{'active'}}@endif" href="{{ route('admin.logs.show', ['kills']) }}">{{ __('Morde') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'damage'){{'active'}}@endif" href="{{ route('admin.logs.show', ['damage']) }}">{{ __('Schaden') }}</a></li>
+                    <li class="nav-item"><a class="nav-link @if($log === 'money'){{'active'}}@endif" href="{{ route('admin.logs.show', ['money']) }}">{{ __('Geld') }}</a></li>
+                    <li class="nav-item"><a class="nav-link @if($log === 'transaction'){{'active'}}@endif" href="{{ route('admin.logs.show', ['transaction']) }}">{{ __('Transaktionen') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'heal'){{'active'}}@endif" href="{{ route('admin.logs.show', ['heal']) }}">{{ __('Heilung') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'action'){{'active'}}@endif" href="{{ route('admin.logs.show', ['action']) }}">{{ __('Aktionen') }}</a></li>
                     <li class="nav-item"><a class="nav-link @if($log === 'login'){{'active'}}@endif" href="{{ route('admin.logs.show', ['login']) }}">{{ __('Logins') }}</a></li>
@@ -31,6 +33,10 @@
                             @include('admin.logs.partials.kills')
                         @elseif($log === 'damage')
                             @include('admin.logs.partials.damage')
+                        @elseif($log === 'money')
+                            @include('admin.logs.partials.money')
+                        @elseif($log === 'transaction')
+                            @include('admin.logs.partials.transaction')
                         @elseif($log === 'heal')
                             @include('admin.logs.partials.heal')
                         @elseif($log === 'action')
