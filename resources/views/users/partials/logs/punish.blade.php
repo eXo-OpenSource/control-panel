@@ -1,5 +1,5 @@
 @php
-    $punish = $user->punish()->whereNotIn('Type', ['nickchange', 'teamspeak', 'teamspeakBan', 'teamspeakUnban'])->with(['user', 'admin'])->orderBy('Id', 'DESC');
+    $punish = $user->punish()->whereNotIn('Type', ['nickchange', 'teamspeak', 'teamspeakNotice', 'teamspeakBan', 'teamspeakUnban'])->with(['user', 'admin'])->orderBy('Id', 'DESC');
 
     if(auth()->user()->Rank < 3) {
         $punish->where('Type', '<>', 'notice');

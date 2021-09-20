@@ -34,7 +34,7 @@ class UserPunishController extends Controller
         $internal = $request->get('internal');
         $duration = $request->get('duration');
 
-        if(!in_array($type, ['notice', 'teamspeak'])) {
+        if(!in_array($type, ['notice', 'teamspeak', 'teamspeakNotice'])) {
             return ['status' => 'Error', 'message' => __('Ungültiger Typ')];
         }
 

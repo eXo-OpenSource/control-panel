@@ -1,5 +1,15 @@
 @php
-    $punish = $user->punish()->whereIn('Type', ['teamspeak', 'teamspeakBan', 'teamspeakUnban'])->with(['user', 'admin'])->orderBy('Id', 'DESC');
+    $types = ['teamspeak', 'teamspeakBan', 'teamspeakUnban'];
+
+    if (auth()->user()->Rank >= 3) {
+        array_push($types, 'teamspeakNotice');
+    }
+
+    $punish = $user->punish()->whereIn('Type', $types)->with(['user', 'admin'])->orderBy('Id', 'DESC');
+
+    if(auth()->user()->Rank < 3) {
+        $punish->where('DeletedAt', null);
+    }
 
     $punish = $punish->paginate(request()->get('limit') ?? 25);
 @endphp

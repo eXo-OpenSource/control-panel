@@ -87,9 +87,10 @@ export default class PunishAddDialog extends Component {
                                     <option value="">[Bitte wählen]</option>
                                     <option value="notice">notice</option>
                                     <option value="teamspeak">teamspeak</option>
+                                    <option value="teamspeakNotice">teamspeakNotice</option>
                                 </Form.Control>
                                 <Form.Text className="text-muted">
-                                    Der Typ "notice" ist nur für Teammitglieder sichtbar.
+                                    Der Typ "notice" und "teamspeakNotice" ist nur für Teammitglieder sichtbar.
                                 </Form.Text>
                             </Form.Group>
 
