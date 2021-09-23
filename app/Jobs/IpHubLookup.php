@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\IpHub;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
