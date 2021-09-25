@@ -470,7 +470,13 @@ class TicketController extends Controller
     {
         abort_unless(auth()->user()->can('show', $ticket), 403);
 
-        return $ticket->getApiResponse();
+        $user = $ticket->users()->find(auth()->user()->Id);
+        $leftAt = null;
+
+        if ($user && $user->pivot && $user->pivot->LeftAt)
+            $leftAt = $user->pivot->LeftAt;
+
+        return $ticket->getApiResponse($leftAt);
     }
 
     /**

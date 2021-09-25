@@ -49,7 +49,7 @@ class Ticket extends Model
         return $this->belongsToMany(User::class, 'ticket_users', 'TicketId', 'UserId')->withPivot('JoinedAt', 'LeftAt', 'IsAdmin');
     }
 
-    public function getApiResponse()
+    public function getApiResponse($leftAt = null)
     {
         $entry = [
             'Id' => $this->Id,
@@ -108,6 +108,11 @@ class Ticket extends Model
                 if (auth()->user()->Rank === 0) {
                     continue;
                 }
+            }
+
+            if (auth()->user()->Rank === 0 && $leftAt !== null && $answer->CreatedAt > $leftAt)
+            {
+                continue;
             }
 
             array_push($entry['answers'], [

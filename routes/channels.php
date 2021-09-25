@@ -37,7 +37,12 @@ Broadcast::channel('tickets.{id}', function ($user, $id) {
     if(!$ticket)
         return false;
 
-    return $ticket->users->pluck('Id')->contains($user->Id);
+    $ticketUser = $ticket->users()->find($user->Id);
+
+    if(!$ticketUser)
+        return false;
+
+    return $ticketUser->pivot->LeftAt === null;
 });
 
 Broadcast::channel('screencaptures.{token}', function ($user, $token) {

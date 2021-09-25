@@ -34,6 +34,11 @@ class TicketPolicy
 
     public function update(User $user, Ticket $ticket)
     {
-        return $ticket->users->contains($user);
+        $ticketUser = $ticket->users()->find($user->Id);
+
+        if ($ticketUser === null)
+            return false;
+
+        return $ticketUser->pivot->LeftAt === null;
     }
 }
