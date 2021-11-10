@@ -26,6 +26,7 @@ require('./components/admin/PunishEditDialog');
 require('./components/admin/PrisonDialog');
 require('./components/admin/UnprisonDialog');
 require('./components/admin/PunishHistoryDialog');
+require('./components/admin/MapCopyDialog');
 require('./components/tickets/Tickets');
 // require('./components/practices/Practices');
 require('./components/trainings/Trainings');

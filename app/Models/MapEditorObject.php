@@ -9,7 +9,7 @@ class MapEditorObject extends Model
 {
     protected $table = 'map_editor_objects';
     protected $primaryKey = 'Id';
-    protected $connection = 'mysql';
+    protected $connection;
     public $timestamps = false;
 
     public function creator()

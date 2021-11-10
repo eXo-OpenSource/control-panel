@@ -136,6 +136,8 @@ Route::middleware('auth')->group(function () {
         Route::get('ip-hub/{ip}', 'IpHubController@show')->name('admin.ip-hub.show');
         Route::resource('maps', 'MapController', ['as' => 'admin'])->only('index', 'create', 'store');
 
+        Route::get('maps/{map}/duplicate', 'MapController@copy')->name('admin.maps.copy');
+
         Route::get('/polls/{path?}', [
             'uses' => 'PollController@index',
             'as' => 'admin.polls.index',

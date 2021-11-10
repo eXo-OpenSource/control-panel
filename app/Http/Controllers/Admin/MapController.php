@@ -20,8 +20,14 @@ class MapController extends Controller
     public function index()
     {
         abort_unless(Gate::allows('admin-rank-5'), 403);
-        $maps = MapEditorMap::all();
-        return view('admin.maps.index', compact('maps'));
+
+        $live = MapEditorMap::on('mysql');
+        $live_maps = $live->get();
+
+        $dev = MapEditorMap::on('mysql_test');
+        $dev_maps = $dev->get();
+
+        return view('admin.maps.index', compact('live', 'live_maps', 'dev', 'dev_maps'));
     }
 
     public function create()
@@ -62,6 +68,7 @@ class MapController extends Controller
                 'Collision' => $entry->attributes()->collisions == "true" ? 1 : 0,
                 'Breakable' => $entry->attributes()->breakable == "true" ? 1 : 0,
                 'Doublesided' => $entry->attributes()->doublesided == "true" ? 1 : 0,
+                'Radius' => empty($entry->attributes()->radius) ? null : floatval($entry->attributes()->radius)
             ];
 
             if($key === 'removeWorldObject') {
@@ -101,6 +108,7 @@ class MapController extends Controller
             $mapObject->Collision = $object['Collision'];
             $mapObject->Breakable = $object['Breakable'];
             $mapObject->Doublesided = $object['Doublesided'];
+            $mapObject->Radius = $object['Radius'];
             $mapObject->save();
         }
 

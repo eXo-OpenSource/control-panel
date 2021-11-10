@@ -9,11 +9,16 @@ class MapEditorMap extends Model
 {
     protected $table = 'map_editor_maps';
     protected $primaryKey = 'Id';
-    protected $connection = 'mysql';
+    protected $connection;
     public $timestamps = false;
 
     public function creator()
     {
         return $this->hasOne(User::class, 'Id', 'Creator');
+    }
+
+    public function objectCount()
+    {
+        return MapEditorObject::on($this->connection)->where('MapId', $this->Id)->count();
     }
 }
