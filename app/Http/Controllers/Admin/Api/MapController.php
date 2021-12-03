@@ -38,8 +38,10 @@ class MapController extends Controller
                 switch($fromConnection){
                     case 'mysql':
                         $toConnection = 'mysql_test';
+                        break;
                     case 'mysql_test':
                         $toConnection = 'mysql';
+                        break;
                 }
 
                 //If there is no map to overwrite, create a new one, else delete objects of specified map
